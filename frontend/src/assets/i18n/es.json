@@ -1,0 +1,250 @@
+{
+  "webpagos": {
+    "securityModule": "Seguridad",
+    "adminModule": "Administrador del sistema",
+    "salesModule": "Ventas",
+    "register": "Registro",
+    "btnSearch":"Consultar",
+    "btnExportPDF":"Exportar a PDF",
+    "btnExportExcel":"Exportar a Excel",
+    "btnBack":"Regresar",
+    "btnEdit":"Modificar",
+    "btnSave":"Guardar",
+    "btnSaveAndClose":"Guardar y cerrar",
+    "btnProcess":"Procesar",
+    "btnCancel":"Cancelar",
+    "btnDelete":"Eliminar",
+    "btnState":"Cambiar Estado",
+    "btnInvalidate":"Anular",
+    "btnNew":"Nuevo",
+    "btnPrint":"Imprimir",
+    "btnAdd":"Añadir",
+    "btnComplete":"Completar",
+    "btnGenerateInvoice":"Generar Factura",
+    "btnGenerateDocument":"Generar Guía",
+    "btnAccept":"Aceptar",
+    "actionsText": "Acciones",
+    "txtNoCoincidences":"No hay coincidenciaaas",
+    "incorrectFormatEmail":"Formato de correo electrónico inválido",
+    "searchFor":"Buscar por",
+    "noRows":"No se encontraron registros",
+    "messages":{
+      "errorSearchActInvoice":"Debe ingresar el Nro. de serie y el Nro. de documento para buscar"
+    },
+    "cnf_empresa": {
+      "home": {
+        "title": "Empresa",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Empresa",
+      "descripcion": "Nobre comercial",
+      "direccion": "Direccion",
+      "nro_documento": "Nro. documento",
+      "telefono": "Teléfono"
+    },
+    "cnf_moneda": {
+      "home": {
+        "title": "Moneda",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Moneda",
+      "codigo": "Codigo ISO",
+      "descripcion": "Descripción",
+      "validini": "Valido desde",
+      "validfin": "Válido hasta"
+    },
+    "cnf_distrito": {
+      "home": {
+        "title": "Empresa",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Distrito"
+    },
+    "cnf_provincia": {
+      "home": {
+        "title": "Empresa",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Provincia"
+    },
+    "cnf_region": {
+      "home": {
+        "title": "Empresa",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Departamento"
+    },
+    "cnf_tipo_documento": {
+      "home": {
+        "title": "Tipo documento",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Tipo documento",
+      "abreviatura": "Abreviatura",
+      "codigo_sunat": "Código SUNAT"
+    },
+    "cnf_local": {
+      "home": {
+        "title": "Tipo documento",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Nombre local",
+      "direccion": "Dirección"
+    },
+    "cnf_tipo_comprobante": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "codigo": "Código",
+      "codigo_sunat": "Código SUNAT"
+    },
+    "cnf_maestro": {
+      "home": {
+        "title": "Socios de Negocios",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombres": "Nombres",
+      "apellido_paterno": "Ap. Paterno",
+      "apellido_materno": "Ap. Materno",
+      "concat(nombres,' ',apellido_paterno,' ',apellido_materno)":"Cliente",
+      "nro_doc": "Nro. Documento",
+      "razon_social": "Razón Social",
+      "direccion": "Dirección",
+      "correo": "Correo",
+      "telefono": "Teléfono"
+    },
+    "cnf_forma_pago": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Forma de pago"
+    },
+    "act_comprobante": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "fecha": "Fecha",
+      "numero": "Número",
+      "total": "Total",
+      "observacion": "Observación",
+      "igv":"IGV",
+      "subtotal":"Subtotal",
+      "serie":"Serie"
+    },
+    "act_comprobante_detalle": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "descripcion": "Descripción",
+      "cantidad": "Cantidad",
+      "precio": "Precio",
+      "afectacion_igv":"Afectación IGV"
+    },
+    "cnf_impuesto_condicion": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Condición de Impuesto"
+    },
+    "cnf_num_comprobante": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "serie": "Serie",
+      "ultimo_nro": "último Número"
+    },
+    "cnf_marca": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Marca"
+    },
+    "cnf_unidad_medida": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Unidad de Medida"
+    },
+    "cnf_categoria": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Categoría"
+    },
+    "cnf_sub_categoria": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Sub Categoría"
+    },
+    "cnf_producto": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Producto",
+      "precio": "precio",
+      "codigo": "Código",
+      "descripcion": "Producto",
+      "cnf_producto.cnf_producto_id, cnf_producto.nombre":"Producto"
+    },
+    "inv_almacen": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Almacén"
+    }
+  }
+}
