@@ -1,0 +1,21 @@
+poner asteriscos a los no null
+
+tipos de comprobantes, agregar:
+-is sunat
+
+Tipos de Producto, agregar: 
+-maneja inventario boolean
+
+Producto, agregar:
+-lista de precios
+
+-Icono reportes
+-plantilla admin nueva
+-impresión ticket, boleta, factura
+-reporte total ventas, total compras,
+-cierre caja
+-control usuarios
+-control locales
+
+
+
