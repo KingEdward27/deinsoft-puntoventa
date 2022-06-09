@@ -9,12 +9,13 @@ import {
 } from '@angular/router';
 import {Observable} from 'rxjs';
 import {AppService} from '@services/app.service';
+import { AuthenticationService } from '@services/authentication.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthGuard implements CanActivate, CanActivateChild {
-    constructor(private router: Router, private appService: AppService) {}
+    constructor(private router: Router, private appService: AppService,private authenticationService:AuthenticationService) {}
 
     canActivate(
         next: ActivatedRouteSnapshot,
@@ -24,6 +25,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         | Promise<boolean | UrlTree>
         | boolean
         | UrlTree {
+            // const isAuthenticated = this.authenticationService.isAuthenticated();
+            // console.log(isAuthenticated);
+            
+            // if(!isAuthenticated){
+            //     this.router.navigate(['/login']); // , { queryParams: { returnUrl: state.url }}
+            //     return false;
+            // }
+            // return true;
         return this.getProfile();
     }
 
@@ -40,7 +49,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
     async getProfile() {
         console.log("getProfile");
+        // await this.appService.getProfile();
+        // return true;
         if (this.appService.user) {
+            console.log("??");
+            
             return true;
         }
 

@@ -55,7 +55,7 @@ export const MENU = [
             {name: 'Tipo de comprobante',path: ['/tipo-comprobante']},
             {name: 'Numeración de comprobante',path: ['/numcomprobante']},
             {name: 'Forma de Pago',path: ['/forma-pago']},
-            {name: 'Socio de Negocio',path: ['/maestro']}
+            {name: 'Clientes y Proveedores',path: ['/maestro']}
         ]
     },
     {

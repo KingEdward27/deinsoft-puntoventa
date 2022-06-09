@@ -43,7 +43,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     async registerByAuth() {
         if (this.registerForm.valid) {
             this.isAuthLoading = true;
-            await this.appService.registerByAuth(this.registerForm.value);
+            //await this.appService.registerByAuth(this.registerForm.value);
             this.isAuthLoading = false;
         } else {
             this.toastr.error('Form is not valid!');
@@ -52,13 +52,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     async registerByGoogle() {
         this.isGoogleLoading = true;
-        await this.appService.registerByGoogle();
+        //await this.appService.registerByGoogle();
         this.isGoogleLoading = false;
     }
 
     async registerByFacebook() {
         this.isFacebookLoading = true;
-        await this.appService.registerByFacebook();
+        //await this.appService.registerByFacebook();
         this.isFacebookLoading = false;
     }
 

@@ -5,24 +5,26 @@ import {Router} from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { catchError } from "rxjs/operators";
 import { UtilService } from "../services/util.service";
+import { AuthenticationService } from "@services/authentication.service";
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor{
 
     constructor(
                 private router: Router,private utilService:UtilService,
-                private http: HttpClient){}
+                private http: HttpClient,private auth:AuthenticationService){}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{
         
-        // let currentUser =  this.auth.currentUserValue 
+        //let currentUser =  this.auth.currentUserValue 
+            console.log(this.auth.getToken());
             
-        //     if(this.auth.getToken()){
-        //         request = request.clone({
-        //             setHeaders:{ Authorization: this.auth.getToken() }
-        //         })
+            if(this.auth.getToken()){
+                request = request.clone({
+                    setHeaders:{ Authorization: this.auth.getToken() }
+                })
                 
-        //     }
+            }
         return next.handle(request)
               .pipe(
                 catchError((error: HttpErrorResponse) => {
@@ -39,7 +41,7 @@ export class JwtInterceptor implements HttpInterceptor{
                   if(!error?.url?.includes("login") && error.status != 417&& error.status != 422 && error.status != 0){
                     if(error.status == 403){
                         this.router.navigate(['/login']);
-                        window.location.reload();
+                        //window.location.reload();
                     }
                     if (error.status === 401) {
                       this.utilService.msgAccessDeniedWithMessage(error.error);

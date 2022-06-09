@@ -9,7 +9,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "update": "ng update --force @angular/cli @angular/core",
-    "postinstall": "ngcc"
+    "postinstall": "ngcc",
+    "heroku-postbuild": "ng build --prod"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
@@ -36,9 +37,11 @@
     "@ngx-translate/core": "13.0.0",
     "@ngx-translate/http-loader": "6.0.0",
     "@types/datatables.net-buttons": "^1.4.7",
+    "@auth0/angular-jwt": "^5.0.2",
     "angular-datatables": "13.0.1",
     "bootstrap": "^4.6.0",
     "core-js": "3.8.0",
+    "angular-jwt": "^0.1.11",
     "datatables.net": "1.11.3",
     "datatables.net-autofill-dt": "2.3.9",
     "datatables.net-buttons": "^2.2.3",
@@ -46,7 +49,6 @@
     "datatables.net-colreorder-dt": "1.5.4",
     "datatables.net-dt": "^1.1.0",
     "dayjs": "1.10.6",
-    "gatekeeper-client-sdk": "0.4.2",
     "jquery": "3.6.0",
     "jquery.promises": "1.0.4",
     "luxon": "2.3.0",

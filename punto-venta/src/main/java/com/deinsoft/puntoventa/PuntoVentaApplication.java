@@ -18,7 +18,7 @@ public class PuntoVentaApplication {
         
         SpringApplication.run(PuntoVentaApplication.class, args);
     }
-
+    
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {

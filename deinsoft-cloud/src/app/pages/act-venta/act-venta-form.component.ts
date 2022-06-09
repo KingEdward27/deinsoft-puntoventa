@@ -25,7 +25,7 @@ export class ActVentaFormComponent extends GenericMasterDetailFormComponent impl
   ticket = "";
   prop = {
     "tableName": "act_comprobante",
-    "title": "Venta",
+    "title": "Venta de Productos y Servicios",
     "api": "save-sale",
     "columnsList": [{ tableName: "act_comprobante", columnName: "fecha", filterType: "text" },
                     { tableName: "cnf_local", columnName: "nombre", filterType: "text"  },
@@ -157,36 +157,36 @@ export class ActVentaFormComponent extends GenericMasterDetailFormComponent impl
 
   // }
   public async save(){
-    await super.preSave();
-
-    this.properties.postSaveTrans = []
-    this.properties.details.forEach((element:any) => {
-      
-    });
-    this.properties.postSaveTrans.push({type:"update"});
-    let result = await super.save();
-    console.log(result);
-  //   for(let key of Array.from( result.entries()) ) {
-  //     console.log(key);
-  //  }
-  //   let we: string[] = Array.from( result.entries());
-  //   console.log(we[1]);
-  //   this.properties.id = result[0];
-  //   result.forEach((value: boolean, key: string) => {
-  //       console.log(key, value);
+    let res = await super.preSave();
+    console.log(res);
+    if(res != 0){
+      this.properties.postSaveTrans = []
+      this.properties.postSaveTrans.push({type:"update"});
+      let result = await super.save();
+      console.log(result);
+    //   for(let key of Array.from( result.entries()) ) {
+    //     console.log(key);
+    //  }
+    //   let we: string[] = Array.from( result.entries());
+    //   console.log(we[1]);
+    //   this.properties.id = result[0];
+    //   result.forEach((value: boolean, key: string) => {
+    //       console.log(key, value);
+          
+    //   });
+      if(result){
+        let res :any;
+        res = await super.postSave();
+        console.log(res);
+        console.log(this.properties);
+        console.log(super.properties);
         
-  //   });
-    if(result){
-      let res :any;
-      res = await super.postSave();
-      console.log(res);
-      console.log(this.properties);
-      console.log(super.properties);
-      
-      
-      this.ticket = res.id;
-      this.properties = this.prop;
+        
+        this.ticket = res.id;
+        this.properties = this.prop;
+      }
     }
+    
     
   }
   // updateValue() {

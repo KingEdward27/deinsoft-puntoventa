@@ -30,6 +30,7 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
 
   //generic variables
   error: any;
+  errorGen: any;
   isDataLoaded: Boolean = false;
   isOk: boolean = false;
   isWarning: boolean = false;
@@ -193,7 +194,8 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
         //columnForm.value = selectValue
         
         if(selectValue){
-          myMap.set(cond,columnForm.value?columnForm.value:selectValue);
+          //myMap.set(cond,columnForm.value?columnForm.value:selectValue);
+          myMap.set(cond,selectValue);
         }
         
       });
@@ -537,8 +539,24 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
     this.router.navigate(["/"]);
   }
   async preSave(){
-    this.preSaveStatic();
-    return await this.preSaveDinamic();
+    this.errorGen = undefined;
+    this.properties.details.forEach(element => {
+      console.log(element);
+      
+      if(element.listData.length == 0){
+        this.errorGen = "Debe agregar productos/servicios a la operación"
+      }
+    });
+    console.log(this.errorGen);
+    
+    if(!this.errorGen){
+      this.preSaveStatic();
+      await this.preSaveDinamic();
+      return 1
+    }else{
+      return 0
+    }
+    
   }
   preSaveStatic()
   {  
@@ -828,17 +846,18 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
       console.log(element.listData);
       element.filters = [];
       let contador = -1;
-      let contador2 = -1;
+      
       element.listData.forEach((lineData:any) => {
         //en cada linea
         contador++
+        let contador2 = -1;
         element.columnsList.forEach((line:any) => {
           contador2++;
           if(line.type != 'none'){
             if(line.type == 'select'){
             
               let column = line?.tableName + "." + line?.relatedBy;
-              console.log(column);
+              console.log(column+"_"+contador);
               let selectValue = (<HTMLInputElement>document.getElementById(column+"_"+contador)).value;
               //element.value = selectValue;
               myMap.set(line.relatedBy, selectValue);

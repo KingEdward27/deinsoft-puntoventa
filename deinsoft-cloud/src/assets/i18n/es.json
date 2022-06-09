@@ -114,7 +114,8 @@
       "id": "ID",
       "nombre": "Nombre",
       "codigo": "Código",
-      "codigo_sunat": "Código SUNAT"
+      "codigo_sunat": "Código SUNAT",
+      "flag_electronico":"Facturación electrónica (1=Si,0=No)"
     },
     "cnf_maestro": {
       "home": {

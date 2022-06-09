@@ -598,5 +598,22 @@ REFERENCES punto_venta.cnf_impuesto_condicion (cnf_impuesto_condicion_id);
 
 drop table act_comprobante_detalle
 drop table act_comprobante
+select * from cnf_tipo_comprobante
+select * from information_schema.key_column_usage AS kcu where kcu.table_name = 'cnf_distrito'     
 
-select * from information_schema.key_column_usage AS kcu where kcu.table_name = 'cnf_distrito'                
+create table act_pago
+(
+	act_pago_id int auto_increment not null,
+	act_comprobante_id int not null,
+    fecha date,
+    monto decimal(14,4)
+)engine=innodb;
+
+create table act_pago_detalle
+(
+	act_pago_id int auto_increment not null,
+	act_comprobante_id int not null,
+    fecha date,
+    monto decimal(14,4)
+)engine=innodb;
+           

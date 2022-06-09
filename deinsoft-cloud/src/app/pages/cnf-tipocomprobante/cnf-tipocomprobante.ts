@@ -17,10 +17,12 @@ export class CnfTipoComprobanteComponent extends GenericListComponent implements
     "title": "Tipo de comprobante",
     "columnsList":[{tableName: "cnf_tipo_comprobante",columnName:"nombre",filterType:"text"},
                    {tableName: "cnf_tipo_comprobante",columnName:"codigo",filterType:"text"},
-                   {tableName: "cnf_tipo_comprobante",columnName:"codigo_sunat",filterType:"text"}],
+                   {tableName: "cnf_tipo_comprobante",columnName:"codigo_sunat",filterType:"text"},
+                   {tableName: "cnf_tipo_comprobante",columnName:"flag_electronico"}],
     "columnsForm":[{tableName: "cnf_tipo_comprobante", "columnName":"nombre","type":"input"},
                    {tableName: "cnf_tipo_comprobante", "columnName":"codigo","type":"input"},
-                   {tableName: "cnf_tipo_comprobante", "columnName":"codigo_sunat","type":"input"}
+                   {tableName: "cnf_tipo_comprobante", "columnName":"codigo_sunat","type":"input"},
+                   {tableName: "cnf_tipo_comprobante",columnName:"flag_electronico",type:"input"}
            ],
     //filters sería para filtros adicionales
     "filters":{"cnf_tipo_comprobante.codigo":"","cnf_tipo_comprobante.nombre":""},

@@ -8,6 +8,7 @@
     <i
         *ngIf="isExpandable && menuItem.children.length > 0"
         class="right fas fa-angle-left"
+        style="padding-left: 10px;"
     ></i>
 </a>
 <ul class="nav nav-treeview" *ngFor="let item of menuItem.children">
@@ -16,6 +17,7 @@
             [routerLink]="item.path"
             [routerLinkActive]="'active'"
             class="nav-link"
+            style="padding-left: 50px;"
         >
             <!-- <i class="far fa-circle nav-icon"></i> -->
             <p>{{ item.name }}</p>

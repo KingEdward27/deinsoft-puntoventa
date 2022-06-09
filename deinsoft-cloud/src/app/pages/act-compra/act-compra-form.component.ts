@@ -148,16 +148,20 @@ export class ActCompraFormComponent extends GenericMasterDetailFormComponent imp
 
   // }
   public async save(){
-    await super.preSave();
-    let result = await super.save();
-    console.log(result);
-    if(result){
-      let res :any;
-      res = await super.postSave();
-      console.log(res);
-      
-      this.properties = this.prop;
+    let res = await super.preSave();
+    console.log(res);
+    if(res != 0){
+      let result = await super.save();
+      console.log(result);
+      if(result){
+        let res :any;
+        res = await super.postSave();
+        console.log(res);
+        
+        this.properties = this.prop;
+      }
     }
+    
     
   }
   print(prope:any, param:CommonService,parent:GenericMasterDetailFormComponent) {

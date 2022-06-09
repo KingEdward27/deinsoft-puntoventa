@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.framework.repository;
 
+import com.deinsoft.puntoventa.business.config.AppConfig;
 import com.deinsoft.puntoventa.framework.model.*;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -37,7 +38,9 @@ public class JdbcRepository implements IJdbcRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(JdbcRepository.class);
 
-    private String tableSchema = "punto_venta";
+    @Autowired
+    AppConfig appConfig;
+    
     private static List<MetaData> listMetaData;
 
     private static List<ReferenceTable> listReferenceTable;
@@ -115,9 +118,9 @@ public class JdbcRepository implements IJdbcRepository {
         String sql = "select tc.table_name, kcu.referenced_table_name,kcu.referenced_column_name\n"
                 + "			    from information_schema.table_constraints AS tc  \n"
                 + "			    JOIN information_schema.key_column_usage AS kcu ON tc.constraint_name = kcu.constraint_name AND tc.table_schema = kcu.table_schema \n"
-                + "			where tc.constraint_schema = 'punto_venta'\n"
+                + "			where tc.constraint_schema = '" + appConfig.getMysqlDatabase() + "'\n"
                 + "			and tc.constraint_type = 'FOREIGN KEY'\n"
-                + "             and tc.constraint_schema = 'punto_venta'-- c.table_schema\n"
+                + "             and tc.constraint_schema = '" + appConfig.getMysqlDatabase() + "'-- c.table_schema\n"
                 + "             and tc.table_schema = kcu.table_schema\n"
                 + "             and tc.constraint_schema = kcu.constraint_schema";
         list = namedParameterJdbcTemplate.query(sql,
@@ -179,7 +182,7 @@ public class JdbcRepository implements IJdbcRepository {
                 + "				-- where tc.constraint_type = 'FOREIGN KEY' \n"
                 + "		) wa on (wa.table_name= c.table_name and wa.column_name = c.column_name)\n";
                 sql = sql + "		where c.table_schema = :tableSchema";
-                mapSqlParameterSource.addValue("tableSchema", this.tableSchema);
+                mapSqlParameterSource.addValue("tableSchema", appConfig.getMysqlDatabase());
                 
                 if(!tableName.equals("")){
                     sql = sql + "		where c.table_name = :tableName";
@@ -459,7 +462,9 @@ public class JdbcRepository implements IJdbcRepository {
         int index = 0;
         for (ColumnsList columnsList : listColumns) {
             index++;
-            sql = sql.concat(columnsList.getTableName()).concat(columnsList.getTableName().isBlank()?"": ".").concat(columnsList.getColumnName()).concat(" as ")
+            sql = sql.concat(columnsList.getTableName()).concat(columnsList.getTableName()== null || 
+                    (columnsList.getTableName() != null && columnsList.getTableName().equals(""))?"": ".")
+                    .concat(columnsList.getColumnName()).concat(" as ")
                     .concat(columnsList.getTableName()).concat("_").concat("column_").concat(String.valueOf(index)).concat(",");
         }
         sql = sql.substring(0, sql.length() - 1);
