@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
+@RequestMapping("/api/framework")
 public class GenericController {
 
     private static final Logger logger = LoggerFactory.getLogger(GenericController.class);
@@ -100,11 +101,27 @@ public class GenericController {
         if (jsonData.getId() == 0) {
             object = jdbcRepository.create(jsonData);
         } else {
-            object = jdbcRepository.update(jsonData);;
+            object = jdbcRepository.update(jsonData);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(object);
     }
+    @PostMapping(value = "/save-user")
+    public ResponseEntity<?> createUser(@RequestBody JsonData jsonData, HttpServletRequest request) throws Exception {
+        logger.info("selectByTablename received: " + jsonData.toString());
+        logger.info("listColumns received: " + jsonData.getFilters());
+        logger.info("getFilters received: " + jsonData.getFilters().entrySet());
+        Object object = jdbcRepository.validate(jsonData);
 
+        if (object != null) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(object);
+        }
+        if (jsonData.getId() == 0) {
+            object = jdbcRepository.create(jsonData);
+        } else {
+            object = jdbcRepository.update(jsonData);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(object);
+    }
     @PostMapping(value = "/save-transaction")
     public ResponseEntity<?> createTransactional(@RequestBody JsonData jsonData, HttpServletRequest request) throws Exception {
         logger.info("selectByTablename received: " + jsonData.toString());

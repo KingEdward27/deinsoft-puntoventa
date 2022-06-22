@@ -70,6 +70,9 @@ import { JwtInterceptor } from './config/jwt.interceptor';
 import { RptActVentaFormComponent } from '@pages/reports/act-venta/rpt-act-venta-form.component';
 import { RptActCompraComponent } from '@pages/reports/act-compra/rpt-act-compra.component';
 import { GenericList2Component } from './base/components/generic-list2/generic-list2.component';
+import { GenericChildFormComponent } from './base/components/generic-child/generic-child-form.component';
+import { SegUsuarioComponent } from '@pages/security/seg-usuario/seg_usuario';
+import { SegRolComponent } from '@pages/security/seg-rol/seg_rol';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -130,10 +133,13 @@ registerLocaleData(localeEn, 'en-EN');
         GenericModalComponent,
         ActCompraFormComponent,
         ActVentaFormComponent,
+        SegUsuarioComponent,
+        SegRolComponent,
         RptActVentaFormComponent,
         RptActCompraComponent,
         GenericReportComponent,
-        GenericList2Component
+        GenericList2Component,
+        GenericChildFormComponent
     ],
     imports: [
         BrowserModule,

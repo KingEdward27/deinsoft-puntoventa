@@ -52,6 +52,7 @@
                         <div class="row">
                             <div class="col-lg-9 col-sm-12 col-xs-12">
                                 <div class="row">
+                                    
                                     <div *ngIf="errorGen != ''">
                                         <div class="alert alert-danger col-sm-12 col-lg-12">{{errorGen}}
                                         </div>
@@ -75,7 +76,7 @@
                                 <div class="row">
                                     <ng-container *ngFor="let item of properties.columnsForm; index as i ">
                                         
-                                        <div *ngIf="item.type == 'input' || item.type == 'date' || item.type == 'select'"
+                                        <div *ngIf="item.type == 'input' || item.type == 'date' || item.type == 'select' || item.type == 'typehead'"
                                             class="col-lg-3 col-sm-12 col-xs-12">
                                             <div class="form-group-sm">
                                                 <label class="col-sm-12 col-form-label-form-md"
@@ -127,7 +128,18 @@
         
                                                         </div>
                                                     </ng-container>
-        
+                                                    <ng-container *ngIf="item.type == 'typehead'">
+                                                        <input class="form-control-sm col-sm-12 col-lg-6"  type="text" 
+                                                            name="{{item.tableName}}.{{item.load?item.load.loadBy:item.relatedBy}}"
+                                                            id="{{item.tableName}}.{{item.relatedBy}}" #input 
+                                                            class="form-control-sm col-sm-12 col-lg-12"
+                                                            (selectItem)="onchangeInForm(item,$event)"
+                                                            [ngbTypeahead]="item.functionSearch" [resultTemplate]="rt" [inputFormatter]="formatter">
+                                                            <ng-template #rt let-r="result" let-t="term">
+                                                                {{ r[0]}} {{ r[1]}}
+                                                            </ng-template>
+                                                    </ng-container>
+                                                    
                                                 </div>
         
                                             </div>
@@ -199,7 +211,7 @@
                                 <div class="form-group-sm row col-12 mb-2">
                                     <label class="col-sm-12 col-lg-2 col-form-label"
                                         translate="webpagos.{{item.search.tableName}}.{{item.search.columnName}}">...cargando</label>
-                                        <input class="form-control-sm col-sm-12 col-lg-6"  type="text" 
+                                        <input autofocus class="form-control-sm col-sm-12 col-lg-6"  type="text" 
                                         name="{{item.search.tableName}}.{{item.search.load?item.search.load.loadBy:item.search.relatedBy}}"
                                         id="{{item.search.tableName}}.{{item.search.relatedBy}}" #input 
                                         [ngbTypeahead]="item.functionSearch" [resultTemplate]="rt" [inputFormatter]="formatter"

@@ -85,6 +85,19 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
         })
       )
     });
+    this.properties.columnsForm.forEach((element:any) => {
+      element.functionSearch = (text$: Observable<string>) =>
+      text$.pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        switchMap(term => {
+          console.log("esg");
+          console.log(term);
+          
+          return this.getListAsObservable(term,element);
+        })
+      )
+    });
     console.log(this.commonService);
     let com = this.commonService;
     let wa = this.properties;
@@ -705,7 +718,7 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
             //     element?.removeEventListener("click", column.action.name());
             //   });
             // });
-            this.router.navigate(["/act-venta"]);
+            this.router.navigate([this.properties.urlReturn]);
           });
       return data;
     }
@@ -820,14 +833,18 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
           element.value = selectValue;
           myMap.set(element.columnName, selectValue);
 
-        } else {
+        } else if(element.type == "select") {
           column = element?.tableName + "." + element?.relatedBy;
           console.log(column);
           let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
           element.value = selectValue;
           myMap.set(element.relatedBy, selectValue);
         }
-
+        else{
+          console.log(element.relatedBy, element.value);
+        
+          myMap.set(element.relatedBy, element.value);
+        }
       }else{
         console.log(element.columnName, element.value);
         
@@ -1002,13 +1019,38 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
     }
     
   }
+  getListAsObservable(term: any,item:any):Observable<any>{
+    console.log(term,item);
+    let condition:any = "";
+      if (term.length >= 2) {
+        return this.commonService.selectByTableNameAndColumns(item.search.tableName, 
+          item.search.columnName,
+          item.search.where.replace(["[value]"],"'"+term+"'").replace(["[value]"],"'"+term+"'")).pipe(
+          tap((data) => {
+            console.log(data);
+            //item.listData.push(data[0]);
+            this.searchFailed = false
+            
+            //postFunction.name(this.properties);
+          }),
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          })
+        );
+        
+      } else {
+        return <any>[];
+      }
+    
+  }
   getListInDetailsAsObservable(term: any,itemLine:any):Observable<any>{
     console.log(term,itemLine);
     let condition:any = "";
       if (term.length >= 2) {
         return this.commonService.selectByTableNameAndColumns(itemLine.search.tableName, 
           itemLine.search.columnName,
-          itemLine.search.where.replace(["[value]"],"'"+term+"'")).pipe(
+          itemLine.search.where.replace(["[value]"],"'"+term+"'").replace(["[value]"],"'"+term+"'")).pipe(
           tap((data) => {
             console.log(data);
             //item.listData.push(data[0]);
@@ -1045,6 +1087,10 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
         window.URL.revokeObjectURL(data);
         link.remove
       }, 100);
+  }
+  onchangeInForm(item:any,event:any){
+    item.value = event.item[0]
+    console.log(event.item);
   }
   // public searchFactory(postFunction:any, item:any): (text$: Observable<string>) => Observable<any[]> {
   //   console.log("wecs");

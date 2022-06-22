@@ -20,29 +20,29 @@ export  class CommonService {
   }
 
   public getListWithFilters(jsonData:any): Observable<any[]> {
-    return this.http.post<any[]>(this.baseEndpoint+"/select-by-tablename-with-filters", jsonData);
+    return this.http.post<any[]>(this.baseEndpoint+"/api/framework/select-by-tablename-with-filters", jsonData);
   }
   public getList(jsonData:any): Observable<any[]> {
-    return this.http.post<any[]>(this.baseEndpoint+"/select-by-properties", jsonData);
+    return this.http.post<any[]>(this.baseEndpoint+"/api/framework/select-by-properties", jsonData);
   }
   public getListComboWithFilters(jsonData2:any): Observable<any[]> {
-    return this.http.post<any[]>(this.baseEndpoint+"/select-combos-by-properties", jsonData2);
+    return this.http.post<any[]>(this.baseEndpoint+"/api/framework/select-combos-by-properties", jsonData2);
   }
   public getData(jsonData:any): Observable<any> {
-    return this.http.post<any>(this.baseEndpoint+"/select-by-id", jsonData);
+    return this.http.post<any>(this.baseEndpoint+"/api/framework/select-by-id", jsonData);
   }
   public getListComboByTableName(tableName:string,columns:string): Observable<any[]> {
     const params = new HttpParams()
     .set('tableName', tableName)
     .set('descriptionColumns', columns);
-    return this.http.get<any[]>(this.baseEndpoint+"/select-combos-by-tablename", {params: params});
+    return this.http.get<any[]>(this.baseEndpoint+"/api/framework/select-combos-by-tablename", {params: params});
   }
   public selectByTableNameAndColumns(tableName:string,columns:string,condition:any): Observable<any[]> {
     const params = new HttpParams()
     .set('tableName', tableName)
     .set('descriptionColumns', columns)
     .set('condition', condition);
-    return this.http.get<any[]>(this.baseEndpoint+"/select-columns", {params: params});
+    return this.http.get<any[]>(this.baseEndpoint+"/api/framework/select-columns", {params: params});
   }
   public selectByTableNameAndColumnsAsync(tableName:string,columns:string,condition:any): Promise<any[]> {
     const params = new HttpParams()
@@ -51,7 +51,7 @@ export  class CommonService {
     .set('condition', condition);
     console.log(columns);
     
-    return this.http.get<any[]>(this.baseEndpoint+"/select-columns", {params: params}).toPromise();
+    return this.http.get<any[]>(this.baseEndpoint+"/api/framework/select-columns", {params: params}).toPromise();
   }
   // public listarPaginas(page: string, size: string): Observable<any>{
   //   const params = new HttpParams()
@@ -65,16 +65,16 @@ export  class CommonService {
   // }
 
   public create(jsonData: any): Observable<any> {
-    return this.http.post<any>(this.baseEndpoint+"/save", jsonData,{ headers: this.cabeceras });
+    return this.http.post<any>(this.baseEndpoint+"/api/framework/save", jsonData,{ headers: this.cabeceras });
   }
   public createTransactional(jsonData: any): Observable<any> {
-    return this.http.post<any>(this.baseEndpoint+"/save-transaction", jsonData,{ headers: this.cabeceras });
+    return this.http.post<any>(this.baseEndpoint+"/api/framework/save-transaction", jsonData,{ headers: this.cabeceras });
   }
   public createTransactionalAsync(api:any, jsonData: any): Promise<any> {
     if(api){
-      return this.http.post<any>(this.baseEndpoint+"/business/"+api, jsonData,{ headers: this.cabeceras }).toPromise();
+      return this.http.post<any>(this.baseEndpoint+"/api/business/"+api, jsonData,{ headers: this.cabeceras }).toPromise();
     }else{
-      return this.http.post<any>(this.baseEndpoint+"/save-transaction", jsonData,{ headers: this.cabeceras }).toPromise();
+      return this.http.post<any>(this.baseEndpoint+"/api/framework/save-transaction", jsonData,{ headers: this.cabeceras }).toPromise();
     }
     
   }
@@ -104,7 +104,7 @@ export  class CommonService {
     if(!responseType){
       responseType = 'text';
     }
-    return this.http.post<any>(this.baseEndpoint + url,param,{responseType: responseType} );
+    return this.http.post<any>(this.baseEndpoint +  url,param,{responseType: responseType} );
   }
   public update(tableName:string, columns:any,condition: string):Observable<HttpResponse<{}>> {
     console.log("update");
@@ -118,13 +118,13 @@ export  class CommonService {
     // map.set("idValue",id);
     console.log(param);
     
-    return this.http.post<any>(this.baseEndpoint+"/update", param);
+    return this.http.post<any>(this.baseEndpoint+"/api/framework/update", param);
   }
   public remove(tableName:string,id: number):Observable<HttpResponse<{}>> {
     let params = new HttpParams().set("tableName",tableName).set("id",id);
-    return this.http.delete(this.baseEndpoint+"/delete", { observe: 'response' ,params});
+    return this.http.delete(this.baseEndpoint+"/api/framework/delete", { observe: 'response' ,params});
   }
   public export(jsonData:any): Observable<any> {
-    return this.http.post(this.baseEndpoint+"/export/excel", jsonData,{observe: 'response', responseType: 'blob'});
+    return this.http.post(this.baseEndpoint+"/api/framework/export/excel", jsonData,{observe: 'response', responseType: 'blob'});
   }
 }

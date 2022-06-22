@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author EDWARD-PC
  */
 @RestController
-@RequestMapping("/business")
+@RequestMapping("/api/business")
 public class BusinessController {
 
     @Autowired

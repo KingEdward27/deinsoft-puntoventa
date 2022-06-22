@@ -133,15 +133,15 @@
                                         style="color: red;font-size: 16px !important;font-weight: bold;"> *</span></label>  
                                 
                                     <div class="col-sm-12 col-lg-9"> 
-                                        <ng-container *ngIf="item.type == 'input'" >
-                                            <input type="text" maxlength="255"
+                                        <ng-container *ngIf="item.type != 'hidden' && (item.type == 'input' || item.type == 'password')" >
+                                            <input type="{{item.type}}" maxlength="255"
                                                 name="{{item.tableName}}.{{item.columnName}}" 
                                                 id="{{item.tableName}}.{{item.columnName}}"  
                                                 class="form-control-sm col-sm-12 col-lg-6"
                                                 value="{{item.value}}" />
                                             <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf='error?[item.columnName]:false'>{{ error[item.columnName] }}</div>
                                         </ng-container>
-                                        <ng-container *ngIf="item.type == 'select'" >
+                                        <ng-container *ngIf="item.type != 'hidden' && item.type == 'select'" >
                                             <select name="{{item.tableName}}.{{item.load?item.load.loadBy:item.relatedBy}}" id="{{item.tableName}}.{{item.load?item.load.loadBy:item.relatedBy}}"  
                                             (change)="load(item,i)" class="form-control-sm col-sm-12 col-lg-6">
                                                     <ng-container *ngFor="let columnas of item.listData; index as u;">
@@ -156,7 +156,7 @@
                                                 <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf='error?[item.load?item.load.loadBy:item.relatedBy]:false'>{{ error[item.load?item.load.loadBy:item.relatedBy] }}</div>
                                             
                                         </ng-container>
-                                        <ng-container *ngIf="item.type == 'date'">
+                                        <ng-container *ngIf="item.type != 'hidden' && item.type == 'date'">
                                             <div class="input-group input-group-sm">
                                                 <input placeholder="dd/mm/yyyy" 
                                                 class="form-control-sm-dp col-xs-10 col-sm-10 col-lg-5"
@@ -177,7 +177,54 @@
                                 
                             </div>
                         </ng-container>
+                        <div class="form-group-sm row" *ngIf="id">
+                            <ng-container *ngFor="let itemChild of properties.childTables">
+                                <label class="col-xl-3 col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.secUser.secRoleUser' |
+                                    translate}} <span
+                                        style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+            
+                                <div class="col-sm-12 col-lg-9">
+                                    <div *ngIf="itemChild.listData && itemChild.listData.length > 0? false:true">
+                                        {{'ocscloudApp.noRows' | translate }}
+                                    </div>
+                                    <div *ngIf="itemChild.listData && itemChild.listData.length > 0?true:false">
+                                        <table id="dtData"
+                                            class="col-xl-9 col-lg-9 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th width="1%">Nro.</th>
+                                                    <th *ngFor="let item of itemChild.columnsForm" class="text-nowrap">{{item.columnName}}</th>
+                                                    <th width="1%" class="text-nowrap">{{'ocscloudApp.actionsText' | translate}}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+            
+                                                <tr *ngFor="let item of itemChild.listData; index as i" class="odd gradeX">
+                                                    <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
+                                                    <ng-container *ngFor="let itemDetail of item; index as i2">
+                                                        <td *ngIf="i2 > 0" [ngClass]="properties.columnsForm[i2-1].type =='number'? 'content-number' : ''">{{itemDetail}}</td>
+                                                    </ng-container>
+                                                    <td>
+                                                        <div class="row row2">
+                                                            <div class="col-sm-12 col-xs-12 text-center"><a 
+                                                                    style="cursor: pointer;" title="Cambiar estado"><i
+                                                                        class="fa fa-trash fa-lg"></i></a></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div>
+                                        <a style="color: blue;text-decoration: underline;cursor: pointer;"
+                                            (click)="addChild(itemChild.tableName)">Añadir SecRoleUser</a>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            
+                            
         
+                        </div>
                         <div class="form-group row">
         
                             <div class="col-sm-12" style="padding-top: 20px;">

@@ -617,3 +617,61 @@ create table act_pago_detalle
     monto decimal(14,4)
 )engine=innodb;
            
+alter table act_comprobante
+add cnf_empresa_id int;
+ALTER TABLE act_comprobante ADD CONSTRAINT act_comprobante_cnf_empresa_fk
+FOREIGN KEY (cnf_empresa_id)
+REFERENCES cnf_empresa (cnf_empresa_id);
+update act_comprobante set cnf_empresa_id = 1 where cnf_empresa_id is null;
+
+alter table cnf_producto
+add cnf_empresa_id int;
+ALTER TABLE cnf_producto ADD CONSTRAINT cnf_producto_cnf_empresa_fk
+FOREIGN KEY (cnf_empresa_id)
+REFERENCES cnf_empresa (cnf_empresa_id);
+update cnf_producto set cnf_empresa_id = 1 where cnf_empresa_id is null;
+
+alter table cnf_categoria
+add cnf_empresa_id int;
+ALTER TABLE cnf_categoria ADD CONSTRAINT cnf_categoria_cnf_empresa_fk
+FOREIGN KEY (cnf_empresa_id)
+REFERENCES cnf_empresa (cnf_empresa_id);
+update cnf_categoria set cnf_empresa_id = 1 where cnf_empresa_id is null;
+
+alter table cnf_sub_categoria
+add cnf_empresa_id int;
+ALTER TABLE cnf_sub_categoria ADD CONSTRAINT cnf_sub_categoria_cnf_empresa_fk
+FOREIGN KEY (cnf_empresa_id)
+REFERENCES cnf_empresa (cnf_empresa_id);
+update cnf_sub_categoria set cnf_empresa_id = 1 where cnf_empresa_id is null;
+
+alter table cnf_marca
+add cnf_empresa_id int;
+ALTER TABLE cnf_marca ADD CONSTRAINT cnf_marca_cnf_empresa_fk
+FOREIGN KEY (cnf_empresa_id)
+REFERENCES cnf_empresa (cnf_empresa_id);
+update cnf_marca set cnf_empresa_id = 1 where cnf_empresa_id is null;
+
+alter table cnf_maestro
+add cnf_empresa_id int;
+ALTER TABLE cnf_maestro ADD CONSTRAINT cnf_maestro_cnf_empresa_fk
+FOREIGN KEY (cnf_empresa_id)
+REFERENCES cnf_empresa (cnf_empresa_id);
+update cnf_maestro set cnf_empresa_id = 1 where cnf_empresa_id is null;
+
+alter table cnf_forma_pago
+add cnf_empresa_id int;
+ALTER TABLE cnf_forma_pago ADD CONSTRAINT cnf_forma_pago_cnf_empresa_fk
+FOREIGN KEY (cnf_empresa_id)
+REFERENCES cnf_empresa (cnf_empresa_id);
+update cnf_forma_pago set cnf_empresa_id = 1 where cnf_empresa_id is null;
+
+ALTER TABLE seg_usuario
+ADD CONSTRAINT email_UNIQUE UNIQUE (email);
+
+UPDATE `punto_venta`.`seg_usuario` SET `email` = 'edward21.sistemas@gmail.com' WHERE (`seg_usuario_id` = '1');
+UPDATE `punto_venta`.`seg_usuario` SET `email` = 'facturacionelectronica@opendeinsoft.com' WHERE (`seg_usuario_id` = '3');
+
+ALTER TABLE `punto_venta`.`cnf_producto` 
+ADD COLUMN `barcode` VARCHAR(100) NULL AFTER `cnf_empresa_id`;
+

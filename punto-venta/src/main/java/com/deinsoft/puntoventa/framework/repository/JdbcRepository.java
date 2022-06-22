@@ -489,6 +489,14 @@ public class JdbcRepository implements IJdbcRepository {
             }
             sql = sql.substring(0, sql.length() - 5);
         }
+        if(jsonData.getOrders() != null && !jsonData.getOrders().isEmpty()){
+            sql = sql.concat("order by ");
+            for (String order : jsonData.getOrders()) {
+                sql = sql.concat(order).concat(",");
+            }
+            sql = sql.substring(0, sql.length() - 1);
+        }
+        
         logger.info(sql);
         List<Object[]> list = namedParameterJdbcTemplate.queryForList(sql, mapSqlParameterSource).stream()
                 .map(row -> row.values().toArray()).collect(Collectors.toList());

@@ -69,10 +69,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         LocalDateTime currentTime = LocalDateTime.now();
         final Date createdDate = new Date();
-        final Date expirationDate = new Date(createdDate.getTime() + Constant.TOKEN_EXPIRATION_TIME *2 * 10000/* *10000 maximo tiempo posible*/);
+        final Date expirationDate = new Date(createdDate.getTime() + Constant.TOKEN_REFRESH_EXPIRATION_TIME * 10000/* *10000 maximo tiempo posible*/);
         LOGGER.info("expirationDate: " + expirationDate);
         String username = ((UserDetails) auth.getPrincipal()).getUsername();
-        SecUser usuario = secUserRepository.findByName(username);
+        SecUser usuario = secUserRepository.findByName(username); 
         usuario.setPassword(null);
         //String idUp = usuario.getUnidadPolicial().getIdUnidadPolicial();
 
@@ -80,7 +80,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String token = Jwts.builder().setIssuedAt(new Date()).setIssuer(Constant.ISSUER_INFO)
                 .setId("DEINSOFT-JWT")
                 .setSubject(((User) auth.getPrincipal()).getUsername())
-                .claim("authorities", "DEINSOFT")
+                .claim("authorities",((User)auth.getPrincipal()).getAuthorities())
                 .claim("user", usuario)
                 .setIssuedAt(Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant()))
                 .setExpiration(expirationDate)

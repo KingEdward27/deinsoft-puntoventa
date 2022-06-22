@@ -84,10 +84,8 @@ export class AppService {
             //this.user = {name:"edward","picture":"logo.png"};
             let tokenDecrypt = helper.decodeToken(localStorage.getItem('token'));
             console.log(tokenDecrypt);
-            
-            let user = tokenDecrypt.user;
-            console.log(user);
-            this.user = user;
+            this.user = tokenDecrypt.user;;
+            this.user.profile = tokenDecrypt.authorities[0].authority;
             console.log(this.user);
             
             // this.user ={ID: "2e7ae590-dc86-4485-809a-9d805e73bb64",

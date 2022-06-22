@@ -134,7 +134,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
 
         element.value = wa;
       }
-
+      this.id = this.properties.id;
       if (element.type != 'input' && element.type != 'date') {
         if (this.properties.id == 0) {
           if (element.loadState == 1) {
@@ -157,6 +157,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
               element.listData = data;
             });
           }
+          
 
         }
 
@@ -198,7 +199,26 @@ export class GenericFormComponent extends CommonService implements OnInit {
       }
 
     });
-
+    this.properties.childTables?.forEach(element => {
+      let columns = element.tableName + "." +element.idValue + ","
+      element.columnsForm.forEach(element => {
+        columns = columns + element.tableName + "." +element.columnName + ",";
+      });
+      columns = columns.substring(0,columns.length-1);
+      console.log(columns);
+      console.log(element);
+      let tableName = element.tableName
+      console.log(element.tableName,element.tableNameDetail);
+      
+      if(element.tableName != element.tableNameDetail){
+        tableName = tableName + " inner join " + element.tableNameDetail + " on " + 
+        element.tableName + "." + element.idValue + " = " + element.tableNameDetail + "." + element.idValue
+      }
+      super.selectByTableNameAndColumns(tableName,columns,"")
+      .subscribe(data => {
+        element.listData = data;
+      });
+    });
 
     this.isDataLoaded = true;
     console.log(this.properties);
@@ -216,29 +236,41 @@ export class GenericFormComponent extends CommonService implements OnInit {
     //this._location.back();
     
   }
+  addChild(tableName:any) {
+    console.log(tableName);
+    this.router.navigate(["/generic-child-form"]);
+  }
   save() {
+    this.preSave();
     let myMap = new Map();
     myMap.set("id", this.properties.id ? this.properties.id : 0);
     this.properties.columnsForm.forEach((element: any) => {
-      if (!element.load) {
-        let column = "";
-        if (element.type == "input" || element.type == "date") {
-          column = element?.tableName + "." + element?.columnName;
-          let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
-          element.value = selectValue;
-          myMap.set(element.columnName, selectValue);
-
-        } else {
-          column = element?.tableName + "." + element?.relatedBy;
-          let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
-          if(selectValue != "0"){
+      if (element.type != "label" && element.type != "hidden") {
+        if (!element.load) {
+          let column = "";
+          if (element.type == "input" || element.type == "date") {
+            column = element?.tableName + "." + element?.columnName;
+            let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
             element.value = selectValue;
-            myMap.set(element.relatedBy, selectValue);
+            myMap.set(element.columnName, selectValue);
+  
+          } else {
+            column = element?.tableName + "." + element?.relatedBy;
+            let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
+            if(selectValue != "0"){
+              element.value = selectValue;
+              myMap.set(element.relatedBy, selectValue);
+            }
+            
           }
-          
+  
         }
-
+      }else if(element.type == "hidden"){
+        console.log(element.columnName, element.value);
+        
+        myMap.set(element.columnName, element.value);
       }
+      
     });
     const convMap: any = {};
     myMap.forEach((val: string, key: string) => {
@@ -259,5 +291,38 @@ export class GenericFormComponent extends CommonService implements OnInit {
       console.log(this.error[0]);
     });
   }
+  async preSave(){
+    // this.errorGen = undefined;
+    // this.properties.details.forEach(element => {
+    //   console.log(element);
+      
+    //   if(element.listData.length == 0){
+    //     this.errorGen = "Debe agregar productos/servicios a la operación"
+    //   }
+    // });
+    // console.log(this.errorGen);
+    
+    // if(!this.errorGen){
+      this.preSaveStatic();
+      return 1
+    // }else{
+    //   return 0
+    // }
+    
+  }
+  preSaveStatic()
+  {  
+    console.log(this.properties.preSave);
+    
+    if(this.properties.preSave){
+      this.properties.preSave.forEach((element:any) => {
+        console.log(element);
+        
+          this.properties.columnsForm.push({tableName:this.properties.tableName, 
+            columnName:element.columnForm,value:element.value,type :"hidden"})
+      });
+    }
+  }
+  
 }
 

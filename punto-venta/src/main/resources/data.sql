@@ -28,6 +28,13 @@ VALUES
 '',
 '');
 
+insert into deinsoft_cnf_tipo_documento values(1,"DNI","1");
+insert into deinsoft_cnf_tipo_documento values(2,"RUC","6");
+
+insert into deinsoft_cnf_empresa(cnf_empresa_id,nombre,descripcion,cnf_tipo_documento_id,nro_documento,telefono,direccion,token) 
+values(null,'EMPRESA PRUEBA',"1");
+insert into deinsoft_cnf_empresa values(2,"RUC","6");
+
 insert into deinsoft_seg_rol values(1,"ROLE_ADMIN","ROLE_ADMIN");
 insert into deinsoft_seg_rol values(2,"ROLE_USER","ROLE_USER");
 

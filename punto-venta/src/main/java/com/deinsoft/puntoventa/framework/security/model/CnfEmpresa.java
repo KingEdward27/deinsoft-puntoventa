@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -20,49 +22,33 @@ import javax.validation.constraints.Size;
  * @author EDWARD-PC
  */
 @Entity
-@Table(name = "deinsoft_empresa")
+@Table(name = "cnf_empresa")
 public class CnfEmpresa implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idempresa")
+    @Column(name = "cnf_empresa_id")
     private Integer id;
     
     @Size(max = 300)
-    @Column(name = "razon_social")
-    private String razonSocial;
+    @Column(name = "nombre")
+    private String nombre;
     
     @Size(max = 300)
-    @Column(name = "nombre_comercial")
-    private String nombreComercial;
+    @Column(name = "descripcion")
+    private String descripcion;
     
     @Size(max = 300)
+    @Column(name = "nro_documento")
+    private String nroDocumento;
+    
     @Column(name = "direccion")
     private String direccion;
     
-    @Column(name = "tipodoc")
-    private Integer tipodoc;
-    
     @Size(max = 13)
-    @Column(name = "numdoc")
-    private String numdoc;
-    
-    @Size(max = 4)
-    @Column(name = "serie")
-    private String serie;
-    
-    @Column(name = "usuariosol")
-    private String usuariosol;
-    
-    @Column(name = "clavesol")
-    private String clavesol;
-    
-    @Column(name = "cert_name")
-    private String certName;
-    
-    @Column(name = "cert_pass")
-    private String certPass;
+    @Column(name = "telefono")
+    private String telefono;
     
     @Column(name = "token")
     @Size(max = 1000)
@@ -71,6 +57,10 @@ public class CnfEmpresa implements Serializable {
     @Column(name = "estado")
     private Character estado;
 
+    @ManyToOne
+    @JoinColumn(name = "cnf_tipo_documento_id")
+    private CnfTipoDocumento cnfTipoDocumento;
+    
     public CnfEmpresa() {
     }
 
@@ -86,37 +76,53 @@ public class CnfEmpresa implements Serializable {
         this.id = id;
     }
 
-
-    public String getRazonSocial() {
-        return razonSocial;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setRazonSocial(String razonSocial) {
-        this.razonSocial = razonSocial;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public Integer getTipodoc() {
-        return tipodoc;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setTipodoc(Integer tipodoc) {
-        this.tipodoc = tipodoc;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public String getNumdoc() {
-        return numdoc;
+    public String getNroDocumento() {
+        return nroDocumento;
     }
 
-    public void setNumdoc(String numdoc) {
-        this.numdoc = numdoc;
+    public void setNroDocumento(String nroDocumento) {
+        this.nroDocumento = nroDocumento;
     }
 
-    public String getSerie() {
-        return serie;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setSerie(String serie) {
-        this.serie = serie;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Character getEstado() {
@@ -127,62 +133,16 @@ public class CnfEmpresa implements Serializable {
         this.estado = estado;
     }
 
-    public String getUsuariosol() {
-        return usuariosol;
+    public CnfTipoDocumento getCnfTipoDocumento() {
+        return cnfTipoDocumento;
     }
 
-    public void setUsuariosol(String usuariosol) {
-        this.usuariosol = usuariosol;
-    }
-
-    public String getClavesol() {
-        return clavesol;
-    }
-
-    public void setClavesol(String clavesol) {
-        this.clavesol = clavesol;
-    }
-
-    public String getCertName() {
-        return certName;
-    }
-
-    public void setCertName(String certName) {
-        this.certName = certName;
-    }
-
-    public String getCertPass() {
-        return certPass;
-    }
-
-    public void setCertPass(String certPass) {
-        this.certPass = certPass;
+    public void setCnfTipoDocumento(CnfTipoDocumento cnfTipoDocumento) {
+        this.cnfTipoDocumento = cnfTipoDocumento;
     }
 
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getNombreComercial() {
-        return nombreComercial;
-    }
-
-    public void setNombreComercial(String nombreComercial) {
-        this.nombreComercial = nombreComercial;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
+    
     
     @Override
     public int hashCode() {
@@ -206,8 +166,9 @@ public class CnfEmpresa implements Serializable {
 
     @Override
     public String toString() {
-        return "Empresa{" + "id=" + id + ", razonSocial=" + razonSocial + ", tipodoc=" + tipodoc + ", numdoc=" + numdoc + ", serie=" + serie + ", usuariosol=" + usuariosol + ", clavesol=" + clavesol + ", certName=" + certName + ", certPass=" + certPass + ", token=" + token + ", estado=" + estado + '}';
+        return "CnfEmpresa{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", nroDocumento=" + nroDocumento + ", direccion=" + direccion + ", telefono=" + telefono + ", token=" + token + ", estado=" + estado + ", cnfTipoDocumento=" + cnfTipoDocumento + '}';
     }
+
     
     
 }

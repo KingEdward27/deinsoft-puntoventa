@@ -108,7 +108,8 @@ export class ActCompraFormComponent extends GenericMasterDetailFormComponent imp
     "preSave" : [
       
                 {columnForm:"flag_estado",value:"1"},
-                {columnForm:"flag_isventa",value:"0"}
+                {columnForm:"flag_isventa",value:"0"},
+                {columnForm:"cnf_empresa_id",value:"1"}
               ],
     "postSave" : {message:{
                     title : {message :"Documento generado correctamente"},
@@ -133,6 +134,7 @@ export class ActCompraFormComponent extends GenericMasterDetailFormComponent imp
     this.properties.details[0].columnsList[5].onChange = { name: this.updateTotals, param: 0, icon: "fas fa-print2" }
     this.properties.details[0].columnsList[4].onChange = { name: this.updateTotals, param: 0, icon: "fas fa-print2" }
     this.properties.details[0].actions.push({ name: this.removeItems, icon: "fas fa-trash" })
+    this.properties.urlReturn = "/compra"
     // this.properties.actions.push({ name: this.print, param: 0, icon: "fas fa-print" })
     localStorage.setItem("properties", JSON.stringify(this.properties));
     super.ngOnInit();

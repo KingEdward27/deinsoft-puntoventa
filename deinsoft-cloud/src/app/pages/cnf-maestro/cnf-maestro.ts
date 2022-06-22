@@ -43,19 +43,23 @@ export class CnfMaestroComponent extends GenericListComponent implements OnInit{
            ],
     //filters sería para filtros adicionales
     "filters":{"cnf_maestro.nombres":"","cnf_maestro.direccion":""},
-    "orders":["nombres","direccion"]
+    "orders":["nombres","direccion"],
+    "preSave" : []
   }
   constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 
     super(utilServices,httpClients,routers,_commonService);
   }
   ngOnInit(): void {
     super.baseEndpoint = this.baseEndpoint;
+    //this.prop.preSave.push({columnForm:"razon_social",value:"columnsForm.apellido_paterno +' '+columnsForm.apellido_materno +' '+columnsForm.nombres"})
     super.properties = this.prop;
     console.log(this.prop);
     super.ngOnInit();
   }
-  save(): void {
-    console.log("test desde cnf-org");
-  }
+  // async save(){
+    
+  //   let res = await super.preSave();
+  //   console.log("test desde cnf-org");
+  // }
 }
 

@@ -35,6 +35,9 @@ import { ActCompraFormComponent } from '@pages/act-compra/act-compra-form.compon
 import { GenericFormComponent } from './base/components/generic-form/generic-form.component';
 import { RptActVentaFormComponent } from '@pages/reports/act-venta/rpt-act-venta-form.component';
 import { RptActCompraComponent } from '@pages/reports/act-compra/rpt-act-compra.component';
+import { GenericChildFormComponent } from './base/components/generic-child/generic-child-form.component';
+import { SegRolComponent } from '@pages/security/seg-rol/seg_rol';
+import { SegUsuarioComponent } from '@pages/security/seg-usuario/seg_usuario';
 
 const routes: Routes = [
     {
@@ -64,7 +67,7 @@ const routes: Routes = [
                 component: DashboardComponent
             },
             {path: 'generic-form',component: GenericFormComponent},
-
+            {path: 'generic-child-form',component: GenericChildFormComponent},
             {path: 'categoria',component: CnfCategoriaComponent},
             {path: 'empresa',component: CnfEmpresaComponent},
             {path: 'moneda',component: CnfMonedaComponent},
@@ -74,7 +77,7 @@ const routes: Routes = [
             {path: 'tipo-documento',component: CnfTipoDocumentoComponent},
             {path: 'local',component: CnfLocalComponent},
             {path: 'tipo-comprobante',component: CnfTipoComprobanteComponent},
-            {path: 'act-venta',component: ActVentaFormComponent},
+            {path: 'venta',component: ActVentaFormComponent},
             {path: 'producto',component: CnfProductoComponent},
             {path: 'marca',component: CnfMarcaComponent},
             {path: 'categoria',component: CnfCategoriaComponent},
@@ -84,7 +87,9 @@ const routes: Routes = [
             {path: 'maestro',component: CnfMaestroComponent},
             {path: 'forma-pago',component: CnfFormaPagoComponent},
             {path: 'almacen',component: InvAlmacenComponent},
-            {path: 'act-compra',component: ActCompraFormComponent},
+            {path: 'compra',component: ActCompraFormComponent},
+            {path: 'usuario',component: SegUsuarioComponent},
+            {path: 'perfil',component: SegRolComponent},
             {path: 'rpt-ventas',component: RptActVentaFormComponent},
             {path: 'rpt-compras',component: RptActCompraComponent}
         ]

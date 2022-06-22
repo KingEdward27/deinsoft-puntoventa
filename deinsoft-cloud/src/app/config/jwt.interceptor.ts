@@ -6,12 +6,13 @@ import { HttpClient } from "@angular/common/http";
 import { catchError } from "rxjs/operators";
 import { UtilService } from "../services/util.service";
 import { AuthenticationService } from "@services/authentication.service";
+import { AppService } from "@services/app.service";
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor{
 
     constructor(
-                private router: Router,private utilService:UtilService,
+                private router: Router,private utilService:UtilService, private appService: AppService,
                 private http: HttpClient,private auth:AuthenticationService){}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{
@@ -39,32 +40,38 @@ export class JwtInterceptor implements HttpInterceptor{
                     errorMsg = `Error Code: ${error.status},  Message: ${error.message}`;
                   }
                   if(!error?.url?.includes("login") && error.status != 417&& error.status != 422 && error.status != 0){
+                    console.log(error.status);
+                    
                     if(error.status == 403){
-                        this.router.navigate(['/login']);
+                      console.log("yeah!");
+                      this.appService.logout();
+                      //this.router.navigate(['/login']);
                         //window.location.reload();
-                    }
-                    if (error.status === 401) {
-                      this.utilService.msgAccessDeniedWithMessage(error.error);
-                    }
-                    if (error.status === 400) {
-                      
-                      if (error.error.message.includes("Date")) {
-                        this.utilService.msgProblemDate();
-                      }else{
-                        this.utilService.msgHTTP400WithMessage(error.error);
-                      }
-                    }
-                    if(error.status === 500 && error.error.message.includes("ConstraintViolationException")){
-                      if(error?.url?.includes("delete")){
-                        this.utilService.msgProblemDelete();
-                      }else{
-                        this.utilService.msgHTTP400WithMessage(error.error);
-                      }
-                      
                     }else{
-                      // this.utilService.msgHTTP400WithMessage(error.error?error.error:error.message);
-                      this.utilService.msgHTTP400WithMessage(error.error.message);
+                      if (error.status === 401) {
+                        this.utilService.msgAccessDeniedWithMessage(error.error);
+                      }
+                      if (error.status === 400) {
+                        
+                        if (error.error.message.includes("Date")) {
+                          this.utilService.msgProblemDate();
+                        }else{
+                          this.utilService.msgHTTP400WithMessage(error.error);
+                        }
+                      }
+                      if(error.status === 500 && error.error.message.includes("ConstraintViolationException")){
+                        if(error?.url?.includes("delete")){
+                          this.utilService.msgProblemDelete();
+                        }else{
+                          this.utilService.msgHTTP400WithMessage(error.error);
+                        }
+                        
+                      }else{
+                        // this.utilService.msgHTTP400WithMessage(error.error?error.error:error.message);
+                        this.utilService.msgHTTP400WithMessage(error.error.message);
+                      }
                     }
+                    
                   }
                   
                   return throwError(error);

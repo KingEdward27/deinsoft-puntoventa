@@ -157,7 +157,8 @@
       "observacion": "Observación",
       "igv":"IGV",
       "subtotal":"Subtotal",
-      "serie":"Serie"
+      "serie":"Serie",
+      "envio_pse_mensaje":"Envío F.E."
     },
     "act_comprobante_detalle": {
       "home": {
@@ -237,7 +238,8 @@
       "precio": "precio",
       "codigo": "Código",
       "descripcion": "Producto",
-      "cnf_producto.cnf_producto_id, cnf_producto.nombre":"Producto"
+      "cnf_producto.cnf_producto_id, cnf_producto.nombre":"Producto",
+      "barcode":"Código de barras"
     },
     "inv_almacen": {
       "home": {
@@ -247,6 +249,29 @@
       },
       "id": "ID",
       "nombre": "Almacén"
+    }
+    ,
+    "seg_rol": {
+      "home": {
+        "title": "Perfiles",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Perfil",
+      "descripcion": "Descripción"
+    },
+    "seg_usuario": {
+      "home": {
+        "title": "Usuarios",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Usuario",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "password2": "repita contraseña"
     }
   }
 }

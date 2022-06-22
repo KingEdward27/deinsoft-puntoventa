@@ -25,6 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -35,7 +36,12 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter{
 	
-	
+    @Order(1)
+    @Configuration
+    public static class WebSecurityRest extends WebSecurityConfigurerAdapter {
+        @Autowired
+	private LoginSuccessHandler successHandler;
+        
 	private final ObjectMapper objectMapper;
 	
         @Autowired
@@ -44,7 +50,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
         @Autowired
 	private JpaUserDetailsService userDetailsService;
         
-	public WebSecurity(ObjectMapper objectMapper) {
+	public WebSecurityRest(ObjectMapper objectMapper) {
 		this.objectMapper = objectMapper;
 	}
 	
@@ -73,15 +79,29 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 		 */
 		httpSecurity
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                        //.csrf().disable().authorizeRequests()
 //			.cors().configurationSource(corsConfigurationSource()).and()
 			.cors().and()
 			.csrf().disable()
-			.authorizeRequests()
+			//.antMatcher("/api/**")
+                        .authorizeRequests()
 				.antMatchers(HttpMethod.POST,"/login").permitAll()
-                        
-			.anyRequest().authenticated().and()
-					.addFilter((Filter) new JWTAuthenticationFilter(authenticationManager(),secUserRepository))
-					.addFilter(new JWTAuthorizationFilter(authenticationManager()));
+                                .antMatchers("/swagger-ui/**","/v3/**").permitAll()
+//                                .antMatchers(HttpMethod.GET,"/login").permitAll()
+//                                .antMatchers("/ventas-backend/login").permitAll() 
+			.anyRequest().authenticated()
+//                        .and()
+//                            .formLogin()
+//                                .successHandler(successHandler)
+//                                .loginPage("/login")
+//                            .permitAll()
+//                        .and()
+//
+//                        .logout().permitAll()
+                        //.and().formLogin().permitAll()
+                        .and().addFilter((Filter) new JWTAuthenticationFilter(authenticationManager(),secUserRepository))
+					.addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                        ;
 //					.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(true);
 	}
         @Bean
@@ -142,5 +162,52 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 		response.setStatus(HttpStatus.OK.value());
 		objectMapper.writeValue(response.getWriter(), "Bye!");
 	}
+    }
+//    @Order(2)
+//    @Configuration
+//    public static class WebSecurityRestWeb extends WebSecurityConfigurerAdapter {
+//
+//        @Autowired
+//	private LoginSuccessHandler successHandler;
+//	
+//	@Autowired
+//	private JpaUserDetailsService userDetailsService;
+//	
+//	@Autowired
+//	private BCryptPasswordEncoder passwordEncoder;
+//	
+//	@Override
+//	protected void configure(HttpSecurity http) throws Exception {
+//
+//		http.authorizeRequests().
+//                        antMatchers("/ventas-backend/css/**", "/ventas-backend/js/**", "/ventas-backend/images/**", "/listar","/ventas-backend/login").permitAll()
+//                        
+//		/*.antMatchers("/ver/**").hasAnyRole("USER")*/
+//		/*.antMatchers("/uploads/**").hasAnyRole("USER")*/
+//		/*.antMatchers("/form/**").hasAnyRole("ADMIN")*/
+//		/*.antMatchers("/eliminar/**").hasAnyRole("ADMIN")*/
+//		/*.antMatchers("/factura/**").hasAnyRole("ADMIN")*/
+//		.anyRequest().authenticated()
+//		.and()
+//		    .formLogin()
+//		        .successHandler(successHandler)
+//		        .loginPage("/login")
+//		    .permitAll()
+//		.and()
+//                
+//		.logout().permitAll()
+//		.and()
+//		.exceptionHandling().accessDeniedPage("/error_403");
+//
+//	}
+//
+//	@Autowired
+//	public void configurerGlobal(AuthenticationManagerBuilder build) throws Exception
+//	{
+//		build.userDetailsService(userDetailsService)
+//		.passwordEncoder(passwordEncoder);
+//
+//	}
+//    }
 
 }

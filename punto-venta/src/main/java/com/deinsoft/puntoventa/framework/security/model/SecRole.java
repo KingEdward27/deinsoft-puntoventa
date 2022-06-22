@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
 
 @Entity(name = "secRole")
-@Table(name = "deinsoft_seg_rol")
+@Table(name = "seg_rol")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class SecRole implements Serializable {
 
@@ -25,11 +25,11 @@ public class SecRole implements Serializable {
 
     @NotEmpty
     @Size(max = 255)
-    @Column(name = "name", length = 255, nullable = false) 
+    @Column(name = "nombre", length = 255, nullable = false) 
     private String name;
 
     @Size(max = 255)
-    @Column(name = "description", length = 255, nullable = true)
+    @Column(name = "descripcion", length = 255, nullable = true)
     private String description;
 
     public long getId() {

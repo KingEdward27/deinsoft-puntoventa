@@ -38,7 +38,8 @@ export class RptActVentaFormComponent extends GenericList2Component implements O
     { tableName: "cnf_maestro", columnName: "nombres", filterType: "text",alias:"" },
     { tableName: "cnf_forma_pago", columnName: "nombre", filterType: "none" },
     { tableName: "cnf_moneda", columnName: "codigo", filterType: "none" },
-    { tableName: "inv_almacen", columnName: "nombre", filterType: "none" }
+    { tableName: "inv_almacen", columnName: "nombre", filterType: "none" },
+    { tableName: "act_comprobante", columnName: "envio_pse_mensaje", filterType: "none" }
     ],
     columnsListParams: [{ "flag_isventa": "1" }],
 
@@ -57,7 +58,8 @@ export class RptActVentaFormComponent extends GenericList2Component implements O
           {columns:[{type:"a",id:"ticket" ,value:"Ticket",icon:"fa fa-arrow-circle-left",action:{name:this.ticketChild}},
                     {type:"a",id:"a4" ,value:"A4",icon:"fa fa-arrow-circle-left",action:{name:this.a4}}]}
                 ]
-      }
+      },
+    "orders":["act_comprobante_id desc"]   
   }
   igv: number = 0;
   subtotal: number = 0;

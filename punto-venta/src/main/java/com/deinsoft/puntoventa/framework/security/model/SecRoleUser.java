@@ -17,7 +17,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 @Entity(name = "secRoleUser")
-@Table(name = "deinsoft_seg_rol_usuario")
+@Table(name = "seg_rol_usuario")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class SecRoleUser implements Serializable {
 
@@ -29,18 +29,18 @@ public class SecRoleUser implements Serializable {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "sec_user_id")
+    @JoinColumn(name = "seg_usuario_id")
     private SecUser secUser;
 
     @NotNull
     @Valid
     @ManyToOne
-    @JoinColumn(name = "sec_role_id")
+    @JoinColumn(name = "seg_rol_id")
     private SecRole secRole;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumn(name = "empresa_id") 
+    @JoinColumn(name = "cnf_empresa_id") 
     private CnfEmpresa empresa;
 
     public long getId() {

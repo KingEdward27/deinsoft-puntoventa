@@ -13,4 +13,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface SecUserRepository  extends JpaRepository<SecUser,Long>{
    public SecUser findByName(String name);
+   public SecUser findByEmail(String email);
 }

@@ -51,7 +51,7 @@ export class ActVentaFormComponent extends GenericMasterDetailFormComponent impl
                     { tableName: "cnf_tipo_comprobante", "columnName": "nombre", "type": "select", loadState: 1, relatedBy: "cnf_tipo_comprobante_id",loadFor:"serie",load:{tableName:"cnf_num_comprobante",columnName:"serie",loadBy:"cnf_tipo_comprobante_id,cnf_local_id",id:"cnf_tipo_comprobante_id",getValue:"1"} },
                     { tableName: "act_comprobante", "columnName": "serie", "type": "input" , disabled:"disabled"},
                     { tableName: "act_comprobante", columnName: "numero", type: "input" , disabled:"disabled"},
-                    { tableName: "cnf_maestro", "columnName": "concat(nombres,' ',apellido_paterno,' ',apellido_materno)", "type": "select", loadState: 1, relatedBy: "cnf_maestro_id" },
+                    { tableName: "cnf_maestro", "columnName": "concat(nombres,' ',apellido_paterno,' ',apellido_materno)", "type": "typehead", loadState: 1, relatedBy: "cnf_maestro_id" },
                     { tableName: "cnf_forma_pago", "columnName": "nombre", "type": "select", loadState: 1, relatedBy: "cnf_forma_pago_id",value:1 },
                     { tableName: "act_comprobante", "columnName": "igv", "type": "label", value: "0.00", "subtype": "number",onchange:"total" },
                     { tableName: "act_comprobante", "columnName": "subtotal", "type": "label", value: "0.00", "subtype": "number" },
@@ -66,7 +66,7 @@ export class ActVentaFormComponent extends GenericMasterDetailFormComponent impl
         tableName: "act_comprobante_detalle", "relatedBy": "act_comprobante_id",
         search: {
           tableName: "cnf_producto", columnName: "cnf_producto.cnf_producto_id, cnf_producto.nombre",
-           "type": "select", loadState: 1,where:"cnf_producto.nombre like concat('%',[value],'%')",
+           "type": "select", loadState: 1,where:"cnf_producto.nombre like concat('%',[value],'%') or cnf_producto.barcode like concat('%',[value],'%')",
           relatedBy: "cnf_producto_id",
           onchange:{
               select: {
@@ -102,7 +102,8 @@ export class ActVentaFormComponent extends GenericMasterDetailFormComponent impl
                   }
                 },
                 {columnForm:"flag_estado",value:"1"},
-                {columnForm:"flag_isventa",value:"1"}
+                {columnForm:"flag_isventa",value:"1"},
+                {columnForm:"cnf_empresa_id",value:"1"}
               ],
     "postSave" : {message:{
                     title : {message :"Documento get(0) - get(1) generado correctamente",
@@ -116,7 +117,7 @@ export class ActVentaFormComponent extends GenericMasterDetailFormComponent impl
                     update:{columns:"ultimo_nro = ultimo_nro + 1",tableName:"cnf_num_comprobante",
                     where:[{"cnf_tipo_comprobante_id":"cnf_tipo_comprobante.cnf_tipo_comprobante_id"},
                              {"cnf_local_id":"cnf_local.cnf_local_id"}]},
-                    api:{url:"/business/sendapi",params:[
+                    api:{url:"/api/business/sendapi",params:[
                                                   ["tableName","act_comprobante"],
                                                   ["id","this.id"]
                                                 ]
@@ -142,11 +143,18 @@ export class ActVentaFormComponent extends GenericMasterDetailFormComponent impl
     this.properties.details[0].actions.push({ name: this.removeItems, icon: "fas fa-trash" })
     this.properties.postSave.message.rows[0].columns[0].action = { name: this.ticketChild }
     this.properties.postSave.message.rows[0].columns[1].action = { name: this.a4 }
+    this.properties.urlReturn = "/venta"
     // this.properties.actions.push({ name: this.print, param: 0, icon: "fas fa-print" })
     localStorage.setItem("properties", JSON.stringify(this.properties));
     super.ngOnInit();
     console.log(this._commonService);
-    
+    this.properties.columnsForm[5].search ={
+      tableName: "cnf_maestro", columnName: "cnf_maestro.cnf_maestro_id, concat(cnf_maestro.apellido_paterno,' ',cnf_maestro.apellido_materno,' ',cnf_maestro.nombres)",
+       "type": "select", loadState: 1,
+       where:"concat(cnf_maestro.apellido_paterno,' ',cnf_maestro.apellido_materno,' ',cnf_maestro.nombres) "+
+              "like concat('%',[value],'%')",
+      relatedBy: "cnf_maestro_id"
+    }
     // this.updateValue();
   }
 
@@ -220,7 +228,7 @@ export class ActVentaFormComponent extends GenericMasterDetailFormComponent impl
         mp.map = convMapDetail;
         param.updateParam = mp;
         //this.properties.actions.push({ name: this.print, param: 0, icon: "fas fa-print" })
-        param.genericPostRequest("/business/getpdflocal",mp,'blob').subscribe(data => {
+        param.genericPostRequest("/api/business/getpdflocal",mp,'blob').subscribe(data => {
           console.log(data);
           if(data.type != 'application/json'){
             var contentType ='application/pdf';
@@ -252,7 +260,7 @@ export class ActVentaFormComponent extends GenericMasterDetailFormComponent impl
         
         mp.map = convMapDetail;
         //this.properties.actions.push({ name: this.print, param: 0, icon: "fas fa-print" })
-        param.genericPostRequest("/business/getpdflocal",mp,'blob').subscribe(data => {
+        param.genericPostRequest("/api/business/getpdflocal",mp,'blob').subscribe(data => {
           console.log(data);
           if(data.type != 'application/json'){
             var contentType ='application/pdf';
@@ -330,35 +338,6 @@ export class ActVentaFormComponent extends GenericMasterDetailFormComponent impl
     properties.details.forEach((element: any) => {
 
     });
-    // let list = await super.select(forSearch.from, forSearch.select);
-    //   console.log(list);
-    //   properties.columnsForm.forEach((element: any) => {
-    //     if (element.columnName == "total") {
-    //       element.value = Number(element.value) + Number(list[5]);
-    //     }
-    //   });
-    //   properties.details[0].listData.push(list);
-
-    // let list = [1, "Producto 1", "", "", "1", "2000.00", ""];
-    // console.log(properties);
-    // properties.columnsForm.forEach((element: any) => {
-    //   if (element.columnName == "total") {
-    //     element.value = Number(element.value) + Number(list[5]);
-    //   }
-    // });
-    // properties.details[0].listData.push(list);
-
-
-
-    // this.updateTotals(2000.00);
-    // super.updateValue("act_comprobante", "igv", 20);
-    // this.properties.columnsForm.forEach((element: any) => {
-    //   if (element.tableName == "act_comprobante" && element.columnName == "total") {
-    //     element.value = 1000;
-    //   }
-    // });
-    // return result
-    // console.log("enviando a imprimir: ",this.properties.listData);
   }
   searchProduct = function (param: any) {
 
