@@ -120,7 +120,7 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
       if (element.type != 'input' && element.type != 'date') {
         if (this.properties.id == 0) {
           if (element.loadState == 1) {
-            super.getListComboByTableName(element.tableName, element.columnName).subscribe(data => {
+            super.getListComboByTableName(element.tableName, element.columnName,"").subscribe(data => {
               data.push([0, "- Seleccione -"]);
               data.sort();
               element.listData = data;
@@ -132,7 +132,7 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
           }
         } else {
           if (element.loadState == 1) {
-            super.getListComboByTableName(element.tableName, element.columnName).subscribe(data => {
+            super.getListComboByTableName(element.tableName, element.columnName,"").subscribe(data => {
               console.log(data);
               data.push([0, "- Seleccione -"]);
               data.sort();
@@ -199,28 +199,43 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
     
   }
   save() {
+    if(this.properties.preSave){
+      this.properties.preSave.forEach((element:any) => {
+        console.log(element);
+        
+          this.properties.columnsForm.push({tableName:this.properties.tableName, 
+            columnName:element.columnForm,value:element.value,type :"hidden"})
+      });
+    }
     let myMap = new Map();
     myMap.set("id", this.properties.id ? this.properties.id : 0);
     this.properties.columnsForm.forEach((element: any) => {
-      if (!element.load) {
-        let column = "";
-        if (element.type == "input" || element.type == "date") {
-          column = element?.tableName + "." + element?.columnName;
-          let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
-          element.value = selectValue;
-          myMap.set(element.columnName, selectValue);
-
-        } else {
-          column = element?.tableName + "." + element?.relatedBy;
-          let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
-          if(selectValue != "0"){
+      if (element.type != "label" && element.type != "hidden") {
+        if (!element.load) {
+          let column = "";
+          if (element.type == "input" || element.type == "date") {
+            column = element?.tableName + "." + element?.columnName;
+            let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
             element.value = selectValue;
-            myMap.set(element.relatedBy, selectValue);
+            myMap.set(element.columnName, selectValue);
+  
+          } else {
+            column = element?.tableName + "." + element?.relatedBy;
+            let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
+            if(selectValue != "0"){
+              element.value = selectValue;
+              myMap.set(element.relatedBy, selectValue);
+            }
+            
           }
-          
+  
         }
-
+      }else if(element.type == "hidden"){
+        console.log(element.columnName, element.value);
+        
+        myMap.set(element.columnName, element.value);
       }
+      
     });
     const convMap: any = {};
     myMap.forEach((val: string, key: string) => {

@@ -33,11 +33,16 @@ export class CnfEmpresaComponent extends GenericListComponent implements OnInit{
                    {tableName: "cnf_tipo_documento", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_tipo_documento_id"},
                    {tableName: "cnf_region", "columnName":"nombre","type":"select",loadState : 1,loadFor:"cnf_distrito_id",load:{tableName:"cnf_provincia",loadBy:"cnf_region_id"}},
                    {tableName: "cnf_provincia", "columnName":"nombre","type":"select",loadState : 0,loadFor:"cnf_distrito_id",load:{tableName:"cnf_distrito",loadBy:"cnf_provincia_id"}},
-                   {tableName: "cnf_distrito", "columnName":"nombre","type":"select",loadState : 0,loadFor:"cnf_distrito_id",relatedBy:"cnf_distrito_id"}
+                   {tableName: "cnf_distrito", "columnName":"nombre","type":"select",loadState : 0,loadFor:"cnf_distrito_id",relatedBy:"cnf_distrito_id"},
+                   {tableName: "cnf_empresa",columnName:"ruta_pse",type:"input"},
+                   {tableName: "cnf_empresa",columnName:"token",type:"input"}
            ],
     //filters sería para filtros adicionales
-    "filters":{"cnf_empresa.nombre":"","cnf_empresa.direccion":""},
-    "orders":["nombre","direccion"]
+    "conditions":[],
+    "preSave" : [
+      {columnForm:"estado",value:"1"}
+    ],
+    "orders":["cnf_empresa.nombre","cnf_empresa.direccion"]
   }
   constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 
     super(utilServices,httpClients,routers,_commonService);

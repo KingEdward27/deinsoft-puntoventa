@@ -138,7 +138,22 @@ export class GenericFormComponent extends CommonService implements OnInit {
       if (element.type != 'input' && element.type != 'date') {
         if (this.properties.id == 0) {
           if (element.loadState == 1) {
-            super.getListComboByTableName(element.tableName, element.columnName).subscribe(data => {
+            // let myMap = new Map();
+            let condition = ""
+            element.filters?.forEach((elementFilter: any) => {
+              // myMap.set(element.columnName, element.value);
+              condition = condition + elementFilter.columnName + " = " + elementFilter.value + " and"
+            })
+            // const convMap: any = {};
+            // myMap.forEach((val: string, key: string) => {
+            //   convMap[key] = val;
+            // });
+            // console.log(convMap);
+            //this.properties.filters = convMap;
+            console.log(condition);
+            
+            condition = condition.substring(0,condition.length-4);
+            super.getListComboByTableName(element.tableName, element.columnName,condition).subscribe(data => {
               data.push([0, "- Seleccione -"]);
               data.sort();
               element.listData = data;
@@ -150,7 +165,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
           }
         } else {
           if (element.loadState == 1) {
-            super.getListComboByTableName(element.tableName, element.columnName).subscribe(data => {
+            super.getListComboByTableName(element.tableName, element.columnName,"").subscribe(data => {
               console.log(data);
               data.push([0, "- Seleccione -"]);
               data.sort();
@@ -200,9 +215,9 @@ export class GenericFormComponent extends CommonService implements OnInit {
 
     });
     this.properties.childTables?.forEach(element => {
-      let columns = element.tableName + "." +element.idValue + ","
+      let columns = element.tableNameDetail + "." +element.tableNameDetail+"_id" + ","
       element.columnsForm.forEach(element => {
-        columns = columns + element.tableName + "." +element.columnName + ",";
+        columns = columns + element.tableName + "." +element.columnName + " as " + element.tableName + "_" +element.columnName +  ",";
       });
       columns = columns.substring(0,columns.length-1);
       console.log(columns);
@@ -211,11 +226,19 @@ export class GenericFormComponent extends CommonService implements OnInit {
       console.log(element.tableName,element.tableNameDetail);
       
       if(element.tableName != element.tableNameDetail){
-        tableName = tableName + " inner join " + element.tableNameDetail + " on " + 
+        tableName = tableName + " left join " + element.tableNameDetail + " on " + 
         element.tableName + "." + element.idValue + " = " + element.tableNameDetail + "." + element.idValue
       }
-      super.selectByTableNameAndColumns(tableName,columns,"")
+      element.columnsForm.forEach(columnForm => {
+        if(element.tableName != columnForm.tableName){
+          tableName = tableName + " left join " + columnForm.tableName + " on " + 
+          element.tableNameDetail + "." + columnForm.tableName + "_id" + " = " + columnForm.tableName + "." + columnForm.tableName + "_id"
+        }
+      });
+      super.selectByTableNameAndColumns(tableName,columns,"seg_usuario_id = "+this.properties.id)
       .subscribe(data => {
+        console.log(data);
+        
         element.listData = data;
       });
     });
@@ -238,7 +261,31 @@ export class GenericFormComponent extends CommonService implements OnInit {
   }
   addChild(tableName:any) {
     console.log(tableName);
+    this.properties.childTables.forEach(element => {
+      if (element.tableName == tableName) {
+        this.properties.columnsForm = element.columnsForm;
+        this.properties.tableName = element.tableNameDetail
+      }
+    });
+    this.properties.preSave = []
+    this.properties.preSave.push({columnForm:"seg_usuario_id",value:this.properties.id})
+    this.properties.id = 0
+    localStorage.setItem("properties", JSON.stringify(this.properties));
     this.router.navigate(["/generic-child-form"]);
+  }
+  deleteChild(tableName,id: any) {
+    console.log(tableName,id);
+    
+    this.utilService.confirmDelete(id).then((result) => { 
+      if(result){
+        this.remove(tableName, id).subscribe(() => {
+          this.utilService.msgOkDelete();
+          this.loadForm()
+          //this.getListData(this.properties.columnsList.params);
+        });
+      }
+      
+    });
   }
   save() {
     this.preSave();
@@ -248,7 +295,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
       if (element.type != "label" && element.type != "hidden") {
         if (!element.load) {
           let column = "";
-          if (element.type == "input" || element.type == "date") {
+          if (element.type == "input" || element.type == "date" || element.type == "password") {
             column = element?.tableName + "." + element?.columnName;
             let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
             element.value = selectValue;
@@ -288,7 +335,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
       if (err.status === 422) {
         this.error = err.error;
       }
-      console.log(this.error[0]);
+      //console.log(this.error[0]);
     });
   }
   async preSave(){

@@ -25,17 +25,20 @@ export class GenericListComponent extends CommonService implements OnInit {
   modelSearch: any;
   error: any;
   headers: any;
-  dtOptions:any;
+  dtOptions: any;
   listDetail: any;
   load: boolean = false;
   listDetail2: any[][] = [];
   dataTable!: DataTables.Api;
-  widthIcons:any;
+  widthIcons: any;
+  datablesSettings : any
   @Output() result: EventEmitter<any> = new EventEmitter();
-  constructor(private utilService: UtilService, private httpClient: HttpClient, private router: Router,public commonService:CommonService) {
+  constructor(private utilService: UtilService, private httpClient: HttpClient, private router: Router, public commonService: CommonService) {
     super(httpClient);
+    
   }
   ngOnInit(): void {
+    
     this.load = false;
     this.headers = this.properties.headers;
     this.commonService.baseEndpoint = environment.apiUrl;
@@ -44,69 +47,98 @@ export class GenericListComponent extends CommonService implements OnInit {
       element.isNull = false;
     });
     this.widthIcons = "25px";
-    this.getListData(this.properties.columnsListParams);
-    this.dtOptions = {
+    let lang = localStorage.getItem('lang');
+    console.log(lang);
+    let listColumns = []
+    let indexes = 0
+    this.properties.columnsList.forEach(element => {
+      listColumns.push(indexes)
+      indexes++;
+    });
+    listColumns.push(this.properties.columnsList.length)
+    // this.utilService.titleExport = this.properties.title
+    this.datablesSettings = {
+      deferRender: true,
+      deferLoading: 7,
       pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Blfrtip',
+      searching: false,
+      processing: true,
+      lengthMenu: [25, 50, 100],
+      order: [[0, "asc"]],
+      dom: 'lBftip',
       buttons: [{
-          extend: 'collection',
-          text: 'Export Data',
-          className: 'exp_d_btn',
-  
-          buttons: [{
-              extend: 'excel',
-              text: '<img src="assets/images/xls.png" width="24">&nbsp; XLS',
-              exportOptions: {
-                columns: ':visible'
-              }
-            },
-            {
-              extend: 'pdf',
-              text: '<img src="assets/images/pdf-mis.png" width="24"> &nbsp;PDF',
-              exportOptions: {
-                columns: ':visible'
-              },
-              orientation: 'landscape'
-            },
-            {
-              extend: 'csv',
-              text: '<img src="assets/images/csv.png" width="24">&nbsp; CSV',
-              exportOptions: {
-                columns: ':visible'
-              }
-            },
-  
-          ]
+        extend: 'excel',
+        title : this.properties.title,
+        text: '<i class="fa fa-file-excel"></i>&nbsp; XLS',
+        exportOptions: {
+          columns: listColumns
         }
-  
-      ]
-    };
-    let com = this.commonService;
-    this.properties.message.rows.forEach((element:any) => {
-      console.log(element);
-      element.columns.forEach((column:any) => {
-          $(document).on('click', '#'+column.id, function() {
-            //Some code 1
-            console.log( "adsd");
-            column.action.name(column.param,com);
-            
-          });
-        
-      });
-      
-    }); 
-  }
-  actionByName(lineItem:any, func:any){
-    console.log(lineItem,func,this.utilService);
+      },
+      {
+        extend: 'pdf',
+        title : this.properties.title,
+        text: ' <i class="fa fa-file-pdf"></i>&nbsp; PDF',
+        orientation: 'landscape',
+        exportOptions: {
+          columns: listColumns
+        }
+      },
+      {
+        extend: 'csv',
+        title : this.properties.title,
+        text: '<i class="fa fa-file-excel"></i>&nbsp; CSV',
+        exportOptions: {
+          columns: listColumns
+        }
+      },
+
+      ],
+      language: {
+        url: 'assets/i18n/datatables/lang' + lang?.toUpperCase() + '.json'
+        // emptyTable: '',
+        // zeroRecords: 'No hay coincidencias',
+        // lengthMenu: 'Mostrar _MENU_ elementos',
+        // search: 'Buscar:',
+        // info: 'De _START_ a _END_ de _TOTAL_ elementos',
+        // infoEmpty: 'De 0 a 0 de 0 elementos',
+        // infoFiltered: '(filtrados de _MAX_ elementos totales)',
+        // paginate: {
+        //   first: 'Prim.',
+        //   last: 'Últ.',
+        //   next: 'Sig.',
+        //   previous: 'Ant.'
+        // }
+      }
+    }
+    console.log(this.properties.title);
     
-    func.name(this.properties,lineItem,this.utilService);
+    this.getListData(this.properties.columnsListParams);
+
+    let com = this.commonService;
+    this.properties.message?.rows?.forEach((element: any) => {
+      console.log(element);
+      element.columns.forEach((column: any) => {
+        $(document).on('click', '#' + column.id, function () {
+          //Some code 1
+          console.log("adsd");
+          column.action.name(column.param, com);
+
+        });
+
+      });
+
+    });
   }
-  addParams(params:any){
-    if(params){
+  actionByName(lineItem: any, func: any) {
+    console.log(lineItem, func, this.utilService);
+
+    func.name(this.properties, lineItem, this.utilService);
+  }
+  addParams(params: any) {
+    if (params) {
       let myMap = new Map();
-      params.forEach((element2:any) => {
-        const map = new Map<string,string>(Object.entries(element2));
+      params.forEach((element2: any) => {
+        const map = new Map<string, string>(Object.entries(element2));
         map.forEach((val: string, key: string) => {
           myMap.set(key, val);
         });
@@ -123,8 +155,8 @@ export class GenericListComponent extends CommonService implements OnInit {
       this.properties.filters = convMap;
     }
   }
-  
-  getListData(params:any) {
+
+  getListData(params: any) {
     // if(params){
     //   let myMap = new Map();
     //   params.forEach((element2:any) => {
@@ -144,49 +176,60 @@ export class GenericListComponent extends CommonService implements OnInit {
     this.baseEndpoint = environment.apiUrl;
 
     console.log(this.properties);
+    let myMap = new Map();
+    this.properties.conditions?.forEach((element: any) => {
+      myMap.set(element.columnName, element.value);
+    })
+    const convMap: any = {};
+    myMap.forEach((val: string, key: string) => {
+      convMap[key] = val;
+    });
+    console.log(convMap);
+    this.properties.filters = convMap;
+
     super.getList(this.properties)
       .subscribe(data => {
         this.listDetail = data;
         console.log(this.headers);
         console.log(this.listDetail);
         setTimeout(() => {
-          this.dataTable = $('#dtData'+this.properties.tableName).DataTable(
-            this.utilService.datablesSettings);
+          this.dataTable = $('#dtData' + this.properties.tableName).DataTable(
+            this.datablesSettings);
         }, 1);
-        this.dataTable?.destroy();
+        //this.dataTable?.destroy();
         // console.log(data);
       });
-    
+
   }
-  exportData(){
+  exportData() {
     console.log(this.headers);
 
     this.addParams(this.properties.columnsListParams);
 
-    let headers :any[] = [];
+    let headers: any[] = [];
     headers.push("Nro.");
-    this.properties.columnsList.forEach((element:any) => {
-      headers.push(this.utilService.getTranslate("webpagos."+element.tableName + "." + element.columnName))
+    this.properties.columnsList.forEach((element: any) => {
+      headers.push(this.utilService.getTranslate("webpagos." + element.tableName + "." + element.columnName))
     });
     this.properties.headers = headers;
     console.log(this.properties.headers);
-    
+
     super.export(this.properties).subscribe(data => {
-        
-        console.log(data.body);
-        if(data.body.type != 'application/json'){
-          var contentType ='application/pdf';
-          var extension = "pdf";
-  
-          if(data.body.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-          data.body.type == "application/octet-stream"){
-            contentType = data.body.type;
-            extension = "xlsx";
-          }
-          const blob = new Blob([data.body],{type: contentType});
-          this.generateAttachment(blob,extension);
+
+      console.log(data.body);
+      if (data.body.type != 'application/json') {
+        var contentType = 'application/pdf';
+        var extension = "pdf";
+
+        if (data.body.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+          data.body.type == "application/octet-stream") {
+          contentType = data.body.type;
+          extension = "xlsx";
         }
-      });
+        const blob = new Blob([data.body], { type: contentType });
+        this.generateAttachment(blob, extension);
+      }
+    });
   }
   goToForm() {
     this.properties.id = 0;
@@ -196,21 +239,21 @@ export class GenericListComponent extends CommonService implements OnInit {
   }
   goToFormToEdit(id: any) {
     this.properties.id = id;
-    
+
     // console.log(this.properties);
     // let listColumns:any[] = [];
     // this.properties.columnsForm.forEach((element:any) => {
-      
+
     //   if(this.properties.tableName == element.tableName){
     //     listColumns.push(element.columnName);
     //   }
     //   if(element.relatedBy){
     //     listColumns.push(element.relatedBy);
     //   }
-      
+
     // });
     // console.log(listColumns);
-    
+
     super.getData(this.properties).subscribe(data => {
       console.log(data);
       let index = 0;
@@ -221,7 +264,7 @@ export class GenericListComponent extends CommonService implements OnInit {
       //     let person = data[personNamedIndex];
       //     // do something with person
       //     console.log(person);
-          
+
       // });
       let objects = [];
       for (let key in data) {
@@ -230,7 +273,7 @@ export class GenericListComponent extends CommonService implements OnInit {
         // convMap[key2] = data[key];
         // objects.push(convMap);
         const convMap: any = [];
-        let key2 = key.replace("__",".");
+        let key2 = key.replace("__", ".");
         convMap[0] = key2;
         convMap[1] = data[key];
         objects.push(convMap);
@@ -239,14 +282,14 @@ export class GenericListComponent extends CommonService implements OnInit {
       for (const element of objects) {
         let tablaAndColumndArr = element[0].split(".");
         for (const element2 of this.properties.columnsForm) {
-          let tableAndColumn = element2.tableName + "." +element2.columnName;
-          if((element[0] == tableAndColumn && (element2.type == 'input' || element2.type == 'date'))){
+          let tableAndColumn = element2.tableName + "." + element2.columnName;
+          if ((element[0] == tableAndColumn && (element2.type == 'input' || element2.type == 'date'))) {
             element2.value = element[1];
             console.log(element[1]);
             break;
           }
-          if(tablaAndColumndArr[0] == element2.tableName && element2.type == 'select' &&  
-          (element2.relatedBy == tablaAndColumndArr[1] || element2.load?.loadBy == tablaAndColumndArr[1])){
+          if (tablaAndColumndArr[0] == element2.tableName && element2.type == 'select' &&
+            (element2.relatedBy == tablaAndColumndArr[1] || element2.load?.loadBy == tablaAndColumndArr[1])) {
             element2.value = element[1];
             break;
           }
@@ -276,7 +319,7 @@ export class GenericListComponent extends CommonService implements OnInit {
       //     //   index++;
       //     //   this.properties.columnsForm[index].value = data[index];
       //     // }
-          
+
       //   });
       // });
       this.properties.route = this.router.url;
@@ -299,21 +342,21 @@ export class GenericListComponent extends CommonService implements OnInit {
       // }
       console.log(this.properties);
       console.log(this.router.url);
-      
-      
+
+
       this.router.navigate(["/generic-form"]);
     });
-    
+
   }
   delete(id: any) {
-    this.utilService.confirmDelete(id).then((result) => { 
-      if(result){
+    this.utilService.confirmDelete(id).then((result) => {
+      if (result) {
         this.remove(this.properties.tableName, id).subscribe(() => {
           this.utilService.msgOkDelete();
           this.getListData(this.properties.columnsList.params);
         });
       }
-      
+
     });
   }
   getListWithParams() {
@@ -329,6 +372,9 @@ export class GenericListComponent extends CommonService implements OnInit {
       }
 
     });
+    this.properties.conditions?.forEach((element: any) => {
+      myMap.set(element.columnName, element.value);
+    })
     const convMap: any = {};
     myMap.forEach((val: string, key: string) => {
       convMap[key] = val;
@@ -341,26 +387,26 @@ export class GenericListComponent extends CommonService implements OnInit {
       this.listDetail = data;
       console.log(this.listDetail);
       setTimeout(() => {
-        this.dataTable = $('#dtData').DataTable(this.utilService.datablesSettings);
+        this.dataTable = $('#dtData').DataTable(this.datablesSettings);
       }, 1);
       //this.dataTable?.destroy();
       // console.log(data);
     });
-    
+
   }
-  generateAttachment(blob:Blob,extension:string){
+  generateAttachment(blob: Blob, extension: string) {
     const data = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = data;
-      link.download = "report."+extension;
-      link.dispatchEvent(new MouseEvent('click',{
-        bubbles:true,cancelable:true,view:window 
-      }));
-      setTimeout(() => {
-        window.URL.revokeObjectURL(data);
-        link.remove
-      }, 100);
+    const link = document.createElement('a');
+    link.href = data;
+    link.download = "report." + extension;
+    link.dispatchEvent(new MouseEvent('click', {
+      bubbles: true, cancelable: true, view: window
+    }));
+    setTimeout(() => {
+      window.URL.revokeObjectURL(data);
+      link.remove
+    }, 100);
   }
-  
+
 }
 

@@ -21,7 +21,7 @@ export class SegRolComponent extends GenericListComponent implements OnInit{
                    {tableName: "seg_rol", columnName:"descripcion",type:"input"}
                   ],
     //filters sería para filtros adicionales
-    "filters":{"seg_rol.nombre":""},
+    "conditions":[],
     "orders":["nombre"]
   }
   constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 

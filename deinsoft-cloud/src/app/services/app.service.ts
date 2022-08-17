@@ -79,7 +79,7 @@ export class AppService {
     //     }
     // }
 
-    async getProfile() {
+    getProfile():any {
         try {
             //this.user = {name:"edward","picture":"logo.png"};
             let tokenDecrypt = helper.decodeToken(localStorage.getItem('token'));
@@ -87,7 +87,7 @@ export class AppService {
             this.user = tokenDecrypt.user;;
             this.user.profile = tokenDecrypt.authorities[0].authority;
             console.log(this.user);
-            
+            return this.user
             // this.user ={ID: "2e7ae590-dc86-4485-809a-9d805e73bb64",
             // createdAt: "2022-06-08T07:09:01.213Z",
             // email: "fake_51@hotmail.com",
@@ -101,7 +101,9 @@ export class AppService {
             
         } catch (error) {
             this.logout();
+            
             throw error;
+            return null
         }
     }
 

@@ -11,6 +11,7 @@ import com.deinsoft.puntoventa.framework.model.Detail;
 import com.deinsoft.puntoventa.framework.model.JsonData;
 import com.deinsoft.puntoventa.framework.repository.JdbcRepository;
 import com.deinsoft.puntoventa.framework.service.TransactionService;
+import com.deinsoft.puntoventa.framework.util.Util;
 import com.deinsoft.puntoventa.util.Impresion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
@@ -43,14 +44,21 @@ public class BusinessServiceImpl implements BusinessService {
     @Autowired
     TransactionService transactionService;
 
-    public static String urlBase = "http://localhost:8080/api/v1/";
-    public static String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NTA5MjAwMTYsImlzcyI6IkRFSU5TT0ZUIiwianRpIjoiREVGQUNULUpXVCIsInN1YiI6IjEwNDE0MzE2NTk1L1BFUkVaIERFTEdBRE8gQkxBTkNBIE5FUkkiLCJudW1Eb2MiOiIxMDQxNDMxNjU5NSIsInJhem9uU29jaWFsIjoiUEVSRVogREVMR0FETyBCTEFOQ0EgTkVSSSIsInVzdWFyaW9Tb2wiOiI0MTQzMTY1OSIsImV4cCI6MTY4MjkyMDAxNn0.1Csg7-tYUYtrpMDHGwMG8K04_aGUXrj8Vbm3qqeSYL6GDxsg-JOOf-VxWHXWeBXGzZ-3C6Br3DB1kJpOH_Ueog";
+//    public static String urlBase = "http://localhost:8080/api/v1/";
+//    public static String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NTA5MjAwMTYsImlzcyI6IkRFSU5TT0ZUIiwianRpIjoiREVGQUNULUpXVCIsInN1YiI6IjEwNDE0MzE2NTk1L1BFUkVaIERFTEdBRE8gQkxBTkNBIE5FUkkiLCJudW1Eb2MiOiIxMDQxNDMxNjU5NSIsInJhem9uU29jaWFsIjoiUEVSRVogREVMR0FETyBCTEFOQ0EgTkVSSSIsInVzdWFyaW9Tb2wiOiI0MTQzMTY1OSIsImV4cCI6MTY4MjkyMDAxNn0.1Csg7-tYUYtrpMDHGwMG8K04_aGUXrj8Vbm3qqeSYL6GDxsg-JOOf-VxWHXWeBXGzZ-3C6Br3DB1kJpOH_Ueog";
 
     @Override
     public RespuestaPSE sendApi(String tableName, long id) throws ParseException {
         RespuestaPSE result = null;
-        EnvioPSE envioPSE = new EnvioPSE(urlBase + "document/send-document", token);
+        
         Map<String, Object> mapVenta = jdbcRepository.findById(tableName, id);
+        Map<String,Object> local = (Map<String,Object>)mapVenta.get("cnf_local");
+        Map<String,Object> empresa = (Map<String,Object>)local.get("cnf_empresa");
+        String ruta = Util.getStringValue(empresa,"ruta_pse");
+        String token = Util.getStringValue(empresa,"token");
+        if (ruta == null) throw new RuntimeException ("Ruta PSE no configurado");
+        if (token == null) throw new RuntimeException ("token PSE no configurado");
+        EnvioPSE envioPSE = new EnvioPSE(ruta,token);
         String jsonBody = envioPSE.paramToJson(mapVenta);
         RespuestaPSE resultEnvioPSE = envioPSE.envioJsonPSE(jsonBody);
 
@@ -81,7 +89,10 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     public byte[] getPDF(long id, int tipo) throws ParseException {
         byte[] result = null;
-        EnvioPSE envioPSE = new EnvioPSE(urlBase + "document/get-pdf", token);
+        Map<String, Object> mapVenta = jdbcRepository.findById("act_comprobante", id);
+        Map<String,Object> local = (Map<String,Object>)mapVenta.get("cnf_local");
+        Map<String,Object> empresa = (Map<String,Object>)local.get("cnf_empresa");
+        EnvioPSE envioPSE = new EnvioPSE(empresa.get("ruta_pse").toString(), empresa.get("token").toString());
         Map<String, Object> mapResult = null;
         try {
             mapResult = envioPSE.getPDF(id, tipo);

@@ -23,7 +23,7 @@ export class CnfTipoDocumentoComponent extends GenericListComponent implements O
                    {tableName: "cnf_tipo_documento", "columnName":"codigo_sunat","type":"input"}
            ],
     //filters sería para filtros adicionales
-    "filters":{"cnf_tipo_documento.codigo_sunat":"","cnf_tipo_documento.nombre":""},
+    "conditions":[],
     "orders":["cnf_tipo_documento_id desc"]
   }
   constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 

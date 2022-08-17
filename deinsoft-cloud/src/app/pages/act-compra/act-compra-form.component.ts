@@ -103,7 +103,7 @@ export class ActCompraFormComponent extends GenericMasterDetailFormComponent imp
       }
     ],
     //filters sería para filtros adicionales
-    "filters": { "act_comprobante.nombre": "", "act_comprobante.direccion": "" },
+    "conditions": { "act_comprobante.nombre": "", "act_comprobante.direccion": "" },
     "orders": ["nombre", "direccion"],
     "preSave" : [
       

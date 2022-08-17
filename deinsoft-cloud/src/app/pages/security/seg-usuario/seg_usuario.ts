@@ -14,6 +14,7 @@ export class SegUsuarioComponent extends GenericListComponent implements OnInit{
   prop ={
     "tableName": "seg_usuario",
     "title": "Usuarios",
+    "api":"/api/framework/save-user",
     "columnsList":[{tableName: "seg_usuario", columnName:"nombre",filterType:"text"},
                    {tableName: "seg_usuario", columnName:"email",filterType:"text"}
                 ],
@@ -21,7 +22,9 @@ export class SegUsuarioComponent extends GenericListComponent implements OnInit{
                   {tableName: "seg_rol",tableNameDetail: "seg_rol_usuario",
                     idValue:"seg_rol_id"
                     ,columnsForm: [
-                                    {tableName:"seg_rol", columnName:"nombre",inputType:"select"}
+                                    {tableName:"seg_rol", columnName:"nombre",type:"select",loadState:1,relatedBy:"seg_rol_id"},
+                                    {tableName:"cnf_empresa", columnName:"nombre",type:"select",loadState:1,relatedBy:"cnf_empresa_id"},
+                                    {tableName:"cnf_local", columnName:"nombre",type:"select",loadState:1,relatedBy:"cnf_local_id"}
                                   ]
                   }
     ],
@@ -29,8 +32,11 @@ export class SegUsuarioComponent extends GenericListComponent implements OnInit{
                    {tableName: "seg_usuario", columnName:"email",type:"input"},
                    {tableName: "seg_usuario", columnName:"password",type:"password"}
            ],
+    "preSave" : [
+            {columnForm:"estado",value:"1"}
+          ],
     //filters sería para filtros adicionales
-    "filters":{"seg_usuario.nombre":""},
+    "conditions":[],
     "orders":["nombre"]
   }
   constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 

@@ -1,5 +1,7 @@
 package com.deinsoft.puntoventa.framework.security.model;
 
+import com.deinsoft.puntoventa.business.model.CnfEmpresa;
+import com.deinsoft.puntoventa.business.model.CnfLocal;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,8 +43,13 @@ public class SecRoleUser implements Serializable {
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "cnf_empresa_id") 
-    private CnfEmpresa empresa;
+    private com.deinsoft.puntoventa.business.model.CnfEmpresa empresa;
 
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "cnf_local_id") 
+    private CnfLocal local;
+    
     public long getId() {
         return id;
     }
@@ -73,6 +80,14 @@ public class SecRoleUser implements Serializable {
 
     public void setEmpresa(CnfEmpresa empresa) {
         this.empresa = empresa;
+    }
+
+    public CnfLocal getLocal() {
+        return local;
+    }
+
+    public void setLocal(CnfLocal local) {
+        this.local = local;
     }
 
 

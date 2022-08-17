@@ -17,9 +17,6 @@ export class JwtInterceptor implements HttpInterceptor{
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{
         
-        //let currentUser =  this.auth.currentUserValue 
-            console.log(this.auth.getToken());
-            
             if(this.auth.getToken()){
                 request = request.clone({
                     setHeaders:{ Authorization: this.auth.getToken() }
@@ -63,7 +60,7 @@ export class JwtInterceptor implements HttpInterceptor{
                         if(error?.url?.includes("delete")){
                           this.utilService.msgProblemDelete();
                         }else{
-                          this.utilService.msgHTTP400WithMessage(error.error);
+                          this.utilService.msgHTTP400WithMessage(error.error.message);
                         }
                         
                       }else{

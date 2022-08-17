@@ -28,6 +28,8 @@
     "incorrectFormatEmail":"Formato de correo electrónico inválido",
     "searchFor":"Buscar por",
     "noRows":"No se encontraron registros",
+    "btnTicket":"Ticket",
+    "btnA4":"A4",
     "messages":{
       "errorSearchActInvoice":"Debe ingresar el Nro. de serie y el Nro. de documento para buscar"
     },
@@ -112,7 +114,7 @@
         "subTitleList": " Listado de Centros de Costo"
       },
       "id": "ID",
-      "nombre": "Nombre",
+      "nombre": "Tipo Doc.",
       "codigo": "Código",
       "codigo_sunat": "Código SUNAT",
       "flag_electronico":"Facturación electrónica (1=Si,0=No)"
@@ -146,19 +148,33 @@
     },
     "act_comprobante": {
       "home": {
-        "title": "Tipo de Comprobante",
+        "title": "Venta de Productos y Servicios",
         "subTitleForm": " Mantenimiento de Centro de Costo",
         "subTitleList": " Listado de Centros de Costo"
       },
       "id": "ID",
       "fecha": "Fecha",
+      "fecha_registro": "Fecha Registro",
       "numero": "Número",
       "total": "Total",
       "observacion": "Observación",
       "igv":"IGV",
       "subtotal":"Subtotal",
       "serie":"Serie",
-      "envio_pse_mensaje":"Envío F.E."
+      "envio_pse_mensaje":"Envío F.E.",
+      "cnf_maestro":"Cliente",
+      "cnf_tipo_comprobante":"Tipo",
+      "cnf_forma_pago":"Forma de pago",
+      "cnf_local":"Local",
+      "inv_almacen":"Almacén",
+      "flag_estado":"Estado",
+      "cnf_moneda":"Moneda",
+      "descuento":"Descuento",
+      "act_comprobante_detalle":"Detalle de Comprobante",
+      "proveedor":"Proveedor",
+      "fechaDesde":"Fecha inicio",
+      "fechaHasta":"Fecha fin",
+      "envio_pse_flag":"Envío SUNAT"
     },
     "act_comprobante_detalle": {
       "home": {
@@ -170,7 +186,10 @@
       "descripcion": "Descripción",
       "cantidad": "Cantidad",
       "precio": "Precio",
-      "afectacion_igv":"Afectación IGV"
+      "importe":"Importe",
+      "afectacion_igv":"Afectación IGV",
+      "cnf_producto":"Producto",
+      "cnf_impuesto_condicion":"Impuesto"
     },
     "cnf_impuesto_condicion": {
       "home": {
@@ -237,9 +256,10 @@
       "nombre": "Producto",
       "precio": "precio",
       "codigo": "Código",
-      "descripcion": "Producto",
+      "descripcion": "Descripción",
       "cnf_producto.cnf_producto_id, cnf_producto.nombre":"Producto",
-      "barcode":"Código de barras"
+      "barcode":"Código de barras",
+      "costo":"Costo"
     },
     "inv_almacen": {
       "home": {
@@ -272,6 +292,22 @@
       "email": "Correo electrónico",
       "password": "Contraseña",
       "password2": "repita contraseña"
+    },
+    "inv_almacen_producto": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "inv_almacen": "Almacén",
+      "cnf_producto":"Producto",
+      "cantidad": "Cantidad"
+    },
+    "reportes": {
+      "act_comprobante_listado":"Listado de Ventas",
+      "act_comprobante":"Reporte de Ventas",
+      "act_comprobante_compra":"Reporte de Compras"
     }
   }
 }

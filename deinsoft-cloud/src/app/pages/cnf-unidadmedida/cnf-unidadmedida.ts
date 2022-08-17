@@ -20,7 +20,7 @@ export class CnfUnidadMedidaComponent extends GenericListComponent implements On
     "columnsForm":[{tableName: "cnf_unidad_medida", "columnName":"nombre","type":"input"}
            ],
     //filters sería para filtros adicionales
-    "filters":{"cnf_unidad_medida.nombre":""},
+    "conditions":[],
     "orders":["nombre"]
   }
   constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 

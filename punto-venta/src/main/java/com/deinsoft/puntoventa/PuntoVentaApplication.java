@@ -2,33 +2,47 @@ package com.deinsoft.puntoventa;
 
 import com.deinsoft.puntoventa.framework.repository.JdbcRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-public class PuntoVentaApplication {
+public class PuntoVentaApplication implements CommandLineRunner {
 
     @Autowired
     JdbcRepository jdbcRepository;
+    
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
     
     public static void main(String[] args) {
         
         SpringApplication.run(PuntoVentaApplication.class, args);
     }
     
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").
-                        allowedMethods("*").
-                        allowedOrigins("http://localhost:4200").
-                        allowedMethods("*");
-            }
-        };
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**").
+//                        allowedMethods("*").
+//                        allowedOrigins("http://localhost:4200").
+//                        allowedMethods("*");
+//            }
+//        };
+//    }
+    @Override
+    public void run(String... args) throws Exception {
+        String password = "123456";
+
+        for (int i = 0; i < 2; i++) {
+            String bcryptPassword = passwordEncoder.encode(password);
+            System.out.println(bcryptPassword);
+        }
     }
 }

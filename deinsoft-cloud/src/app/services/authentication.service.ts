@@ -30,11 +30,6 @@ export class AuthenticationService {
     return this.http.post<any>(this.url + '/login', { name, password },data)
            .pipe(map(data => {
                 console.log("RESULTADO1: ",data)
-              //   let user = helper.decodeToken(data.headers.get('authorization'))
-              //   console.log(user);
-                
-              //  localStorage.setItem('currentUser', user); 
-               
                return data.headers.get('authorization');
            },(error: any) =>{ console.log("ERRORN: ",error)})).toPromise();
   }

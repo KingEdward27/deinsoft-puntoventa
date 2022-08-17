@@ -6,10 +6,11 @@ import { Location } from '@angular/common';
 import { NgbDateAdapter, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomAdapter, CustomDateParserFormatter } from '@/base/util/CustomDate';
 import { GenericMasterDetailFormComponent } from '@/base/components/generic-master-detail-form/generic-master-detail-form.component';
-import { UtilService } from '@services/util.service';
+
 import { HttpClient } from '@angular/common/http';
 import { CommonService } from '@/base/services/common.service';
 import { UpdateParam } from '@/base/components/model/UpdateParam';
+import { UtilService } from '@services/util.service';
 
 
 @Component({
@@ -90,7 +91,7 @@ export class ActVentaFormComponent extends GenericMasterDetailFormComponent impl
       }
     ],
     //filters sería para filtros adicionales
-    "filters": { "act_comprobante.nombre": "", "act_comprobante.direccion": "" },
+    "conditions": { "act_comprobante.nombre": "", "act_comprobante.direccion": "" },
     "orders": ["nombre", "direccion"],
     "preSave" : [
                 {columnForm:"numero",select: {
@@ -224,7 +225,7 @@ export class ActVentaFormComponent extends GenericMasterDetailFormComponent impl
           convMapDetail[key] = val;
         });
         console.log(convMapDetail);
-        
+        //otrafuncion();//error
         mp.map = convMapDetail;
         param.updateParam = mp;
         //this.properties.actions.push({ name: this.print, param: 0, icon: "fas fa-print" })

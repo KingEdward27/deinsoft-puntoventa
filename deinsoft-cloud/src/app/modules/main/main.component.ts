@@ -12,10 +12,24 @@ import {Observable} from 'rxjs';
 })
 export class MainComponent implements OnInit {
     @HostBinding('class') class = 'wrapper';
+    startedClass = false;
+    completedClass = false;
     public ui: Observable<UiState>;
 
     constructor(private renderer: Renderer2, private store: Store<AppState>) {}
-
+    onStarted() {
+        this.startedClass = true;
+        setTimeout(() => {
+          this.startedClass = false;
+        }, 100);
+      }
+    
+      onCompleted() {
+        this.completedClass = true;
+        setTimeout(() => {
+          this.completedClass = false;
+        }, 800);
+      }
     ngOnInit() {
         this.ui = this.store.select('ui');
         this.renderer.removeClass(

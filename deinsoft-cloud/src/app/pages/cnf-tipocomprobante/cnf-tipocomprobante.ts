@@ -25,7 +25,7 @@ export class CnfTipoComprobanteComponent extends GenericListComponent implements
                    {tableName: "cnf_tipo_comprobante",columnName:"flag_electronico",type:"input"}
            ],
     //filters sería para filtros adicionales
-    "filters":{"cnf_tipo_comprobante.codigo":"","cnf_tipo_comprobante.nombre":""},
+    "conditions":[],
     "orders":["cnf_tipo_comprobante_id desc"]
   }
   constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 

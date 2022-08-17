@@ -3,6 +3,7 @@ import { CommonService } from '@/base/services/common.service';
 import { HttpClient } from '@angular/common/http';
 import { Component,OnInit} from '@angular/core';
 import { Router } from '@angular/router';
+import { AppService } from '@services/app.service';
 import { UtilService } from '@services/util.service';
 
 @Component({
@@ -31,7 +32,7 @@ export class CnfMaestroComponent extends GenericListComponent implements OnInit{
     "columnsForm":[{tableName: "cnf_maestro", columnName:"nro_doc",type:"input"},
                     {tableName: "cnf_maestro", columnName:"apellido_paterno",type:"input"},
                     {tableName: "cnf_maestro", columnName:"apellido_materno",type:"input"},
-                    {tableName: "cnf_maestro",columnName:"nombres",type:"input"},
+                    {tableName: "cnf_maestro",columnName:"nombres",type:"date"},
                     {tableName: "cnf_maestro",columnName:"razon_social",type:"input"},
                     {tableName: "cnf_maestro",columnName:"direccion",type:"input"},
                     {tableName: "cnf_maestro",columnName:"correo",type:"input"},
@@ -42,15 +43,19 @@ export class CnfMaestroComponent extends GenericListComponent implements OnInit{
                    {tableName: "cnf_distrito", "columnName":"nombre","type":"select",loadState : 0,loadFor:"cnf_distrito_id",relatedBy:"cnf_distrito_id"}
            ],
     //filters sería para filtros adicionales
-    "filters":{"cnf_maestro.nombres":"","cnf_maestro.direccion":""},
+    "conditions":[],
     "orders":["nombres","direccion"],
     "preSave" : []
   }
-  constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 
+  constructor(private utilServices: UtilService,private httpClients:HttpClient,
+    private routers: Router,public _commonService:CommonService,private appService:AppService) { 
     super(utilServices,httpClients,routers,_commonService);
   }
   ngOnInit(): void {
     super.baseEndpoint = this.baseEndpoint;
+    let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+    this.prop.preSave.push({columnForm:"cnf_empresa_id",value:cnfEmpresa});
+    this.prop.conditions.push({"columnName":"cnf_maestro.cnf_empresa_id","value":cnfEmpresa});
     //this.prop.preSave.push({columnForm:"razon_social",value:"columnsForm.apellido_paterno +' '+columnsForm.apellido_materno +' '+columnsForm.nombres"})
     super.properties = this.prop;
     console.log(this.prop);

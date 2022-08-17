@@ -675,3 +675,81 @@ UPDATE `punto_venta`.`seg_usuario` SET `email` = 'facturacionelectronica@opendei
 ALTER TABLE `punto_venta`.`cnf_producto` 
 ADD COLUMN `barcode` VARCHAR(100) NULL AFTER `cnf_empresa_id`;
 
+UPDATE `punto_venta`.`seg_rol_usuario` SET `cnf_local_id` = null WHERE (`seg_rol_usuario_id` = '1');
+UPDATE `punto_venta`.`seg_rol_usuario` SET `cnf_local_id` = null WHERE (`seg_rol_usuario_id` = '2');
+
+
+alter table seg_rol_usuario
+add constraint fk_seg_rol_usuario_cnf_empresa foreign key (cnf_empresa_id) references cnf_empresa(cnf_empresa_id);
+alter table seg_rol_usuario
+add constraint fk_seg_rol_usuario_cnf_local foreign key (cnf_local_id) references cnf_local(cnf_local_id);
+
+ALTER TABLE `punto_venta`.`cnf_producto` 
+DROP INDEX `codigo_UNIQUE` ;
+;
+ALTER TABLE `punto_venta`.`inv_movimiento_producto` 
+RENAME TO  `punto_venta`.`inv_almacen_producto` ;
+
+alter table cnf_empresa
+add ruta_pse varchar(500);
+
+alter table cnf_num_comprobante
+add cnf_empresa_id int;
+
+alter table cnf_num_comprobante
+add constraint fk_cnf_num_comprobante_cnf_empresa foreign key (cnf_empresa_id) references cnf_empresa(cnf_empresa_id);
+
+create table inv_movimiento_producto
+(
+	inv_movimiento_producto_id int auto_increment primary key,
+    cnf_producto_id int,
+    inv_almacen_id int,
+    act_comprobante_id int,
+    fecha date,
+    fecha_Registro datetime,
+    cantidad decimal(14,4)
+)engine=innodb;
+
+alter table inv_movimiento_producto
+add constraint fk_inv_movimiento_producto_cnf_producto foreign key (cnf_producto_id) references cnf_producto(cnf_producto_id);
+
+alter table inv_movimiento_producto
+add constraint fk_inv_movimiento_producto_cnf_empresa foreign key (inv_almacen_id) references inv_almacen(inv_almacen_id);
+
+alter table inv_movimiento_producto
+add constraint fk_inv_movimiento_producto_act_comprobante foreign key (act_comprobante_id) references act_comprobante(act_comprobante_id);
+
+INSERT INTO `dbbodegadesktop`.`productos`
+(`IdProducto`,
+`IdMarca`,
+`IdCategoria`,
+`IdUnidadMedida`,
+`Descripcion`,
+`Costo`,
+`Precio`,
+`Precio2`,
+`paquete`,
+`Stock`,
+`StockMinimo`,
+`CodigoBarra`,
+`Observacion`,
+`Estado`,
+`codigo`,
+`orden`)
+VALUES
+(<{IdProducto: }>,
+<{IdMarca: }>,
+<{IdCategoria: }>,
+<{IdUnidadMedida: }>,
+<{Descripcion: }>,
+<{Costo: }>,
+<{Precio: }>,
+<{Precio2: }>,
+<{paquete: }>,
+<{Stock: }>,
+<{StockMinimo: }>,
+<{CodigoBarra: }>,
+<{Observacion: }>,
+<{Estado: }>,
+<{codigo: -}>,
+<{orden: 9999}>);

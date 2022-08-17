@@ -19,8 +19,8 @@ export class CnfRegionComponent extends GenericListComponent implements OnInit{
     "columnsForm":[{tableName: "cnf_region", "columnName":"nombre","type":"input"}
            ],
     //filters sería para filtros adicionales
-    "filters":{"cnf_region.nombre":""},
-    "orders":["nombre"]
+    "conditions":[],
+    "orders":["cnf_region.nombre"]
   }
   constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 
     super(utilServices,httpClients,routers,_commonService);

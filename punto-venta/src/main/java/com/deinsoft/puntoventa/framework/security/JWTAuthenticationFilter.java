@@ -23,9 +23,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//import ocs.opensoft.controller.ActChanceController;
-//import ocs.opensoft.model.SecUser;
-//import ocs.opensoft.security.Constant;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -69,7 +66,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         LocalDateTime currentTime = LocalDateTime.now();
         final Date createdDate = new Date();
-        final Date expirationDate = new Date(createdDate.getTime() + Constant.TOKEN_REFRESH_EXPIRATION_TIME * 10000/* *10000 maximo tiempo posible*/);
+        final Date expirationDate = new Date(createdDate.getTime() + Constant.TOKEN_REFRESH_EXPIRATION_TIME * 10000 * 2/* *10000 maximo tiempo posible*/);
         LOGGER.info("expirationDate: " + expirationDate);
         String username = ((UserDetails) auth.getPrincipal()).getUsername();
         SecUser usuario = secUserRepository.findByName(username); 

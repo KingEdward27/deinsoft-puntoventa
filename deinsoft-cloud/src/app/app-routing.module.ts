@@ -38,6 +38,14 @@ import { RptActCompraComponent } from '@pages/reports/act-compra/rpt-act-compra.
 import { GenericChildFormComponent } from './base/components/generic-child/generic-child-form.component';
 import { SegRolComponent } from '@pages/security/seg-rol/seg_rol';
 import { SegUsuarioComponent } from '@pages/security/seg-usuario/seg_usuario';
+import { ActComprobanteCompraFormComponent } from '@pages/act-comprobante/act-comprobante-compra/act-comprobante-compra-form.component';
+import { ActComprobanteFormComponent } from '@pages/act-comprobante/act-comprobante-form/act-comprobante-form.component';
+import { CnfProducto2FormComponent } from '@pages/cnf-producto/cnf-producto2-form.component';
+import { ActComprobanteCompraReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-compra/act-comprobante-compra-report.component';
+import { ActComprobanteListFormComponent } from '@pages/reports/act-comprobante/list-act-comprobante-venta/act-comprobante-list.component';
+import { ActComprobanteReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-venta/act-comprobante-report.component';
+import { InvAlmacenReportFormComponent } from '@pages/reports/inv-almacen/inv-almacen-report.component';
+import { InvMovimientoProductoReportFormComponent } from '@pages/reports/inv-movimiento-producto/inv-movimiento-producto-report.component';
 
 const routes: Routes = [
     {
@@ -77,7 +85,7 @@ const routes: Routes = [
             {path: 'tipo-documento',component: CnfTipoDocumentoComponent},
             {path: 'local',component: CnfLocalComponent},
             {path: 'tipo-comprobante',component: CnfTipoComprobanteComponent},
-            {path: 'venta',component: ActVentaFormComponent},
+            {path: 'venta',component: ActComprobanteFormComponent},
             {path: 'producto',component: CnfProductoComponent},
             {path: 'marca',component: CnfMarcaComponent},
             {path: 'categoria',component: CnfCategoriaComponent},
@@ -87,11 +95,14 @@ const routes: Routes = [
             {path: 'maestro',component: CnfMaestroComponent},
             {path: 'forma-pago',component: CnfFormaPagoComponent},
             {path: 'almacen',component: InvAlmacenComponent},
-            {path: 'compra',component: ActCompraFormComponent},
+            {path: 'compra',component: ActComprobanteCompraFormComponent},
             {path: 'usuario',component: SegUsuarioComponent},
             {path: 'perfil',component: SegRolComponent},
-            {path: 'rpt-ventas',component: RptActVentaFormComponent},
-            {path: 'rpt-compras',component: RptActCompraComponent}
+            {path: 'list-ventas',component: ActComprobanteListFormComponent},
+            {path: 'rpt-ventas',component: ActComprobanteReportFormComponent},
+            {path: 'rpt-compras',component: ActComprobanteCompraReportFormComponent},
+            {path: 'rpt-almacen',component: InvAlmacenReportFormComponent},
+            {path: 'rpt-movimiento-producto',component: InvMovimientoProductoReportFormComponent}
         ]
     },
     {

@@ -8,6 +8,7 @@ import {
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {AppService} from '@services/app.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-login',
@@ -24,7 +25,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     constructor(
         private renderer: Renderer2,
         private toastr: ToastrService,
-        private appService: AppService
+        private appService: AppService,
+        private translate: TranslateService
     ) {}
 
     ngOnInit() {
@@ -43,6 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.isAuthLoading = true;
             await this.appService.loginByAuth(this.loginForm.value);
             this.isAuthLoading = false;
+            localStorage.setItem('lang', this.translate.store.defaultLang);
         } else {
             this.toastr.error('Form is not valid!');
         }

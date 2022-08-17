@@ -1,0 +1,105 @@
+<ol class="breadcrumb float-xl-right">
+    <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+    <li class="breadcrumb-item"><a href="javascript:;" translate = "ocscloudApp.securityModule"></a></li>
+    <li class="breadcrumb-item active" translate = "ocscloudApp.actComprobante.home.title"></li>
+</ol>
+<h1 class="page-header" translate = "ocscloudApp.actComprobante.home.title"><small translate = "ocscloudApp.actComprobante.home.subTitleList"></small></h1>
+
+<div class="panel panel-inverse">
+    <!-- begin panel-heading -->
+    <div class="panel-heading">
+        <h4 class="panel-title" translate = "ocscloudApp.actComprobante.home.title"></h4>
+        <div class="panel-heading-btn">
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i
+                    class="fa fa-expand"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i
+                    class="fa fa-redo"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i
+                    class="fa fa-minus"></i></a>
+
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="col-md-12 table">
+                <tr>
+                    <td>
+                        <div class="col-md-12 col-xs-9" style="margin-left:-15px">
+                            <button class="btn btn-orange" [routerLink]="['/new-act-comprobante']"
+                                data-toggle="modal">
+                                <i class="fa fa-plus"></i> {{'ocscloudApp.btnNew' | translate }}
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <table id="dtDataActComprobante" class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
+                <thead>
+                    <tr>
+                        <th width="1%">Nro.</th>			<th class="text-nowrap">{{'ocscloudApp.actComprobante.fecha' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.serie' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.numero' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.fechaRegistro' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.billete' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.total' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.vuelto' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.descuento' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.subtotal' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.igv' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.observacion' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.flagEstado' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.flagIsventa' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.envioPseFlag' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.envioPseMensaje' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.xmlhash' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.codigoqr' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.numTicket' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.actComprobante' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.cnfMaestro' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.cnfFormaPago' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.cnfMoneda' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.cnfLocal' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.cnfTipoComprobante' | translate}}</th>
+			<th class="text-nowrap">{{'ocscloudApp.actComprobante.invAlmacen' | translate}}</th>
+	<th class="text-nowrap">{{'ocscloudApp.actionsText' | translate}}</th>
+		</tr>
+            </thead>
+	<tr>
+                    <th></th>	<th><input type="text" class="form-control-sm" placeholder="{{'ocscloudApp.searchFor' | translate}} {{'ocscloudApp.actComprobante.serie' | translate}}" name="search-id" [(ngModel)]="modelSearch.serie" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'ocscloudApp.searchFor' | translate}} {{'ocscloudApp.actComprobante.numero' | translate}}" name="search-id" [(ngModel)]="modelSearch.numero" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'ocscloudApp.searchFor' | translate}} {{'ocscloudApp.actComprobante.observacion' | translate}}" name="search-id" [(ngModel)]="modelSearch.observacion" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'ocscloudApp.searchFor' | translate}} {{'ocscloudApp.actComprobante.flagEstado' | translate}}" name="search-id" [(ngModel)]="modelSearch.flagEstado" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'ocscloudApp.searchFor' | translate}} {{'ocscloudApp.actComprobante.flagIsventa' | translate}}" name="search-id" [(ngModel)]="modelSearch.flagIsventa" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'ocscloudApp.searchFor' | translate}} {{'ocscloudApp.actComprobante.envioPseFlag' | translate}}" name="search-id" [(ngModel)]="modelSearch.envioPseFlag" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'ocscloudApp.searchFor' | translate}} {{'ocscloudApp.actComprobante.envioPseMensaje' | translate}}" name="search-id" [(ngModel)]="modelSearch.envioPseMensaje" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'ocscloudApp.searchFor' | translate}} {{'ocscloudApp.actComprobante.xmlhash' | translate}}" name="search-id" [(ngModel)]="modelSearch.xmlhash" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'ocscloudApp.searchFor' | translate}} {{'ocscloudApp.actComprobante.codigoqr' | translate}}" name="search-id" [(ngModel)]="modelSearch.codigoqr" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'ocscloudApp.searchFor' | translate}} {{'ocscloudApp.actComprobante.numTicket' | translate}}" name="search-id" [(ngModel)]="modelSearch.numTicket" (keyUp.enter)="getAllData()"/></th>	<th></th>	<th></th>	<th></th>	<th></th>	<th></th>	<th></th>	<th></th></tr><tbody>
+                    
+                    <tr *ngFor="let item of lista; index as i" class="odd gradeX">
+                        <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>			<td>{{item.fecha}}</td>
+			<td>{{item.serie}}</td>
+			<td>{{item.numero}}</td>
+			<td>{{item.fechaRegistro}}</td>
+			<td>{{item.billete}}</td>
+			<td>{{item.total}}</td>
+			<td>{{item.vuelto}}</td>
+			<td>{{item.descuento}}</td>
+			<td>{{item.subtotal}}</td>
+			<td>{{item.igv}}</td>
+			<td>{{item.observacion}}</td>
+			<td>{{item.flagEstado}}</td>
+			<td>{{item.flagIsventa}}</td>
+			<td>{{item.envioPseFlag}}</td>
+			<td>{{item.envioPseMensaje}}</td>
+			<td>{{item.xmlhash}}</td>
+			<td>{{item.codigoqr}}</td>
+			<td>{{item.numTicket}}</td>
+			<td>{{item.actComprobante?.numero}}</td>
+			<td>{{item.cnfMaestro?.nombre}}</td>
+			<td>{{item.cnfFormaPago?.nombre}}</td>
+			<td>{{item.cnfMoneda?.name}}</td>
+			<td>{{item.cnfLocal?.name}}</td>
+			<td>{{item.cnfTipoComprobante?.name}}</td>
+			<td>{{item.invAlmacen?.name}}</td>
+<td>
+                            <div class="row">
+                                <div class="col-sm-6 col-xs-6 text-right"><a class="fas fa-edit" (click)="editar(item)" style="cursor: pointer;"
+                                         title="{{'ocscloudApp.btnEdit' | translate}}"></a></div>
+                                <div class="col-sm-6 col-xs-6"><a (click) = "eliminar(item)" style="cursor: pointer;" title="{{'ocscloudApp.btnDelete' | translate}}"><i
+                                            class="fa fa-trash fa-lg"></i></a></div>
+                            </div>
+                        </td></tr>
+                </tbody>	</table>
+    </div>    </div>    </div>

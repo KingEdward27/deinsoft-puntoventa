@@ -15,27 +15,51 @@ import java.util.Map;
  * @author EDWARD-PC
  */
 public class Util {
-    public static BigDecimal getBigDecimalValue(Map<String,Object> map, String key){
-        if(map.get(key) == null) return BigDecimal.ZERO;
+
+    public static BigDecimal getBigDecimalValue(Map<String, Object> map, String key) {
+        if (map.get(key) == null) {
+            return BigDecimal.ZERO;
+        }
         return new BigDecimal(map.get(key).toString());
     }
-    public Map<String, Object> toMap(Object object,String[] visibles) throws IllegalArgumentException, IllegalAccessException, IllegalAccessException {
+
+    public static String getStringValue(Map<String, Object> map, String key) {
+        if (map.get(key) == null) {
+            return null;
+        }
+        return map.get(key).toString();
+    }
+
+    public static Map<String, Object> toMap(Object object, String[] visibles) {
         Map<String, Object> map = new HashMap<>();
-        for (Field f : object.getClass().getDeclaredFields()) {
+        try {
+
+            for (Field f : object.getClass().getDeclaredFields()) {
 //            System.out.println(f.toString());
 //                System.out.println(f.getGenericType() + " " + f.getName() + " " + f.getType());
-//                System.out.println(f.getGenericType() + " " + f.getName() + " " + f.getModifiers()+ " = " + f.get(facturaElectronica));
-            if (f.toString().contains("final") || f.toString().contains("list") || 
-                    !Arrays.asList(visibles).contains(f.getName())) {
-                continue;
-            }
+                System.out.println(f.getGenericType() + " " + f.getName() + " " + f.getModifiers());
+                if (visibles == null) {
+                    if (f.toString().contains("final") || f.toString().contains("list")) {
+                        continue;
+                    }
+                } else {
+                    if (f.toString().contains("final") || f.toString().contains("list")
+                            || !Arrays.asList(visibles).contains(f.getName())) {
+                        continue;
+                    }
+                }
 
-            map.put(f.getName(), f.get(object)); 
+                map.put(f.getName(), f.get(object));
 
 //                objectBuilder.add(f.getName(), f.get(facturaElectronica).toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return map;
     }
+
     public static float round(float d, int decimalPlace) {
         BigDecimal bd = new BigDecimal(Float.toString(d));
         bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);

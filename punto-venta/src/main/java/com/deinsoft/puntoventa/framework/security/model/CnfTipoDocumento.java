@@ -11,7 +11,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
 
-@Entity(name = "cnfTipoDocumento")
+@Entity(name = "secTipoDocumento")
 @Table(name = "cnf_tipo_documento")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CnfTipoDocumento implements Serializable {

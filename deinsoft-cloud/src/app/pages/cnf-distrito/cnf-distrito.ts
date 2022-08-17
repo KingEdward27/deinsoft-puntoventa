@@ -23,8 +23,8 @@ export class CnfDistritoComponent extends GenericListComponent implements OnInit
                    {tableName: "cnf_provincia", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_provincia_id"}
            ],
     //filters sería para filtros adicionales
-    "filters":{"cnf_distrito.nombre":""},
-    "orders":["nombre"]
+    "conditions":[],
+    "orders":["cnf_distrito.nombre"]
   }
   constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 
     super(utilServices,httpClients,routers,_commonService);

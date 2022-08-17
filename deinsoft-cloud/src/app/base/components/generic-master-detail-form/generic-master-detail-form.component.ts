@@ -455,7 +455,7 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
       if (element.type != 'input' && element.type != 'date') {
         if (this.properties.id == 0) {
           if (element.loadState == 1) {
-            this.commonService.getListComboByTableName(element.tableName, element.columnName).subscribe(data => {
+            this.commonService.getListComboByTableName(element.tableName, element.columnName,"").subscribe(data => {
               data.push([0, "- Seleccione -"]);
               data.sort();
               element.listData = data;
@@ -467,7 +467,7 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
           }
         } else {
           if (element.loadState == 1) {
-            this.commonService.getListComboByTableName(element.tableName, element.columnName).subscribe(data => {
+            this.commonService.getListComboByTableName(element.tableName, element.columnName,"").subscribe(data => {
               data.push([0, "- Seleccione -"]);
               data.sort();
               element.listData = data;
@@ -520,7 +520,7 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
     this.isDataLoaded = true;
     this.properties.details.forEach((element: any) => {
       if (element.search) {
-        this.commonService.getListComboByTableName(element.search.tableName, element.search.columnName).subscribe(data => {
+        this.commonService.getListComboByTableName(element.search.tableName, element.search.columnName,"").subscribe(data => {
           console.log(data);
           data.push([0, "- Seleccione -"]);
           data.sort();
@@ -531,7 +531,7 @@ export class GenericMasterDetailFormComponent extends BaseService  implements On
         console.log(element2);
         
         if(element2.type == 'select'){
-          this.commonService.getListComboByTableName(element2.tableName, element2.columnName).subscribe(data => {
+          this.commonService.getListComboByTableName(element2.tableName, element2.columnName,"").subscribe(data => {
             console.log(data);
             data.push([0, "- Seleccione -"]);
             data.sort();

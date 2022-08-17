@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
  *
  * @author EDWARD-PC
  */
-@Entity
+@Entity(name = "secEmpresa")
 @Table(name = "cnf_empresa")
 public class CnfEmpresa implements Serializable {
 

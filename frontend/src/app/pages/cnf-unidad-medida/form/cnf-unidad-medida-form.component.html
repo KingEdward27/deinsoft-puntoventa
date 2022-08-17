@@ -1,0 +1,69 @@
+<ol class="breadcrumb float-xl-right">
+    <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+    <li class="breadcrumb-item"><a href="javascript:;" translate = "ocscloudApp.securityModule"></a></li>
+    <li class="breadcrumb-item active" translate = "ocscloudApp.cnfUnidadMedida.home.title"></li>
+</ol>
+<h1 class="page-header" translate = "ocscloudApp.cnfUnidadMedida.home.title"><small translate = "ocscloudApp.cnfUnidadMedida.home.subTitleForm"></small></h1>
+
+<div class="panel panel-inverse" *ngIf="isDataLoaded">
+    <!-- begin panel-heading -->
+    <div class="panel-heading">
+        <h4 class="panel-title" translate = "ocscloudApp.cnfUnidadMedida.home.title"></h4>
+        <div class="panel-heading-btn">
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i
+                    class="fa fa-expand"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i
+                    class="fa fa-redo"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i
+                    class="fa fa-minus"></i></a>
+
+        </div>
+    </div>
+    <!-- end panel-heading -->
+    <!-- begin panel-body -->
+    <div class="panel-body">
+        <div class="table-responsive">
+            <h4 style="border-bottom: solid 1px;padding-bottom: 6px;">{{'ocscloudApp.register' | translate}} - {{'ocscloudApp.cnfUnidadMedida.home.title' | translate}}</h4>
+            <form class="col-sm-12" style="padding-top: 6px;"  >
+                <div class="form-group-sm row" >
+	                <label for="codigoSunat" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.cnfUnidadMedida.codigoSunat' | translate}}</label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.codigoSunat" maxlength="3" name="codigoSunat" id="codigoSunat" name = "codigoSunat" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese codigoSunat"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.codigoSunat">{{ error.codigoSunat }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label for="nombre" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.cnfUnidadMedida.nombre' | translate}}</label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.nombre" maxlength="100" name="nombre" id="nombre" name = "nombre" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese nombre"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.nombre">{{ error.nombre }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label for="flagEstado" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.cnfUnidadMedida.flagEstado' | translate}}</label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.flagEstado" maxlength="1" name="flagEstado" id="flagEstado" name = "flagEstado" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese flagEstado"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.flagEstado">{{ error.flagEstado }}</div>
+                    </div>
+                </div>
+<div class="form-group row">
+
+                    <div class="col-sm-12" style="padding-top: 20px;">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-2 col-sm-4 col-xs-5" style="margin-left: 50x;">
+                                <button class="btn btn-default col-12" (click)="getBack()" >
+                                    <i class="fa fa-arrow-circle-left"></i> {{'ocscloudApp.btnBack' | translate }}
+                                </button>
+                            </div>
+                            <div class="col-lg-2 col-sm-4 col-xs-5" style="margin-left: 20x;">
+                                <button class="btn btn-orange col-12" (click)="save()" >
+                                    <i [ngClass]="model.id ? 'fa fa-pen' : 'fa fa-plus'"></i> {{ model.id ? ('ocscloudApp.btnEdit' | translate):('ocscloudApp.btnSave' | translate) }}
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div></form>
+        </div>
+      </div>
+</div>

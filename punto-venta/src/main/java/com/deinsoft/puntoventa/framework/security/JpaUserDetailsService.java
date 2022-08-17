@@ -29,7 +29,7 @@ public class JpaUserDetailsService implements UserDetailsService {
 
     @Autowired
     private SecRoleUserRepository secRoleUserRepository;
-    
+
     @Autowired
     JdbcRepository jdbcRepository;
     private Logger logger = LoggerFactory.getLogger(JpaUserDetailsService.class);
@@ -48,11 +48,30 @@ public class JpaUserDetailsService implements UserDetailsService {
 //        usuario.setListSecRoleUser(listRoles);
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         //Map<String,Object> list = jdbcRepository.selectColumnsMap(username, username, username)
+        String locales = "*";
+        boolean totalAccess = false;
         for (SecRoleUser roleUser : usuario.getListSecRoleUser()) {
             logger.info("Role: ".concat(roleUser.getSecRole().getName()));
-            authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName()));
+            if(roleUser.getEmpresa() == null) {
+                authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() + "|*|*"));
+                totalAccess = true;
+                break;
+            }
+            if(roleUser.getEmpresa() != null && roleUser.getLocal() == null) {
+                authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() + "|"+String.valueOf(roleUser.getEmpresa().getId())+"|*"));
+                totalAccess = true;
+                break;
+            }
+            if(roleUser.getEmpresa() != null && roleUser.getLocal() != null) {
+                locales = locales + roleUser.getSecRole().getName() 
+                        + "|" + String.valueOf(roleUser.getEmpresa().getId()) 
+                        + "|" + String.valueOf(roleUser.getLocal().getId());
+            }
         }
-
+        if(!totalAccess){
+            authorities.add(new SimpleGrantedAuthority(locales));
+        }
+        
         if (authorities.isEmpty()) {
             logger.error("Error en el Login: Usuario '" + email + "' no tiene roles asignados!");
             throw new UsernameNotFoundException("Error en el Login: usuario '" + email + "' no tiene roles asignados!");

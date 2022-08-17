@@ -8,10 +8,12 @@ import { NgbDateAdapter, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/
 import { CustomAdapter, CustomDateParserFormatter } from '@/base/util/CustomDate';
 import { GenericListComponent } from '@/base/components/generic-list/generic-list.component';
 import { CommonService } from '@/base/services/common.service';
-import { UtilService } from '@services/util.service';
 import { GenericMasterDetailFormComponent } from '@/base/components/generic-master-detail-form/generic-master-detail-form.component';
 import { UpdateParam } from '@/base/components/model/UpdateParam';
 import { GenericList2Component } from '@/base/components/generic-list2/generic-list2.component';
+import { UtilService } from '@services/util.service';
+import { AppService } from '@services/app.service';
+import { ActComprobanteService } from '@pages/act-comprobante/act-comprobante.service';
 
 
 @Component({
@@ -41,7 +43,7 @@ export class RptActVentaFormComponent extends GenericList2Component implements O
     { tableName: "inv_almacen", columnName: "nombre", filterType: "none" },
     { tableName: "act_comprobante", columnName: "envio_pse_mensaje", filterType: "none" }
     ],
-    columnsListParams: [{ "flag_isventa": "1" }],
+    columnsListParams: [],
 
     "foreignTables": [{ "tableName": "cnf_tipo_comprobante", "idValue": "cnf_tipo_comprobante_id" },
     { "tableName": "cnf_maestro", "idValue": "cnf_maestro_id" },
@@ -64,8 +66,11 @@ export class RptActVentaFormComponent extends GenericList2Component implements O
   igv: number = 0;
   subtotal: number = 0;
   total: number = 0;
-  constructor(private utilServices: UtilService, private httpClientChild: HttpClient, private routers: Router,
-    private _location0: Location, public _commonService: CommonService) {
+  constructor(private utilServices: UtilService, private httpClientChild: HttpClient, 
+    private routers: Router,
+    private _location0: Location, public _commonService: CommonService,
+    private appService:AppService,
+    private actComprobanteService:ActComprobanteService) {
     super(utilServices, httpClientChild, routers,_commonService);
   }
   ngOnInit(): void {
@@ -73,9 +78,13 @@ export class RptActVentaFormComponent extends GenericList2Component implements O
     this.prop.columnsList[7].tableName = ""
     this.prop.columnsList[7].columnName = "concat(cnf_maestro.apellido_paterno,' ',cnf_maestro.apellido_materno,' ',cnf_maestro.nombres)"
     this.prop.columnsList[7].alias = "cnf_maestro.nombre_completo"
+    
+    let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+    this.prop.columnsListParams.push({"columnName":"act_comprobante.flag_isventa","value":1});
+    this.prop.columnsListParams.push({"columnName":"cnf_local.cnf_empresa_id","value":cnfEmpresa});
     super.properties = this.prop;
     this.properties.actions.push({ name: this.print, icon: "fas fa-print",value:"Imprimir" })
-    this.properties.actions.push({ name: this.print, icon: "fas fa-cloud-upload-alt",value:"Enviar Comprobante" })
+    this.properties.actions.push({ name: this.sendApi, icon: "fas fa-cloud-upload-alt",value:"Enviar Comprobante" })
     this.properties.actions.push({ name: this.print, icon: "fas fa-ban" ,value:"Anular"})
 
     this.properties.message.rows[0].columns[0].action = { name: this.ticketChild }
@@ -102,11 +111,7 @@ export class RptActVentaFormComponent extends GenericList2Component implements O
     });
   }
   ticketChild(id: any, param: CommonService) {
-    //this.ticket();
-    // console.log("ticket...", param);
     let myMap = new Map();
-    // let ticketOperacion = JSON.parse(localStorage.getItem("ticketOperacion") || '0');
-    // if(ticketOperacion != prope.ticketOperacion) return;
     myMap.set("id", id);
     myMap.set("tipo", 2);
     let mp = new UpdateParam();
@@ -121,7 +126,7 @@ export class RptActVentaFormComponent extends GenericList2Component implements O
     mp.map = convMapDetail;
     param.updateParam = mp;
     //this.properties.actions.push({ name: this.print, param: 0, icon: "fas fa-print" })
-    param.genericPostRequest("/business/getpdflocal", mp, 'blob').subscribe(data => {
+    param.genericPostRequest("/api/business/getpdflocal", mp, 'blob').subscribe(data => {
       console.log(data);
       if (data.type != 'application/json') {
         var contentType = 'application/pdf';
@@ -136,7 +141,6 @@ export class RptActVentaFormComponent extends GenericList2Component implements O
       }
 
     });
-    // console.log("enviando a imprimir: ",this.properties.listData);
   }
   a4(id: any, param: CommonService) {
     let myMap = new Map();
@@ -152,8 +156,7 @@ export class RptActVentaFormComponent extends GenericList2Component implements O
     console.log(convMapDetail);
 
     mp.map = convMapDetail;
-    //this.properties.actions.push({ name: this.print, param: 0, icon: "fas fa-print" })
-    param.genericPostRequest("/business/getpdflocal", mp, 'blob').subscribe(data => {
+    param.genericPostRequest("/api/business/getpdflocal", mp, 'blob').subscribe(data => {
       console.log(data);
       if (data.type != 'application/json') {
         var contentType = 'application/pdf';
@@ -171,15 +174,6 @@ export class RptActVentaFormComponent extends GenericList2Component implements O
   }
   print(prope: any, item: any,utilService: UtilService) {
     console.log("print...", prope, item,utilService);
-    // let message ={
-    //   title : {message :"Documento get(0) - get(1) generado correctamente",
-    //           params:"columnsForm->act_comprobante.serie,columnsForm->act_comprobante.numero"},
-    //   icon :"success",
-    //   rows:[
-    //       {columns:[{type:"a",id:"ticket" ,value:"Ticket",icon:"fa fa-arrow-circle-left",action:{name:this.ticketChild}},
-    //                 {type:"a",id:"a4" ,value:"A4",icon:"fa fa-arrow-circle-left",action:{name:this.a4}}]}
-    //             ]
-    //   }
     
     let id = item[0]
     prope.message.rows[0].columns[0].param = id;
@@ -188,14 +182,40 @@ export class RptActVentaFormComponent extends GenericList2Component implements O
       prope.message.title.message,
       undefined,
       prope.message.rows)
-    // Swal.fire({
-    //   title: 'Title',
-    //   html: "Some Text" +
-    //     "<br>" +
-    //     '<button id="ticket" type="button" role="button" tabindex="0" class="SwalBtn1 customSwalBtn">' + 'Button1' + '</button>' +
-    //     '<button id="a4" type="button" role="button" tabindex="0" class="SwalBtn2 customSwalBtn">' + 'Button2' + '</button>',
-    //   showCancelButton: false,
-    //   showConfirmButton: false
-    // });
   }
+  sendApi(prope: any, item: any,utilService: UtilService) {
+    let id = item[0]
+    this.actComprobanteService.sendApi("act_comprobante",id).subscribe(data =>{
+      console.log(data);
+      
+    })
+    console.log("print...", prope, item,utilService);
+    
+    
+    // prope.message.rows[0].columns[0].param = id;
+    // prope.message.rows[0].columns[1].param = id;
+    // utilService.msgConfirmSaveWithButtons(
+    //   prope.message.title.message,
+    //   undefined,
+    //   prope.message.rows)
+  }
+  // UpdateState(prope: any, item: any,utilService: UtilService) {
+  //   let id = item[0]
+  //   utilService.confirmOperation(null).then((result) => {
+  //     if (result) {
+  //       this.actComprobanteDetalleService.delete(e.id.toString()).subscribe(() => {
+  //         this.utilService.msgOkDelete();
+  //         this.loadData();
+  //       }, err => {
+  //         if (err.status === 500 && err.error.trace.includes("DataIntegrityViolationException")) {
+  //           this.utilService.msgProblemDelete();
+  //         }
+  //       });
+  //     }
+
+  //   });
+  //   console.log("print...", prope, item,utilService);
+    
+    
+  // }
 }

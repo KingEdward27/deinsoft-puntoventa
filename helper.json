@@ -1,0 +1,646 @@
+{
+    _comment: "comment text goes here...",
+    configuration: {
+        modelsPath: "backend/src/main/java/com/deinsoft/puntoventa/business/model",
+        repositoryPath: "backend/src/main/java/com/deinsoft/puntoventa/business/repository",
+        servicePath: "backend/src/main/java/com/deinsoft/puntoventa/business/service",
+        controllerPath: "backend/src/main/java/com/deinsoft/puntoventa/business/controller",
+        frontendPath: "frontend/src/app/pages",
+        pathModule: "./pages"
+    },
+    tables: [
+        {
+            tableName: "cnf_pais",
+            title: "cnf_pais",
+            columnsForm: [
+            {columnName: "nombre",inputType: "text"},    
+            {columnName: "isocode",inputType: "text"}
+        ],
+            columnsList: [
+            {columnName: "nombre",filterType: "text"},    
+            {columnName: "isocode",filterType: "text"}
+        ],
+            generateFrontend: true,
+            regenerate: true,
+            typeDeleteVoid: "2"
+        },
+        {
+            tableName: "cnf_region",
+            title: "cnf_region",
+            foreignTables: [
+                {tableName: "cnf_pais",idValue: "cnf_pais_id",
+                descriptionColumn : "nombre"
+                }
+            ],
+            columnsForm: [
+            {columnName: "nombre",inputType: "text"}
+        ],
+            columnsList: [
+            {columnName: "nombre",filterType: "text"}
+        ],
+            generateFrontend: true,
+            regenerate: true,
+            typeDeleteVoid: "2"
+        },
+        {
+            tableName: "cnf_provincia",
+            title: "cnf_provincia",
+            foreignTables: [
+                {tableName: "cnf_region",idValue: "cnf_region_id",
+                descriptionColumn : "nombre"
+                }
+            ],
+            columnsForm: [
+            {columnName: "nombre",inputType: "text"}
+        ],
+            columnsList: [
+            {columnName: "nombre",filterType: "text"}
+        ],
+            generateFrontend: true,
+            regenerate: true,
+            typeDeleteVoid: "2"
+        },
+        {
+            tableName: "cnf_distrito",
+            title: "cnf_distrito",
+            foreignTables: [
+                {tableName: "cnf_provincia",idValue: "cnf_provincia_id",
+                descriptionColumn : "nombre"
+                }
+            ],
+            columnsForm: [
+            {columnName: "nombre",inputType: "text"}
+        ],
+            columnsList: [
+            {columnName: "nombre",filterType: "text"}
+        ],
+            generateFrontend: true,
+            regenerate: true,
+            typeDeleteVoid: "2"
+        },
+        {
+            tableName: "cnf_tipo_documento",
+            title: "cnf_tipo_documento",
+            columnsForm: [
+            {columnName: "abreviatura",inputType: "text"},
+            {columnName: "nombre",inputType: "text"},
+            {columnName: "codigo_sunat",inputType: "text"},
+            {columnName: "flag_estado",inputType: "text"}
+        ],
+            columnsList: [
+                {columnName: "abreviatura",filterType: "text"},
+                {columnName: "nombre",filterType: "text"},
+                {columnName: "codigo_sunat",filterType: "text"},
+                {columnName: "flag_estado",filterType: "text"}
+        ],
+            generateFrontend: true,
+            regenerate: true,
+            typeDeleteVoid: "2"
+        },
+        {
+            tableName: "cnf_tipo_comprobante",
+            title: "cnf_tipo_comprobante",
+            columnsForm: [
+            {columnName: "nombre",inputType: "text"},
+            {columnName: "codigo_sunat",inputType: "text"},
+            {columnName: "codigo",inputType: "text"},
+            {columnName: "flag_electronico",inputType: "text"}
+        ],
+            columnsList: [
+                {columnName: "nombre",filterType: "text"},
+            {columnName: "codigo_sunat",filterType: "text"},
+            {columnName: "codigo",filterType: "text"},
+            {columnName: "flag_electronico",filterType: "text"}
+        ],
+            generateFrontend: true,
+            regenerate: true,
+            typeDeleteVoid: "2"
+        },
+        {
+            tableName: "cnf_empresa",
+            title: "Empresa",
+            foreignTables: [
+                {tableName: "cnf_tipo_documento",idValue: "cnf_tipo_documento_id",
+                descriptionColumn : "nombre"
+                },
+                {tableName: "cnf_distrito",idValue: "cnf_distrito_id",
+                descriptionColumn : "nombre"
+                }
+            ],
+            columnsForm: [
+            {columnName: "nombre",inputType: "text"},
+            {columnName: "descripcion",inputType: "text"},
+            {columnName: "nro_documento",inputType: "text"},
+            {columnName: "direccion",inputType: "text"},
+            {columnName: "telefono",inputType: "text"},
+            {columnName: "estado",inputType: "text"},
+            {columnName: "token",inputType: "text"}
+        ],
+            columnsList: [
+                {columnName: "nombre",filterType: "text"},
+                {columnName: "descripcion",filterType: "text"},
+                {columnName: "nro_documento",filterType: "text"},
+                {columnName: "direccion",filterType: "text"},
+                {columnName: "telefono",filterType: "text"},
+                {columnName: "estado",filterType: "text"},
+                {columnName: "token",filterType: "text"}
+        ],
+            generateFrontend: true,
+            regenerate: true,
+            typeDeleteVoid: "2"
+        },
+        {
+                tableName: "cnf_categoria",
+                title: "Categorias",
+                foreignTables: [
+                    {tableName: "cnf_empresa",idValue: "cnf_empresa_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "nombre",inputType: "text"},
+                {columnName: "flag_estado",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "flag_estado",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "cnf_local",
+                title: "cnf_local",
+                foreignTables: [
+                    {tableName: "cnf_empresa",idValue: "cnf_empresa_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "nombre",inputType: "text"},
+                {columnName: "direccion",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "direccion",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "cnf_forma_pago",
+                title: "cnf_forma_pago",
+                foreignTables: [
+                    {tableName: "cnf_empresa",idValue: "cnf_empresa_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "nombre",inputType: "text"},
+                {columnName: "flag_estado",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "flag_estado",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "cnf_moneda",
+                title: "cnf_moneda",
+                columnsForm: [
+                {columnName: "codigo",inputType: "text"},
+                {columnName: "nombre",inputType: "text"},
+                {columnName: "flag_estado",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "codigo",filterType: "text"},
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "flag_estado",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "inv_almacen",
+                title: "inv_almacen",
+                foreignTables: [
+                    {tableName: "cnf_local",idValue: "cnf_local_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "nombre",inputType: "text"},
+                {columnName: "flag_estado",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "flag_estado",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "cnf_maestro",
+                title: "cnf_maestro",
+                foreignTables: [
+                    {tableName: "cnf_tipo_documento",idValue: "cnf_tipo_documento_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "cnf_empresa",idValue: "cnf_empresa_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "cnf_distrito",idValue: "cnf_distrito_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "nro_doc",inputType: "text"},
+                {columnName: "nombres",inputType: "text"},
+                {columnName: "apellido_paterno",inputType: "text"},
+                {columnName: "apellido_materno",inputType: "text"},
+                {columnName: "razon_social",inputType: "text"},
+                {columnName: "direccion",inputType: "text"},
+                {columnName: "correo",inputType: "text"},
+                {columnName: "telefono",inputType: "text"},
+                {columnName: "fecha_registro",inputType: "text"},
+                {columnName: "flag_estado",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nro_doc",filterType: "text"},
+                {columnName: "nombres",filterType: "text"},
+                {columnName: "apellido_paterno",filterType: "text"},
+                {columnName: "apellido_materno",filterType: "text"},
+                {columnName: "razon_social",filterType: "text"},
+                {columnName: "direccion",filterType: "text"},
+                {columnName: "correo",filterType: "text"},
+                {columnName: "telefono",filterType: "text"},
+                {columnName: "fecha_registro",filterType: "text"},
+                {columnName: "flag_estado",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "cnf_marca",
+                title: "cnf_marca",
+                
+                foreignTables: [
+                    {tableName: "cnf_empresa",idValue: "cnf_empresa_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "nombre",inputType: "text"},
+                {columnName: "flag_estado",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "flag_estado",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "cnf_sub_categoria",
+                title: "cnf_sub_categoria",
+                
+                foreignTables: [
+                    {tableName: "cnf_categoria",idValue: "cnf_categoria_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "cnf_empresa",idValue: "cnf_empresa_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "nombre",inputType: "text"},
+                {columnName: "flag_estado",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "flag_estado",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "cnf_unidad_medida",
+                title: "cnf_unidad_medida",
+                
+                columnsForm: [
+                {columnName: "codigo_sunat",inputType: "text"},
+                {columnName: "nombre",inputType: "text"},
+                {columnName: "flag_estado",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "codigo_sunat",filterType: "text"},
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "flag_estado",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "cnf_impuesto_condicion",
+                title: "cnf_impuesto_condicion",
+                
+                columnsForm: [
+                {columnName: "codigo_sunat",inputType: "text"},
+                {columnName: "nombre",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "codigo_sunat",filterType: "text"},
+                    {columnName: "nombre",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "cnf_producto",
+                title: "cnf_producto",
+                foreignTables: [
+                    {tableName: "cnf_unidad_medida",idValue: "cnf_unidad_medida_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "cnf_empresa",idValue: "cnf_empresa_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "cnf_sub_categoria",idValue: "cnf_sub_categoria_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "cnf_marca",idValue: "cnf_marca_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "codigo",inputType: "text"},
+                {columnName: "nombre",inputType: "text"},
+                {columnName: "precio",inputType: "text"},
+                {columnName: "existencia",inputType: "text"},
+                {columnName: "fecha_registro",inputType: "text"},
+                {columnName: "ruta_imagen",inputType: "text"},
+                {columnName: "flag_estado",inputType: "text"},
+                {columnName: "barcode",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "codigo",filterType: "text"},
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "precio",filterType: "text"},
+                    {columnName: "existencia",filterType: "text"},
+                    {columnName: "fecha_registro",filterType: "text"},
+                    {columnName: "ruta_imagen",filterType: "text"},
+                    {columnName: "flag_estado",filterType: "text"},
+                    {columnName: "barcode",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "act_comprobante_detalle",
+                title: "act_comprobante_detalle",
+                foreignTables: [
+                {tableName: "act_comprobante",idValue: "act_comprobante_id",
+                descriptionColumn : "numero"
+                },
+                {tableName: "cnf_producto",idValue: "cnf_producto_id",descriptionColumn : "nombre"
+                },
+                {tableName: "cnf_impuesto_condicion",idValue: "cnf_impuesto_condicion_id",descriptionColumn : "nombre"
+                }
+            ],
+                columnsForm: [
+                {columnName: "descripcion",inputType: "text"
+                },
+                {columnName: "cantidad",inputType: "number"
+                },
+                {columnName: "precio",inputType: "number"
+                },
+                {columnName: "descuento",inputType: "number"
+                },
+                {columnName: "importe",inputType: "number"
+                },
+                {columnName: "afectacion_igv",inputType: "number"
+                }
+            ],
+                columnsList: [
+                    {columnName: "descripcion",filterType: "text"
+                },
+                {columnName: "cantidad",filterType: "number"
+                },
+                {columnName: "precio",filterType: "number"
+                },
+                {columnName: "descuento",filterType: "number"
+                },
+                {columnName: "importe",filterType: "number"
+                },
+                {columnName: "afectacion_igv",filterType: "number"
+                }
+            ],
+                typeDeleteVoid: "2",
+                regenerate: true,
+                generateFrontend: true
+        },
+        {
+                tableName: "act_comprobante",
+                title: "act_comprobante",
+                foreignTables: [
+                {tableName: "act_comprobante",idValue: "act_comprobante_id",
+                descriptionColumn : "numero"
+                },
+                {tableName: "cnf_maestro",idValue: "cnf_maestro_id",descriptionColumn : "nombre"
+                },
+                {tableName: "cnf_forma_pago",idValue: "cnf_forma_pago_id",descriptionColumn : "nombre"
+                },
+                {tableName: "cnf_moneda",idValue: "cnf_moneda_id",descriptionColumn : "name"
+                },
+                {tableName: "cnf_local",idValue: "cnf_local_id",descriptionColumn : "name"
+                },
+                {tableName: "cnf_tipo_comprobante",idValue: "cnf_tipo_comprobante_id",descriptionColumn : "name"
+                },
+                {tableName: "inv_almacen",idValue: "inv_almacen_id",descriptionColumn : "name"
+                }
+            ],
+                  childTables: [
+                {tableName: "act_comprobante_detalle",tableNameDetail: "act_comprobante_detalle",
+                        idValue: "act_comprobante_detalle_id",columnsForm: [
+                        {tableName: "cnf_producto", columnName: "name",inputType: "select"
+                        }
+                    ]
+                }
+            ],
+                columnsForm: [
+                {columnName: "fecha",inputType: "number"
+                },
+                {columnName: "serie",inputType: "number"
+                },
+                {columnName: "numero",inputType: "text"
+                },
+                {columnName: "fecha_registro",inputType: "text"
+                },
+                {columnName: "billete",inputType: "text"
+                },
+                {columnName: "total",inputType: "text"
+                },
+                {columnName: "vuelto",inputType: "text"
+                },
+                {columnName: "descuento",inputType: "text"
+                },
+                {columnName: "subtotal",inputType: "text"
+                },
+                {columnName: "igv",inputType: "text"
+                },
+                {columnName: "observacion",inputType: "text"
+                },
+                {columnName: "flag_estado",inputType: "text"
+                },
+                {columnName: "flag_isventa",inputType: "text"
+                },
+                {columnName: "envio_pse_flag",inputType: "text"
+                },
+                {columnName: "envio_pse_mensaje",inputType: "text"
+                },
+                {columnName: "xmlhash",inputType: "text"
+                },
+                {columnName: "codigoqr",inputType: "text"
+                },
+                {columnName: "num_ticket",inputType: "text"
+                }
+            ],
+                columnsList: [
+                    {columnName: "fecha",filterType: "number"
+                },
+                {columnName: "serie",filterType: "number"
+                },
+                {columnName: "numero",filterType: "text"
+                },
+                {columnName: "fecha_registro",filterType: "text"
+                },
+                {columnName: "billete",filterType: "text"
+                },
+                {columnName: "total",filterType: "text"
+                },
+                {columnName: "vuelto",filterType: "text"
+                },
+                {columnName: "descuento",filterType: "text"
+                },
+                {columnName: "subtotal",filterType: "text"
+                },
+                {columnName: "igv",filterType: "text"
+                },
+                {columnName: "observacion",filterType: "text"
+                },
+                {columnName: "flag_estado",filterType: "text"
+                },
+                {columnName: "flag_isventa",filterType: "text"
+                },
+                {columnName: "envio_pse_flag",filterType: "text"
+                },
+                {columnName: "envio_pse_mensaje",filterType: "text"
+                },
+                {columnName: "xmlhash",filterType: "text"
+                },
+                {columnName: "codigoqr",filterType: "text"
+                },
+                {columnName: "num_ticket",filterType: "text"
+                }
+            ],
+                typeDeleteVoid: "2",
+                regenerate: true,
+                generateFrontend: true
+        },
+        {
+                tableName: "cnf_num_comprobante",
+                title: "cnf_num_comprobante",
+                
+                foreignTables: [
+                    {tableName: "cnf_tipo_comprobante",idValue: "cnf_tipo_comprobante_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "cnf_local",idValue: "cnf_local_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "serie",inputType: "text"},
+                {columnName: "ultimo_nro",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "serie",filterType: "text"},
+                    {columnName: "ultimo_nro",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "inv_almacen_producto",
+                title: "inv_almacen_producto",
+                
+                foreignTables: [
+                    {tableName: "inv_almacen",idValue: "inv_almacen_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "cnf_producto",idValue: "cnf_producto_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "cantidad",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "cantidad",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "inv_movimiento_producto",
+                title: "inv_movimiento_producto",
+                
+                foreignTables: [
+                    {tableName: "inv_almacen",idValue: "inv_almacen_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "cnf_producto",idValue: "cnf_producto_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "act_comprobante",idValue: "act_comprobante_id",
+                    descriptionColumn : "numero"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "fecha",inputType: "text"},
+                {columnName: "fecha_registro",inputType: "text"},
+                {columnName: "cantidad",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "fecha",filterType: "text"},
+                    {columnName: "fecha_registro",filterType: "text"},
+                    {columnName: "cantidad",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        }
+    ]
+}
+//--sec_user 
+//1) en proyecto ya creado
+//rutal models
+//ruta repositry
+//ruta service
+//ruta controllers
+//2) crear todo el proyecto

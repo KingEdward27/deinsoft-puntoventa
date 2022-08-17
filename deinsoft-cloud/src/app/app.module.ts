@@ -1,48 +1,47 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {HttpClient, HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import {AppRoutingModule} from '@/app-routing.module';
-import {AppComponent} from './app.component';
-import {MainComponent} from '@modules/main/main.component';
-import {LoginComponent} from '@modules/login/login.component';
-import {HeaderComponent} from '@modules/main/header/header.component';
-import {FooterComponent} from '@modules/main/footer/footer.component';
-import {MenuSidebarComponent} from '@modules/main/menu-sidebar/menu-sidebar.component';
-import {BlankComponent} from '@pages/blank/blank.component';
-import {ReactiveFormsModule} from '@angular/forms';
-import {ProfileComponent} from '@pages/profile/profile.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RegisterComponent} from '@modules/register/register.component';
-import {DashboardComponent} from '@pages/dashboard/dashboard.component';
-import {ToastrModule} from 'ngx-toastr';
-import {MessagesComponent} from '@modules/main/header/messages/messages.component';
-import {NotificationsComponent} from '@modules/main/header/notifications/notifications.component';
-import {ButtonComponent} from './components/button/button.component';
+import { AppRoutingModule } from '@/app-routing.module';
+import { AppComponent } from './app.component';
+import { MainComponent } from '@modules/main/main.component';
+import { LoginComponent } from '@modules/login/login.component';
+import { HeaderComponent } from '@modules/main/header/header.component';
+import { FooterComponent } from '@modules/main/footer/footer.component';
+import { MenuSidebarComponent } from '@modules/main/menu-sidebar/menu-sidebar.component';
+import { BlankComponent } from '@pages/blank/blank.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ProfileComponent } from '@pages/profile/profile.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RegisterComponent } from '@modules/register/register.component';
+import { DashboardComponent } from '@pages/dashboard/dashboard.component';
+import { ToastrModule } from 'ngx-toastr';
+import { MessagesComponent } from '@modules/main/header/messages/messages.component';
+import { NotificationsComponent } from '@modules/main/header/notifications/notifications.component';
+import { ButtonComponent } from './components/button/button.component';
 
-import {registerLocaleData} from '@angular/common';
+import { registerLocaleData } from '@angular/common';
 import localeEn from '@angular/common/locales/en';
-import {UserComponent} from '@modules/main/header/user/user.component';
-import {ForgotPasswordComponent} from '@modules/forgot-password/forgot-password.component';
-import {RecoverPasswordComponent} from '@modules/recover-password/recover-password.component';
-import {LanguageComponent} from '@modules/main/header/language/language.component';
-import {PrivacyPolicyComponent} from './modules/privacy-policy/privacy-policy.component';
-import {MainMenuComponent} from './pages/main-menu/main-menu.component';
-import {SubMenuComponent} from './pages/main-menu/sub-menu/sub-menu.component';
-import {MenuItemComponent} from './components/menu-item/menu-item.component';
-import {DropdownComponent} from './components/dropdown/dropdown.component';
-import {DropdownMenuComponent} from './components/dropdown/dropdown-menu/dropdown-menu.component';
-import {ControlSidebarComponent} from './modules/main/control-sidebar/control-sidebar.component';
-import {StoreModule} from '@ngrx/store';
-import {authReducer} from './store/auth/reducer';
-import {uiReducer} from './store/ui/reducer';
+import { UserComponent } from '@modules/main/header/user/user.component';
+import { ForgotPasswordComponent } from '@modules/forgot-password/forgot-password.component';
+import { RecoverPasswordComponent } from '@modules/recover-password/recover-password.component';
+import { LanguageComponent } from '@modules/main/header/language/language.component';
+import { PrivacyPolicyComponent } from './modules/privacy-policy/privacy-policy.component';
+import { MainMenuComponent } from './pages/main-menu/main-menu.component';
+import { SubMenuComponent } from './pages/main-menu/sub-menu/sub-menu.component';
+import { MenuItemComponent } from './components/menu-item/menu-item.component';
+import { DropdownComponent } from './components/dropdown/dropdown.component';
+import { DropdownMenuComponent } from './components/dropdown/dropdown-menu/dropdown-menu.component';
+import { ControlSidebarComponent } from './modules/main/control-sidebar/control-sidebar.component';
+import { StoreModule } from '@ngrx/store';
+import { authReducer } from './store/auth/reducer';
+import { uiReducer } from './store/ui/reducer';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SelectComponent } from './components/select/select.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { GenericListComponent } from './base/components/generic-list/generic-list.component';
 import { GenericFormComponent } from './base/components/generic-form/generic-form.component';
 import { GenericMasterDetailFormComponent } from './base/components/generic-master-detail-form/generic-master-detail-form.component';
-import { GenericReportComponent } from './base/components/generic-report/generic-report.component';
 import { GenericModalComponent } from './base/components/generic-modal/generic-modal.component';
 import { CnfCategoriaComponent } from '@pages/cnf-categoria/cnf-categoria';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -73,7 +72,18 @@ import { GenericList2Component } from './base/components/generic-list2/generic-l
 import { GenericChildFormComponent } from './base/components/generic-child/generic-child-form.component';
 import { SegUsuarioComponent } from '@pages/security/seg-usuario/seg_usuario';
 import { SegRolComponent } from '@pages/security/seg-rol/seg_rol';
-
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+import { ActComprobanteCompraFormComponent } from '@pages/act-comprobante/act-comprobante-compra/act-comprobante-compra-form.component';
+import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
+import { ActComprobanteFormComponent } from '@pages/act-comprobante/act-comprobante-form/act-comprobante-form.component';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { CnfProducto2FormComponent } from '@pages/cnf-producto/cnf-producto2-form.component';
+import { ActComprobanteCompraReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-compra/act-comprobante-compra-report.component';
+import { ActComprobanteReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-venta/act-comprobante-report.component';
+import { ActComprobanteListFormComponent } from '@pages/reports/act-comprobante/list-act-comprobante-venta/act-comprobante-list.component';
+import { InvAlmacenReportFormComponent } from '@pages/reports/inv-almacen/inv-almacen-report.component';
+import { InvMovimientoProductoReportFormComponent } from '@pages/reports/inv-movimiento-producto/inv-movimiento-producto-report.component';
 registerLocaleData(localeEn, 'en-EN');
 
 @NgModule({
@@ -108,8 +118,7 @@ registerLocaleData(localeEn, 'en-EN');
         GenericFormComponent,
         GenericMasterDetailFormComponent,
         GenericModalComponent,
-        GenericReportComponent,
-        
+
         CnfCategoriaComponent,
         CnfEmpresaComponent,
         CnfMonedaComponent,
@@ -119,7 +128,7 @@ registerLocaleData(localeEn, 'en-EN');
         CnfTipoDocumentoComponent,
         CnfLocalComponent,
         CnfTipoComprobanteComponent,
-        
+
         CnfProductoComponent,
         CnfMarcaComponent,
         CnfCategoriaComponent,
@@ -137,17 +146,27 @@ registerLocaleData(localeEn, 'en-EN');
         SegRolComponent,
         RptActVentaFormComponent,
         RptActCompraComponent,
-        GenericReportComponent,
         GenericList2Component,
-        GenericChildFormComponent
+        GenericChildFormComponent,
+        ActComprobanteFormComponent,
+        MessageModalComponent,
+        ActComprobanteCompraFormComponent,
+        ActComprobanteReportFormComponent,
+        CnfProducto2FormComponent,
+        ActComprobanteCompraReportFormComponent,
+        ActComprobanteListFormComponent,
+        InvAlmacenReportFormComponent,
+        InvMovimientoProductoReportFormComponent
     ],
     imports: [
         BrowserModule,
-        StoreModule.forRoot({auth: authReducer, ui: uiReducer}),
+        StoreModule.forRoot({ auth: authReducer, ui: uiReducer }),
         HttpClientModule,
         AppRoutingModule,
         ReactiveFormsModule,
+        FormsModule,
         BrowserAnimationsModule,
+        ZXingScannerModule,
         ToastrModule.forRoot({
             timeOut: 3000,
             positionClass: 'toast-top-right',
@@ -156,20 +175,25 @@ registerLocaleData(localeEn, 'en-EN');
         NgbModule,
         TranslateModule.forRoot({
             loader: {
-              provide: TranslateLoader,
-              useFactory: translatePartialLoader,
-              deps: [HttpClient],
+                provide: TranslateLoader,
+                useFactory: translatePartialLoader,
+                deps: [HttpClient],
             }
-            })
-        
+        }),
+        // for HttpClient use:
+        LoadingBarHttpClientModule,
+
+        // for Router use:
+        LoadingBarRouterModule,
+
     ],
     providers: [
         HttpClientModule,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
-      ],
+    ],
     bootstrap: [AppComponent]
 })
-export class AppModule {}
-export function HttpLoaderFactory(http:HttpClient){
-	return new TranslateHttpLoader(http);
+export class AppModule { }
+export function HttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http);
 }

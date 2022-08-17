@@ -31,10 +31,11 @@ export  class CommonService {
   public getData(jsonData:any): Observable<any> {
     return this.http.post<any>(this.baseEndpoint+"/api/framework/select-by-id", jsonData);
   }
-  public getListComboByTableName(tableName:string,columns:string): Observable<any[]> {
+  public getListComboByTableName(tableName:string,columns:string,condition:string): Observable<any[]> {
     const params = new HttpParams()
     .set('tableName', tableName)
-    .set('descriptionColumns', columns);
+    .set('descriptionColumns', columns)
+    .set('condition', condition);
     return this.http.get<any[]>(this.baseEndpoint+"/api/framework/select-combos-by-tablename", {params: params});
   }
   public selectByTableNameAndColumns(tableName:string,columns:string,condition:any): Observable<any[]> {
@@ -64,8 +65,15 @@ export  class CommonService {
   //   return this.http.get<any>(`${this.baseEndpoint}/${id}`);
   // }
 
+  // public create(jsonData: any): Observable<any> {
+  //   return this.http.post<any>(this.baseEndpoint+"/api/framework/save", jsonData,{ headers: this.cabeceras });
+  // }
   public create(jsonData: any): Observable<any> {
-    return this.http.post<any>(this.baseEndpoint+"/api/framework/save", jsonData,{ headers: this.cabeceras });
+    if (jsonData.api){
+      return this.http.post<any>(this.baseEndpoint + jsonData.api, jsonData,{ headers: this.cabeceras });
+    }else{
+      return this.http.post<any>(this.baseEndpoint+"/api/framework/save", jsonData,{ headers: this.cabeceras });
+    }
   }
   public createTransactional(jsonData: any): Observable<any> {
     return this.http.post<any>(this.baseEndpoint+"/api/framework/save-transaction", jsonData,{ headers: this.cabeceras });

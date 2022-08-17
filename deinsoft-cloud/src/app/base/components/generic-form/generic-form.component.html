@@ -189,12 +189,12 @@
                                     </div>
                                     <div *ngIf="itemChild.listData && itemChild.listData.length > 0?true:false">
                                         <table id="dtData"
-                                            class="col-xl-9 col-lg-9 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
+                                            class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
                                             <thead>
                                                 <tr>
                                                     <th width="1%">Nro.</th>
-                                                    <th *ngFor="let item of itemChild.columnsForm" class="text-nowrap">{{item.columnName}}</th>
-                                                    <th width="1%" class="text-nowrap">{{'ocscloudApp.actionsText' | translate}}</th>
+                                                    <th *ngFor="let item of itemChild.columnsForm" class="text-nowrap" translate="webpagos.{{item.tableName}}.{{item.columnName}}">...cargando</th>
+                                                    <th width="1%" class="text-nowrap">{{'webpagos.actionsText' | translate}}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -207,7 +207,7 @@
                                                     <td>
                                                         <div class="row row2">
                                                             <div class="col-sm-12 col-xs-12 text-center"><a 
-                                                                    style="cursor: pointer;" title="Cambiar estado"><i
+                                                                 (click) = "deleteChild(itemChild.tableNameDetail,item[0])"   style="cursor: pointer;" title="Cambiar estado"><i
                                                                         class="fa fa-trash fa-lg"></i></a></div>
                                                         </div>
                                                     </td>

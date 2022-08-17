@@ -1,3 +1,5 @@
+import { CnfEmpresa } from '@/business/model/cnf-empresa.model';
+import { CnfEmpresaService } from '@/business/service/cnf-empresa.service';
 import {AppState} from '@/store/state';
 import {UiState} from '@/store/ui/state';
 import {Component, HostBinding, OnInit} from '@angular/core';
@@ -18,17 +20,19 @@ export class MenuSidebarComponent implements OnInit {
     public menu;
 
     constructor(
+        private cnfEmpresaService:CnfEmpresaService,
         public appService: AppService,
         private store: Store<AppState>
     ) {}
 
     ngOnInit() {
+        this.cnfEmpresaService.getAllDataCombo().subscribe(data => {})
         this.ui = this.store.select('ui');
         this.ui.subscribe((state: UiState) => {
             this.classes = `${BASE_CLASSES} ${state.sidebarSkin}`;
         });
         this.user = this.appService.user;
-        if(this.user.profile == 'ROLE_ADMIN'){
+        if(this.user.profile.includes('ROLE_ADMIN')){
             this.menu = [
                 {
                     name: 'Dashboard',
@@ -89,7 +93,8 @@ export class MenuSidebarComponent implements OnInit {
                     name: 'Ventas',
                     icon :"fa-cart-plus",
                     children: [
-                        {name: 'Venta',path: ['/venta']}
+                        {name: 'Venta',path: ['/venta']},
+                        {name: 'Listado Ventas',path: ['/list-ventas']}
                     ]
                 },
                 {
@@ -97,7 +102,9 @@ export class MenuSidebarComponent implements OnInit {
                     icon :"fa-file",
                     children: [
                         {name: 'Reporte Ventas',path: ['/rpt-ventas']},
-                        {name: 'Reporte Compras',path: ['/rpt-compras']}
+                        {name: 'Reporte Compras',path: ['/rpt-compras']},
+                        {name: 'Stock Valorizado',path: ['/rpt-almacen']},
+                        {name: 'Kardex Valorizado',path: ['/rpt-movimiento-producto']}
                     ]
                 }
             ];
@@ -137,7 +144,8 @@ export class MenuSidebarComponent implements OnInit {
                     name: 'Ventas',
                     icon :"fa-cart-plus",
                     children: [
-                        {name: 'Venta',path: ['/venta']}
+                        {name: 'Venta',path: ['/venta']},
+                        {name: 'Listado Ventas',path: ['/list-ventas']}
                     ]
                 },
                 {
@@ -145,7 +153,9 @@ export class MenuSidebarComponent implements OnInit {
                     icon :"fa-file",
                     children: [
                         {name: 'Reporte Ventas',path: ['/rpt-ventas']},
-                        {name: 'Reporte Compras',path: ['/rpt-compras']}
+                        {name: 'Reporte Compras',path: ['/rpt-compras']},
+                        {name: 'Stock Valorizado',path: ['/rpt-almacen']},
+                        {name: 'Kardex Valorizado',path: ['/rpt-movimiento-producto']}
                     ]
                 }
             ];

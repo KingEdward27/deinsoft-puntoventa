@@ -21,7 +21,7 @@ export class CnfMonedaComponent extends GenericListComponent implements OnInit{
                    {tableName: "cnf_moneda", "columnName":"nombre","type":"input"}
            ],
     //filters sería para filtros adicionales
-    "filters":{"cnf_moneda.codigo":"","cnf_moneda.nombre":""},
+    "conditions":[],
     "orders":["codigo","nombre"]
   }
   constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 

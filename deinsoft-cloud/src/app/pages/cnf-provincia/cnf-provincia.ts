@@ -23,8 +23,8 @@ export class CnfProvinciaComponent extends GenericListComponent implements OnIni
                    {tableName: "cnf_region", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_region_id"} 
            ],
     //filters sería para filtros adicionales
-    "filters":{"cnf_provincia.nombre":""},
-    "orders":["nombre"]
+    "conditions":[],
+    "orders":["cnf_provincia.nombre"]
   }
   constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 
     super(utilServices,httpClients,routers,_commonService);

@@ -31,6 +31,7 @@ export class GenericList2Component extends CommonService implements OnInit {
   listDetail2: any[][] = [];
   dataTable!: DataTables.Api;
   widthIcons:any;
+  datablesSettings : any
   @Output() result: EventEmitter<any> = new EventEmitter();
   constructor(private utilService: UtilService, private httpClient: HttpClient, private router: Router,public commonService:CommonService) {
     super(httpClient);
@@ -51,46 +52,50 @@ export class GenericList2Component extends CommonService implements OnInit {
       }
     });
     this.widthIcons = "25px";
-    this.getListData(this.properties.columnsListParams);
-    this.dtOptions = {
+    let lang = localStorage.getItem('lang');
+    console.log(lang);
+    this.datablesSettings = {
+      deferRender: true,
+      deferLoading: 7,
       pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Blfrtip',
+      searching: false,
+      processing: true,
+      lengthMenu: [25, 50, 100],
+      order: [[0, "asc"]],
+      dom: 'lBftip',
       buttons: [{
-          extend: 'collection',
-          text: 'Export Data',
-          className: 'exp_d_btn',
-  
-          buttons: [{
-              extend: 'excel',
-              text: '<img src="assets/images/xls.png" width="24">&nbsp; XLS',
-              exportOptions: {
-                columns: ':visible'
-              }
-            },
-            {
-              extend: 'pdf',
-              text: '<img src="assets/images/pdf-mis.png" width="24"> &nbsp;PDF',
-              exportOptions: {
-                columns: ':visible'
-              },
-              orientation: 'landscape'
-            },
-            {
-              extend: 'csv',
-              text: '<img src="assets/images/csv.png" width="24">&nbsp; CSV',
-              exportOptions: {
-                columns: ':visible'
-              }
-            },
-  
-          ]
+        extend: 'excel',
+        title : this.properties.title,
+        text: '<i class="fa fa-file-excel"></i>&nbsp; XLS',
+        exportOptions: {
+          columns: ':visible'
         }
-  
-      ]
-    };
+      },
+      {
+        extend: 'pdf',
+        title : this.properties.title,
+        text: ' <i class="fa fa-file-pdf"></i>&nbsp; PDF',
+        orientation: 'landscape'
+      },
+      {
+        extend: 'csv',
+        title : this.properties.title,
+        text: '<i class="fa fa-file-excel"></i>&nbsp; CSV',
+        exportOptions: {
+          columns: ':visible'
+        }
+      },
+
+      ],
+      language: {
+        url: 'assets/i18n/datatables/lang' + lang?.toUpperCase() + '.json'
+      }
+    }
+
+    this.getListData(this.properties.columnsListParams);
+    
     let com = this.commonService;
-    this.properties.message.rows.forEach((element:any) => {
+    this.properties.message?.rows?.forEach((element:any) => {
       console.log(element);
       element.columns.forEach((column:any) => {
           $(document).on('click', '#'+column.id, function() {
@@ -110,14 +115,20 @@ export class GenericList2Component extends CommonService implements OnInit {
     func.name(this.properties,lineItem,this.utilService);
   }
   addParams(params:any){
+    console.log(params);
+    
     if(params){
       let myMap = new Map();
-      params.forEach((element2:any) => {
-        const map = new Map<string,string>(Object.entries(element2));
-        map.forEach((val: string, key: string) => {
-          myMap.set(key, val);
-        });
-      });
+      params.forEach((element: any) => {
+        myMap.set(element.columnName, element.value);
+      })
+      // let myMap = new Map();
+      // params.forEach((element2:any) => {
+      //   const map = new Map<string,string>(Object.entries(element2));
+      //   map.forEach((val: string, key: string) => {
+      //     myMap.set(key, val);
+      //   });
+      // });
       // let myMap = new Map();
       // params.forEach((element:any) => {
       //   myMap.set(element.tableName + '.' + element.columnName, inputFilter);
@@ -158,7 +169,7 @@ export class GenericList2Component extends CommonService implements OnInit {
         console.log(this.listDetail);
         setTimeout(() => {
           this.dataTable = $('#dtData'+this.properties.tableName).DataTable(
-            this.utilService.datablesSettings);
+            this.datablesSettings);
         }, 1);
         this.dataTable?.destroy();
         // console.log(data);
@@ -348,7 +359,7 @@ export class GenericList2Component extends CommonService implements OnInit {
       this.listDetail = data;
       console.log(this.listDetail);
       setTimeout(() => {
-        this.dataTable = $('#dtData').DataTable(this.utilService.datablesSettings);
+        this.dataTable = $('#dtData').DataTable(this.datablesSettings);
       }, 1);
       //this.dataTable?.destroy();
       // console.log(data);

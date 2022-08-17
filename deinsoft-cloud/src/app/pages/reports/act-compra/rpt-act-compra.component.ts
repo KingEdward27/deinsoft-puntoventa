@@ -10,18 +10,20 @@ import { CustomAdapter, CustomDateParserFormatter } from '@/base/util/CustomDate
 import { UtilService } from '@services/util.service';
 import { CommonService } from '@/base/services/common.service';
 import { GenericMasterDetailFormComponent } from '@/base/components/generic-master-detail-form/generic-master-detail-form.component';
+import { GenericList2Component } from '@/base/components/generic-list2/generic-list2.component';
+import { AppService } from '@services/app.service';
 
 
 @Component({
   selector: 'rpt-act-compra',
-  templateUrl: '../../../base/components/generic-list/generic-list.component.html',
+  templateUrl: '../../../base/components/generic-list2/generic-list2.component.html',
   providers: [
     { provide: NgbDateAdapter, useClass: CustomAdapter },
     { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter }
   ]
 
 })
-export class RptActCompraComponent extends GenericListComponent implements OnInit {
+export class RptActCompraComponent extends GenericList2Component implements OnInit {
   ticket = "";
   prop = {
     "tableName": "act_comprobante",
@@ -38,7 +40,7 @@ export class RptActCompraComponent extends GenericListComponent implements OnIni
                     { tableName: "cnf_moneda", columnName: "codigo", filterType: "none" },
                     { tableName: "inv_almacen", columnName: "nombre", filterType: "none" }
     ],
-    columnsListParams:[{"flag_isventa":"0"}],
+    columnsListParams:[],
 
     "foreignTables": [{ "tableName": "cnf_tipo_comprobante", "idValue": "cnf_tipo_comprobante_id" },
                       { "tableName": "cnf_maestro", "idValue": "cnf_maestro_id" },
@@ -51,11 +53,14 @@ export class RptActCompraComponent extends GenericListComponent implements OnIni
   subtotal: number = 0;
   total: number = 0;
   constructor(private utilServices: UtilService, private httpClientChild: HttpClient, private routers: Router,
-    private _location0: Location,public _commonService:CommonService) {
+    private _location0: Location,public _commonService:CommonService,private appService:AppService) {
     super(utilServices, httpClientChild, routers,_commonService);
   }
   ngOnInit(): void {
     super.baseEndpoint = this.baseEndpoint;
+    let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+    this.prop.columnsListParams.push({"columnName":"act_comprobante.flag_isventa","value":0});
+    this.prop.columnsListParams.push({"columnName":"cnf_local.cnf_empresa_id","value":cnfEmpresa});
     super.properties = this.prop;
 
     localStorage.setItem("properties", JSON.stringify(this.properties));

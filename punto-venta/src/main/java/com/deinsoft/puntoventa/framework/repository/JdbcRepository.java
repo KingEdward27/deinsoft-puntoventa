@@ -196,7 +196,8 @@ public class JdbcRepository implements IJdbcRepository {
                         rs.getString("constraint_type"), rs.getString("foreign_table_name"),
                         rs.getString("foreign_column_name"), rs.getInt("count_foreigned"),
                         rs.getString("data_type").equals("numeric") ? "number"
-                        : rs.getString("data_type").equals("character varying") ? "text" : "text", rs.getString("table_name")));
+                        : rs.getString("data_type").equals("character varying") ? "text" : "text", 
+                        rs.getString("table_name")));
         listMetaData = list;
         logger.debug("getting from db...{} rows",list.size());
         return list;
@@ -260,7 +261,7 @@ public class JdbcRepository implements IJdbcRepository {
      * @param descriptionColumns
      * @return select by descriptionColumns
      */
-    public List<Object[]> getListForCombos(String tableName, String descriptionColumns) {
+    public List<Object[]> getListForCombos(String tableName, String descriptionColumns,String condition) {
         String sql = "select distinct ";
 
         String columnPk = getColumnPk(tableName);
@@ -268,6 +269,10 @@ public class JdbcRepository implements IJdbcRepository {
                 .concat("'");
         sql = sql.concat(" from ");
         sql = sql.concat(tableName);
+        if (condition != null && !condition.isEmpty()) {
+            sql = sql.concat(" where ");
+            sql = sql.concat(condition);
+        }
         logger.info(sql);
         List<Object[]> list = jdbcTemplate.queryForList(sql).stream().map(row -> row.values().toArray())
                 .collect(Collectors.toList());
@@ -321,7 +326,20 @@ public class JdbcRepository implements IJdbcRepository {
             sql = sql.concat(condition);
         }
         logger.info(sql);
-        List<Object[]> list = jdbcTemplate.queryForList(sql).stream().map(row -> row.values().toArray())
+//        List<Map<String,Object>> listMap = jdbcTemplate.queryForList(sql);
+//        List<Object[]> list = new ArrayList<>();
+//        for (Map<String, Object> map : listMap) {
+//            Object[] wa = new Object[map.entrySet().size()];
+//            int cont = 0;
+//            for (Map.Entry<String, Object> entry : map.entrySet()) {
+//                wa[cont] = entry.getValue();
+//                cont++;
+////                System.out.println(entry.getKey() + "/" + entry.getValue());
+//            }
+//            list.add(wa);
+//        }
+        List<Object[]> list = jdbcTemplate.queryForList(sql).stream()
+                .map(row -> row.values().toArray())
                 .collect(Collectors.toList());
         return list;
     }
@@ -490,7 +508,7 @@ public class JdbcRepository implements IJdbcRepository {
             sql = sql.substring(0, sql.length() - 5);
         }
         if(jsonData.getOrders() != null && !jsonData.getOrders().isEmpty()){
-            sql = sql.concat("order by ");
+            sql = sql.concat(" order by ");
             for (String order : jsonData.getOrders()) {
                 sql = sql.concat(order).concat(",");
             }

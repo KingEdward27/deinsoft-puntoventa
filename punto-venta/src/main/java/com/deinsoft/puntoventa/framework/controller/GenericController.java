@@ -32,6 +32,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,6 +50,9 @@ public class GenericController {
     @Autowired
     TransactionService transactionService;
 
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
+    
     @PostMapping(value = "/select-by-properties")
     public ResponseEntity<?> selectByProperties(@RequestBody JsonData jsonData, HttpServletRequest request,
             HttpServletResponse response) {
@@ -68,9 +72,9 @@ public class GenericController {
     }
 
     @GetMapping(value = "/select-combos-by-tablename")
-    public ResponseEntity<?> selectByTablename(String tableName, String descriptionColumns, HttpServletRequest request) {
+    public ResponseEntity<?> selectByTablename(String tableName, String descriptionColumns, String condition, HttpServletRequest request) {
         logger.info("selectByTablename received: " + tableName);
-        List<Object[]> selectedColumns = jdbcRepository.getListForCombos(tableName, descriptionColumns);
+        List<Object[]> selectedColumns = jdbcRepository.getListForCombos(tableName, descriptionColumns,condition);
         return ResponseEntity.status(HttpStatus.CREATED).body(selectedColumns);
     }
 
@@ -114,6 +118,13 @@ public class GenericController {
 
         if (object != null) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(object);
+        }
+        for (Map.Entry<String, Object> entry : jsonData.getFilters().entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(key.equals("password")){
+                entry.setValue(passwordEncoder.encode(value.toString()));
+            }
         }
         if (jsonData.getId() == 0) {
             object = jdbcRepository.create(jsonData);
