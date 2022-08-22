@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {AppService} from '@services/app.service';
 import {DateTime} from 'luxon';
 
@@ -11,11 +11,13 @@ export class UserComponent implements OnInit {
     public user;
 
     constructor(private appService: AppService) {}
-
-    ngOnInit(): void {
+    ngOnInit() {
+        console.log("asdf");
         console.log(this.appService.user);
         
         this.user = this.appService.user;
+        console.log("asd: ", this.user);
+        
     }
 
     logout() {

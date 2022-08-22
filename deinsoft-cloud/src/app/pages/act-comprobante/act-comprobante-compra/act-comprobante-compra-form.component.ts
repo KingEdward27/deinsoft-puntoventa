@@ -260,6 +260,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
       this.model.id = m.id
       this.model.numero = m.numero;
       this.utilService.msgOkSave()
+      this.router.navigate(["/compra"]);
       // this.modalRef = this.modalService.open(MessageModalComponent);
       // this.modalRef.componentInstance.message = "Documento " + m.serie + " - " + m.numero + " generado correctamente";
       // this.modalRef.componentInstance.id = m.id;

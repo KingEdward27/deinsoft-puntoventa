@@ -32,7 +32,7 @@ export class CnfMaestroComponent extends GenericListComponent implements OnInit{
     "columnsForm":[{tableName: "cnf_maestro", columnName:"nro_doc",type:"input"},
                     {tableName: "cnf_maestro", columnName:"apellido_paterno",type:"input"},
                     {tableName: "cnf_maestro", columnName:"apellido_materno",type:"input"},
-                    {tableName: "cnf_maestro",columnName:"nombres",type:"date"},
+                    {tableName: "cnf_maestro",columnName:"nombres",type:"input"},
                     {tableName: "cnf_maestro",columnName:"razon_social",type:"input"},
                     {tableName: "cnf_maestro",columnName:"direccion",type:"input"},
                     {tableName: "cnf_maestro",columnName:"correo",type:"input"},

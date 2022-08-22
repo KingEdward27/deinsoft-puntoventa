@@ -84,9 +84,138 @@ export class AppService {
             //this.user = {name:"edward","picture":"logo.png"};
             let tokenDecrypt = helper.decodeToken(localStorage.getItem('token'));
             console.log(tokenDecrypt);
-            this.user = tokenDecrypt.user;;
+            this.user = tokenDecrypt.user
             this.user.profile = tokenDecrypt.authorities[0].authority;
             console.log(this.user);
+
+            if(this.user.profile.includes('ROLE_ADMIN')){
+                this.user.menu = [
+                    {
+                        name: 'Dashboard',
+                        path: ['/'],
+                        icon :"fa-tachometer-alt"
+                    },
+                    // {
+                    //     name: 'Blank',
+                    //     path: ['/blank'],
+                    //     icon :"fa-tachometer-alt"
+                    // },
+                    {
+                        name: 'Administración',
+                        icon :"fa-user-shield",
+                        children: [
+                            {name: 'Región',path: ['/region']},
+                            {name: 'Provincia',path: ['/provincia']},
+                            {name: 'Distrito',path: ['/distrito']},
+                            {name: 'Tipo de documento de identidad',path: ['/tipo-documento']},
+                            {name: 'Moneda',path: ['/moneda']},
+                            {name: 'Empresa',path: ['/empresa']}
+                        ]
+                    },
+                    {
+                        name: 'Seguridad',
+                        icon :"fa-shield-alt",
+                        children: [
+                            {name: 'Perfiles',path: ['/perfil']},
+                            {name: 'Usuarios',path: ['/usuario']}
+                        ]
+                    },
+                    {
+                        name: 'Configuración',
+                        icon :"fa-cog",
+                        children: [
+                            {name: 'Tipo de comprobante',path: ['/tipo-comprobante']},
+                            {name: 'Numeración de comprobante',path: ['/numcomprobante']},
+                            {name: 'Forma de Pago',path: ['/forma-pago']},
+                            {name: 'Clientes y Proveedores',path: ['/maestro']}
+                        ]
+                    },
+                    {
+                        name: 'Inventario',
+                        icon :"fa-box",
+                        children: [
+                            {name: 'Local',path: ['/local']},
+                            {name: 'Almacen',path: ['/almacen']},
+                            {name: 'Marca',path: ['/marca']},
+                            {name: 'Categoría',path: ['/categoria']},
+                            {name: 'Sub Categoría',path: ['/subcategoria']},
+                            {name: 'Unidad Medida',path: ['/unidadmedida']},
+                            {name: 'Producto',path: ['/producto']},
+                            {name: 'Almacén',path: ['/almacen']},
+                            {name: 'Compra',path: ['/compra']}
+                        ]
+                    },
+                    {
+                        name: 'Ventas',
+                        icon :"fa-cart-plus",
+                        children: [
+                            {name: 'Venta',path: ['/venta']},
+                            {name: 'Listado Ventas',path: ['/list-ventas']}
+                        ]
+                    },
+                    {
+                        name: 'Reportes',
+                        icon :"fa-file",
+                        children: [
+                            {name: 'Reporte Ventas',path: ['/rpt-ventas']},
+                            {name: 'Reporte Compras',path: ['/rpt-compras']},
+                            {name: 'Stock Valorizado',path: ['/rpt-almacen']},
+                            {name: 'Kardex Valorizado',path: ['/rpt-movimiento-producto']}
+                        ]
+                    }
+                ];
+            }else{
+                this.user.menu = [
+                    {
+                        name: 'Dashboard',
+                        path: ['/'],
+                        icon :"fa-tachometer-alt"
+                    },
+                    {
+                        name: 'Configuración',
+                        icon :"fa-cog",
+                        children: [
+                            {name: 'Tipo de comprobante',path: ['/tipo-comprobante']},
+                            {name: 'Numeración de comprobante',path: ['/numcomprobante']},
+                            {name: 'Forma de Pago',path: ['/forma-pago']},
+                            {name: 'Clientes y Proveedores',path: ['/maestro']}
+                        ]
+                    },
+                    {
+                        name: 'Inventario',
+                        icon :"fa-box",
+                        children: [
+                            {name: 'Local',path: ['/local']},
+                            {name: 'Almacen',path: ['/almacen']},
+                            {name: 'Marca',path: ['/marca']},
+                            {name: 'Categoría',path: ['/categoria']},
+                            {name: 'Sub Categoría',path: ['/subcategoria']},
+                            {name: 'Unidad Medida',path: ['/unidadmedida']},
+                            {name: 'Producto',path: ['/producto']},
+                            {name: 'Almacén',path: ['/almacen']},
+                            {name: 'Compra',path: ['/compra']}
+                        ]
+                    },
+                    {
+                        name: 'Ventas',
+                        icon :"fa-cart-plus",
+                        children: [
+                            {name: 'Venta',path: ['/venta']},
+                            {name: 'Listado Ventas',path: ['/list-ventas']}
+                        ]
+                    },
+                    {
+                        name: 'Reportes',
+                        icon :"fa-file",
+                        children: [
+                            {name: 'Reporte Ventas',path: ['/rpt-ventas']},
+                            {name: 'Reporte Compras',path: ['/rpt-compras']},
+                            {name: 'Stock Valorizado',path: ['/rpt-almacen']},
+                            {name: 'Kardex Valorizado',path: ['/rpt-movimiento-producto']}
+                        ]
+                    }
+                ];
+            }
             return this.user
             // this.user ={ID: "2e7ae590-dc86-4485-809a-9d805e73bb64",
             // createdAt: "2022-06-08T07:09:01.213Z",

@@ -77,8 +77,6 @@ import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { ActComprobanteCompraFormComponent } from '@pages/act-comprobante/act-comprobante-compra/act-comprobante-compra-form.component';
 import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
 import { ActComprobanteFormComponent } from '@pages/act-comprobante/act-comprobante-form/act-comprobante-form.component';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { CnfProducto2FormComponent } from '@pages/cnf-producto/cnf-producto2-form.component';
 import { ActComprobanteCompraReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-compra/act-comprobante-compra-report.component';
 import { ActComprobanteReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-venta/act-comprobante-report.component';
 import { ActComprobanteListFormComponent } from '@pages/reports/act-comprobante/list-act-comprobante-venta/act-comprobante-list.component';
@@ -152,7 +150,6 @@ registerLocaleData(localeEn, 'en-EN');
         MessageModalComponent,
         ActComprobanteCompraFormComponent,
         ActComprobanteReportFormComponent,
-        CnfProducto2FormComponent,
         ActComprobanteCompraReportFormComponent,
         ActComprobanteListFormComponent,
         InvAlmacenReportFormComponent,
@@ -166,7 +163,6 @@ registerLocaleData(localeEn, 'en-EN');
         ReactiveFormsModule,
         FormsModule,
         BrowserAnimationsModule,
-        ZXingScannerModule,
         ToastrModule.forRoot({
             timeOut: 3000,
             positionClass: 'toast-top-right',

@@ -101,6 +101,7 @@ export class InvMovimientoProductoReportFormComponent extends CommonReportFormCo
   listData: any;
   total:number;
   saldoInicial:any;
+  totalCantidad:any
   constructor(public deps: MyBaseComponentDependences) {
     super(deps);
   }
@@ -121,6 +122,10 @@ export class InvMovimientoProductoReportFormComponent extends CommonReportFormCo
         this.dataTable = $('#dtDataInvMovimientoProducto').DataTable(this.datablesSettings);
       }, 1);
       this.dataTable?.destroy();
+      this.totalCantidad = 0
+      this.listData.forEach(element => {
+        this.totalCantidad = this.totalCantidad + element.cantidad 
+      });
       this.deps.invMovimientoProductoService.getSaldoInicial(this.model).subscribe(data => {
         console.log(data);
         
@@ -128,7 +133,7 @@ export class InvMovimientoProductoReportFormComponent extends CommonReportFormCo
         this.total = data
         this.listData.forEach(element => {
           this.total = this.total + this.saldoInicial 
-          + (element.cantidad * element.valor?element.valor:0)
+          + (element.cantidad * (element.valor?element.valor:0))
         });
       })
       

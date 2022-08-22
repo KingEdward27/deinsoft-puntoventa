@@ -2,6 +2,7 @@
   "webpagos": {
     "securityModule": "Seguridad",
     "adminModule": "Administrador del sistema",
+    "reportModule": "Reportes",
     "salesModule": "Ventas",
     "register": "Registro",
     "btnSearch":"Consultar",
@@ -44,7 +45,9 @@
       "descripcion": "Nobre comercial",
       "direccion": "Direccion",
       "nro_documento": "Nro. documento",
-      "telefono": "Teléfono"
+      "telefono": "Teléfono",
+      "ruta_pse ":"Ruta PSE facturación",
+      "token":"Token seguridad"
     },
     "cnf_moneda": {
       "home": {
@@ -307,7 +310,9 @@
     "reportes": {
       "act_comprobante_listado":"Listado de Ventas",
       "act_comprobante":"Reporte de Ventas",
-      "act_comprobante_compra":"Reporte de Compras"
+      "act_comprobante_compra":"Reporte de Compra",
+      "inv_almacen_producto":"Reporte de Stock Valorizado",
+      "inv_movimiento_producto":"Reporte de Kardex Valorizado"
     }
   }
 }

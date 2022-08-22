@@ -34,6 +34,8 @@ export class MenuItemComponent implements OnInit {
     }
 
     public handleMainMenuAction() {
+        console.log("handleMainMenuAction()");
+        
         if (this.isExpandable) {
             this.toggleMenu();
             return;
@@ -42,6 +44,7 @@ export class MenuItemComponent implements OnInit {
     }
 
     public toggleMenu() {
+        console.log("toggleMenu()");
         this.isMenuExtended = !this.isMenuExtended;
     }
 

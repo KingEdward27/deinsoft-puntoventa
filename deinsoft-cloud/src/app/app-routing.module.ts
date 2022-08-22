@@ -40,7 +40,6 @@ import { SegRolComponent } from '@pages/security/seg-rol/seg_rol';
 import { SegUsuarioComponent } from '@pages/security/seg-usuario/seg_usuario';
 import { ActComprobanteCompraFormComponent } from '@pages/act-comprobante/act-comprobante-compra/act-comprobante-compra-form.component';
 import { ActComprobanteFormComponent } from '@pages/act-comprobante/act-comprobante-form/act-comprobante-form.component';
-import { CnfProducto2FormComponent } from '@pages/cnf-producto/cnf-producto2-form.component';
 import { ActComprobanteCompraReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-compra/act-comprobante-compra-report.component';
 import { ActComprobanteListFormComponent } from '@pages/reports/act-comprobante/list-act-comprobante-venta/act-comprobante-list.component';
 import { ActComprobanteReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-venta/act-comprobante-report.component';
