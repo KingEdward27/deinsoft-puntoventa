@@ -235,7 +235,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
           element.tableNameDetail + "." + columnForm.tableName + "_id" + " = " + columnForm.tableName + "." + columnForm.tableName + "_id"
         }
       });
-      super.selectByTableNameAndColumns(tableName,columns,"seg_usuario_id = "+this.properties.id)
+      super.selectByTableNameAndColumns(tableName,columns,element.idValue + " = "+this.properties.id)
       .subscribe(data => {
         console.log(data);
         
@@ -261,14 +261,15 @@ export class GenericFormComponent extends CommonService implements OnInit {
   }
   addChild(tableName:any) {
     console.log(tableName);
+    this.properties.preSave = []
+    this.properties.preSave.push({columnForm:this.properties.tableName + "_id",value:this.properties.id})
     this.properties.childTables.forEach(element => {
       if (element.tableName == tableName) {
         this.properties.columnsForm = element.columnsForm;
         this.properties.tableName = element.tableNameDetail
       }
     });
-    this.properties.preSave = []
-    this.properties.preSave.push({columnForm:"seg_usuario_id",value:this.properties.id})
+    
     this.properties.id = 0
     localStorage.setItem("properties", JSON.stringify(this.properties));
     this.router.navigate(["/generic-child-form"]);

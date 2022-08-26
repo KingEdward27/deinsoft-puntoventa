@@ -53,10 +53,10 @@ export class CnfProductoService {
     let params = new HttpParams().set("id", arg1);
     return this.http.delete(this.url + '/delete-cnf-producto', { observe: 'response', params });
   }
-  public getAllDataComboTypeHead(name_value: string,invWarehouseId:number): Observable<any> {
+  public getAllDataComboTypeHead(name_value: string,cnfEmpresaId:number): Observable<any> {
     let params = new HttpParams()
     .set("nameOrCode",name_value)
-    .set("invWarehouseId",invWarehouseId.toString());
+    .set("cnfEmpresaId",cnfEmpresaId.toString());
     return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-typehead`, { params });
   }
 }

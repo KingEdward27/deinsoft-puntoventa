@@ -45,6 +45,7 @@
     "angular-jwt": "^0.1.11",
     "bootstrap": "^4.6.0",
     "core-js": "3.8.0",
+    "@ng-select/ng-select": "^6.1.0",
     "datatables.net": "1.11.3",
     "datatables.net-autofill-dt": "2.3.9",
     "datatables.net-buttons": "^2.2.3",

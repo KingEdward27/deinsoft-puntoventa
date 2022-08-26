@@ -162,7 +162,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-lg-3 col-sm-12 col-xs-12">
+                                    <div class="col-lg-6 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label
                                                 class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_maestro'
@@ -171,7 +171,30 @@
                                                     class="spinner-border spinner-border-sm mr-1"></span><span
                                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                                             <div class="col-sm-12 col-lg-12">
-                                                <select name="model.cnfMaestro" [compareWith]="compareCnfMaestro"
+                                                <!-- <ng-select [items]="listCnfMaestro" class="col-sm-12 col-lg-6" 
+                                                        name="selectedCnfMaestro"
+                                                        bindLabel="name"
+                                                        role="listbox"
+                                                        placeholder = "- Seleccione -"
+                                                        [(ngModel)]="selectedCnfMaestro"
+                                                        [clearable] = "false">
+                                                </ng-select> -->
+                                                <input class="form-control-sm col-sm-12 col-lg-10"  type="text"
+                                                    [(ngModel)]="model.cnfMaestro"  
+                                                    name="model.cnfMaestro"
+                                                    #input 
+                                                    [ngbTypeahead]="searchCnfMaestro"
+                                                    [resultTemplate]="rt2" 
+                                                    [inputFormatter]="formatterCnfMaestro"/>
+                                                    <ng-template #rt2 let-r="result" let-t="term">
+                                                        {{ r.apellidoPaterno}}  {{ r.apellidoMaterno}}  {{ r.nombres}}  -  {{ r.nroDoc}}
+                                                    </ng-template>
+                                                &nbsp;
+                                                <a class="fas fa-plus"
+                                                    style="cursor: pointer;" (click)="addNewCnfMestro()"
+                                                    title="agregar"></a>
+                                                
+                                                <!-- <select name="model.cnfMaestro" [compareWith]="compareCnfMaestro"
                                                     [(ngModel)]="model.cnfMaestro"
                                                     class="form-control-sm col-sm-12 col-lg-12">
                                                     <option *ngIf="loadingCnfMaestro" [ngValue]="0" selected="selected">
@@ -183,7 +206,7 @@
                                                         [ngValue]="item">{{item.apellidoPaterno + ' ' +item.nombres}}
                                                     </option>
 
-                                                </select>
+                                                </select> -->
                                             </div>
                                         </div>
                                     </div>

@@ -1,0 +1,181 @@
+<!-- Main content -->
+<section class="content" style="padding-top: 10px;">
+    <!-- Default box -->
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{'webpagos.reportes.inv_almacen_producto'| translate}}</h3>
+                <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <h4 style="border-bottom: solid 1px;padding-bottom: 6px;">{{'webpagos.register' | translate}} -
+                        {{'webpagos.cnf_maestro.home.title' | translate}}</h4>
+                    <form class="col-sm-12" style="padding-top: 6px;">
+                        <div class="form-group-sm row">
+                            <label class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.cnf_tipo_documento'
+                                | translate}} <span *ngIf="loadingCnfTipoDocumento"
+                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-8">
+                                <select name="model.cnfTipoDocumento" [compareWith]="compareCnfTipoDocumento"
+                                    [(ngModel)]="model.cnfTipoDocumento" class="form-control-sm col-sm-12 col-lg-12">
+                                    <option *ngIf="loadingCnfTipoDocumento" [ngValue]="0" selected="selected">
+                                        Cargando...</option>
+                                    <option *ngIf="!loadingCnfTipoDocumento" [ngValue]="selectDefaultCnfTipoDocumento">
+                                        {{selectDefaultCnfTipoDocumento.name}}</option>
+                                    <option *ngFor="let item of listCnfTipoDocumento; index as i;" [ngValue]="item">
+                                        {{item.nombre}}</option>
+
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-12"
+                                    *ngIf="error?['cnfTipoDocumento.nombre']:false">{{error["cnfTipoDocumento.nombre"]
+                                    }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="nroDoc"
+                                class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.nro_doc' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-8">
+                                <input type="text" [(ngModel)]="model.nroDoc" maxlength="11" name="nroDoc" id="nroDoc"
+                                    name="nroDoc" class="form-control-sm col-sm-12 col-lg-12"
+                                    placeholder="Ingrese nroDoc" />
+                                <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.nroDoc">{{ error.nroDoc
+                                    }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row" *ngIf="model.cnfTipoDocumento.codigoSunat != '6'">
+                            <label for="nombres"
+                                class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.nombres' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-8">
+                                <input type="text" [(ngModel)]="model.nombres" maxlength="100" name="nombres"
+                                    id="nombres" name="nombres" class="form-control-sm col-sm-12 col-lg-12"
+                                    placeholder="Ingrese nombres" />
+                                <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.nombres">{{
+                                    error.nombres }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row" *ngIf="model.cnfTipoDocumento.codigoSunat != '6'">
+                            <label for="apellidoPaterno"
+                                class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.apellido_paterno' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-8">
+                                <input type="text" [(ngModel)]="model.apellidoPaterno" maxlength="100"
+                                    name="apellidoPaterno" id="apellidoPaterno" name="apellidoPaterno"
+                                    class="form-control-sm col-sm-12 col-lg-12" placeholder="Ingrese apellidoPaterno" />
+                                <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.apellidoPaterno">{{
+                                    error.apellidoPaterno }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row" *ngIf="model.cnfTipoDocumento.codigoSunat != '6'">
+                            <label for="apellidoMaterno"
+                                class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.apellido_materno' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-8">
+                                <input type="text" [(ngModel)]="model.apellidoMaterno" maxlength="100"
+                                    name="apellidoMaterno" id="apellidoMaterno" name="apellidoMaterno"
+                                    class="form-control-sm col-sm-12 col-lg-12" placeholder="Ingrese apellidoMaterno" />
+                                <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.apellidoMaterno">{{
+                                    error.apellidoMaterno }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row" *ngIf="model.cnfTipoDocumento.codigoSunat == '6'">
+                            <label for="razonSocial"
+                                class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.razon_social' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-8">
+                                <input type="text" [(ngModel)]="model.razonSocial" maxlength="100" name="razonSocial"
+                                    id="razonSocial" name="razonSocial" class="form-control-sm col-sm-12 col-lg-12"
+                                    placeholder="Ingrese razonSocial" />
+                                <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.razonSocial">{{
+                                    error.razonSocial }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="direccion"
+                                class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.direccion' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-8">
+                                <input type="text" [(ngModel)]="model.direccion" maxlength="200" name="direccion"
+                                    id="direccion" name="direccion" class="form-control-sm col-sm-12 col-lg-12"
+                                    placeholder="Ingrese direccion" />
+                                <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.direccion">{{
+                                    error.direccion }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="correo"
+                                class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.correo' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-8">
+                                <input type="text" [(ngModel)]="model.correo" maxlength="100" name="correo" id="correo"
+                                    name="correo" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese correo" />
+                                <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.correo">{{ error.correo
+                                    }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="telefono"
+                                class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.telefono' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-8">
+                                <input type="text" [(ngModel)]="model.telefono" maxlength="20" name="telefono"
+                                    id="telefono" name="telefono" class="form-control-sm col-sm-12 col-lg-12"
+                                    placeholder="Ingrese telefono" />
+                                <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.telefono">{{
+                                    error.telefono }}</div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="form-group-sm row">
+                            <label class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.cnf_distrito' |
+                                translate}} <span *ngIf="loadingCnfDistrito"
+                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-8">
+                                <select name="model.cnfDistrito" [compareWith]="compareCnfDistrito"
+                                    [(ngModel)]="model.cnfDistrito" class="form-control-sm col-sm-12 col-lg-12">
+                                    <option *ngIf="loadingCnfDistrito" [ngValue]="0" selected="selected">Cargando...
+                                    </option>
+                                    <option *ngIf="!loadingCnfDistrito" [ngValue]="selectDefaultCnfDistrito">
+                                        {{selectDefaultCnfDistrito.name}}</option>
+                                    <option *ngFor="let item of listCnfDistrito; index as i;" [ngValue]="item">
+                                        {{item.nombre}}</option>
+
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-12"
+                                    *ngIf="error?['cnfDistrito.nombre']:false">{{error["cnfDistrito.nombre"] }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+                            <div class="col-sm-12" style="padding-top: 20px;">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-5 col-sm-4 col-xs-5" style="margin-left: 50x;">
+                                        <button class="btn btn-default col-12" (click)="activeModal.dismiss('cancel click')">
+                                            <i class="fa fa-arrow-circle-left"></i> {{'webpagos.btnBack' | translate
+                                            }}
+                                        </button>
+                                    </div>
+                                    <div class="col-lg-5 col-sm-4 col-xs-5" style="margin-left: 20x;">
+                                        <button class="btn btn-primary col-12" (click)="save()">
+                                            <i [ngClass]="model.id ? 'fa fa-pen' : 'fa fa-plus'"></i> {{ model.id ?
+                                            ('webpagos.btnEdit' | translate):('webpagos.btnSave' | translate) }}
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

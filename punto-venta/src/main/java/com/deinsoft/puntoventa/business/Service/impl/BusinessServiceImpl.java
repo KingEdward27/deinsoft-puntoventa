@@ -56,8 +56,8 @@ public class BusinessServiceImpl implements BusinessService {
         Map<String,Object> empresa = (Map<String,Object>)local.get("cnf_empresa");
         String ruta = Util.getStringValue(empresa,"ruta_pse");
         String token = Util.getStringValue(empresa,"token");
-        if (ruta == null) throw new RuntimeException ("Ruta PSE no configurado");
-        if (token == null) throw new RuntimeException ("token PSE no configurado");
+//        if (ruta == null) throw new RuntimeException ("Ruta PSE no configurado");
+//        if (token == null) throw new RuntimeException ("token PSE no configurado");
         EnvioPSE envioPSE = new EnvioPSE(ruta,token);
         String jsonBody = envioPSE.paramToJson(mapVenta);
         RespuestaPSE resultEnvioPSE = envioPSE.envioJsonPSE(jsonBody);

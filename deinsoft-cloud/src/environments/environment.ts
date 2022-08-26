@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    apiUrl: 'https://deinsoft-cloud-backend.herokuapp.com/ventas-backend', 
+    apiUrl: 'http://localhost:8084/ventas-backend',
     __TIMESTAMP__: String(new Date().getTime()),
 };
 

@@ -719,37 +719,88 @@ add constraint fk_inv_movimiento_producto_cnf_empresa foreign key (inv_almacen_i
 alter table inv_movimiento_producto
 add constraint fk_inv_movimiento_producto_act_comprobante foreign key (act_comprobante_id) references act_comprobante(act_comprobante_id);
 
-INSERT INTO `dbbodegadesktop`.`productos`
-(`IdProducto`,
-`IdMarca`,
-`IdCategoria`,
-`IdUnidadMedida`,
-`Descripcion`,
-`Costo`,
-`Precio`,
-`Precio2`,
-`paquete`,
-`Stock`,
-`StockMinimo`,
-`CodigoBarra`,
-`Observacion`,
-`Estado`,
-`codigo`,
-`orden`)
-VALUES
-(<{IdProducto: }>,
-<{IdMarca: }>,
-<{IdCategoria: }>,
-<{IdUnidadMedida: }>,
-<{Descripcion: }>,
-<{Costo: }>,
-<{Precio: }>,
-<{Precio2: }>,
-<{paquete: }>,
-<{Stock: }>,
-<{StockMinimo: }>,
-<{CodigoBarra: }>,
-<{Observacion: }>,
-<{Estado: }>,
-<{codigo: -}>,
-<{orden: 9999}>);
+
+-- new 2022-08-23
+
+create table act_caja
+(
+	act_caja_id int auto_increment primary key,
+    nombre varchar(100) not null,
+    estado char(1)
+)engine=innodb;
+
+create table act_caja_turno
+(
+	act_caja_turno_id int auto_increment primary key,
+	seg_usuario_id int,
+    fecha_apertura datetime,
+	fecha_cierre datetime,
+    estado char(1)
+)engine=innodb;
+
+alter table act_caja_turno
+add constraint fk_act_caja_turno_seg_usuario foreign key (seg_usuario_id) references seg_usuario(seg_usuario_id);
+
+create table act_caja_operacion
+(
+	act_caja_operacion_id int auto_increment primary key,
+	act_caja_turno_id int not null,
+    act_comprobante_id int,
+    act_pago_id int,
+    monto decimal(14,4),
+	fecha date,
+    fecha_registro datetime,
+    flag_ingreso char(1),
+    estado char(1)
+)engine=innodb;
+
+alter table act_caja_operacion
+add constraint fk_act_caja_operacion_act_caja_turno foreign key (seg_usuario_id) references seg_usuario(seg_usuario_id);
+
+alter table act_caja_operacion
+add constraint fk_act_caja_operacion_act_comprobante foreign key (act_comprobante_id) references act_comprobante(act_comprobante_id);
+
+create table cnf_forma_pago_detalle
+(
+	cnf_forma_pago_detalle int auto_increment primary key,
+	cnf_forma_pago_id int,
+    modo_dias_intervalo int,
+    modo_porcentaje decimal(14,2),
+    modo_monto decimal(14,2),
+    modo_dia_vencimiento int
+)engine=innodb;
+
+alter table cnf_forma_pago_detalle
+add constraint fk_cnf_forma_pago_detalle_cnf_forma_pago foreign key (cnf_forma_pago_id) references cnf_forma_pago(cnf_forma_pago_id);
+
+create table act_pago_programacion
+(
+	act_pago_programacion_id int auto_increment primary key,
+	act_comprobante_id int not null,
+    fecha date,
+    fecha_vencimiento date,
+    monto decimal(14,4),
+    monto_pendiente decimal(14,4)
+)engine=innodb;
+
+alter table act_pago_programacion
+add constraint fk_act_pago_programacion_act_comprobante foreign key (act_comprobante_id) references act_comprobante(act_comprobante_id);
+
+
+create table act_pago
+(
+	act_pago_id int auto_increment primary key,
+	act_pago_programacion_id int not null,
+    fecha date,
+    monto decimal(14,4)
+)engine=innodb;
+
+alter table act_pago
+add constraint fk_act_pago_act_pago_programacion foreign key (act_pago_programacion_id) references act_pago_programacion(act_pago_programacion_id);
+
+alter table act_caja_operacion
+add constraint fk_act_caja_operacion_act_pago foreign key (act_pago_id) references act_pago(act_pago_id);
+
+
+alter table cnf_producto
+add flag_servicio int1;

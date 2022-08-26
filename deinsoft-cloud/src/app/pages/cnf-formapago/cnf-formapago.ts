@@ -15,9 +15,20 @@ export class CnfFormaPagoComponent extends GenericListComponent implements OnIni
   //baseEndpoint = environment.apiUrl + '/get-all-cnf-org';
   prop ={
     "tableName": "cnf_forma_pago",
-    "title": "Marcas",
+    "title": "Formas de Pago",
     "columnsList":[{tableName: "cnf_forma_pago", columnName:"nombre",filterType:"text"}
                 ],
+    childTables:[
+                  {tableName: "cnf_forma_pago_detalle",tableNameDetail: "cnf_forma_pago_detalle",
+                    idValue:"cnf_forma_pago_id"
+                    ,columnsForm: [
+                                    {tableName:"cnf_forma_pago_detalle", columnName:"modo_dias_intervalo",type:"number"},
+                                    {tableName:"cnf_forma_pago_detalle", columnName:"modo_porcentaje",type:"number"},
+                                    {tableName:"cnf_forma_pago_detalle", columnName:"modo_monto",type:"number"},
+                                    {tableName:"cnf_forma_pago_detalle", columnName:"modo_dia_vencimiento",type:"number"}
+                                  ]
+                  }
+    ],
     "columnsForm":[{tableName: "cnf_forma_pago", "columnName":"nombre","type":"input"}
            ],
     //filters sería para filtros adicionales

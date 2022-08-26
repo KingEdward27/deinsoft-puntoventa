@@ -607,6 +607,25 @@
                 typeDeleteVoid: "2"
         },
         {
+                tableName: "seg_usuario",
+                title: "seg_usuario",
+                columnsForm: [
+                {columnName: "nombre",inputType: "text"},
+                {columnName: "email",inputType: "text"},
+                {columnName: "password",inputType: "text"},
+                {columnName: "estado",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "email",filterType: "text"},
+                    {columnName: "password",filterType: "text"},
+                    {columnName: "estado",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
                 tableName: "inv_movimiento_producto",
                 title: "inv_movimiento_producto",
                 
@@ -630,6 +649,139 @@
                     {columnName: "fecha",filterType: "text"},
                     {columnName: "fecha_registro",filterType: "text"},
                     {columnName: "cantidad",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "act_caja",
+                title: "act_caja",
+                columnsForm: [
+                {columnName: "nombre",inputType: "text"},
+                {columnName: "estado",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "estado",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "act_caja_turno",
+                title: "act_caja_turno",
+                foreignTables: [
+                    {tableName: "seg_usuario",idValue: "seg_usuario_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "fecha_apertura",inputType: "date"},
+                {columnName: "fecha_cierre",inputType: "date"},
+                {columnName: "estado",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "fecha_apertura",filterType: "text"},
+                    {columnName: "fecha_cierre",filterType: "text"},
+                    {columnName: "estado",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "act_caja_operacion",
+                title: "act_caja_operacion",
+                foreignTables: [
+                    {tableName: "act_caja_turno",idValue: "act_caja_turno_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "act_comprobante",idValue: "act_comprobante_id",
+                    descriptionColumn : "numero"
+                    },
+                    {tableName: "act_comprobante",idValue: "act_comprobante_id",
+                    descriptionColumn : "numero"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "fecha_apertura",inputType: "date"},
+                {columnName: "fecha_cierre",inputType: "date"},
+                {columnName: "estado",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "fecha_apertura",filterType: "text"},
+                    {columnName: "fecha_cierre",filterType: "text"},
+                    {columnName: "estado",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "cnf_forma_pago_detalle",
+                title: "cnf_forma_pago_detalle",
+                foreignTables: [
+                    {tableName: "cnf_forma_pago",idValue: "cnf_forma_pago_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "modo_dias_intervalo",inputType: "date"},
+                {columnName: "modo_porcentaje",inputType: "date"},
+                {columnName: "modo_monto",inputType: "text"},
+                {columnName: "modo_dia_vencimiento",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "modo_dias_intervalo",filterType: "date"},
+                {columnName: "modo_porcentaje",filterType: "date"},
+                {columnName: "modo_monto",filterType: "text"},
+                {columnName: "modo_dia_vencimiento",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "act_pago_programacion",
+                title: "act_pago_programacion",
+                foreignTables: [
+                    {tableName: "act_comprobante",idValue: "act_comprobante_id",
+                    descriptionColumn : "numero"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "fecha",inputType: "date"},
+                {columnName: "fecha_vencimiento",inputType: "date"},
+                {columnName: "monto",inputType: "text"},
+                {columnName: "monto_pendiente",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "fecha",filterType: "date"},
+                    {columnName: "fecha_vencimiento",filterType: "date"},
+                    {columnName: "monto",filterType: "text"},
+                    {columnName: "monto_pendiente",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "act_pago",
+                title: "act_pago",
+                foreignTables: [
+                    {tableName: "act_pago_programacion",idValue: "act_pago_programacion_id",
+                    descriptionColumn : "monto"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "fecha",inputType: "date"},
+                {columnName: "monto",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "fecha",filterType: "date"},
+                    {columnName: "monto",filterType: "text"}
             ],
                 generateFrontend: true,
                 regenerate: true,

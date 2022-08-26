@@ -76,9 +76,9 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
     }
 
     @Override
-    public List<CnfProducto> getAllCnfProductTypeHead(String nameOrValue, long invWarehouseId) {
+    public List<CnfProducto> getAllCnfProductTypeHead(String nameOrValue, long cnfEmpresaId) {
         List<CnfProducto> cnfProductList = (List<CnfProducto>) cnfProductoRepository.getAllCnfProductTypeHead
-        (nameOrValue.toUpperCase());
+        (nameOrValue.toUpperCase(),cnfEmpresaId);
         
 //        for (CnfProducto cnfProduct2 : cnfProductList) {
 //            InvBalance invBalance = invBalanceService.findByCnfProductIdAndWarehouseId(cnfProduct2.getId(), invWarehouseId);

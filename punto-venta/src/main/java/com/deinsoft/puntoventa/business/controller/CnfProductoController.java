@@ -80,10 +80,10 @@ public class CnfProductoController extends CommonController<CnfProducto, CnfProd
     }
 
     @GetMapping(value = "/get-all-cnf-producto-typehead")
-    public ResponseEntity<?> getAllCnfProductTypeHead(String nameOrCode, long invWarehouseId, 
+    public ResponseEntity<?> getAllCnfProductTypeHead(String nameOrCode, long cnfEmpresaId, 
             HttpServletRequest request) {
         List<CnfProducto> cnfProductList = cnfProductoService
-                .getAllCnfProductTypeHead(nameOrCode, invWarehouseId);
+                .getAllCnfProductTypeHead(nameOrCode, cnfEmpresaId);
         return ResponseEntity.status(HttpStatus.OK).body(cnfProductList);
     }
 }

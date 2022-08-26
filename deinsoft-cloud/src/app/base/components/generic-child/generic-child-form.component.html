@@ -54,8 +54,8 @@
                                         style="color: red;font-size: 16px !important;font-weight: bold;"> *</span></label>  
                                 
                                     <div class="col-sm-12 col-lg-9"> 
-                                        <ng-container *ngIf="item.type == 'input'" >
-                                            <input type="text" maxlength="255"
+                                        <ng-container *ngIf="item.type == 'input' || item.type == 'number'" >
+                                            <input type="{{item.tableName}}" maxlength="255"
                                                 name="{{item.tableName}}.{{item.columnName}}" 
                                                 id="{{item.tableName}}.{{item.columnName}}"  
                                                 class="form-control-sm col-sm-12 col-lg-6"

@@ -109,7 +109,8 @@ export class AppService {
                             {name: 'Distrito',path: ['/distrito']},
                             {name: 'Tipo de documento de identidad',path: ['/tipo-documento']},
                             {name: 'Moneda',path: ['/moneda']},
-                            {name: 'Empresa',path: ['/empresa']}
+                            {name: 'Empresa',path: ['/empresa']},
+                            {name: 'Unidad Medida',path: ['/unidadmedida']}
                         ]
                     },
                     {
@@ -190,7 +191,6 @@ export class AppService {
                             {name: 'Marca',path: ['/marca']},
                             {name: 'Categoría',path: ['/categoria']},
                             {name: 'Sub Categoría',path: ['/subcategoria']},
-                            {name: 'Unidad Medida',path: ['/unidadmedida']},
                             {name: 'Producto',path: ['/producto']},
                             {name: 'Almacén',path: ['/almacen']},
                             {name: 'Compra',path: ['/compra']}

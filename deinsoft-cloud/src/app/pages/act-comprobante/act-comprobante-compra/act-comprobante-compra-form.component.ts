@@ -174,7 +174,8 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   getListCnfProductAsObservable(term: any): Observable<any> {
 
     if (term.length >= 2) {
-      return this.cnfProductoService.getAllDataComboTypeHead(term, this.model.invAlmacen.id)
+      let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];  
+      return this.cnfProductoService.getAllDataComboTypeHead(term, cnfEmpresa)
         .pipe(
           tap(() => this.searchFailed = false),
           catchError((err: any) => {

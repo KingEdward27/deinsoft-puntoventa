@@ -117,7 +117,7 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
         element.value = wa;
       }
 
-      if (element.type != 'input' && element.type != 'date') {
+      if (element.type != 'input' && element.type != 'date' && element.type != 'number') {
         if (this.properties.id == 0) {
           if (element.loadState == 1) {
             super.getListComboByTableName(element.tableName, element.columnName,"").subscribe(data => {
@@ -213,7 +213,7 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
       if (element.type != "label" && element.type != "hidden") {
         if (!element.load) {
           let column = "";
-          if (element.type == "input" || element.type == "date") {
+          if (element.type == "input" || element.type == "date" || element.type == "number") {
             column = element?.tableName + "." + element?.columnName;
             let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
             element.value = selectValue;

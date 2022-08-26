@@ -17,14 +17,14 @@ export class CnfMaestroService {
 
   public getAllData(arg1:CnfMaestro):Observable<any>{
     let params = new HttpParams().set("nroDoc",arg1.nroDoc)
-.set("nombres",arg1.nombres)
-.set("apellidoPaterno",arg1.apellidoPaterno)
-.set("apellidoMaterno",arg1.apellidoMaterno)
-.set("razonSocial",arg1.razonSocial)
-.set("direccion",arg1.direccion)
-.set("correo",arg1.correo)
-.set("telefono",arg1.telefono)
-.set("flagEstado",arg1.flagEstado)
+    .set("nombres",arg1.nombres)
+    .set("apellidoPaterno",arg1.apellidoPaterno)
+    .set("apellidoMaterno",arg1.apellidoMaterno)
+    .set("razonSocial",arg1.razonSocial)
+    .set("direccion",arg1.direccion)
+    .set("correo",arg1.correo)
+    .set("telefono",arg1.telefono)
+    .set("flagEstado",arg1.flagEstado)
 ;    return this.http.get<CnfMaestro[]>(`${this.url}/get-all-cnf-maestro`,{params});
   }
   public getAllDataCombo():Observable<any>{
@@ -52,6 +52,12 @@ export class CnfMaestroService {
   public delete(arg1:string): Observable<HttpResponse<{}>>{
     let params = new HttpParams().set("id",arg1);
     return this.http.delete(this.url+'/delete-cnf-maestro', { observe: 'response' ,params}); 
+  }
+  public getAllDataComboTypeHead(name_value: string,empresaId:any): Observable<any> {
+    let params = new HttpParams()
+    .set("nameOrCode",name_value)
+    .set("empresaId",empresaId);
+    return this.http.get<CnfMaestro[]>(`${this.url}/get-all-cnf-maestro-typehead`, { params });
   }
 }
 

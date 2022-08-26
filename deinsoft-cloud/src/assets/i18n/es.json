@@ -124,7 +124,7 @@
     },
     "cnf_maestro": {
       "home": {
-        "title": "Socios de Negocios",
+        "title": "Clientes y Proveedores",
         "subTitleForm": " Mantenimiento de Centro de Costo",
         "subTitleList": " Listado de Centros de Costo"
       },
@@ -138,7 +138,9 @@
       "razon_social": "Razón Social",
       "direccion": "Dirección",
       "correo": "Correo",
-      "telefono": "Teléfono"
+      "telefono": "Teléfono",
+      "cnf_tipo_documento":"Tipo doc identidad",
+      "cnf_distrito":"Distrito"
     },
     "cnf_forma_pago": {
       "home": {
@@ -306,6 +308,18 @@
       "inv_almacen": "Almacén",
       "cnf_producto":"Producto",
       "cantidad": "Cantidad"
+    },
+    "cnf_forma_pago_detalle": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "modo_dias_intervalo": "Días",
+      "modo_porcentaje":"Porcentaje",
+      "modo_monto": "Monto",
+      "modo_dia_vencimiento": "Día del mes a vencer"
     },
     "reportes": {
       "act_comprobante_listado":"Listado de Ventas",

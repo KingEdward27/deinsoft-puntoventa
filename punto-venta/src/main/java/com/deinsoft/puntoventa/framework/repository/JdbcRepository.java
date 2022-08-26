@@ -689,7 +689,7 @@ public class JdbcRepository implements IJdbcRepository {
                 if (key.equals("id")) {
                     sql = sql.concat("").concat(columnPk).concat(",");
                 } else {
-                    sql = sql.concat("").concat(key).concat(",");
+                    sql = sql.concat("").concat(key).concat(","); 
                 }
 
             }
@@ -904,7 +904,20 @@ public class JdbcRepository implements IJdbcRepository {
                 mapSqlParameterSource.addValue(key, Long.parseLong(String.valueOf(value)));
                 break;
             case "BigDecimal":
-                mapSqlParameterSource.addValue(key, new BigDecimal(String.valueOf(value)));
+                if (String.valueOf(value).equalsIgnoreCase("")) {
+                    mapSqlParameterSource.addValue(key, null);
+                } else {
+                    mapSqlParameterSource.addValue(key, new BigDecimal(String.valueOf(value)));
+                }
+                
+                break;
+            case "int":
+                if (String.valueOf(value).equalsIgnoreCase("")) {
+                    mapSqlParameterSource.addValue(key, null);
+                } else {
+                    mapSqlParameterSource.addValue(key, Integer.valueOf(String.valueOf(value)));
+                }
+                
                 break;
             case "Date":
                 if (String.valueOf(value).equalsIgnoreCase("")) {

@@ -82,6 +82,8 @@ import { ActComprobanteReportFormComponent } from '@pages/reports/act-comprobant
 import { ActComprobanteListFormComponent } from '@pages/reports/act-comprobante/list-act-comprobante-venta/act-comprobante-list.component';
 import { InvAlmacenReportFormComponent } from '@pages/reports/inv-almacen/inv-almacen-report.component';
 import { InvMovimientoProductoReportFormComponent } from '@pages/reports/inv-movimiento-producto/inv-movimiento-producto-report.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { CnfMaestroFormModalComponent } from '@pages/cnf-maestro/cnf-maestro-modal/cnf-maestro-form-modal.component';
 registerLocaleData(localeEn, 'en-EN');
 
 @NgModule({
@@ -153,7 +155,8 @@ registerLocaleData(localeEn, 'en-EN');
         ActComprobanteCompraReportFormComponent,
         ActComprobanteListFormComponent,
         InvAlmacenReportFormComponent,
-        InvMovimientoProductoReportFormComponent
+        InvMovimientoProductoReportFormComponent,
+        CnfMaestroFormModalComponent
     ],
     imports: [
         BrowserModule,
@@ -162,6 +165,7 @@ registerLocaleData(localeEn, 'en-EN');
         AppRoutingModule,
         ReactiveFormsModule,
         FormsModule,
+        NgSelectModule,
         BrowserAnimationsModule,
         ToastrModule.forRoot({
             timeOut: 3000,

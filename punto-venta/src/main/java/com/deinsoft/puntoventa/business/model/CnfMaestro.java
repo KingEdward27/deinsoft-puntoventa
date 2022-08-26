@@ -58,17 +58,17 @@ public class CnfMaestro implements Serializable {
     @Column(name = "flag_estado", length = 1, nullable = true)
     private String flagEstado;
 
-    @NotNull
     @Valid
     @OneToOne
     @JoinColumn(name = "cnf_tipo_documento_id")
     private CnfTipoDocumento cnfTipoDocumento;
 
     @OneToOne
+    @Valid
     @JoinColumn(name = "cnf_empresa_id")
     private CnfEmpresa cnfEmpresa;
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "cnf_distrito_id")
     private CnfDistrito cnfDistrito;
 

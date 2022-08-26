@@ -34,6 +34,7 @@ import { UpdateParam } from '@/base/components/model/UpdateParam';
 import dayjs from 'dayjs';
 import { MessageModalComponent } from '../modal/message-modal.component';
 import { AppService } from '@services/app.service';
+import { CnfMaestroFormModalComponent } from '@pages/cnf-maestro/cnf-maestro-modal/cnf-maestro-form-modal.component';
 
 
 
@@ -92,10 +93,12 @@ export class ActComprobanteFormComponent implements OnInit {
   public modelOrig: ActComprobante = new ActComprobante();
   cnfProducto: any;
   formatter = (x: { nombre: string }) => x.nombre;
+  formatterCnfMaestro = (x: CnfMaestro ) => (x.apellidoPaterno + ' '+x.apellidoMaterno+ ' '+x.nombres).trim();
 
   loadingCnfImpuestoCondicion: boolean = false;
   selectDefaultImpuestoCondicion: any = { id: 0, nombre: "- Seleccione -" };
   listImpuestoCondicion: any;
+  selectedCnfMaestro: any;
   public modalRef!: NgbModalRef;
   constructor(private actComprobanteService: ActComprobanteService,
     private router: Router,
@@ -174,7 +177,9 @@ export class ActComprobanteFormComponent implements OnInit {
   getListCnfProductAsObservable(term: any): Observable<any> {
 
     if (term.length >= 2) {
-      return this.cnfProductoService.getAllDataComboTypeHead(term, this.model.invAlmacen.id)
+      console.log(this.model.invAlmacen.id);
+      let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];  
+      return this.cnfProductoService.getAllDataComboTypeHead(term, cnfEmpresa)
         .pipe(
           tap(() => this.searchFailed = false),
           catchError((err: any) => {
@@ -193,12 +198,10 @@ export class ActComprobanteFormComponent implements OnInit {
       debounceTime(200),
       distinctUntilChanged(),
       switchMap(term => {
-        console.log("esg");
-        console.log(term);
-
         return this.getListCnfProductAsObservable(term);
       })
     )
+  
   onchangeProduct(event: any, input: any) {
     event.preventDefault();
     console.log(event.item);
@@ -676,5 +679,43 @@ export class ActComprobanteFormComponent implements OnInit {
     this.model.listActComprobanteDetalle.splice(index, 1)
     this.updateTotals()
   }
+  addNewCnfMestro() {
+    this.modalRef = this.modalService.open(CnfMaestroFormModalComponent);
+    this.modalRef.closed.subscribe(result => {
+      this.getListCnfMaestro();
+      // this.model.cnfBpartner = 
+    })
+    this.modalRef.componentInstance.cnfMaestro.subscribe((receivedEntry:CnfMaestro) => {
+      console.log(receivedEntry);
+      this.getListCnfMaestro()
+      this.model.cnfMaestro = receivedEntry
+    })
+  }
+  getListCnfMestroAsObservable(term: any): Observable<any> {
+
+    if (term.length >= 2) {
+      let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+      return this.cnfMaestroService.getAllDataComboTypeHead(term,cnfEmpresa)
+        .pipe(
+          tap(() => this.searchFailed = false),
+          catchError((err: any) => {
+            console.log(err);
+            this.searchFailed = true;
+            return of([]);
+          })
+        );
+    } else {
+      return <any>[];
+    }
+
+  }
+searchCnfMaestro = (text$: Observable<string>) =>
+  text$.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    switchMap(term => {
+      return this.getListCnfMestroAsObservable(term);
+    })
+  )
 }
 
