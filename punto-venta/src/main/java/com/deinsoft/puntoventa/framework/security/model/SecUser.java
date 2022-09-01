@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.framework.security.model;
 
+import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -37,6 +38,9 @@ public class SecUser implements Serializable {
     @Column(name = "password", length = 255, nullable = true)
     private String password;
 
+    @Transient
+    private ActCajaTurno actCajaTurno;
+    
 //	@OneToMany(fetch=FetchType.LAZY,cascade = {CascadeType.MERGE, CascadeType.REFRESH})
 //	@JoinTable(name="sec_role_user",
 //	        joinColumns = {@JoinColumn(name="sec_user_id", referencedColumnName="sec_user_id")},
@@ -105,4 +109,12 @@ public class SecUser implements Serializable {
 //	public String toString() {
 //		return "Company [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password +"]";	
 //		}
+
+    public ActCajaTurno getActCajaTurno() {
+        return actCajaTurno;
+    }
+
+    public void setActCajaTurno(ActCajaTurno actCajaTurno) {
+        this.actCajaTurno = actCajaTurno;
+    }
 }

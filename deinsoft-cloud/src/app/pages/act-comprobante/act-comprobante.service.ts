@@ -85,5 +85,9 @@ export class ActComprobanteService {
   public genReportExcel(jsonData:any): Observable<any> {
     return this.http.post(this.url+"/export/excel", jsonData,{observe: 'response', responseType: 'blob'});
   }
+  public invalidateActComprobante(arg1:string): Observable<any>{
+    let params = new HttpParams().set("id",arg1);
+    return this.http.post(this.url+'/invalidate-act-comprobante', params); 
+  }
 }
 

@@ -18,6 +18,7 @@ import { CommonService } from '../base/services/common.service';
 export class UtilService {
   datablesSettingsChild!: DataTables.Settings;
   dtOptions:any;
+  datablesSettings:any
   // public listReports:any[] = [];
   url: string = environment.apiUrl;
   public titleExport = ""
@@ -33,7 +34,56 @@ export class UtilService {
     //   console.log(this.profile);
     // }
     
-    
+    this.datablesSettings = {
+      deferRender: true,
+      deferLoading: 7,
+      pagingType: 'full_numbers',
+      searching: false,
+      processing: true,
+      lengthMenu: [25, 50, 100],
+      order: [[0, "asc"]],
+      dom: 'lBftip',
+      buttons: [{
+        extend: 'excel',
+        title : this.titleExport,
+        text: '<i class="fa fa-file-excel"></i>&nbsp; XLS',
+        exportOptions: {
+          columns: ':visible'
+        }
+      },
+      {
+        extend: 'pdf',
+        title : this.titleExport,
+        text: ' <i class="fa fa-file-pdf"></i>&nbsp; PDF',
+        orientation: 'landscape'
+      },
+      {
+        extend: 'csv',
+        title : this.titleExport,
+        text: '<i class="fa fa-file-excel"></i>&nbsp; CSV',
+        exportOptions: {
+          columns: ':visible'
+        }
+      },
+
+      ],
+      language: {
+        url: 'assets/i18n/datatables/lang' + lang?.toUpperCase() + '.json'
+        // emptyTable: '',
+        // zeroRecords: 'No hay coincidencias',
+        // lengthMenu: 'Mostrar _MENU_ elementos',
+        // search: 'Buscar:',
+        // info: 'De _START_ a _END_ de _TOTAL_ elementos',
+        // infoEmpty: 'De 0 a 0 de 0 elementos',
+        // infoFiltered: '(filtrados de _MAX_ elementos totales)',
+        // paginate: {
+        //   first: 'Prim.',
+        //   last: 'Últ.',
+        //   next: 'Sig.',
+        //   previous: 'Ant.'
+        // }
+      }
+    }
     this.datablesSettingsChild = {
       deferRender: true,
       deferLoading: 7,

@@ -60,4 +60,12 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
     return len > 0 ?
       new Array(len).join(ch) + str : str;
   }
+  formatDateAndTime(date: Date | null): string {
+    return date ? date.getFullYear.toString()
+    + this.DELIMITER + this.leftPad(date.getMonth.toString(),2,'0') 
+    + this.DELIMITER + this.leftPad(date.getDay.toString(),2,'0') 
+    + " " + this.leftPad(date.getHours.toString(),2,'0') 
+    + ":" + this.leftPad(date.getMinutes.toString(),2,'0') 
+    + ":" + this.leftPad(date.getSeconds.toString(),2,'0') :''
+  }
 }

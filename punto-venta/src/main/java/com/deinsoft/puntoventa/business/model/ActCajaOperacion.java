@@ -15,6 +15,7 @@ public class ActCajaOperacion implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "act_caja_operacion_id", nullable = false, unique = true)
     private long id;
 
@@ -25,8 +26,7 @@ public class ActCajaOperacion implements Serializable {
     @Column(name = "fecha", length = 0, nullable = true)
     private LocalDate fecha;
 
-    @Size(max = 0)
-    @Column(name = "fecha_registro", length = 0, nullable = true)
+    @Column(name = "fecha_registro", nullable = true)
     private LocalDateTime fechaRegistro;
 
     @Size(max = 1)
@@ -37,8 +37,6 @@ public class ActCajaOperacion implements Serializable {
     @Column(name = "estado", length = 1, nullable = true)
     private String estado;
 
-    @NotNull
-    @Valid
     @OneToOne
     @JoinColumn(name = "act_caja_turno_id")
     private ActCajaTurno actCajaTurno;
@@ -114,6 +112,14 @@ public class ActCajaOperacion implements Serializable {
 
     public void setActComprobante(ActComprobante actComprobante) {
         this.actComprobante = actComprobante;
+    }
+
+    public ActPago getActPago() {
+        return actPago;
+    }
+
+    public void setActPago(ActPago actPago) {
+        this.actPago = actPago;
     }
 
 

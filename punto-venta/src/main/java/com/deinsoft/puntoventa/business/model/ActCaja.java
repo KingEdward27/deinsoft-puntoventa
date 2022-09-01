@@ -15,6 +15,7 @@ public class ActCaja implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "act_caja_id", nullable = false, unique = true)
     private long id;
 
@@ -27,6 +28,11 @@ public class ActCaja implements Serializable {
     @Column(name = "estado", length = 1, nullable = true)
     private String estado;
 
+    @OneToOne
+    @Valid
+    @JoinColumn(name = "cnf_empresa_id")
+    private CnfEmpresa cnfEmpresa;
+    
     public long getId() {
         return id;
     }
@@ -49,6 +55,14 @@ public class ActCaja implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public CnfEmpresa getCnfEmpresa() {
+        return cnfEmpresa;
+    }
+
+    public void setCnfEmpresa(CnfEmpresa cnfEmpresa) {
+        this.cnfEmpresa = cnfEmpresa;
     }
 
     @Override

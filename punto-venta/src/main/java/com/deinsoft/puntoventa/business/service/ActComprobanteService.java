@@ -37,4 +37,6 @@ public interface ActComprobanteService extends CommonService<ActComprobante> {
     public void delete(long id);
     
     public List<ActComprobante> getReportActComprobante(ParamBean paramBean);
+    
+    public String invalidate(long id)  throws Exception;
 }

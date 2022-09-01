@@ -15,6 +15,7 @@ public class ActPago implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "act_pago_id", nullable = false, unique = true)
     private long id;
 

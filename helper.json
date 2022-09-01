@@ -701,18 +701,22 @@
                     {tableName: "act_comprobante",idValue: "act_comprobante_id",
                     descriptionColumn : "numero"
                     },
-                    {tableName: "act_comprobante",idValue: "act_comprobante_id",
-                    descriptionColumn : "numero"
+                    {tableName: "act_pago",idValue: "act_pago_id",
+                    descriptionColumn : "fecha"
                     }
                 ],
                 columnsForm: [
-                {columnName: "fecha_apertura",inputType: "date"},
-                {columnName: "fecha_cierre",inputType: "date"},
-                {columnName: "estado",inputType: "text"}
+                    {columnName: "monto",inputType: "date"},
+                    {columnName: "fecha",inputType: "date"},
+                    {columnName: "fecha_registro",inputType: "date"},
+                    {columnName: "flag_ingreso",inputType: "date"},
+                    {columnName: "estado",inputType: "text"}
             ],
                 columnsList: [
-                    {columnName: "fecha_apertura",filterType: "text"},
-                    {columnName: "fecha_cierre",filterType: "text"},
+                    {columnName: "monto",filterType: "text"},
+                    {columnName: "fecha",filterType: "text"},
+                    {columnName: "fecha_registro",filterType: "text"},
+                    {columnName: "flag_ingreso",filterType: "text"},
                     {columnName: "estado",filterType: "text"}
             ],
                 generateFrontend: true,

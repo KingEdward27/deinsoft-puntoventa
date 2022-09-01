@@ -13,8 +13,12 @@ import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.service.ActPagoProgramacionService;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @RestController
+@RequestMapping("/api/business/act-pago-programacion")
 public class ActPagoProgramacionController extends CommonController<ActPagoProgramacion, ActPagoProgramacionService> {
 
     private static final Logger logger = LoggerFactory.getLogger(ActPagoProgramacionController.class);
@@ -55,7 +59,34 @@ public class ActPagoProgramacionController extends CommonController<ActPagoProgr
 
     @GetMapping(value = "/get-all-act-pago-programacion-by-act-comprobante")
     public List<ActPagoProgramacion> getAllActPagoProgramacionByActComprobante(@Param("id") Long id) {
+        
         List<ActPagoProgramacion> actPagoProgramacionList = actPagoProgramacionService.getAllActPagoProgramacionByActComprobante(id);
         return actPagoProgramacionList;
+    }
+    @GetMapping(value = "/get-all-act-pago-programacion-by-cnf-maestro")
+    public List<ActPagoProgramacion> getAllActPagoProgramacionByCnfMaestro(@Param("id") Long id,
+            @Param("fechaVencimiento") String fechaVencimiento) {
+       LocalDate date = getDateFromString(fechaVencimiento);
+        List<ActPagoProgramacion> actPagoProgramacionList 
+                = actPagoProgramacionService.getAllActPagoProgramacionByCnfMaestro(id, date);
+        return actPagoProgramacionList;
+    }
+    @GetMapping(value = "/get-all-act-pago-programacion-compra-by-cnf-maestro")
+    public List<ActPagoProgramacion> getAllActPagoProgramacionCompraByCnfMaestro(@Param("id") Long id,
+            @Param("fechaVencimiento") String fechaVencimiento) {
+        LocalDate date = getDateFromString(fechaVencimiento);
+        List<ActPagoProgramacion> actPagoProgramacionList 
+                = actPagoProgramacionService.getAllActPagoProgramacionCompraByCnfMaestro(id, date);
+        return actPagoProgramacionList;
+    }
+
+    private LocalDate getDateFromString(String fechaVencimiento) {
+        if (fechaVencimiento.equals("")){
+            return null;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        formatter = formatter.withLocale( Locale.getDefault() );  // Locale specifies human language for translating, and cultural norms for lowercase/uppercase and abbreviations and such. Example: Locale.US or Locale.CANADA_FRENCH
+        LocalDate date = LocalDate.parse(fechaVencimiento, formatter);
+        return date;
     }
 }

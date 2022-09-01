@@ -23,4 +23,5 @@ export class ParamBean {
 	fechaDesde?: dayjs.Dayjs;
     fechaHasta?: dayjs.Dayjs;
 	flagIsventa:string;
+	fechaVencimiento: string;
 };

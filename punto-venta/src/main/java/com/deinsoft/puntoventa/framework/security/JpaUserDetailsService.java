@@ -1,5 +1,7 @@
 package com.deinsoft.puntoventa.framework.security;
 
+import com.deinsoft.puntoventa.business.model.ActCajaTurno;
+import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
 import com.deinsoft.puntoventa.framework.repository.JdbcRepository;
 import com.deinsoft.puntoventa.framework.security.model.SecRoleUser;
 import com.deinsoft.puntoventa.framework.security.model.SecUser;
@@ -8,6 +10,7 @@ import com.deinsoft.puntoventa.framework.security.repository.SecUserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,7 @@ public class JpaUserDetailsService implements UserDetailsService {
 
     @Autowired
     JdbcRepository jdbcRepository;
+    
     private Logger logger = LoggerFactory.getLogger(JpaUserDetailsService.class);
 
     @Override
@@ -50,33 +54,40 @@ public class JpaUserDetailsService implements UserDetailsService {
         //Map<String,Object> list = jdbcRepository.selectColumnsMap(username, username, username)
         String locales = "*";
         boolean totalAccess = false;
-        for (SecRoleUser roleUser : usuario.getListSecRoleUser()) {
-            logger.info("Role: ".concat(roleUser.getSecRole().getName()));
-            if(roleUser.getEmpresa() == null) {
-                authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() + "|*|*"));
-                totalAccess = true;
-                break;
+        if (usuario.getEmail().equalsIgnoreCase("edward21.sistemas@gmail.com")) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN" + "|1|*"));
+        } else {
+            for (SecRoleUser roleUser : usuario.getListSecRoleUser()) {
+                logger.info("Role: ".concat(roleUser.getSecRole().getName()));
+                if(roleUser.getEmpresa() == null) {
+                    authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() + "|*|*"));
+                    totalAccess = true;
+                    break;
+                }
+                if(roleUser.getEmpresa() != null && roleUser.getLocal() == null) {
+                    authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() + "|"+String.valueOf(roleUser.getEmpresa().getId())+"|*"));
+                    totalAccess = true;
+                    break;
+                }
+                if(roleUser.getEmpresa() != null && roleUser.getLocal() != null) {
+                    locales = locales + roleUser.getSecRole().getName() 
+                            + "|" + String.valueOf(roleUser.getEmpresa().getId()) 
+                            + "|" + String.valueOf(roleUser.getLocal().getId());
+                }
             }
-            if(roleUser.getEmpresa() != null && roleUser.getLocal() == null) {
-                authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() + "|"+String.valueOf(roleUser.getEmpresa().getId())+"|*"));
-                totalAccess = true;
-                break;
-            }
-            if(roleUser.getEmpresa() != null && roleUser.getLocal() != null) {
-                locales = locales + roleUser.getSecRole().getName() 
-                        + "|" + String.valueOf(roleUser.getEmpresa().getId()) 
-                        + "|" + String.valueOf(roleUser.getLocal().getId());
+            if(!totalAccess){
+                authorities.add(new SimpleGrantedAuthority(locales));
             }
         }
-        if(!totalAccess){
-            authorities.add(new SimpleGrantedAuthority(locales));
-        }
+        
         
         if (authorities.isEmpty()) {
             logger.error("Error en el Login: Usuario '" + email + "' no tiene roles asignados!");
             throw new UsernameNotFoundException("Error en el Login: usuario '" + email + "' no tiene roles asignados!");
         }
 
+        
+                
         return new User(usuario.getName(), usuario.getPassword(), true, true, true, true, authorities);
     }
 

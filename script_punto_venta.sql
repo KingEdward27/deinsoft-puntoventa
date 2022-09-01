@@ -804,3 +804,35 @@ add constraint fk_act_caja_operacion_act_pago foreign key (act_pago_id) referenc
 
 alter table cnf_producto
 add flag_servicio int1;
+
+ALTER TABLE act_caja
+CHANGE COLUMN cnf_empresa_id cnf_empresa_id INT NULL DEFAULT NULL ;
+
+
+alter table act_caja
+add constraint fk_act_caja_cnf_empresa foreign key (cnf_empresa_id) references cnf_empresa(cnf_empresa_id);
+
+ALTER TABLE act_caja_turno
+ADD COLUMN act_caja_id INT NULL AFTER monto_cierre;
+
+alter table act_caja_turno
+add constraint fk_act_caja_turno_act_caja foreign key (act_caja_id) references act_caja(act_caja_id);
+
+ALTER TABLE act_comprobante
+CHANGE COLUMN seg_usuario_id seg_usuario_id INT NULL DEFAULT NULL ;
+
+alter table act_comprobante
+add constraint fk_act_comprobante_seg_usuario foreign key (seg_usuario_id) references seg_usuario(seg_usuario_id);
+
+
+ALTER TABLE seg_usuario
+add cnf_empresa_id INT NULL DEFAULT NULL ;
+
+alter table seg_usuario
+add constraint fk_seg_usuario_cnf_empresa foreign key (cnf_empresa_id) references cnf_empresa(cnf_empresa_id);
+
+ALTER TABLE cnf_unidad_medida
+CHANGE COLUMN codigo_sunat codigo_sunat CHAR(3) NOT NULL ;
+
+ALTER TABLE cnf_unidad_medida
+CHANGE COLUMN nombre nombre VARCHAR(100) NOT NULL ;

@@ -39,4 +39,6 @@ public interface InvMovimientoProductoRepository extends JpaRepository<InvMovimi
             + "and (:#{#paramBean.invAlmacen.id} = 0l or p.invAlmacen.id = :#{#paramBean.invAlmacen.id}) "
             + "and (p.fecha < :#{#paramBean.fechaDesde})")
     List<InvMovimientoProducto> getSaldoReportInvMovimientoProducto(@Param("paramBean") ParamBean paramBean);
+    
+    void deleteByActComprobante(ActComprobante actComprobante);
 }

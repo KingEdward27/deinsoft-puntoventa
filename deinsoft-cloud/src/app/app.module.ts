@@ -84,6 +84,13 @@ import { InvAlmacenReportFormComponent } from '@pages/reports/inv-almacen/inv-al
 import { InvMovimientoProductoReportFormComponent } from '@pages/reports/inv-movimiento-producto/inv-movimiento-producto-report.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CnfMaestroFormModalComponent } from '@pages/cnf-maestro/cnf-maestro-modal/cnf-maestro-form-modal.component';
+import { ActPagoProgramacionListFormComponent } from '@pages/act-pago-programacion/act-pago-programacion-list.component';
+import { ActCajaComponent } from '@pages/act-caja/act-caja';
+import { ActPagoProgramacionCompraListFormComponent } from '@pages/act-pago-programacion-compras/act-pago-programacion-compra-list.component';
+import { ActCajaTurnoComponent } from '@pages/act-caja-turno/act-caja-turno';
+import { ActCajaTurnoListComponent } from '@pages/act-caja-turno/list/act-caja-turno-list.component';
+import { ActCajaTurnoFormComponent } from '@pages/act-caja-turno/form/act-caja-turno-form.component';
+import { SegUsuarioEmpresaComponent } from '@pages/security/seg-usuario-empresa/seg_usuario';
 registerLocaleData(localeEn, 'en-EN');
 
 @NgModule({
@@ -156,7 +163,14 @@ registerLocaleData(localeEn, 'en-EN');
         ActComprobanteListFormComponent,
         InvAlmacenReportFormComponent,
         InvMovimientoProductoReportFormComponent,
-        CnfMaestroFormModalComponent
+        CnfMaestroFormModalComponent,
+        ActPagoProgramacionListFormComponent,
+        ActPagoProgramacionCompraListFormComponent,
+        ActCajaComponent,
+        ActCajaTurnoComponent,
+        ActCajaTurnoListComponent,
+        ActCajaTurnoFormComponent,
+        SegUsuarioEmpresaComponent
     ],
     imports: [
         BrowserModule,

@@ -2,15 +2,15 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { environment } from 'environments/environment';
 import { Observable } from 'rxjs/internal/Observable';
-import { ActCajaTurno } from './act-caja-turno.model';
-import { environment } from 'src/environments/environment';
+import { ActCajaTurno } from '../model/act-caja-turno.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActCajaTurnoService {
-  url:string  = environment.apiUrl;
+  url:string  = environment.apiUrl + '/api/business/act-caja-turno';
   constructor(private http: HttpClient,
               private router: Router) { 
   }

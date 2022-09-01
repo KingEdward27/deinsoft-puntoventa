@@ -65,7 +65,7 @@ export class CnfMaestroComponent extends GenericListComponent implements OnInit{
   // async save(){
     
   //   let res = await super.preSave();
-  //   console.log("test desde cnf-org");
+  //   
   // }
 }
 

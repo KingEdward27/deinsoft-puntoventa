@@ -51,7 +51,7 @@ export class CnfLocalComponent extends GenericListComponent implements OnInit{
     
   }
   save(): void {
-    console.log("test desde cnf-org");
+    
   }
 }
 

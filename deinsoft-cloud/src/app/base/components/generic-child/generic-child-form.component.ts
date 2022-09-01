@@ -54,7 +54,7 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
       let column = columnForm?.tableName + "." + columnForm?.load.loadBy;
       let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
       let myMap = new Map();
-      if(selectValue){
+      if (selectValue) {
         myMap.set(columnForm.load.loadBy, selectValue);
       }
       const convMap = this.mapToObjectMap(myMap);
@@ -87,18 +87,18 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
     if (value) {
       let date = value.split("-");
       return {
-        year : parseInt(date[0], 10),
-        month : parseInt(date[1], 10),
-        day : parseInt(date[2], 10)
+        year: parseInt(date[0], 10),
+        month: parseInt(date[1], 10),
+        day: parseInt(date[2], 10)
       };
     }
     return null;
   }
   format(date: NgbDateStruct | null): string {
-    return date ? this.leftPad(date.day.toString(),2,'0') + "/" + this.leftPad(date.month.toString(),2,'0') 
-    + "/" + date.year : '';
+    return date ? this.leftPad(date.day.toString(), 2, '0') + "/" + this.leftPad(date.month.toString(), 2, '0')
+      + "/" + date.year : '';
   }
-  leftPad(str: string, len: number, ch='.'): string {
+  leftPad(str: string, len: number, ch = '.'): string {
     len = len - str.length + 1;
     return len > 0 ?
       new Array(len).join(ch) + str : str;
@@ -117,10 +117,18 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
         element.value = wa;
       }
 
+      let condition = ""
+      element.filters?.forEach((elementFilter: any) => {
+        // myMap.set(element.columnName, element.value);
+        condition = condition + elementFilter.columnName + " = " + elementFilter.value + " and"
+      })
+      condition = condition.substring(0, condition.length - 4);
       if (element.type != 'input' && element.type != 'date' && element.type != 'number') {
         if (this.properties.id == 0) {
+
           if (element.loadState == 1) {
-            super.getListComboByTableName(element.tableName, element.columnName,"").subscribe(data => {
+
+            super.getListComboByTableName(element.tableName, element.columnName, condition).subscribe(data => {
               data.push([0, "- Seleccione -"]);
               data.sort();
               element.listData = data;
@@ -132,7 +140,7 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
           }
         } else {
           if (element.loadState == 1) {
-            super.getListComboByTableName(element.tableName, element.columnName,"").subscribe(data => {
+            super.getListComboByTableName(element.tableName, element.columnName, condition).subscribe(data => {
               console.log(data);
               data.push([0, "- Seleccione -"]);
               data.sort();
@@ -152,7 +160,7 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
             // let column = element?.load.tableName + "." + element?.load.loadBy;
             let selectValue = element.value;
             let myMap = new Map();
-            if(selectValue){
+            if (selectValue) {
               myMap.set(element?.load.loadBy, selectValue);
             }
             const convMap = this.mapToObjectMap(myMap);
@@ -193,18 +201,20 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
   }
   back() {
     console.log(this.properties.route);
-    
+
     this.router.navigate([this.properties.route]);
     //this._location.back();
-    
+
   }
   save() {
-    if(this.properties.preSave){
-      this.properties.preSave.forEach((element:any) => {
+    if (this.properties.preSave) {
+      this.properties.preSave.forEach((element: any) => {
         console.log(element);
-        
-          this.properties.columnsForm.push({tableName:this.properties.tableName, 
-            columnName:element.columnForm,value:element.value,type :"hidden"})
+
+        this.properties.columnsForm.push({
+          tableName: this.properties.tableName,
+          columnName: element.columnForm, value: element.value, type: "hidden"
+        })
       });
     }
     let myMap = new Map();
@@ -218,24 +228,24 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
             let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
             element.value = selectValue;
             myMap.set(element.columnName, selectValue);
-  
+
           } else {
             column = element?.tableName + "." + element?.relatedBy;
             let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
-            if(selectValue != "0"){
+            if (selectValue != "0") {
               element.value = selectValue;
               myMap.set(element.relatedBy, selectValue);
             }
-            
+
           }
-  
+
         }
-      }else if(element.type == "hidden"){
+      } else if (element.type == "hidden") {
         console.log(element.columnName, element.value);
-        
+
         myMap.set(element.columnName, element.value);
       }
-      
+
     });
     const convMap: any = {};
     myMap.forEach((val: string, key: string) => {

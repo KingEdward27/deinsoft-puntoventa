@@ -340,7 +340,6 @@ export class ActComprobanteFormComponent implements OnInit {
   }
   getListCnfMaestro() {
     this.loadingCnfMaestro = true;
-    console.log(this.chargingsb);
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
     if(cnfEmpresa == '*') {
       return this.cnfMaestroService.getAllDataCombo().subscribe(data => {

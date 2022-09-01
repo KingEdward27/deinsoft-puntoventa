@@ -3,6 +3,7 @@ import { CommonService } from '@/base/services/common.service';
 import { HttpClient } from '@angular/common/http';
 import { Component,OnInit} from '@angular/core';
 import { Router } from '@angular/router';
+import { AppService } from '@services/app.service';
 import { UtilService } from '@services/util.service';
 @Component({
   selector: 'app-seg-usuario',
@@ -22,9 +23,10 @@ export class SegUsuarioComponent extends GenericListComponent implements OnInit{
                   {tableName: "seg_rol",tableNameDetail: "seg_rol_usuario",
                     idValue:"seg_rol_id"
                     ,columnsForm: [
-                                    {tableName:"seg_rol", columnName:"nombre",type:"select",loadState:1,relatedBy:"seg_rol_id"},
-                                    {tableName:"cnf_empresa", columnName:"nombre",type:"select",loadState:1,relatedBy:"cnf_empresa_id"},
-                                    {tableName:"cnf_local", columnName:"nombre",type:"select",loadState:1,relatedBy:"cnf_local_id"}
+                                    {tableName:"seg_rol", columnName:"nombre",
+                                    type:"select",loadState:1,relatedBy:"seg_rol_id"},
+                                    {tableName:"cnf_local", columnName:"nombre",type:"select",loadState:1,
+                                    relatedBy:"cnf_local_id",filters:[]}
                                   ]
                   }
     ],
@@ -39,17 +41,25 @@ export class SegUsuarioComponent extends GenericListComponent implements OnInit{
     "conditions":[],
     "orders":["nombre"]
   }
-  constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 
+  constructor(private utilServices: UtilService,private httpClients:HttpClient,
+    private routers: Router,public _commonService:CommonService,private appService:AppService) { 
     super(utilServices,httpClients,routers,_commonService);
   }
   ngOnInit(): void {
     super.baseEndpoint = this.baseEndpoint;
+    let user = this.appService.getProfile();
+    console.log(user);
+    
+    let cnfEmpresa = user.profile.split("|")[1];
+    // this.prop.conditions.push({"columnName":"seg_usuario.cnf_empresa_id","value":cnfEmpresa});
+    // this.prop.childTables[0].columnsForm[1].filters.push({"columnName":"cnf_local.cnf_empresa_id","value":cnfEmpresa});
+    this.prop.preSave.push({columnForm:"cnf_empresa_id", "value":cnfEmpresa})
     super.properties = this.prop;
     console.log(this.prop);
     super.ngOnInit();
   }
   save(): void {
-    console.log("test desde cnf-org");
+    
   }
 }
 

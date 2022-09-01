@@ -151,5 +151,18 @@ export class ActComprobanteListFormComponent extends CommonReportFormComponent i
     })
     
   }
+  anular(item:any) {
+    if (item.flagEstado == '0'){
+      this.deps.utilService.msgWarning("No puede continuar","El comprobante ya se encuentra anulado")
+    }
+    this.deps.utilService.confirmOperation(null).then((result) => {
+      if (result) {
+        this.deps.actComprobanteService.invalidateActComprobante(item.id).subscribe(data => {
+          this.deps.utilService.msgOkOperation();
+          this.getListData();
+        })
+      }
+    });
+  }
 }
 

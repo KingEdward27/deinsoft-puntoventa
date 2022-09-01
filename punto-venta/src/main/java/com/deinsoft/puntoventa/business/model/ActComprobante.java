@@ -135,6 +135,10 @@ public class ActComprobante implements Serializable {
     @JsonIgnoreProperties(value = {"actComprobante"}, allowSetters = true)
     private Set<ActComprobanteDetalle> listActComprobanteDetalle;
 
+    @OneToOne
+    @JoinColumn(name = "seg_usuario_id")
+    private SegUsuario segUsuario;
+    
     public void addActComprobanteDetalle(ActComprobanteDetalle item) {
         item.setActComprobante(this);
     }
@@ -345,6 +349,14 @@ public class ActComprobante implements Serializable {
 
     public void setListActComprobanteDetalle(Set<ActComprobanteDetalle> listActComprobanteDetalle) {
         this.listActComprobanteDetalle = listActComprobanteDetalle;
+    }
+
+    public SegUsuario getSegUsuario() {
+        return segUsuario;
+    }
+
+    public void setSegUsuario(SegUsuario segUsuario) {
+        this.segUsuario = segUsuario;
     }
 
     @Override

@@ -36,7 +36,7 @@ export class CnfTipoDocumentoComponent extends GenericListComponent implements O
     super.ngOnInit();
   }
   save(): void {
-    console.log("test desde cnf-org");
+    
   }
 }
 

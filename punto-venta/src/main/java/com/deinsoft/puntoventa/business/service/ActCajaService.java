@@ -16,4 +16,6 @@ public interface ActCajaService extends CommonService<ActCaja>{
 	public ActCaja saveActCaja(ActCaja actCaja);
 	public List<ActCaja> getAllActCaja();
 	public void delete(long id);
+        
+        public List<ActCaja> getAllActCajaByCnfEmpresa(long id);
 }

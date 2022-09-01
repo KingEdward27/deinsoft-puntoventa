@@ -20,7 +20,7 @@ public class CnfFormaPagoDetalle implements Serializable {
 
     @Size(max = 10)
     @Column(name = "modo_dias_intervalo", length = 10, nullable = true)
-    private int modoDiasIntervalo;
+    private Integer modoDiasIntervalo;
 
     @Column(name = "modo_porcentaje", length = 16, nullable = true)
     private BigDecimal modoPorcentaje;
@@ -30,7 +30,7 @@ public class CnfFormaPagoDetalle implements Serializable {
 
     @Size(max = 10)
     @Column(name = "modo_dia_vencimiento", length = 10, nullable = true)
-    private int modoDiaVencimiento;
+    private Integer modoDiaVencimiento;
 
     @OneToOne
     @JoinColumn(name = "cnf_forma_pago_id")
@@ -44,13 +44,6 @@ public class CnfFormaPagoDetalle implements Serializable {
         this.id = id;
     }
 
-    public int getModoDiasIntervalo() {
-        return modoDiasIntervalo;
-    }
-
-    public void setModoDiasIntervalo(int modoDiasIntervalo) {
-        this.modoDiasIntervalo = modoDiasIntervalo;
-    }
 
     public BigDecimal getModoPorcentaje() {
         return modoPorcentaje;
@@ -68,11 +61,19 @@ public class CnfFormaPagoDetalle implements Serializable {
         this.modoMonto = modoMonto;
     }
 
-    public int getModoDiaVencimiento() {
+    public Integer getModoDiasIntervalo() {
+        return modoDiasIntervalo;
+    }
+
+    public void setModoDiasIntervalo(Integer modoDiasIntervalo) {
+        this.modoDiasIntervalo = modoDiasIntervalo;
+    }
+
+    public Integer getModoDiaVencimiento() {
         return modoDiaVencimiento;
     }
 
-    public void setModoDiaVencimiento(int modoDiaVencimiento) {
+    public void setModoDiaVencimiento(Integer modoDiaVencimiento) {
         this.modoDiaVencimiento = modoDiaVencimiento;
     }
 

@@ -221,6 +221,8 @@
                                                     translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.total' | translate}}
                                                 </th>
+                                                <th class="text-nowrap">{{'webpagos.act_comprobante.flag_estado' |
+                                                    translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.envio_pse_flag' |
                                                     translate}}</th>
                                                 <th width="1%" class="text-nowrap">{{'webpagos.actionsText' |
@@ -241,17 +243,18 @@
                                                     item.cnfMaestro.apellidoMaterno + ' ' + item.cnfMaestro.nombres}}
                                                 </td>
                                                 <td class="content-number">{{item.total | number:'1.2-2'}}</td>
+                                                <td>{{item.flagEstado == '1'? "Registrado":"Anulado"}}</td>
                                                 <td>{{item.envio_pse_flag == '1'?"ENVIADO":"RECHAZADO"}}</td>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col-lg-4 col-sm-6 col-xs-6"><a (click) = "print(item)" style="cursor: pointer;"
-                                                                title="Cambiar estado"><i
+                                                                title="Imprimir"><i
                                                                     class="fa fa-print fa-md"></i></a></div>
-                                                        <div class="col-lg-4 col-sm-6 col-xs-6"><a (click) = "sendApi(item)" style="cursor: pointer;"
-                                                                title="Cambiar estado"><i
+                                                        <div *ngIf="item.flagEstado != '0'" class="col-lg-4 col-sm-6 col-xs-6"><a (click) = "sendApi(item)" style="cursor: pointer;"
+                                                                title="Enviar comprobante a SUNAT"><i
                                                                     class="fa fa-cloud-upload-alt fa-md"></i></a></div>
-                                                        <div class="col-lg-4 col-sm-6 col-xs-6"><a style="cursor: pointer;"
-                                                                title="Anular"><i
+                                                        <div *ngIf="item.flagEstado != '0'" class="col-lg-4 col-sm-6 col-xs-6"><a style="cursor: pointer;"
+                                                                title="Anular" (click) = "anular(item)"><i
                                                                     class="fa fa-ban fa-md"></i></a></div>
                                                     </div>
                                                 </td>

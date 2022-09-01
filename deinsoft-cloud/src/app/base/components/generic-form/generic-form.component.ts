@@ -138,20 +138,10 @@ export class GenericFormComponent extends CommonService implements OnInit {
       if (element.type != 'input' && element.type != 'date') {
         if (this.properties.id == 0) {
           if (element.loadState == 1) {
-            // let myMap = new Map();
             let condition = ""
             element.filters?.forEach((elementFilter: any) => {
-              // myMap.set(element.columnName, element.value);
               condition = condition + elementFilter.columnName + " = " + elementFilter.value + " and"
             })
-            // const convMap: any = {};
-            // myMap.forEach((val: string, key: string) => {
-            //   convMap[key] = val;
-            // });
-            // console.log(convMap);
-            //this.properties.filters = convMap;
-            console.log(condition);
-            
             condition = condition.substring(0,condition.length-4);
             super.getListComboByTableName(element.tableName, element.columnName,condition).subscribe(data => {
               data.push([0, "- Seleccione -"]);
@@ -235,7 +225,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
           element.tableNameDetail + "." + columnForm.tableName + "_id" + " = " + columnForm.tableName + "." + columnForm.tableName + "_id"
         }
       });
-      super.selectByTableNameAndColumns(tableName,columns,element.idValue + " = "+this.properties.id)
+      super.selectByTableNameAndColumns(tableName,columns,element.tableNameDetail + "." + this.properties.tableName + "_id" + " = "+this.properties.id)
       .subscribe(data => {
         console.log(data);
         

@@ -2,15 +2,15 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { environment } from 'environments/environment';
 import { Observable } from 'rxjs/internal/Observable';
-import { SegUsuario } from './seg-usuario.model';
-import { environment } from 'src/environments/environment';
+import { SegUsuario } from '../model/seg-usuario.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SegUsuarioService {
-  url:string  = environment.apiUrl;
+  url:string  = environment.apiUrl + '/api/business/seg-usuario';
   constructor(private http: HttpClient,
               private router: Router) { 
   }

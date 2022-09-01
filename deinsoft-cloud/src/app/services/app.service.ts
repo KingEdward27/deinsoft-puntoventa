@@ -83,23 +83,18 @@ export class AppService {
         try {
             //this.user = {name:"edward","picture":"logo.png"};
             let tokenDecrypt = helper.decodeToken(localStorage.getItem('token'));
-            console.log(tokenDecrypt);
+            // console.log(tokenDecrypt);
             this.user = tokenDecrypt.user
             this.user.profile = tokenDecrypt.authorities[0].authority;
             console.log(this.user);
 
-            if(this.user.profile.includes('ROLE_ADMIN')){
+            if(this.user.profile.includes('ROLE_SUPER_ADMIN')){
                 this.user.menu = [
                     {
                         name: 'Dashboard',
                         path: ['/'],
                         icon :"fa-tachometer-alt"
                     },
-                    // {
-                    //     name: 'Blank',
-                    //     path: ['/blank'],
-                    //     icon :"fa-tachometer-alt"
-                    // },
                     {
                         name: 'Administración',
                         icon :"fa-user-shield",
@@ -125,9 +120,11 @@ export class AppService {
                         name: 'Configuración',
                         icon :"fa-cog",
                         children: [
+                            {name: 'Usuarios',path: ['/usuario-empresa']},
                             {name: 'Tipo de comprobante',path: ['/tipo-comprobante']},
                             {name: 'Numeración de comprobante',path: ['/numcomprobante']},
                             {name: 'Forma de Pago',path: ['/forma-pago']},
+                            {name: 'Caja',path: ['/caja']},
                             {name: 'Clientes y Proveedores',path: ['/maestro']}
                         ]
                     },
@@ -155,6 +152,103 @@ export class AppService {
                         ]
                     },
                     {
+                        name: 'Caja',
+                        icon :"fa-money-bill",
+                        children: [
+                            {name: 'Turno de Caja',path: ['/act-caja-turno']},
+                            {name: 'Cuentas x pagar',path: ['/cuentas-pagar']},
+                            {name: 'Cuentas x cobrar',path: ['/cuentas-cobrar']}
+                        ]
+                    },
+                    {
+                        name: 'Reportes',
+                        icon :"fa-file",
+                        children: [
+                            {name: 'Reporte Ventas',path: ['/rpt-ventas']},
+                            {name: 'Reporte Compras',path: ['/rpt-compras']},
+                            {name: 'Stock Valorizado',path: ['/rpt-almacen']},
+                            {name: 'Kardex Valorizado',path: ['/rpt-movimiento-producto']}
+                        ]
+                    }
+                ];
+            }else if(this.user.profile.includes('ROLE_ADMIN')){
+                this.user.menu = [
+                    {
+                        name: 'Dashboard',
+                        path: ['/'],
+                        icon :"fa-tachometer-alt"
+                    },
+                    // {
+                    //     name: 'Blank',
+                    //     path: ['/blank'],
+                    //     icon :"fa-tachometer-alt"
+                    // },
+                    // {
+                    //     name: 'Administración',
+                    //     icon :"fa-user-shield",
+                    //     children: [
+                    //         {name: 'Región',path: ['/region']},
+                    //         {name: 'Provincia',path: ['/provincia']},
+                    //         {name: 'Distrito',path: ['/distrito']},
+                    //         {name: 'Tipo de documento de identidad',path: ['/tipo-documento']},
+                    //         {name: 'Moneda',path: ['/moneda']},
+                    //         {name: 'Empresa',path: ['/empresa']},
+                    //         {name: 'Unidad Medida',path: ['/unidadmedida']}
+                    //     ]
+                    // },
+                    {
+                        name: 'Seguridad',
+                        icon :"fa-shield-alt",
+                        children: [
+                            {name: 'Perfiles',path: ['/perfil']},
+                            {name: 'Usuarios',path: ['/usuario']}
+                        ]
+                    },
+                    {
+                        name: 'Configuración',
+                        icon :"fa-cog",
+                        children: [
+                            {name: 'Usuarios',path: ['/usuario-empresa']},
+                            {name: 'Tipo de comprobante',path: ['/tipo-comprobante']},
+                            {name: 'Numeración de comprobante',path: ['/numcomprobante']},
+                            {name: 'Forma de Pago',path: ['/forma-pago']},
+                            {name: 'Caja',path: ['/caja']},
+                            {name: 'Clientes y Proveedores',path: ['/maestro']}
+                        ]
+                    },
+                    {
+                        name: 'Inventario',
+                        icon :"fa-box",
+                        children: [
+                            {name: 'Local',path: ['/local']},
+                            {name: 'Almacen',path: ['/almacen']},
+                            {name: 'Marca',path: ['/marca']},
+                            {name: 'Categoría',path: ['/categoria']},
+                            {name: 'Sub Categoría',path: ['/subcategoria']},
+                            {name: 'Unidad Medida',path: ['/unidadmedida']},
+                            {name: 'Producto',path: ['/producto']},
+                            {name: 'Almacén',path: ['/almacen']},
+                            {name: 'Compra',path: ['/compra']}
+                        ]
+                    },
+                    {
+                        name: 'Ventas',
+                        icon :"fa-cart-plus",
+                        children: [
+                            {name: 'Venta',path: ['/venta']},
+                            {name: 'Listado Ventas',path: ['/list-ventas']}
+                        ]
+                    },
+                    {
+                        name: 'Caja',
+                        icon :"fa-money-bill",
+                        children: [
+                            {name: 'Turno de Caja',path: ['/act-caja-turno']},
+                            {name: 'Cuentas x pagar',path: ['/cuentas-pagar']},
+                            {name: 'Cuentas x cobrar',path: ['/cuentas-cobrar']}
+                        ]
+                    },
+                    {
                         name: 'Reportes',
                         icon :"fa-file",
                         children: [
@@ -176,9 +270,11 @@ export class AppService {
                         name: 'Configuración',
                         icon :"fa-cog",
                         children: [
+                            {name: 'Usuarios',path: ['/usuario-empresa']},
                             {name: 'Tipo de comprobante',path: ['/tipo-comprobante']},
                             {name: 'Numeración de comprobante',path: ['/numcomprobante']},
                             {name: 'Forma de Pago',path: ['/forma-pago']},
+                            {name: 'Caja',path: ['/caja']},
                             {name: 'Clientes y Proveedores',path: ['/maestro']}
                         ]
                     },
@@ -202,6 +298,15 @@ export class AppService {
                         children: [
                             {name: 'Venta',path: ['/venta']},
                             {name: 'Listado Ventas',path: ['/list-ventas']}
+                        ]
+                    },
+                    {
+                        name: 'Caja',
+                        icon :"fa-money-bill",
+                        children: [
+                            {name: 'Turno de Caja',path: ['/act-caja-turno']},
+                            {name: 'Cuentas x pagar',path: ['/cuentas-pagar']},
+                            {name: 'Cuentas x cobrar',path: ['/cuentas-cobrar']}
                         ]
                     },
                     {

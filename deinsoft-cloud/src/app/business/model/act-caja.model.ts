@@ -1,6 +1,6 @@
 
 export class ActCaja {
-	id: int = "";
+	id: number = 0;
 	nombre: string = "";
 	estado: string = "";
 	token?: string = "";

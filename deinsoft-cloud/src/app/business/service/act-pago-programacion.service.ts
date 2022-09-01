@@ -2,15 +2,15 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { environment } from 'environments/environment';
 import { Observable } from 'rxjs/internal/Observable';
-import { ActPagoProgramacion } from './act-pago-programacion.model';
-import { environment } from 'src/environments/environment';
+import { ActPagoProgramacion } from '../model/act-pago-programacion.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActPagoProgramacionService {
-  url:string  = environment.apiUrl;
+  url:string  = environment.apiUrl + '/api/business/act-pago-programacion';
   constructor(private http: HttpClient,
               private router: Router) { 
   }
@@ -36,5 +36,15 @@ export class ActPagoProgramacionService {
     let params = new HttpParams().set("id",arg1);
     return this.http.delete(this.url+'/delete-act-pago-programacion', { observe: 'response' ,params}); 
   }
+  public getAllByCnfMaestroId(id:number,fecha:any):Observable<any>{
+    let params = new HttpParams().set("id",id.toString())
+    .set("fechaVencimiento",fecha);
+    return this.http.get<ActPagoProgramacion[]>(`${this.url}/get-all-act-pago-programacion-by-cnf-maestro`,{params});
+  } 
+  public getAllCompraByCnfMaestroId(id:number,fecha:any):Observable<any>{
+    let params = new HttpParams().set("id",id.toString())
+    .set("fechaVencimiento",fecha);
+    return this.http.get<ActPagoProgramacion[]>(`${this.url}/get-all-act-pago-programacion-compra-by-cnf-maestro`,{params});
+  } 
 }
 

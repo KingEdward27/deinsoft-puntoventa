@@ -13,6 +13,10 @@ import { CnfEmpresaService } from '@/business/service/cnf-empresa.service';
 import { CnfTipoDocumentoService } from '@/business/service/cnf-tipo-documento.service';
 import { CnfDistritoService } from '@/business/service/cnf-distrito.service';
 import { AppService } from '@services/app.service';
+import { CnfRegionService } from '@/business/service/cnf-region.service';
+import { CnfProvinciaService } from '@/business/service/cnf-provincia.service';
+import { CnfRegion } from '@/business/model/cnf-region.model';
+import { CnfProvincia } from '@/business/model/cnf-provincia.model';
 
 @Component({
   selector: 'ngbd-modal-content',
@@ -40,9 +44,23 @@ export class CnfMaestroFormModalComponent implements OnInit {
   selectDefaultCnfEmpresa: any = { id: 0, name: "- Seleccione -" }; listCnfEmpresa: any;
   cnfEmpresa: CnfEmpresa = new CnfEmpresa();
   loadingCnfEmpresa: boolean = false;
-  selectDefaultCnfDistrito: any = { id: 0, name: "- Seleccione -" }; listCnfDistrito: any;
+
+  selectDefaultCnfRegion: any = { id: 0, name: "- Seleccione -" }; 
+  listCnfRegion: any;
+  cnfRegion: CnfRegion = new CnfRegion();
+  loadingCnfRegion: boolean = false;
+
+  selectDefaultCnfProvincia: any = { id: 0, name: "- Seleccione -" }; 
+  listCnfProvincia: any;
+  cnfProvincia: CnfProvincia = new CnfProvincia();
+  loadingCnfProvincia: boolean = false;
+
+  selectDefaultCnfDistrito: any = { id: 0, name: "- Seleccione -" }; 
+  listCnfDistrito: any;
   cnfDistrito: CnfDistrito = new CnfDistrito();
   loadingCnfDistrito: boolean = false;
+  selectedCnfRegion: CnfRegion = new CnfRegion();
+  selectedCnfProvincia: CnfProvincia = new CnfProvincia();
   protected redirect: string = "/cnf-maestro";
   selectedOption: any;
   passwordRepeat: any;
@@ -54,7 +72,8 @@ export class CnfMaestroFormModalComponent implements OnInit {
     private cnfEmpresaService: CnfEmpresaService,
     private cnfDistritoService: CnfDistritoService,
     private route: ActivatedRoute,public activeModal: NgbActiveModal,
-    private appService:AppService) {
+    private appService:AppService,private cnfRegionService:CnfRegionService,
+    private cnfProvinciaService:CnfProvinciaService) {
   }
   ngOnInit(): void {
     this.isDataLoaded = false;
@@ -66,7 +85,7 @@ export class CnfMaestroFormModalComponent implements OnInit {
   loadData() {
     this.getListCnfTipoDocumento();
     this.getListCnfEmpresa();
-    this.getListCnfDistrito();
+    this.getListCnfRegion();
     return this.route.paramMap.subscribe(params => {
       this.id = params.get('id')!;
       console.log(this.id);
@@ -151,6 +170,47 @@ export class CnfMaestroFormModalComponent implements OnInit {
 
   }
   compareCnfDistrito(a1: CnfDistrito, a2: CnfDistrito): boolean {
+    if (a1 === undefined && a2 === undefined) {
+      return true;
+    }
+
+    return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
+      ? false : a1.id === a2.id;
+  }
+  getListCnfRegion() {
+    this.loadingCnfRegion = true;
+    return this.cnfRegionService.getAllDataCombo().subscribe(data => {
+      console.log(data);
+      
+      this.listCnfRegion = data;
+      this.loadingCnfRegion = false;
+    })
+
+  }
+  loadCnfProvincia(selectedCnfRegion: CnfRegion) {
+    this.chargingsb = true;
+    return this.cnfProvinciaService.getAllByCnfRegionId(selectedCnfRegion.id).subscribe(data => {
+      this.listCnfProvincia = data;
+      this.listCnfProvincia.id = 0;
+    })
+  }
+  loadCnfDistrito(selectedCnfProvince: CnfProvincia) {
+    this.chargingsb = true;
+    console.log(selectedCnfProvince);
+    return this.cnfDistritoService.getAllByCnfProvinciaId(selectedCnfProvince.id).subscribe(data => {
+      this.listCnfDistrito = data;
+      this.listCnfDistrito.id = 0;
+    })
+  }
+  compareCnfRegion(a1: CnfRegion, a2: CnfRegion): boolean {
+    if (a1 === undefined && a2 === undefined) {
+      return true;
+    }
+
+    return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
+      ? false : a1.id === a2.id;
+  }
+  compareCnfProvincia(a1: CnfProvincia, a2: CnfProvincia): boolean {
     if (a1 === undefined && a2 === undefined) {
       return true;
     }

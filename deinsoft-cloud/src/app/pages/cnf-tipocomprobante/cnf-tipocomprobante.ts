@@ -38,7 +38,7 @@ export class CnfTipoComprobanteComponent extends GenericListComponent implements
     super.ngOnInit();
   }
   save(): void {
-    console.log("test desde cnf-org");
+    
   }
 }
 

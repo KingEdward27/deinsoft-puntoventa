@@ -140,7 +140,9 @@
       "correo": "Correo",
       "telefono": "Teléfono",
       "cnf_tipo_documento":"Tipo doc identidad",
-      "cnf_distrito":"Distrito"
+      "cnf_distrito":"Distrito",
+      "cnf_region":"Departamento",
+      "cnf_provincia":"Provincia"
     },
     "cnf_forma_pago": {
       "home": {
@@ -149,11 +151,13 @@
         "subTitleList": " Listado de Centros de Costo"
       },
       "id": "ID",
-      "nombre": "Forma de pago"
+      "nombre": "Forma de pago",
+      "cnf_forma_pago_detalle":"Programación de formas de pago"
     },
     "act_comprobante": {
       "home": {
         "title": "Venta de Productos y Servicios",
+        "titleCompra": "Compra de Productos",
         "subTitleForm": " Mantenimiento de Centro de Costo",
         "subTitleList": " Listado de Centros de Costo"
       },
@@ -179,7 +183,8 @@
       "proveedor":"Proveedor",
       "fechaDesde":"Fecha inicio",
       "fechaHasta":"Fecha fin",
-      "envio_pse_flag":"Envío SUNAT"
+      "envio_pse_flag":"Envío SUNAT",
+      "fecha_vencimiento":"Fecha vencimiento"
     },
     "act_comprobante_detalle": {
       "home": {
@@ -231,7 +236,8 @@
         "subTitleList": " Listado de Centros de Costo"
       },
       "id": "ID",
-      "nombre": "Unidad de Medida"
+      "nombre": "Unidad de Medida",
+      "codigo_sunat": "Código SUNAT"
     },
     "cnf_categoria": {
       "home": {
@@ -296,7 +302,8 @@
       "nombre": "Usuario",
       "email": "Correo electrónico",
       "password": "Contraseña",
-      "password2": "repita contraseña"
+      "password2": "repita contraseña",
+      "seg_rol":"Roles"
     },
     "inv_almacen_producto": {
       "home": {
@@ -320,6 +327,56 @@
       "modo_porcentaje":"Porcentaje",
       "modo_monto": "Monto",
       "modo_dia_vencimiento": "Día del mes a vencer"
+    },
+    "act_pago_programacion": {
+      "home": {
+        "title": "Cuentas por cobrar",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "cnf_maestro":"Cliente/Proveedor",
+      "fecha_vencimiento":"Fecha vencimiento",
+      "monto": "Monto",
+      "monto_pendiente": "Monto pendiente",
+      "monto_pagar": "Monto a pagar"
+    },
+    "act_pago_programacion_compra": {
+      "home": {
+        "title": "Cuentas por pagar",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "cnf_maestro":"Cliente/Proveedor",
+      "fecha_vencimiento":"Fecha vencimiento",
+      "monto": "Monto",
+      "monto_pendiente": "Monto pendiente",
+      "monto_pagar": "Monto a pagar"
+    },
+    "act_caja": {
+      "home": {
+        "title": "Caja",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre":"Caja"
+    },
+    "act_caja_turno": {
+      "home": {
+        "title": "Turnos de caja",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "act_caja":"Caja",
+      "seg_usuario":"Usuario",
+      "fecha_apertura":"Fecha apertura",
+      "monto_apertura":"Monto apertura",
+      "fecha_cierre":"Fecha cierre",
+      "monto_cierre":"Monto cierre",
+      "estado":"Estado"
     },
     "reportes": {
       "act_comprobante_listado":"Listado de Ventas",

@@ -15,6 +15,7 @@ import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.service.ActCajaOperacionService;
 
 @RestController
+@RequestMapping("/api/business/act-caja-operacion")
 public class ActCajaOperacionController extends CommonController<ActCajaOperacion, ActCajaOperacionService> {
 
     private static final Logger logger = LoggerFactory.getLogger(ActCajaOperacionController.class);

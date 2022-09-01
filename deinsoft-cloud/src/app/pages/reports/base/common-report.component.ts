@@ -36,6 +36,8 @@ import { ActComprobanteService } from '@pages/act-comprobante/act-comprobante.se
 import { ParamBean } from './ParamReports';
 import { InvAlmacenProductoService } from '@/business/service/inv-almacen-producto.service';
 import { InvMovimientoProductoService } from '@/business/service/inv-movimiento-producto.service';
+import { ActPagoProgramacionService } from '@/business/service/act-pago-programacion.service';
+import { ActPagoService } from '@/business/service/act-pago.service';
 
 @Injectable()
 export class MyBaseComponentDependences {
@@ -56,9 +58,12 @@ export class MyBaseComponentDependences {
     public dateAdapter: NgbDateAdapter<dayjs.Dayjs>,
     public ngbCalendar: NgbCalendar,
     public modalService: NgbModal,
-    public route: ActivatedRoute, config: NgbModalConfig,public appService:AppService,
+    public route: ActivatedRoute, config: NgbModalConfig,
+    public appService:AppService,
     public invAlmacenProductoService: InvAlmacenProductoService,
-    public invMovimientoProductoService: InvMovimientoProductoService
+    public invMovimientoProductoService: InvMovimientoProductoService,
+    public actPagoProgramacionService:ActPagoProgramacionService,
+    public actPagoService:ActPagoService
   ) { }
 }
 @Directive()
@@ -117,6 +122,8 @@ export class CommonReportFormComponent implements OnInit {
   listData:any;
   titleExport:any;
   datablesSettings:any
+  indexInputs:any;
+  datablesSettingsWithInputs:any;
   constructor(public deps: MyBaseComponentDependences) {
   }
   ngOnInit(): void {
@@ -158,6 +165,62 @@ export class CommonReportFormComponent implements OnInit {
         }
       },
 
+      ],
+      language: {
+        url: 'assets/i18n/datatables/lang' + lang?.toUpperCase() + '.json'
+        // emptyTable: '',
+        // zeroRecords: 'No hay coincidencias',
+        // lengthMenu: 'Mostrar _MENU_ elementos',
+        // search: 'Buscar:',
+        // info: 'De _START_ a _END_ de _TOTAL_ elementos',
+        // infoEmpty: 'De 0 a 0 de 0 elementos',
+        // infoFiltered: '(filtrados de _MAX_ elementos totales)',
+        // paginate: {
+        //   first: 'Prim.',
+        //   last: 'Últ.',
+        //   next: 'Sig.',
+        //   previous: 'Ant.'
+        // }
+      }
+    }
+    this.datablesSettingsWithInputs = {
+      deferRender: true,
+      deferLoading: 7,
+      pagingType: 'full_numbers',
+      searching: false,
+      processing: true,
+      lengthMenu: [25, 50, 100],
+      order: [[0, "asc"]],
+      dom: 'lBftip',
+      buttons: [{
+        extend: 'excel',
+        title : this.titleExport,
+        text: '<i class="fa fa-file-excel"></i>&nbsp; XLS',
+        exportOptions: {
+          columns: ':visible'
+        }
+      },
+      {
+        extend: 'pdf',
+        title : this.titleExport,
+        text: ' <i class="fa fa-file-pdf"></i>&nbsp; PDF',
+        orientation: 'landscape'
+      },
+      {
+        extend: 'csv',
+        title : this.titleExport,
+        text: '<i class="fa fa-file-excel"></i>&nbsp; CSV',
+        exportOptions: {
+          columns: ':visible'
+        }
+      },
+      
+      ],
+      columnDefs: [
+        {
+            orderable: false,
+            targets: this.indexInputs,
+        },
       ],
       language: {
         url: 'assets/i18n/datatables/lang' + lang?.toUpperCase() + '.json'
@@ -236,11 +299,19 @@ export class CommonReportFormComponent implements OnInit {
   }
   getListCnfMaestro() {
     this.loadingCnfMaestro = true;
-    console.log(this.chargingsb);
-    return this.deps.cnfMaestroService.getAllDataCombo().subscribe(data => {
-      this.listCnfMaestro = data;
-      this.loadingCnfMaestro = false;
-    })
+    let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
+    if(cnfEmpresa == '*') {
+      return this.deps.cnfMaestroService.getAllDataCombo().subscribe(data => {
+        this.listCnfMaestro = data;
+        this.loadingCnfMaestro = false;
+      })
+    }else{
+      return this.deps.cnfMaestroService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
+        this.listCnfMaestro = data;
+        this.loadingCnfMaestro = false;
+      })
+    }
+    
 
   }
   getListImpuestoCondicion() {

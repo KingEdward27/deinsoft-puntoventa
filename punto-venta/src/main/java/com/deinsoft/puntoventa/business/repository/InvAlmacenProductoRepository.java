@@ -25,6 +25,10 @@ public interface InvAlmacenProductoRepository extends JpaRepository<InvAlmacenPr
     List<InvAlmacenProducto> findByCnfProductoId(long id);
 
     @Query(value = "select p from invAlmacenProducto p "
+            + "where p.cnfProducto.id =  ?1 and p.invAlmacen.id =  ?2")
+    InvAlmacenProducto findByCnfProductoIdAndInvAlmacenId(long productoId,long almacenId);
+    
+    @Query(value = "select p from invAlmacenProducto p "
             + "where (:#{#paramBean.cnfLocal.id} = 0l or p.invAlmacen.cnfLocal.id = :#{#paramBean.cnfLocal.id}) "
             + "and (:#{#paramBean.invAlmacen.id} = 0l or p.invAlmacen.id = :#{#paramBean.invAlmacen.id}) ")
     List<InvAlmacenProducto> getReportInvAlmacen(@Param("paramBean") ParamBean paramBean);

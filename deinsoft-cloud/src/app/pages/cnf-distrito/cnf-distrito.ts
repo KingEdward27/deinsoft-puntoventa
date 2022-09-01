@@ -36,7 +36,7 @@ export class CnfDistritoComponent extends GenericListComponent implements OnInit
     super.ngOnInit();
   }
   save(): void {
-    console.log("test desde cnf-org");
+    
   }
 }
 

@@ -9,12 +9,18 @@ import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 
 @Service
 @Transactional
-public interface ActCajaTurnoService extends CommonService<ActCajaTurno>{
-	
-	public List<ActCajaTurno> getAllActCajaTurno(ActCajaTurno actCajaTurno);
-	public ActCajaTurno getActCajaTurno(Long id);
-	public ActCajaTurno saveActCajaTurno(ActCajaTurno actCajaTurno);
-	public List<ActCajaTurno> getAllActCajaTurno();
-  public List<ActCajaTurno> getAllActCajaTurnoBySegUsuario(long id);
-	public void delete(long id);
+public interface ActCajaTurnoService extends CommonService<ActCajaTurno> {
+
+    public List<ActCajaTurno> getAllActCajaTurno(ActCajaTurno actCajaTurno);
+
+    public ActCajaTurno getActCajaTurno(Long id);
+
+    public ActCajaTurno saveActCajaTurno(ActCajaTurno actCajaTurno) throws Exception;
+
+    public List<ActCajaTurno> getAllActCajaTurno();
+
+    public List<ActCajaTurno> getAllActCajaTurnoBySegUsuario(long id);
+
+    public void delete(long id);
+
 }

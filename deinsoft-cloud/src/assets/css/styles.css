@@ -205,3 +205,6 @@ table.dataTable tbody td {
 table.dataTable{
   width: 100% !important;
 }
+tfoot>tr>td{
+  font-weight: bold;
+}

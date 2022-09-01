@@ -13,24 +13,32 @@ import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.business.repository.ActComprobanteRepository;
 import com.deinsoft.puntoventa.business.service.ActComprobanteService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
+import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 import com.deinsoft.puntoventa.business.model.ActComprobanteDetalle;
 import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.model.CnfFormaPagoDetalle;
 import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
 import com.deinsoft.puntoventa.business.model.InvAlmacenProducto;
 import com.deinsoft.puntoventa.business.model.InvMovimientoProducto;
+import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
+import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
 import com.deinsoft.puntoventa.business.repository.ActComprobanteDetalleRepository;
 import com.deinsoft.puntoventa.business.repository.ActPagoProgramacionRepository;
 import com.deinsoft.puntoventa.business.repository.CnfFormaPagoDetalleRepository;
 import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
 import com.deinsoft.puntoventa.business.repository.InvAlmacenProductoRepository;
 import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoRepository;
+import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
@@ -59,6 +67,12 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     @Autowired
     ActPagoProgramacionRepository actPagoProgramacionRepository;
 
+    @Autowired
+    ActCajaTurnoRepository actCajaTurnoRepository;
+
+    @Autowired
+    ActCajaOperacionRepository actCajaOperacionRepository;
+
     public List<ActComprobante> getAllActComprobante(ActComprobante actComprobante) {
         List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getAllActComprobante(
                 actComprobante.getSerie().toUpperCase(), actComprobante.getNumero().toUpperCase(),
@@ -86,10 +100,24 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     @Override
     public ActComprobante saveActComprobante(ActComprobante actComprobante) throws Exception {
         ActComprobante actComprobanteResult = null;
+
+        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actComprobante.getSegUsuario().getId());
+        actCajaTurno = actCajaTurno.stream()
+                .filter(item -> item.getEstado().equals("1"))
+                .collect(Collectors.toList());
+        if (actCajaTurno.isEmpty()) {
+            throw new Exception("El usuario no tiene caja aperturada");
+        }
         try {
             List<CnfNumComprobante> numComprobante = cnfNumComprobanteRepository.findByCnfTipoComprobanteIdAndCnfLocalId(
                     actComprobante.getCnfTipoComprobante().getId(),
                     actComprobante.getCnfLocal().getId());
+            if (numComprobante.isEmpty()) {
+                throw new Exception("No existe numeración para el tipo de comprobante y el local");
+            }
+            if (numComprobante.isEmpty()) {
+                throw new Exception("No existe numeración para el tipo de comprobante y el local");
+            }
             if (numComprobante.isEmpty()) {
                 throw new Exception("No existe numeración para el tipo de comprobante y el local");
             }
@@ -134,45 +162,11 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             });
 
             //save pagos programacion
-            BigDecimal pending = actComprobante.getTotal();
-            LocalDate dueDate = actComprobante.getFecha();
-            for (CnfFormaPagoDetalle cnfFormaPagoDetalle
-                    : cnfFormaPagoDetalleRepository.findByCnfFormaPagoId(actComprobante.getCnfFormaPago().getId())) {
-                ActPagoProgramacion p = new ActPagoProgramacion();
-                p.setActComprobante(actComprobante);
+            
+            saveActPagoProgramacion(actComprobante, actCajaTurno);
 
-                if (cnfFormaPagoDetalle.getModoDiaVencimiento() != 0) {
-                    p.setFecha(actComprobante.getFecha());
-                    p.setFechaVencimiento(actComprobante.getFecha()
-                            .plusDays(cnfFormaPagoDetalle.getModoDiaVencimiento()));
-                    p.setMonto(cnfFormaPagoDetalle.getModoMonto());
-                    p.setMontoPendiente(cnfFormaPagoDetalle.getModoMonto());
-                } else if (cnfFormaPagoDetalle.getModoPorcentaje() != null) {
-                    p.setFechaVencimiento(actComprobante.getFecha()
-                            .plusDays(cnfFormaPagoDetalle.getModoDiasIntervalo()));
-                    //actPayment.setTotalamt(actInvoice.getGrandtotal()
-                    //				.multiply(cnfTendertypeSchedule.getPercent().divide(new BigDecimal(100))))
-                    p.setMonto(actComprobante.getTotal().multiply(cnfFormaPagoDetalle.getModoPorcentaje().divide(new BigDecimal(100))));
+            
 
-                } else {
-                    if (pending.compareTo(cnfFormaPagoDetalle.getModoMonto()) == -1) {
-                        p.setMonto(pending);
-                    }
-                    p.setMonto(cnfFormaPagoDetalle.getModoMonto());
-                }
-                pending = pending.subtract(p.getMonto());
-                p.setMontoPendiente(p.getMonto());
-                actPagoProgramacionRepository.save(p);
-            }
-            if (pending.compareTo(BigDecimal.ZERO) == 1) {
-                ActPagoProgramacion actPayment = new ActPagoProgramacion();
-                actPayment.setActComprobante(actComprobante);
-                actPayment.setFecha(actComprobante.getFecha());
-                actPayment.setFechaVencimiento(dueDate.plusDays(30));
-                actPayment.setMonto(pending);
-                actPayment.setMontoPendiente(actPayment.getMonto());
-                actPagoProgramacionRepository.save(actPayment);
-            }
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //            e.printStackTrace();
@@ -182,10 +176,20 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         return actComprobanteResult;
     }
 
+    
+
     @Transactional
     @Override
     public ActComprobante saveActComprobanteCompra(ActComprobante actComprobante) throws Exception {
         ActComprobante actComprobanteResult = null;
+
+//        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actComprobante.getSegUsuario().getId());
+//        actCajaTurno = actCajaTurno.stream()
+//                .filter(item -> item.getEstado().equals("1"))
+//                .collect(Collectors.toList());
+//        if (actCajaTurno.isEmpty()) {
+//            throw new Exception("El usuario no tiene caja aperturada");
+//        }
         try {
             actComprobante.setFechaRegistro(LocalDateTime.now());
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
@@ -224,6 +228,9 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                 mov.setValor(data.getPrecio());
                 invMovimientoProductoRepository.save(mov);
             });
+            //save pagos programacion
+            
+            saveActPagoProgramacion(actComprobante, null);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //            e.printStackTrace();
@@ -283,5 +290,135 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     public List<ActComprobante> getReportActComprobante(ParamBean paramBean) {
         List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getReportActComprobante(paramBean);
         return actComprobanteList;
+    }
+
+    @Transactional
+    @Override
+    public String invalidate(long id) throws Exception {
+        String result = "";
+        try {
+            ActComprobante actInvoice = getActComprobante(id);
+            if (!"1".equals(actInvoice.getFlagEstado())) {
+                result = "El documento no se encuentra en estado Registrado";
+                throw new Exception(result);
+            }
+            // clean in actOrder
+            for (ActComprobanteDetalle item : actInvoice.getListActComprobanteDetalle()) {
+//                List<ActOrderLine> listActOrderline = actOrderLineService.findByActInvoiceId(item.getId());
+//                for (ActOrderLine actOrderLine : listActOrderline) {
+//                    actOrderLine.setActInvoiceLine(null);
+//                    actOrderLineService.save(actOrderLine);
+//                }
+                // update balance
+                if (!item.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
+                    InvAlmacenProducto invBalance
+                            = invAlmacenProductoRepository.findByCnfProductoIdAndInvAlmacenId(
+                                    item.getCnfProducto().getId(), actInvoice.getInvAlmacen().getId());
+                    BigDecimal currentQty = invBalance.getCantidad();
+                    if (actInvoice.getFlagIsventa().equals("1")) {
+                        invBalance.setCantidad(currentQty.add(item.getCantidad()));
+                    } else {
+                        invBalance.setCantidad(currentQty.subtract(item.getCantidad()));
+                    }
+                    invAlmacenProductoRepository.save(invBalance);
+
+                    invMovimientoProductoRepository.deleteByActComprobante(actInvoice);
+                }
+
+            }
+            actInvoice.setFlagEstado("0");
+            actInvoice.setTotal(BigDecimal.ZERO);
+            // update cab
+            this.save(actInvoice);
+            // delete detail
+//            actInvoiceLineService.deleteByActInvoice(actInvoice);
+
+            // delete payment(remains validate)
+            actPagoProgramacionRepository.deleteByActComprobante(actInvoice);
+
+            // delete invoice tax
+//            actInvoiceTaxService.deleteByActInvoice(actInvoice);
+            // delete movement
+//            if (actInvoice.getIsinventory()) {
+//                invMovimientoProductoRepository.deleteByActInvoice(actInvoice);
+//            }
+            // enviar a ebi
+//            if (actInvoice.getCnfDoctype().getIsebi()) {
+//                result = "No se pudo enviar la anulacion de documento a EBI, porque no era un documento electronico";
+//                String documentSerial = actInvoice.getDocumentserial();
+//                String documentNro = String.format("%08d", actInvoice.getDocumentno());
+//                String docType = actInvoice.getCnfDoctype().getValue();
+//                ObjectNode objectNode = ebiService.ebiDeleteDocument(docType, documentSerial, documentNro);
+//                result = objectNode.get(RESPONSE).asText();
+//                if (result.toLowerCase().startsWith("ok")) {
+//                    result = "";
+//                }
+//            }
+//        } catch (GenericBusinessException e) {
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            result = e.getMessage();
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            result = e.getMessage();
+            e.printStackTrace();
+            throw e;
+        }
+        return result;
+    }
+    private void saveActPagoProgramacion(ActComprobante actComprobante, List<ActCajaTurno> actCajaTurno) {
+        BigDecimal pending = actComprobante.getTotal();
+            LocalDate dueDate = actComprobante.getFecha();
+        List<CnfFormaPagoDetalle> list = cnfFormaPagoDetalleRepository.findByCnfFormaPagoId(
+                actComprobante.getCnfFormaPago().getId());
+        if (!list.isEmpty()) {
+            for (CnfFormaPagoDetalle cnfFormaPagoDetalle : list) {
+                ActPagoProgramacion p = new ActPagoProgramacion();
+                p.setActComprobante(actComprobante);
+                
+                if (cnfFormaPagoDetalle.getModoDiaVencimiento() != null
+                        && cnfFormaPagoDetalle.getModoDiaVencimiento() != 0) {
+                    p.setFecha(actComprobante.getFecha());
+                    p.setFechaVencimiento(actComprobante.getFecha()
+                            .plusDays(cnfFormaPagoDetalle.getModoDiaVencimiento()));
+                    p.setMonto(cnfFormaPagoDetalle.getModoMonto());
+                    p.setMontoPendiente(cnfFormaPagoDetalle.getModoMonto());
+                } else if (cnfFormaPagoDetalle.getModoPorcentaje() != null
+                        && cnfFormaPagoDetalle.getModoPorcentaje() != null) {
+                    p.setFechaVencimiento(actComprobante.getFecha()
+                            .plusDays(cnfFormaPagoDetalle.getModoDiasIntervalo()));
+                    //actPayment.setTotalamt(actInvoice.getGrandtotal()
+                    //				.multiply(cnfTendertypeSchedule.getPercent().divide(new BigDecimal(100))))
+                    p.setMonto(actComprobante.getTotal().multiply(cnfFormaPagoDetalle.getModoPorcentaje().divide(new BigDecimal(100))));
+                    
+                } else {
+                    if (pending.compareTo(cnfFormaPagoDetalle.getModoMonto()) == -1) {
+                        p.setMonto(pending);
+                    }
+                    p.setMonto(cnfFormaPagoDetalle.getModoMonto());
+                }
+                pending = pending.subtract(p.getMonto());
+                p.setMontoPendiente(p.getMonto());
+                actPagoProgramacionRepository.save(p);
+            }
+            if (pending.compareTo(BigDecimal.ZERO) == 1) {
+                ActPagoProgramacion actPayment = new ActPagoProgramacion();
+                actPayment.setActComprobante(actComprobante);
+                actPayment.setFecha(actComprobante.getFecha());
+                actPayment.setFechaVencimiento(dueDate.plusDays(30));
+                actPayment.setMonto(pending);
+                actPayment.setMontoPendiente(actPayment.getMonto());
+                actPagoProgramacionRepository.save(actPayment);
+            }
+        } else {
+            ActCajaOperacion actCajaOperacion = new ActCajaOperacion(); 
+            actCajaOperacion.setActCajaTurno(actCajaTurno == null? actCajaTurno : actCajaTurno.get(0));
+            actCajaOperacion.setActPago(null);
+            actCajaOperacion.setActComprobante(actComprobante);
+            actCajaOperacion.setFecha(LocalDate.now());
+            actCajaOperacion.setFechaRegistro(LocalDateTime.now());
+            actCajaOperacion.setMonto(actComprobante.getTotal());
+            actCajaOperacion.setFlagIngreso("1");
+            actCajaOperacionRepository.save(actCajaOperacion);
+        }
     }
 }

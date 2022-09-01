@@ -52,7 +52,7 @@ export class CnfNumComprobanteComponent extends GenericListComponent implements 
     super.ngOnInit();
   }
   save(): void {
-    console.log("test desde cnf-org");
+    
   }
 }
 

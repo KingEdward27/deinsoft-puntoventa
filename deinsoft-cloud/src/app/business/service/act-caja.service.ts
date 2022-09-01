@@ -2,15 +2,14 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { environment } from 'environments/environment';
 import { Observable } from 'rxjs/internal/Observable';
-import { ActCaja } from './act-caja.model';
-import { environment } from 'src/environments/environment';
-
+import { ActCaja } from '../model/act-caja.model';
 @Injectable({
   providedIn: 'root'
 })
 export class ActCajaService {
-  url:string  = environment.apiUrl;
+  url:string  = environment.apiUrl + '/api/business/act-caja';
   constructor(private http: HttpClient,
               private router: Router) { 
   }
@@ -34,5 +33,9 @@ export class ActCajaService {
     let params = new HttpParams().set("id",arg1);
     return this.http.delete(this.url+'/delete-act-caja', { observe: 'response' ,params}); 
   }
+  public getAllByCnfEmpresaId(id:number):Observable<any>{
+    let params = new HttpParams().set("id",id.toString());
+    return this.http.get<ActCaja[]>(`${this.url}/get-all-act-caja-by-cnf-empresa`,{params});
+  } 
 }
 

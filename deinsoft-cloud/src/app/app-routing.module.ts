@@ -45,6 +45,13 @@ import { ActComprobanteListFormComponent } from '@pages/reports/act-comprobante/
 import { ActComprobanteReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-venta/act-comprobante-report.component';
 import { InvAlmacenReportFormComponent } from '@pages/reports/inv-almacen/inv-almacen-report.component';
 import { InvMovimientoProductoReportFormComponent } from '@pages/reports/inv-movimiento-producto/inv-movimiento-producto-report.component';
+import { ActPagoProgramacionListFormComponent } from '@pages/act-pago-programacion/act-pago-programacion-list.component';
+import { ActCajaComponent } from '@pages/act-caja/act-caja';
+import { ActPagoProgramacionCompraListFormComponent } from '@pages/act-pago-programacion-compras/act-pago-programacion-compra-list.component';
+import { ActCajaTurnoComponent } from '@pages/act-caja-turno/act-caja-turno';
+import { ActCajaTurnoListComponent } from '@pages/act-caja-turno/list/act-caja-turno-list.component';
+import { ActCajaTurnoFormComponent } from '@pages/act-caja-turno/form/act-caja-turno-form.component';
+import { SegUsuarioEmpresaComponent } from '@pages/security/seg-usuario-empresa/seg_usuario';
 
 const routes: Routes = [
     {
@@ -53,10 +60,10 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         children: [
-            {
-                path: 'profile',
-                component: ProfileComponent
-            },
+            // {
+            //     path: 'profile',
+            //     component: ProfileComponent
+            // },
             {
                 path: 'blank',
                 component: BlankComponent
@@ -97,6 +104,13 @@ const routes: Routes = [
             {path: 'compra',component: ActComprobanteCompraFormComponent},
             {path: 'usuario',component: SegUsuarioComponent},
             {path: 'perfil',component: SegRolComponent},
+            {path: 'cuentas-cobrar',component: ActPagoProgramacionListFormComponent},
+            {path: 'cuentas-pagar',component: ActPagoProgramacionCompraListFormComponent},
+            {path: 'caja',component: ActCajaComponent},
+            {path: 'act-caja-turno',component: ActCajaTurnoListComponent},
+            {path: 'new-act-caja-turno',component: ActCajaTurnoFormComponent},
+            {path: 'new-act-caja-turno/:id',component: ActCajaTurnoFormComponent},
+            {path: 'usuario-empresa',component: SegUsuarioEmpresaComponent},
             {path: 'list-ventas',component: ActComprobanteListFormComponent},
             {path: 'rpt-ventas',component: ActComprobanteReportFormComponent},
             {path: 'rpt-compras',component: ActComprobanteCompraReportFormComponent},

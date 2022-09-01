@@ -14,8 +14,10 @@ import org.springframework.validation.BindingResult;
 import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.ActComprobante;
+import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.business.service.ActComprobanteService;
 import com.deinsoft.puntoventa.framework.model.JsonData;
+import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import com.deinsoft.puntoventa.framework.util.ExportUtil;
 import com.deinsoft.puntoventa.framework.util.Util;
 import java.io.IOException;
@@ -37,7 +39,9 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
 
     @Autowired
     ActComprobanteService actComprobanteService;
-
+    
+    @Autowired
+    AuthenticationHelper auth;
     
     @Autowired
     BusinessService businessService;
@@ -78,6 +82,8 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
         if(!errores.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errores);
         }
+        SegUsuario segUsuario = auth.getLoggedUserdata();
+        actComprobante.setSegUsuario(segUsuario);
         ActComprobante actComprobanteResult = actComprobanteService.saveActComprobante(actComprobante);
         //send fe
         if (actComprobanteResult != null) {
@@ -205,5 +211,16 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
          
         excelExporter.export(response);
         return null;
+    }
+    @PostMapping(value = "/invalidate-act-comprobante")
+    public ResponseEntity<?> cambiarEstado(@Param("id") Long id, HttpServletRequest request) throws  Exception{
+        
+//        if(!errores.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errores);
+//        }
+        actComprobanteService.invalidate(id);
+        
+        
+        return ResponseEntity.noContent().build();
     }
 }

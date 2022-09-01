@@ -15,9 +15,11 @@ export class CnfUnidadMedidaComponent extends GenericListComponent implements On
   prop ={
     "tableName": "cnf_unidad_medida",
     "title": "Unidad Medida",
-    "columnsList":[{tableName: "cnf_unidad_medida", columnName:"nombre",filterType:"text"}
+    "columnsList":[{tableName: "cnf_unidad_medida", columnName:"nombre",filterType:"text"},
+                   {tableName: "cnf_unidad_medida", columnName:"codigo_sunat",filterType:"text"}
                 ],
-    "columnsForm":[{tableName: "cnf_unidad_medida", "columnName":"nombre","type":"input"}
+    "columnsForm":[{tableName: "cnf_unidad_medida", "columnName":"nombre","type":"input"},
+                   {tableName: "cnf_unidad_medida", "columnName":"codigo_sunat","type":"input"}
            ],
     //filters sería para filtros adicionales
     "conditions":[],
@@ -33,7 +35,7 @@ export class CnfUnidadMedidaComponent extends GenericListComponent implements On
     super.ngOnInit();
   }
   save(): void {
-    console.log("test desde cnf-org");
+    
   }
 }
 

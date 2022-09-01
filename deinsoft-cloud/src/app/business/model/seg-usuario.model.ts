@@ -1,9 +1,9 @@
 
 export class SegUsuario {
-	id: int = "";
+	id: number = 0;
 	email: string = "";
 	nombre: string = "";
 	password: string = "";
-	estado!: int;
+	estado!: number;
 	token?: string = "";
 };

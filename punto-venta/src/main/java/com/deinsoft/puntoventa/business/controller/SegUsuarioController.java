@@ -14,6 +14,7 @@ import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.business.service.SegUsuarioService;
 
 @RestController
+@RequestMapping("/api/business/seg-usuario")
 public class SegUsuarioController extends CommonController<SegUsuario, SegUsuarioService> {
 
     private static final Logger logger = LoggerFactory.getLogger(SegUsuarioController.class);

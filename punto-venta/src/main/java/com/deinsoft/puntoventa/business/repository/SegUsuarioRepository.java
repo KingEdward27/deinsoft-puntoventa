@@ -8,10 +8,11 @@ import org.springframework.data.repository.query.Param;
 
 import com.deinsoft.puntoventa.business.model.SegUsuario;
 
-public interface SegUsuarioRepository extends JpaRepository<SegUsuario,Long> {
-	@Query(value="select p from segUsuario p "+ 
- "where upper(p.nombre) like %?1% and upper(p.email) like %?2% and upper(p.password) like %?3% ")
+public interface SegUsuarioRepository extends JpaRepository<SegUsuario, Long> {
 
-	List<SegUsuario> getAllSegUsuario(String nombre,String email,String password);
+    @Query(value = "select p from segUsuario p "
+            + "where upper(p.nombre) like %?1% and upper(p.email) like %?2% and upper(p.password) like %?3% ")
+    List<SegUsuario> getAllSegUsuario(String nombre, String email, String password);
 
+    List<SegUsuario> findByNombre(String nombre);
 }

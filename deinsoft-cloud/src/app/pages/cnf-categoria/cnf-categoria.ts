@@ -38,7 +38,7 @@ export class CnfCategoriaComponent extends GenericListComponent implements OnIni
     super.ngOnInit();
   }
   save(): void {
-    console.log("test desde cnf-org");
+    
   }
 }
 

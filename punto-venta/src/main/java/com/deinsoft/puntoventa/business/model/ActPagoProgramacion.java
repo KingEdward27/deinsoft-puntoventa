@@ -15,6 +15,7 @@ public class ActPagoProgramacion implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "act_pago_programacion_id", nullable = false, unique = true)
     private long id;
 
@@ -38,6 +39,9 @@ public class ActPagoProgramacion implements Serializable {
     @JoinColumn(name = "act_comprobante_id")
     private ActComprobante actComprobante;
 
+    @Transient
+    BigDecimal amtToPay;
+    
     public long getId() {
         return id;
     }
@@ -84,6 +88,14 @@ public class ActPagoProgramacion implements Serializable {
 
     public void setActComprobante(ActComprobante actComprobante) {
         this.actComprobante = actComprobante;
+    }
+
+    public BigDecimal getAmtToPay() {
+        return amtToPay;
+    }
+
+    public void setAmtToPay(BigDecimal amtToPay) {
+        this.amtToPay = amtToPay;
     }
 
     @Override

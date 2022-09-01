@@ -37,6 +37,9 @@ public class SegUsuario implements Serializable {
     @Column(name = "estado", length = 10, nullable = false)
     private int estado;
 
+    @JoinColumn(name = "cnf_empresa_id")
+    private CnfEmpresa cnfEmpresa;
+    
     public long getId() {
         return id;
     }
@@ -75,6 +78,14 @@ public class SegUsuario implements Serializable {
 
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public CnfEmpresa getCnfEmpresa() {
+        return cnfEmpresa;
+    }
+
+    public void setCnfEmpresa(CnfEmpresa cnfEmpresa) {
+        this.cnfEmpresa = cnfEmpresa;
     }
 
     @Override

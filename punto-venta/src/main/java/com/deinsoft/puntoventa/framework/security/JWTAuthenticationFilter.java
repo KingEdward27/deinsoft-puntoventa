@@ -1,5 +1,7 @@
 package com.deinsoft.puntoventa.framework.security;
 
+import com.deinsoft.puntoventa.business.model.ActCajaTurno;
+import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
 import com.deinsoft.puntoventa.framework.security.model.SecUser;
 import com.deinsoft.puntoventa.framework.security.repository.SecUserRepository;
 import org.slf4j.Logger;
@@ -40,11 +42,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     
     private AuthenticationManager authenticationManager;
 
+    private ActCajaTurnoRepository actCajaTurnoRepository;
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager,SecUserRepository secUserRepository) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager,
+            SecUserRepository secUserRepository,
+            ActCajaTurnoRepository actCajaTurnoRepository) {
         this.authenticationManager = authenticationManager;
         this.secUserRepository = secUserRepository;
+        this.actCajaTurnoRepository = actCajaTurnoRepository;
     }
 
     @Override
@@ -71,6 +78,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = ((UserDetails) auth.getPrincipal()).getUsername();
         SecUser usuario = secUserRepository.findByName(username); 
         usuario.setPassword(null);
+        
+        ActCajaTurno caja = actCajaTurnoRepository.findBySegUsuarioId(usuario.getId())
+                .stream().filter(item -> item.getFechaCierre() == null)
+                .findFirst().orElse(new ActCajaTurno());
+        usuario.setActCajaTurno(caja);
         //String idUp = usuario.getUnidadPolicial().getIdUnidadPolicial();
 
         //Usuario usr = userService.getUserByUsername(usrname);
