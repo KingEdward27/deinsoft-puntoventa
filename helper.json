@@ -790,6 +790,82 @@
                 generateFrontend: true,
                 regenerate: true,
                 typeDeleteVoid: "2"
+        },
+        {
+                tableName: "seg_rol",
+                title: "seg_rol",
+                columnsForm: [
+                    {columnName: "nombre",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "seg_accion",
+                title: "seg_accion",
+                columnsForm: [
+                    {columnName: "nombre",inputType: "text"},
+                    {columnName: "descripcion",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "descripcion",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "seg_menu",
+                title: "seg_menu",
+                columnsForm: [
+                    {columnName: "nombre",inputType: "text"},
+                    {columnName: "seqorder",inputType: "text"},
+                    {columnName: "icon",inputType: "text"},
+                    {columnName: "path",inputType: "text"}
+            ],
+            foreignTables: [
+                {tableName: "seg_menu",idValue: "parent_id",
+                descriptionColumn : "nombre"
+                }
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "seqorder",filterType: "text"},
+                    {columnName: "icon",filterType: "text"},
+                    {columnName: "path",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "seg_permiso",
+                title: "seg_permiso",
+                foreignTables: [
+                    {tableName: "seg_rol",idValue: "seg_rol_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "seg_menu",idValue: "seg_menu_id",
+                    descriptionColumn : "nombre"
+                    },
+                    {tableName: "seg_accion",idValue: "seg_accion_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                    {columnName: "seg_menu_id",inputType: "text"}
+                ],
+                columnsList: [
+                    {columnName: "seg_menu_id",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
         }
     ]
 }

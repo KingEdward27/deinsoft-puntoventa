@@ -1,3 +1,4 @@
+import { SegPermisoService } from '@/business/service/seg-permiso.service';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -11,7 +12,8 @@ const helper = new JwtHelperService();
 export class AppService {
     public user: any = null;
 
-    constructor(private router: Router, private toastr: ToastrService,private auth:AuthenticationService) {}
+    constructor(private router: Router, private toastr: ToastrService,
+        private auth:AuthenticationService,private segPermisoService:SegPermisoService) {}
 
     async loginByAuth({email, password}) {
         try {
@@ -81,242 +83,255 @@ export class AppService {
 
     getProfile():any {
         try {
-            //this.user = {name:"edward","picture":"logo.png"};
+            //this.user = {nombre:"edward","picture":"logo.png"};
             let tokenDecrypt = helper.decodeToken(localStorage.getItem('token'));
             // console.log(tokenDecrypt);
             this.user = tokenDecrypt.user
             this.user.profile = tokenDecrypt.authorities[0].authority;
             console.log(this.user);
-
+            // this.user.menu = []
+            // this.user.menu.push({nombre:'Dashboard',
+            //     path:['/'],
+            //     icon:"fa-tachometer-alt"})
+            // this.segPermisoService.getAllBySegRolNombre(this.user.profile.split("|")[0]).subscribe( data =>{
+            //     this.user.menu = data
+            //     return this.user
+            // })
             if(this.user.profile.includes('ROLE_SUPER_ADMIN')){
                 this.user.menu = [
                     {
-                        name: 'Dashboard',
+                        nombre: 'Dashboard',
                         path: ['/'],
                         icon :"fa-tachometer-alt"
                     },
                     {
-                        name: 'Administración',
+                        nombre: 'Administración',
                         icon :"fa-user-shield",
                         children: [
-                            {name: 'Región',path: ['/region']},
-                            {name: 'Provincia',path: ['/provincia']},
-                            {name: 'Distrito',path: ['/distrito']},
-                            {name: 'Tipo de documento de identidad',path: ['/tipo-documento']},
-                            {name: 'Moneda',path: ['/moneda']},
-                            {name: 'Empresa',path: ['/empresa']},
-                            {name: 'Unidad Medida',path: ['/unidadmedida']}
+                            {nombre: 'Región',path: ['/region']},
+                            {nombre: 'Provincia',path: ['/provincia']},
+                            {nombre: 'Distrito',path: ['/distrito']},
+                            {nombre: 'Tipo de documento de identidad',path: ['/tipo-documento']},
+                            {nombre: 'Moneda',path: ['/moneda']},
+                            {nombre: 'Empresa',path: ['/empresa']},
+                            {nombre: 'Unidad Medida',path: ['/unidadmedida']}
                         ]
                     },
                     {
-                        name: 'Seguridad',
+                        nombre: 'Seguridad',
                         icon :"fa-shield-alt",
                         children: [
-                            {name: 'Perfiles',path: ['/perfil']},
-                            {name: 'Usuarios',path: ['/usuario']}
+                            {nombre: 'Perfiles',path: ['/perfil']},
+                            {nombre: 'Acciones',path: ['/accion']},
+                            {nombre: 'Opciones de menú',path: ['/menu']},
+                            {nombre: 'Permisos',path: ['/permiso']},
+                            {nombre: 'Usuarios',path: ['/usuario']}
                         ]
                     },
                     {
-                        name: 'Configuración',
+                        nombre: 'Configuración',
                         icon :"fa-cog",
                         children: [
-                            {name: 'Usuarios',path: ['/usuario-empresa']},
-                            {name: 'Tipo de comprobante',path: ['/tipo-comprobante']},
-                            {name: 'Numeración de comprobante',path: ['/numcomprobante']},
-                            {name: 'Forma de Pago',path: ['/forma-pago']},
-                            {name: 'Caja',path: ['/caja']},
-                            {name: 'Clientes y Proveedores',path: ['/maestro']}
+                            {nombre: 'Usuarios',path: ['/usuario-empresa']},
+                            {nombre: 'Tipo de comprobante',path: ['/tipo-comprobante']},
+                            {nombre: 'Numeración de comprobante',path: ['/numcomprobante']},
+                            {nombre: 'Forma de Pago',path: ['/forma-pago']},
+                            {nombre: 'Caja',path: ['/caja']},
+                            {nombre: 'Clientes y Proveedores',path: ['/maestro']}
                         ]
                     },
                     {
-                        name: 'Inventario',
+                        nombre: 'Inventario',
                         icon :"fa-box",
                         children: [
-                            {name: 'Local',path: ['/local']},
-                            {name: 'Almacen',path: ['/almacen']},
-                            {name: 'Marca',path: ['/marca']},
-                            {name: 'Categoría',path: ['/categoria']},
-                            {name: 'Sub Categoría',path: ['/subcategoria']},
-                            {name: 'Unidad Medida',path: ['/unidadmedida']},
-                            {name: 'Producto',path: ['/producto']},
-                            {name: 'Almacén',path: ['/almacen']},
-                            {name: 'Compra',path: ['/compra']}
+                            {nombre: 'Local',path: ['/local']},
+                            {nombre: 'Almacen',path: ['/almacen']},
+                            {nombre: 'Marca',path: ['/marca']},
+                            {nombre: 'Categoría',path: ['/categoria']},
+                            {nombre: 'Sub Categoría',path: ['/subcategoria']},
+                            {nombre: 'Unidad Medida',path: ['/unidadmedida']},
+                            {nombre: 'Producto',path: ['/producto']},
+                            {nombre: 'Almacén',path: ['/almacen']},
+                            {nombre: 'Compra',path: ['/compra']}
                         ]
                     },
                     {
-                        name: 'Ventas',
+                        nombre: 'Ventas',
                         icon :"fa-cart-plus",
                         children: [
-                            {name: 'Venta',path: ['/venta']},
-                            {name: 'Listado Ventas',path: ['/list-ventas']}
+                            {nombre: 'Venta',path: ['/venta']},
+                            {nombre: 'Listado Ventas',path: ['/list-ventas']}
                         ]
                     },
                     {
-                        name: 'Caja',
+                        nombre: 'Caja',
                         icon :"fa-money-bill",
                         children: [
-                            {name: 'Turno de Caja',path: ['/act-caja-turno']},
-                            {name: 'Cuentas x pagar',path: ['/cuentas-pagar']},
-                            {name: 'Cuentas x cobrar',path: ['/cuentas-cobrar']}
+                            {nombre: 'Turno de Caja',path: ['/act-caja-turno']},
+                            {nombre: 'Cuentas x pagar',path: ['/cuentas-pagar']},
+                            {nombre: 'Cuentas x cobrar',path: ['/cuentas-cobrar']}
                         ]
                     },
                     {
-                        name: 'Reportes',
+                        nombre: 'Reportes',
                         icon :"fa-file",
                         children: [
-                            {name: 'Reporte Ventas',path: ['/rpt-ventas']},
-                            {name: 'Reporte Compras',path: ['/rpt-compras']},
-                            {name: 'Stock Valorizado',path: ['/rpt-almacen']},
-                            {name: 'Kardex Valorizado',path: ['/rpt-movimiento-producto']}
+                            {nombre: 'Reporte Ventas',path: ['/rpt-ventas']},
+                            {nombre: 'Reporte Compras',path: ['/rpt-compras']},
+                            {nombre: 'Stock Valorizado',path: ['/rpt-almacen']},
+                            {nombre: 'Kardex Valorizado',path: ['/rpt-movimiento-producto']}
                         ]
                     }
                 ];
             }else if(this.user.profile.includes('ROLE_ADMIN')){
                 this.user.menu = [
                     {
-                        name: 'Dashboard',
+                        nombre: 'Dashboard',
                         path: ['/'],
                         icon :"fa-tachometer-alt"
                     },
                     // {
-                    //     name: 'Blank',
+                    //     nombre: 'Blank',
                     //     path: ['/blank'],
                     //     icon :"fa-tachometer-alt"
                     // },
                     // {
-                    //     name: 'Administración',
+                    //     nombre: 'Administración',
                     //     icon :"fa-user-shield",
                     //     children: [
-                    //         {name: 'Región',path: ['/region']},
-                    //         {name: 'Provincia',path: ['/provincia']},
-                    //         {name: 'Distrito',path: ['/distrito']},
-                    //         {name: 'Tipo de documento de identidad',path: ['/tipo-documento']},
-                    //         {name: 'Moneda',path: ['/moneda']},
-                    //         {name: 'Empresa',path: ['/empresa']},
-                    //         {name: 'Unidad Medida',path: ['/unidadmedida']}
+                    //         {nombre: 'Región',path: ['/region']},
+                    //         {nombre: 'Provincia',path: ['/provincia']},
+                    //         {nombre: 'Distrito',path: ['/distrito']},
+                    //         {nombre: 'Tipo de documento de identidad',path: ['/tipo-documento']},
+                    //         {nombre: 'Moneda',path: ['/moneda']},
+                    //         {nombre: 'Empresa',path: ['/empresa']},
+                    //         {nombre: 'Unidad Medida',path: ['/unidadmedida']}
                     //     ]
                     // },
                     {
-                        name: 'Seguridad',
+                        nombre: 'Seguridad',
                         icon :"fa-shield-alt",
                         children: [
-                            {name: 'Perfiles',path: ['/perfil']},
-                            {name: 'Usuarios',path: ['/usuario']}
+                            {nombre: 'Perfiles',path: ['/perfil']},
+                            {nombre: 'Acciones',path: ['/accion']},
+                            {nombre: 'Opciones de menú',path: ['/menu']},
+                            {nombre: 'Permisos',path: ['/permiso']},
+                            {nombre: 'Usuarios',path: ['/usuario']}
                         ]
                     },
                     {
-                        name: 'Configuración',
+                        nombre: 'Configuración',
                         icon :"fa-cog",
                         children: [
-                            {name: 'Usuarios',path: ['/usuario-empresa']},
-                            {name: 'Tipo de comprobante',path: ['/tipo-comprobante']},
-                            {name: 'Numeración de comprobante',path: ['/numcomprobante']},
-                            {name: 'Forma de Pago',path: ['/forma-pago']},
-                            {name: 'Caja',path: ['/caja']},
-                            {name: 'Clientes y Proveedores',path: ['/maestro']}
+                            {nombre: 'Usuarios',path: ['/usuario-empresa']},
+                            {nombre: 'Tipo de comprobante',path: ['/tipo-comprobante']},
+                            {nombre: 'Numeración de comprobante',path: ['/numcomprobante']},
+                            {nombre: 'Forma de Pago',path: ['/forma-pago']},
+                            {nombre: 'Caja',path: ['/caja']},
+                            {nombre: 'Clientes y Proveedores',path: ['/maestro']}
                         ]
                     },
                     {
-                        name: 'Inventario',
+                        nombre: 'Inventario',
                         icon :"fa-box",
                         children: [
-                            {name: 'Local',path: ['/local']},
-                            {name: 'Almacen',path: ['/almacen']},
-                            {name: 'Marca',path: ['/marca']},
-                            {name: 'Categoría',path: ['/categoria']},
-                            {name: 'Sub Categoría',path: ['/subcategoria']},
-                            {name: 'Unidad Medida',path: ['/unidadmedida']},
-                            {name: 'Producto',path: ['/producto']},
-                            {name: 'Almacén',path: ['/almacen']},
-                            {name: 'Compra',path: ['/compra']}
+                            {nombre: 'Local',path: ['/local']},
+                            {nombre: 'Almacen',path: ['/almacen']},
+                            {nombre: 'Marca',path: ['/marca']},
+                            {nombre: 'Categoría',path: ['/categoria']},
+                            {nombre: 'Sub Categoría',path: ['/subcategoria']},
+                            {nombre: 'Unidad Medida',path: ['/unidadmedida']},
+                            {nombre: 'Producto',path: ['/producto']},
+                            {nombre: 'Almacén',path: ['/almacen']},
+                            {nombre: 'Compra',path: ['/compra']}
                         ]
                     },
                     {
-                        name: 'Ventas',
+                        nombre: 'Ventas',
                         icon :"fa-cart-plus",
                         children: [
-                            {name: 'Venta',path: ['/venta']},
-                            {name: 'Listado Ventas',path: ['/list-ventas']}
+                            {nombre: 'Venta',path: ['/venta']},
+                            {nombre: 'Listado Ventas',path: ['/list-ventas']}
                         ]
                     },
                     {
-                        name: 'Caja',
+                        nombre: 'Caja',
                         icon :"fa-money-bill",
                         children: [
-                            {name: 'Turno de Caja',path: ['/act-caja-turno']},
-                            {name: 'Cuentas x pagar',path: ['/cuentas-pagar']},
-                            {name: 'Cuentas x cobrar',path: ['/cuentas-cobrar']}
+                            {nombre: 'Turno de Caja',path: ['/act-caja-turno']},
+                            {nombre: 'Cuentas x pagar',path: ['/cuentas-pagar']},
+                            {nombre: 'Cuentas x cobrar',path: ['/cuentas-cobrar']}
                         ]
                     },
                     {
-                        name: 'Reportes',
+                        nombre: 'Reportes',
                         icon :"fa-file",
                         children: [
-                            {name: 'Reporte Ventas',path: ['/rpt-ventas']},
-                            {name: 'Reporte Compras',path: ['/rpt-compras']},
-                            {name: 'Stock Valorizado',path: ['/rpt-almacen']},
-                            {name: 'Kardex Valorizado',path: ['/rpt-movimiento-producto']}
+                            {nombre: 'Reporte Ventas',path: ['/rpt-ventas']},
+                            {nombre: 'Reporte Compras',path: ['/rpt-compras']},
+                            {nombre: 'Stock Valorizado',path: ['/rpt-almacen']},
+                            {nombre: 'Kardex Valorizado',path: ['/rpt-movimiento-producto']}
                         ]
                     }
                 ];
             }else{
                 this.user.menu = [
                     {
-                        name: 'Dashboard',
+                        nombre: 'Dashboard',
                         path: ['/'],
                         icon :"fa-tachometer-alt"
                     },
                     {
-                        name: 'Configuración',
+                        nombre: 'Configuración',
                         icon :"fa-cog",
                         children: [
-                            {name: 'Usuarios',path: ['/usuario-empresa']},
-                            {name: 'Tipo de comprobante',path: ['/tipo-comprobante']},
-                            {name: 'Numeración de comprobante',path: ['/numcomprobante']},
-                            {name: 'Forma de Pago',path: ['/forma-pago']},
-                            {name: 'Caja',path: ['/caja']},
-                            {name: 'Clientes y Proveedores',path: ['/maestro']}
+                            {nombre: 'Usuarios',path: ['/usuario-empresa']},
+                            {nombre: 'Tipo de comprobante',path: ['/tipo-comprobante']},
+                            {nombre: 'Numeración de comprobante',path: ['/numcomprobante']},
+                            {nombre: 'Forma de Pago',path: ['/forma-pago']},
+                            {nombre: 'Caja',path: ['/caja']},
+                            {nombre: 'Clientes y Proveedores',path: ['/maestro']}
                         ]
                     },
                     {
-                        name: 'Inventario',
+                        nombre: 'Inventario',
                         icon :"fa-box",
                         children: [
-                            {name: 'Local',path: ['/local']},
-                            {name: 'Almacen',path: ['/almacen']},
-                            {name: 'Marca',path: ['/marca']},
-                            {name: 'Categoría',path: ['/categoria']},
-                            {name: 'Sub Categoría',path: ['/subcategoria']},
-                            {name: 'Producto',path: ['/producto']},
-                            {name: 'Almacén',path: ['/almacen']},
-                            {name: 'Compra',path: ['/compra']}
+                            {nombre: 'Local',path: ['/local']},
+                            {nombre: 'Almacen',path: ['/almacen']},
+                            {nombre: 'Marca',path: ['/marca']},
+                            {nombre: 'Categoría',path: ['/categoria']},
+                            {nombre: 'Sub Categoría',path: ['/subcategoria']},
+                            {nombre: 'Producto',path: ['/producto']},
+                            {nombre: 'Almacén',path: ['/almacen']},
+                            {nombre: 'Compra',path: ['/compra']}
                         ]
                     },
                     {
-                        name: 'Ventas',
+                        nombre: 'Ventas',
                         icon :"fa-cart-plus",
                         children: [
-                            {name: 'Venta',path: ['/venta']},
-                            {name: 'Listado Ventas',path: ['/list-ventas']}
+                            {nombre: 'Venta',path: ['/venta']},
+                            {nombre: 'Listado Ventas',path: ['/list-ventas']}
                         ]
                     },
                     {
-                        name: 'Caja',
+                        nombre: 'Caja',
                         icon :"fa-money-bill",
                         children: [
-                            {name: 'Turno de Caja',path: ['/act-caja-turno']},
-                            {name: 'Cuentas x pagar',path: ['/cuentas-pagar']},
-                            {name: 'Cuentas x cobrar',path: ['/cuentas-cobrar']}
+                            {nombre: 'Turno de Caja',path: ['/act-caja-turno']},
+                            {nombre: 'Cuentas x pagar',path: ['/cuentas-pagar']},
+                            {nombre: 'Cuentas x cobrar',path: ['/cuentas-cobrar']}
                         ]
                     },
                     {
-                        name: 'Reportes',
+                        nombre: 'Reportes',
                         icon :"fa-file",
                         children: [
-                            {name: 'Reporte Ventas',path: ['/rpt-ventas']},
-                            {name: 'Reporte Compras',path: ['/rpt-compras']},
-                            {name: 'Stock Valorizado',path: ['/rpt-almacen']},
-                            {name: 'Kardex Valorizado',path: ['/rpt-movimiento-producto']}
+                            {nombre: 'Reporte Ventas',path: ['/rpt-ventas']},
+                            {nombre: 'Reporte Compras',path: ['/rpt-compras']},
+                            {nombre: 'Stock Valorizado',path: ['/rpt-almacen']},
+                            {nombre: 'Kardex Valorizado',path: ['/rpt-movimiento-producto']}
                         ]
                     }
                 ];
@@ -330,7 +345,7 @@ export class AppService {
             // provider: "AUTH",
             // //"picture":"logo.png",
             // updatedAt: "2022-06-08T07:09:01.213Z",
-            // username: "fake_51"};
+            // usernombre: "fake_51"};
             // console.log(this.user);
             
         } catch (error) {

@@ -93,7 +93,7 @@
                                     <td *ngIf="i2 > 0" [ngClass]="properties.columnsList[i2-1].type =='number'? 'content-number' : ''">{{itemDetail}}</td>
                                 </ng-container>
                                 <td>
-                                    <div class="row row2">
+                                    <div class="row2">
                                         <div><a class="fas fa-edit" [style.width]="widthIcons" style="cursor: pointer;"
                                                 (click) = "goToFormToEdit(item[0])" title="Modificar"></a></div>
                                         <div><a class="fas fa-trash" [style.width]="widthIcons" (click)="delete(item[0])" style="cursor: pointer;"

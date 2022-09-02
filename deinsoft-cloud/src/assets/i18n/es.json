@@ -378,6 +378,40 @@
       "monto_cierre":"Monto cierre",
       "estado":"Estado"
     },
+    "seg_accion": {
+      "home": {
+        "title": "Acciones",
+        "subTitleForm": " Mantenimiento de Acciones",
+        "subTitleList": " Listado de Acciones"
+      },
+      "id": "ID",
+      "nombre":"Nombre",
+      "descripcion":"Descripción"
+    },
+    "seg_menu": {
+      "home": {
+        "title": "Opciones de Menú",
+        "subTitleForm": " Mantenimiento de Opciones de Menú",
+        "subTitleList": " Listado de Opciones de Menú"
+      },
+      "id": "ID",
+      "nombre":"Nombre",
+      "seqorder":"Orden",
+      "icon":"Icono",
+      "path":"Ruta",
+      "seg_menu":"Opción padre"
+    },
+    "seg_permiso": {
+      "home": {
+        "title": "Permisos por Rol",
+        "subTitleForm": " Mantenimiento de Permisos",
+        "subTitleList": " Listado de Permisos"
+      },
+      "id": "ID",
+      "seg_rol":"Perfil",
+      "seg_menu":"Opción",
+      "seg_accion":"Acción"
+    },
     "reportes": {
       "act_comprobante_listado":"Listado de Ventas",
       "act_comprobante":"Reporte de Ventas",

@@ -836,3 +836,183 @@ CHANGE COLUMN codigo_sunat codigo_sunat CHAR(3) NOT NULL ;
 
 ALTER TABLE cnf_unidad_medida
 CHANGE COLUMN nombre nombre VARCHAR(100) NOT NULL ;
+
+ALTER TABLE seg_permiso 
+DROP FOREIGN KEY fk_seg_permiso_seg_nodo;
+ALTER TABLE seg_permiso
+DROP COLUMN seg_nodo_id,
+ADD COLUMN seg_menu_id int NULL AFTER seg_rol_id,
+DROP INDEX fk_seg_permiso_seg_nodo ;
+;
+alter table seg_permiso
+add constraint fk_seg_permiso_seg_menu foreign key (seg_menu_id) references seg_menu(seg_menu_id);
+
+ALTER TABLE seg_accion
+CHANGE COLUMN description descripcion VARCHAR(255) NULL DEFAULT NULL ;
+
+insert into seg_accion (seg_accion_id,nombre,descripcion)
+values (1,'VER','');
+
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (1,'ADMINISTRACION',null,1,'',null);
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (2,'SEGURIDAD',null,1,'',null);
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (3,'CONFIGURACION',null,3,'',null);
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (4,'INVENTARIO',null,4,'',null);
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (5,'VENTAS',null,5,'',null);
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (6,'CAJA',null,6,'',null);
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (7,'REPORTES',null,7,'',null);
+
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (9,'Región',1,1,'','/region');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (10,'Provincia',1,2,'','/provincia');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (11,'Distrito',1,3,'','/distrito');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (12,'Tipo de documento de identidad',1,4,'','/tipo-documento');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (13,'Moneda',1,5,'','/moneda');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (14,'Empresa',1,6,'','/empresa');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (15,'Unidad de medida',1,7,'','/unidad-medida');
+
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (16,'Perfiles',2,1,'','/perfil');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (17,'Acciones',2,2,'','/accion');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (18,'Opciones de menú',2,3,'','/menu');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (19,'Permisos',2,4,'','/permiso');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (20,'Usuarios',2,5,'','/usuario');
+
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Usuarios',3,1,'','/usuario-empresa');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Tipo de comprobante',3,2,'','/tipo-comprobante');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Numeración de comprobante',3,3,'','/numcomprobante');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Forma de pago',3,4,'','/forma-pago');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Cajas',3,5,'','/caja');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Clientes y Proveedores',3,5,'','/maestro');
+
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Local',4,1,'','/local');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Almacén',4,2,'','/almacen');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Marca',4,3,'','/marca');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Categoría',4,4,'','/categoria');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Sub categoria',4,5,'','/sub-categoria');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Unidad de medida',4,6,'','/unidadmedida');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Producto',4,7,'','/producto');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Compra',4,8,'','/compra');
+
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Venta',5,1,'','/venta');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Listado de ventas',5,2,'','/list-ventas');
+
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Turno de caja',6,1,'','/act-caja-turno');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Cuentas por pagar',6,2,'','/cuentas-pagar');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Cuentas por cobrar',6,1,'','/cuentas-cobrar');
+
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Reporte ventas',7,1,'','/rpt-ventas');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Reporte compras',7,2,'','/rpt-compras');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Stock valorizado',7,1,'','/rpt-almacen');
+insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
+values (null,'Kardex valorizado',7,1,'','/rpt-movimiento-producto');
+
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,1,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,2,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,3,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,4,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,5,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,6,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,7,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,9,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,10,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,11,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,12,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,13,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,14,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,15,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,16,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,17,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,18,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,19,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,20,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,21,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,22,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,23,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,24,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,25,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,26,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,27,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,28,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,29,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,30,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,31,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,32,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,33,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,34,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,35,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,36,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,37,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,38,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,39,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,40,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,41,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,42,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,43,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,2,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,3,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,4,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,5,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,6,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,7,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,21,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,22,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,23,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,24,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,25,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,26,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,27,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,28,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,29,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,30,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,31,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,32,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,33,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,34,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,35,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,36,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,37,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,38,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,39,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,40,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,41,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,42,1);
+insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,43,1);

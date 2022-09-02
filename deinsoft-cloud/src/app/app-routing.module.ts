@@ -52,7 +52,13 @@ import { ActCajaTurnoComponent } from '@pages/act-caja-turno/act-caja-turno';
 import { ActCajaTurnoListComponent } from '@pages/act-caja-turno/list/act-caja-turno-list.component';
 import { ActCajaTurnoFormComponent } from '@pages/act-caja-turno/form/act-caja-turno-form.component';
 import { SegUsuarioEmpresaComponent } from '@pages/security/seg-usuario-empresa/seg_usuario';
-
+import { SegMenuListComponent } from '@pages/security/seg-menu/list/seg-menu-list.component';
+import { SegMenuFormComponent } from '@pages/security/seg-menu/form/seg-menu-form.component';
+import { SegAccionFormComponent } from '@pages/security/seg-accion/form/seg-accion-form.component';
+import { SegAccionListComponent } from '@pages/security/seg-accion/list/seg-accion-list.component';
+import { SegPermisoFormComponent } from '@pages/security/seg-permiso/form/seg-permiso-form.component';
+import { SegPermisoListComponent } from '@pages/security/seg-permiso/list/seg-permiso-list.component';
+import { SegAccionComponent } from '@pages/security/seg-accion/seg_accion';
 const routes: Routes = [
     {
         path: '',
@@ -111,6 +117,19 @@ const routes: Routes = [
             {path: 'new-act-caja-turno',component: ActCajaTurnoFormComponent},
             {path: 'new-act-caja-turno/:id',component: ActCajaTurnoFormComponent},
             {path: 'usuario-empresa',component: SegUsuarioEmpresaComponent},
+
+            {path: 'accion',component: SegAccionComponent},
+            // {path: 'new-accion/:id',component: SegAccionFormComponent},
+            // {path: 'new-accion/:id',component: SegAccionFormComponent},
+
+            {path: 'menu',component: SegMenuListComponent},
+            {path: 'new-menu',component: SegMenuFormComponent},
+            {path: 'new-menu/:id',component: SegMenuFormComponent},
+
+            {path: 'permiso',component: SegPermisoListComponent},
+            {path: 'new-permiso',component: SegPermisoFormComponent},
+            {path: 'new-permiso/:id',component: SegPermisoFormComponent},
+
             {path: 'list-ventas',component: ActComprobanteListFormComponent},
             {path: 'rpt-ventas',component: ActComprobanteReportFormComponent},
             {path: 'rpt-compras',component: ActComprobanteCompraReportFormComponent},

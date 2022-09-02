@@ -411,7 +411,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             }
         } else {
             ActCajaOperacion actCajaOperacion = new ActCajaOperacion(); 
-            actCajaOperacion.setActCajaTurno(actCajaTurno == null? actCajaTurno : actCajaTurno.get(0));
+            actCajaOperacion.setActCajaTurno(actCajaTurno == null? null : actCajaTurno.get(0));
             actCajaOperacion.setActPago(null);
             actCajaOperacion.setActComprobante(actComprobante);
             actCajaOperacion.setFecha(LocalDate.now());

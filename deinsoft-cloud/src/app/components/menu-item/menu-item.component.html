@@ -4,7 +4,7 @@
     [ngClass]="{active: isMainActive || isOneOfChildrenActive}"
 >
     <i class="nav-icon fas {{menuItem.icon}}"></i>
-    <p>{{ menuItem.name }}</p>
+    <p>{{ menuItem.nombre }}</p>
     <i
         *ngIf="isExpandable && menuItem.children.length > 0"
         class="right fas fa-angle-left"
@@ -20,7 +20,7 @@
             style="padding-left: 50px;"
         >
             <!-- <i class="far fa-circle nav-icon"></i> -->
-            <p>{{ item.name }}</p>
+            <p>{{ item.nombre }}</p>
         </a>
     </li>
 </ul>

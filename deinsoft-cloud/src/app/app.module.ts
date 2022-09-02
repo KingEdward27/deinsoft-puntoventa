@@ -91,6 +91,13 @@ import { ActCajaTurnoComponent } from '@pages/act-caja-turno/act-caja-turno';
 import { ActCajaTurnoListComponent } from '@pages/act-caja-turno/list/act-caja-turno-list.component';
 import { ActCajaTurnoFormComponent } from '@pages/act-caja-turno/form/act-caja-turno-form.component';
 import { SegUsuarioEmpresaComponent } from '@pages/security/seg-usuario-empresa/seg_usuario';
+import { SegMenuFormComponent } from '@pages/security/seg-menu/form/seg-menu-form.component';
+import { SegMenuListComponent } from '@pages/security/seg-menu/list/seg-menu-list.component';
+import { SegAccionFormComponent } from '@pages/security/seg-accion/form/seg-accion-form.component';
+import { SegAccionListComponent } from '@pages/security/seg-accion/list/seg-accion-list.component';
+import { SegPermisoFormComponent } from '@pages/security/seg-permiso/form/seg-permiso-form.component';
+import { SegPermisoListComponent } from '@pages/security/seg-permiso/list/seg-permiso-list.component';
+import { SegAccionComponent } from '@pages/security/seg-accion/seg_accion';
 registerLocaleData(localeEn, 'en-EN');
 
 @NgModule({
@@ -170,7 +177,14 @@ registerLocaleData(localeEn, 'en-EN');
         ActCajaTurnoComponent,
         ActCajaTurnoListComponent,
         ActCajaTurnoFormComponent,
-        SegUsuarioEmpresaComponent
+        SegUsuarioEmpresaComponent,
+        SegMenuFormComponent,
+        SegMenuListComponent,
+        SegAccionFormComponent,
+        SegAccionListComponent,
+        SegPermisoFormComponent,
+        SegPermisoListComponent,
+        SegAccionComponent
     ],
     imports: [
         BrowserModule,

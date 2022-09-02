@@ -140,6 +140,8 @@ input:hover {
 .row2 {
   margin-right: 0px;
   margin-left: 0px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .table thead th {
