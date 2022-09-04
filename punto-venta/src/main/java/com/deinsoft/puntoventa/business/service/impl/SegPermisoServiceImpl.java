@@ -11,6 +11,11 @@ import com.deinsoft.puntoventa.business.model.SegPermiso;
 import com.deinsoft.puntoventa.business.repository.SegPermisoRepository;
 import com.deinsoft.puntoventa.business.service.SegPermisoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -71,6 +76,12 @@ public class SegPermisoServiceImpl extends CommonServiceImpl<SegPermiso, SegPerm
     
     public List<SegPermiso> getAllSegPermisoBySegRolNombre(String nombre) {
         List<SegPermiso> SegPermisoList = (List<SegPermiso>) segPermisoRepository.findBySegRolNonmbre(nombre);
-        return SegPermisoList;
+        return SegPermisoList.stream()
+                .filter( distinctByKey(p -> p.getSegMenu().getNombre()))
+                .collect( Collectors.toList() );
+    }
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
     }
 }

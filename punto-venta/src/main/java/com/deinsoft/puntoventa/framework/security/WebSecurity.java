@@ -1,6 +1,7 @@
 package com.deinsoft.puntoventa.framework.security;
 
 import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
+import com.deinsoft.puntoventa.business.repository.SegPermisoRepository;
 import com.deinsoft.puntoventa.framework.security.repository.SecUserRepository;
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -54,6 +55,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
         @Autowired
 	private JpaUserDetailsService userDetailsService;
         
+        @Autowired
+        private SegPermisoRepository segPermisoRepository;
+        
 	public WebSecurityRest(ObjectMapper objectMapper) {
 		this.objectMapper = objectMapper;
 	}
@@ -104,7 +108,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 //                        .logout().permitAll()
                         //.and().formLogin().permitAll()
                         .and().addFilter((Filter) new JWTAuthenticationFilter(authenticationManager(),
-                                secUserRepository,actCajaTurnoRepository))
+                                secUserRepository,actCajaTurnoRepository,segPermisoRepository))
 					.addFilter(new JWTAuthorizationFilter(authenticationManager()))
                         ;
 //					.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(true);

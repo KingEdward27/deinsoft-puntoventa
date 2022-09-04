@@ -7,6 +7,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity(name = "segPermiso")
 @Table(name = "seg_permiso")
@@ -65,6 +66,31 @@ public class SegPermiso implements Serializable {
 
     public void setSegAccion(SegAccion segAccion) {
         this.segAccion = segAccion;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + (int) (this.id ^ (this.id >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SegPermiso other = (SegPermiso) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return Objects.equals(this.segMenu, other.segMenu);
     }
 
     @Override

@@ -27,6 +27,6 @@ public interface SegPermisoRepository extends JpaRepository<SegPermiso, Long> {
     List<SegPermiso> findBySegAccionId(long id);
 
     @Query(value = "select p from segPermiso p "
-            + "where p.segRol.nombre =  ?1 ")
-    List<SegPermiso> findBySegRolNonmbre(String id);
+            + "where p.segRol.nombre = :id or :id ='ROLE_SUPER_ADMIN'")
+    List<SegPermiso> findBySegRolNonmbre(@Param("id") String id);
 }

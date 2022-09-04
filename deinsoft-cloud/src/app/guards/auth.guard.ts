@@ -35,39 +35,48 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         // return true;
         console.log(state.url);
         let optionValid = []
-        this.appService.getProfile().menu.forEach(element => {
-            // console.log(element.children);
-            if (!element.children) {
-                if (element.path[0] == state.url) {
-                    optionValid.push(element)
-                }
-            } else {
-                console.log(element.children);
-                let wa = element.children.filter(
-                    item => item.path[0] == state.url)
-                    console.log(wa);
-                    
-                if (wa.length > 0) {
-                    optionValid.push(wa);
-                }
-
-            }
-
-
-        });
-
-        console.log(optionValid);
-        // if (optionValid.length > 0 || state.url == '/' 
-        // || state.url == '/generic-form' || state.url == '/generic-child-form' || state.url == '/swagger-ui') {
-        //     return true;
-        // }
-        // else {
-        //     // this.router.navigate(['']); // , { queryParams: { returnUrl: state.url }}
-        //     return false;
-        // }
         return this.getProfile();
-    }
+        let wa = this.appService.getMenu();
+        console.log(wa);
+        for (let we in wa){
+            console.log(we);
+        }
+        wa?.forEach(element => {
+            console.log(element);
+            
+            // console.log(element.children);
+            // if (!element.segMenu) {
+            //     optionValid.push(element)
+            // }
+            // else if (!element.segMenu.children) {
+            //     if (element.segMenu.path[0] == state.url) {
+            //         optionValid.push(element.segMenu)
+            //     }
+            // } else {
+            //     console.log(element.segMenu.children);
+            //     let wa = element.segMenu.children.filter(
+            //         item => item.path[0] == state.url)
+            //     console.log(wa);
 
+            //     if (wa.length > 0) {
+            //         optionValid.push(wa);
+            //     }
+
+            // }
+        }, err => {
+            return false
+        });
+        console.log(optionValid);
+        if (optionValid.length > 0 || state.url == '/' 
+        || state.url == '/generic-form' || state.url == '/generic-child-form' || state.url == '/swagger-ui') {
+            return true;
+        }
+        else {
+            // this.router.navigate(['']); // , { queryParams: { returnUrl: state.url }}
+            return false;
+        }
+        //return this.getProfile();
+    }
     canActivateChild(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot

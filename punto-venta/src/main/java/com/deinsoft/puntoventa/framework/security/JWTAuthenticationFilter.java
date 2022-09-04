@@ -1,7 +1,11 @@
 package com.deinsoft.puntoventa.framework.security;
 
 import com.deinsoft.puntoventa.business.model.ActCajaTurno;
+import com.deinsoft.puntoventa.business.model.SegMenu;
+import com.deinsoft.puntoventa.business.model.SegPermiso;
 import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
+import com.deinsoft.puntoventa.business.repository.SegMenuRepository;
+import com.deinsoft.puntoventa.business.repository.SegPermisoRepository;
 import com.deinsoft.puntoventa.framework.security.model.SecUser;
 import com.deinsoft.puntoventa.framework.security.repository.SecUserRepository;
 import org.slf4j.Logger;
@@ -31,6 +35,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * @author bangulo
@@ -44,14 +49,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private ActCajaTurnoRepository actCajaTurnoRepository;
     
+    private SegPermisoRepository segPermisoRepository;
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager,
             SecUserRepository secUserRepository,
-            ActCajaTurnoRepository actCajaTurnoRepository) {
+            ActCajaTurnoRepository actCajaTurnoRepository,
+            SegPermisoRepository segPermisoRepository) {
         this.authenticationManager = authenticationManager;
         this.secUserRepository = secUserRepository;
         this.actCajaTurnoRepository = actCajaTurnoRepository;
+        this.segPermisoRepository = segPermisoRepository;
     }
 
     @Override
@@ -84,7 +93,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .findFirst().orElse(new ActCajaTurno());
         usuario.setActCajaTurno(caja);
         //String idUp = usuario.getUnidadPolicial().getIdUnidadPolicial();
-
+//        List<SegPermiso> listMenu = null;
+//        for (GrantedAuthority authority : ((User)auth.getPrincipal()).getAuthorities()) {
+//            String rolName = authority.getAuthority().split("\\|")[0];
+//            listMenu = segPermisoRepository.findBySegRolNonmbre(rolName);
+//        }
         //Usuario usr = userService.getUserByUsername(usrname);
         String token = Jwts.builder().setIssuedAt(new Date()).setIssuer(Constant.ISSUER_INFO)
                 .setId("DEINSOFT-JWT")

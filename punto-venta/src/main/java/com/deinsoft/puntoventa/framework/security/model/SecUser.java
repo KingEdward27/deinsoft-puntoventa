@@ -1,6 +1,7 @@
 package com.deinsoft.puntoventa.framework.security.model;
 
 import com.deinsoft.puntoventa.business.model.ActCajaTurno;
+import com.deinsoft.puntoventa.business.model.SegPermiso;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -9,6 +10,7 @@ import org.hibernate.annotations.Cache;
 import java.util.Date;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "secUser")
@@ -40,6 +42,9 @@ public class SecUser implements Serializable {
 
     @Transient
     private ActCajaTurno actCajaTurno;
+    
+    @Transient
+    private List<SegPermiso> permisos;
     
 //	@OneToMany(fetch=FetchType.LAZY,cascade = {CascadeType.MERGE, CascadeType.REFRESH})
 //	@JoinTable(name="sec_role_user",
@@ -117,4 +122,13 @@ public class SecUser implements Serializable {
     public void setActCajaTurno(ActCajaTurno actCajaTurno) {
         this.actCajaTurno = actCajaTurno;
     }
+
+    public List<SegPermiso> getPermisos() {
+        return permisos;
+    }
+
+    public void setPermisos(List<SegPermiso> permisos) {
+        this.permisos = permisos;
+    }
+    
 }

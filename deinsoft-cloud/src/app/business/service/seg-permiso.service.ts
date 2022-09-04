@@ -43,9 +43,9 @@ export class SegPermisoService {
     let params = new HttpParams().set("id",arg1);
     return this.http.delete(this.url+'/delete-seg-permiso', { observe: 'response' ,params}); 
   }
-  public getAllBySegRolNombre(nombre:any):Observable<any>{
+  public getAllBySegRolNombre(nombre:any): Promise<any>{
     let params = new HttpParams().set("nombre",nombre.toString());
-    return this.http.get<SegPermiso[]>(`${this.url}/get-all-seg-permiso-by-seg-rol-name`,{params});
+    return this.http.get<SegPermiso[]>(`${this.url}/get-all-seg-permiso-by-seg-rol-name`,{params}).toPromise();;
   }
 }
 

@@ -52,7 +52,7 @@ public class JpaUserDetailsService implements UserDetailsService {
 //        usuario.setListSecRoleUser(listRoles);
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         //Map<String,Object> list = jdbcRepository.selectColumnsMap(username, username, username)
-        String locales = "*";
+        String locales = "";
         boolean totalAccess = false;
         if (usuario.getEmail().equalsIgnoreCase("edward21.sistemas@gmail.com")) {
             authorities.add(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN" + "|1|*"));
@@ -86,8 +86,6 @@ public class JpaUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Error en el Login: usuario '" + email + "' no tiene roles asignados!");
         }
 
-        
-                
         return new User(usuario.getName(), usuario.getPassword(), true, true, true, true, authorities);
     }
 
