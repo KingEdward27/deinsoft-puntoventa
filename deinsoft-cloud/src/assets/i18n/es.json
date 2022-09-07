@@ -46,7 +46,7 @@
       "direccion": "Direccion",
       "nro_documento": "Nro. documento",
       "telefono": "Teléfono",
-      "ruta_pse ":"Ruta PSE facturación",
+      "ruta_pse":"Ruta PSE facturación",
       "token":"Token seguridad"
     },
     "cnf_moneda": {
@@ -270,7 +270,8 @@
       "descripcion": "Descripción",
       "cnf_producto.cnf_producto_id, cnf_producto.nombre":"Producto",
       "barcode":"Código de barras",
-      "costo":"Costo"
+      "costo":"Costo",
+      "flag_servicio":"Es servicio"
     },
     "inv_almacen": {
       "home": {
@@ -411,6 +412,25 @@
       "seg_rol":"Perfil",
       "seg_menu":"Opción",
       "seg_accion":"Acción"
+    },
+    "act_caja_operacion": {
+      "home": {
+        "title": "Operaciones de caja",
+        "subTitleForm": " Mantenimiento de Operaciones de caja",
+        "subTitleList": " Listado de Operaciones de caja"
+      },
+      "id": "ID",
+      "act_caja":"Caja",
+      "seg_usuario":"Usuario",
+      "fecha":"Fecha",
+      "act_caja_turno":"Caja turno",
+      "act_comprobante":"Comprobante",
+      "act_pago":"Pago de comprobante",
+      "flag_ingreso":"Es ingreso",
+      "monto":"Monto",
+      "estado":"Estado",
+      "monto_salida":"Salida",
+      "monto_ingreso":"Ingreso"
     },
     "reportes": {
       "act_comprobante_listado":"Listado de Ventas",

@@ -11,6 +11,8 @@ import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.repository.ActPagoProgramacionRepository;
 import com.deinsoft.puntoventa.business.service.ActPagoProgramacionService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.model.SegUsuario;
+import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
@@ -23,8 +25,12 @@ public class ActPagoProgramacionServiceImpl
     ActPagoProgramacionRepository actPagoProgramacionRepository;
 
     public List<ActPagoProgramacion> getAllActPagoProgramacion(ActPagoProgramacion actPagoProgramacion) {
+        
         List<ActPagoProgramacion> actPagoProgramacionList = (List<ActPagoProgramacion>) actPagoProgramacionRepository.getAllActPagoProgramacion();
-        return actPagoProgramacionList;
+        return actPagoProgramacionList.stream().filter(item -> !item.getActComprobante().getFlagIsventa().equals("1"))
+                        .filter(item -> listRoles().stream()
+                                .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActComprobante().getCnfLocal().getCnfEmpresa().getId()))
+                        .collect(Collectors.toList());
     }
 
     public ActPagoProgramacion getActPagoProgramacion(Long id) {
@@ -70,9 +76,12 @@ public class ActPagoProgramacionServiceImpl
         return ActPagoProgramacionList;
     }
     public List<ActPagoProgramacion> getAllActPagoProgramacionCompraByCnfMaestro(long id, LocalDate fechaVencimiento) {
+        
         List<ActPagoProgramacion> ActPagoProgramacionList
                 = (List<ActPagoProgramacion>) actPagoProgramacionRepository.findByCnfMaestroId(id,fechaVencimiento)
                         .stream().filter(item -> !item.getActComprobante().getFlagIsventa().equals("1"))
+                        .filter(item -> listRoles().stream()
+                                .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActComprobante().getCnfLocal().getCnfEmpresa().getId()))
                         .collect(Collectors.toList());
         return ActPagoProgramacionList;
     }

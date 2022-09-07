@@ -25,6 +25,8 @@ export class SegUsuarioComponent extends GenericListComponent implements OnInit{
                     ,columnsForm: [
                                     {tableName:"seg_rol", columnName:"nombre",
                                     type:"select",loadState:1,relatedBy:"seg_rol_id"},
+                                    {tableName:"cnf_empresa", columnName:"nombre",
+                                    type:"select",loadState:1,relatedBy:"cnf_empresa_id"},
                                     {tableName:"cnf_local", columnName:"nombre",type:"select",loadState:1,
                                     relatedBy:"cnf_local_id",filters:[]}
                                   ]

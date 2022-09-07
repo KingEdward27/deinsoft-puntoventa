@@ -13,7 +13,9 @@ import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.ActPago;
 import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
+import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.business.service.ActPagoService;
+import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import org.springframework.http.HttpStatus;
 
 @RestController
@@ -25,6 +27,9 @@ public class ActPagoController extends CommonController<ActPago, ActPagoService>
     @Autowired
     ActPagoService actPagoService;
 
+    @Autowired
+    AuthenticationHelper auth;
+    
     @GetMapping(value = "/get-all-act-pago")
     public List<ActPago> getAllActPago(ActPago actPago) {
         logger.info("getAllActPago received: " + actPago.toString());
@@ -40,8 +45,13 @@ public class ActPagoController extends CommonController<ActPago, ActPagoService>
     }
 
     @PostMapping(value = "/save-act-pago")
-    public ResponseEntity<?> saveActPago(@Valid @RequestBody ActPago actPago, BindingResult result) {
-        return super.crear(actPago, result);
+    public ResponseEntity<?> saveActPago(@Valid @RequestBody ActPago actPago, BindingResult result) throws  Exception{
+        if (result.hasErrors()) {
+            return this.validar(result);
+        }
+        SegUsuario segUsuario = auth.getLoggedUserdata();
+        actPago.setSegUsuario(segUsuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(actPagoService.saveActPago(actPago));
     }
 
     @GetMapping(value = "/get-all-act-pago-combo")
@@ -64,8 +74,11 @@ public class ActPagoController extends CommonController<ActPago, ActPagoService>
 
     @PostMapping(value = "/save-list-act-pago")
     public ResponseEntity<?> saveListActPaymentDetail(
-            @RequestBody List<ActPagoProgramacion> listActPayment, HttpServletRequest request) {
-
+            @RequestBody List<ActPagoProgramacion> listActPayment, HttpServletRequest request) throws Exception {
+        SegUsuario segUsuario = auth.getLoggedUserdata();
+        listActPayment.forEach(data -> {
+            data.setSegUsuario(segUsuario);
+        });
         List<ActPago> listActPaymentDetailResult = actPagoService.saveActPaymentDetailFromList(listActPayment);
         return ResponseEntity.status(HttpStatus.CREATED).body(listActPaymentDetailResult);
     }

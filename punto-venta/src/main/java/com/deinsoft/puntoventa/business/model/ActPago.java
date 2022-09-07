@@ -32,6 +32,10 @@ public class ActPago implements Serializable {
     @JoinColumn(name = "act_pago_programacion_id")
     private ActPagoProgramacion actPagoProgramacion;
 
+    @OneToOne
+    @JoinColumn(name = "seg_usuario_id")
+    private SegUsuario segUsuario;
+    
     public long getId() {
         return id;
     }
@@ -62,6 +66,14 @@ public class ActPago implements Serializable {
 
     public void setActPagoProgramacion(ActPagoProgramacion actPagoProgramacion) {
         this.actPagoProgramacion = actPagoProgramacion;
+    }
+
+    public SegUsuario getSegUsuario() {
+        return segUsuario;
+    }
+
+    public void setSegUsuario(SegUsuario segUsuario) {
+        this.segUsuario = segUsuario;
     }
 
     @Override

@@ -10,7 +10,7 @@ import com.deinsoft.puntoventa.business.model.SegPermiso;
 
 public interface SegPermisoRepository extends JpaRepository<SegPermiso, Long> {
 
-    @Query(value = "select p from segPermiso p ")
+    @Query(value = "select p from segPermiso p order by p.segMenu.seqorder")
 
     List<SegPermiso> getAllSegPermiso();
 
@@ -26,7 +26,7 @@ public interface SegPermisoRepository extends JpaRepository<SegPermiso, Long> {
             + "where p.segAccion.id =  ?1 ")
     List<SegPermiso> findBySegAccionId(long id);
 
-    @Query(value = "select p from segPermiso p "
-            + "where p.segRol.nombre = :id or :id ='ROLE_SUPER_ADMIN'")
-    List<SegPermiso> findBySegRolNonmbre(@Param("id") String id);
+//    @Query(value = "select p from segPermiso p "
+//            + "where p.segRol.nombre = :id or :id ='ROLE_SUPER_ADMIN' order by p.segMenu.seqorder")
+//    List<SegPermiso> findBySegRolNonmbre(@Param("id") String id);
 }

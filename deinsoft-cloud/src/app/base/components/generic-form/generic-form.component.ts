@@ -151,7 +151,10 @@ export class GenericFormComponent extends CommonService implements OnInit {
           } else {
             let dataVacia: any[] = [];
             dataVacia.push([0, "- Seleccione -"]);
-            element.listData = dataVacia;
+            if (!element.listData) {
+              element.listData = dataVacia;
+            }
+            
           }
         } else {
           if (element.loadState == 1) {

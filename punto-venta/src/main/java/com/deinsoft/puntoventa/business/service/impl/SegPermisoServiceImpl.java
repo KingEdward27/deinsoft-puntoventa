@@ -11,6 +11,9 @@ import com.deinsoft.puntoventa.business.model.SegPermiso;
 import com.deinsoft.puntoventa.business.repository.SegPermisoRepository;
 import com.deinsoft.puntoventa.business.service.SegPermisoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.model.SegMenu;
+import com.deinsoft.puntoventa.business.repository.SegMenuRepository;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -24,6 +27,9 @@ public class SegPermisoServiceImpl extends CommonServiceImpl<SegPermiso, SegPerm
     @Autowired
     SegPermisoRepository segPermisoRepository;
 
+    @Autowired
+    SegMenuRepository segMenuRepository;
+    
     public List<SegPermiso> getAllSegPermiso(SegPermiso segPermiso) {
         List<SegPermiso> segPermisoList = (List<SegPermiso>) segPermisoRepository.getAllSegPermiso();
         return segPermisoList;
@@ -75,10 +81,51 @@ public class SegPermisoServiceImpl extends CommonServiceImpl<SegPermiso, SegPerm
     }
     
     public List<SegPermiso> getAllSegPermisoBySegRolNombre(String nombre) {
-        List<SegPermiso> SegPermisoList = (List<SegPermiso>) segPermisoRepository.findBySegRolNonmbre(nombre);
-        return SegPermisoList.stream()
-                .filter( distinctByKey(p -> p.getSegMenu().getNombre()))
-                .collect( Collectors.toList() );
+        
+        
+        
+        if (nombre.equalsIgnoreCase("ROLE_SUPER_ADMIN")){
+            List<SegPermiso> segPermisoList = new ArrayList<>();
+            List<SegMenu> segMenuList = segMenuRepository.findAll();
+            segMenuList.forEach(data -> {
+                SegPermiso s = new SegPermiso();
+                s.setSegMenu(data);
+                segPermisoList.add(s);
+            });
+            return segPermisoList;
+        } else {
+            final List<SegPermiso> segPermisoList = (List<SegPermiso>) segPermisoRepository.getAllSegPermiso();
+            
+            return segPermisoList.stream()
+                    .filter( distinctByKey(p -> p.getSegMenu().getNombre()))
+                    .map(item -> {
+                        System.out.println("item.getSegMenu().getId()"+ "/"+ item.getSegMenu().getId());
+                        Set<SegMenu> list = 
+                                item.getSegMenu().getChildren().stream()
+                                        .filter(predicate -> {
+                                          return segPermisoList.stream().anyMatch(i -> i.getSegMenu().getId() == predicate.getId());
+    //                                      System.out.println("item.getSegMenu().getId()"+ 
+    //                                              item.getSegMenu().getNombre() +"-"+ predicate.getId() + "/"+ item.getSegMenu().getId());
+    //                                      return predicate.getId() == item.getSegMenu().getId();  
+                                        })
+                                        .collect(Collectors.toSet());
+                        item.getSegMenu().setChildren(list);
+                        System.out.println("list"+ list.size());
+                        return item;
+                    })
+                    //.filter( filter -> !filter.getSegMenu().getChildren().isEmpty())
+                    .collect( Collectors.toList() );
+    //        System.out.println("item.getSegMenu().getId()"+ "/"+ item.getSegMenu().getId());
+    //                    Set<SegMenu> list = 
+    //                            item.getSegMenu().getChildren().stream()
+    //                                    .filter(predicate -> predicate.getId() == item.getSegMenu().getId())
+    //                                    .collect(Collectors.toSet());
+    //                    item.getSegMenu().setChildren(list);
+    //                    System.out.println("list"+ list.size());
+    //                    return item;
+    //        return segPermisoList;
+        }
+        
     }
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();

@@ -56,8 +56,12 @@ export class CnfProductoComponent extends GenericListComponent implements OnInit
     
     this.prop.conditions.push({"columnName":"cnf_producto.cnf_empresa_id","value":this.cnfEmpresa});
     this.prop.preSave.push({columnForm:"cnf_empresa_id",value:this.cnfEmpresa});
+    // this.prop.columnsForm[1].listData.push([0, "- Seleccione -"]);
+    // this.prop.columnsForm[1].listData.push([1, "Control Inventario"]);
+    // this.prop.columnsForm[1].listData.push([2, "Servicio"]); 
     this.prop.columnsForm[4].filters.push({"columnName":"cnf_marca.cnf_empresa_id","value":this.cnfEmpresa});
     this.prop.columnsForm[6].filters.push({"columnName":"cnf_sub_categoria.cnf_empresa_id","value":this.cnfEmpresa});
+    
     super.properties = this.prop;
     console.log(this.prop);
     super.ngOnInit();

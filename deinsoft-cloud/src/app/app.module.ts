@@ -98,6 +98,8 @@ import { SegAccionListComponent } from '@pages/security/seg-accion/list/seg-acci
 import { SegPermisoFormComponent } from '@pages/security/seg-permiso/form/seg-permiso-form.component';
 import { SegPermisoListComponent } from '@pages/security/seg-permiso/list/seg-permiso-list.component';
 import { SegAccionComponent } from '@pages/security/seg-accion/seg_accion';
+import { ActCajaOperacionListComponent } from '@pages/act-caja-operacion/list/act-caja-operacion-list.component';
+import { ActCajaOperacionFormComponent } from '@pages/act-caja-operacion/form/act-caja-operacion-form.component';
 registerLocaleData(localeEn, 'en-EN');
 
 @NgModule({
@@ -184,7 +186,9 @@ registerLocaleData(localeEn, 'en-EN');
         SegAccionListComponent,
         SegPermisoFormComponent,
         SegPermisoListComponent,
-        SegAccionComponent
+        SegAccionComponent,
+        ActCajaOperacionListComponent,
+        ActCajaOperacionFormComponent
     ],
     imports: [
         BrowserModule,

@@ -119,6 +119,8 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
         if(!errores.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errores);
         }
+        SegUsuario segUsuario = auth.getLoggedUserdata();
+        actComprobante.setSegUsuario(segUsuario);
         ActComprobante actComprobanteResult = actComprobanteService.saveActComprobanteCompra(actComprobante);
         
         

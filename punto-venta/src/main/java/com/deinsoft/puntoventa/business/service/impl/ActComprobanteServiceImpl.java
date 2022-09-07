@@ -101,6 +101,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     public ActComprobante saveActComprobante(ActComprobante actComprobante) throws Exception {
         ActComprobante actComprobanteResult = null;
 
+        //tiene que obedecer un parametro de configuración caja turno, por ahora null
         List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actComprobante.getSegUsuario().getId());
         actCajaTurno = actCajaTurno.stream()
                 .filter(item -> item.getEstado().equals("1"))
@@ -135,37 +136,38 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
 
             //update stock
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
-                List<InvAlmacenProducto> list
+                if (!data.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
+                    List<InvAlmacenProducto> list
                         = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
 
-                if (list.size() > 1) {
-                    throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
-                }
-                if (list.size() == 0) {
-                    throw new RuntimeException("No existe stock para el almacen y producto seleccionados");
-                }
-                InvAlmacenProducto stock = list.get(0);
-                stock.setCnfProducto(data.getCnfProducto());
-                stock.setInvAlmacen(actComprobante.getInvAlmacen());
-                stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
-                invAlmacenProductoRepository.save(stock);
+                    if (list.size() > 1) {
+                        throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
+                    }
+                    if (list.size() == 0) {
+                        throw new RuntimeException("No existe stock para el almacen y producto seleccionados");
+                    }
+                    InvAlmacenProducto stock = list.get(0);
+                    stock.setCnfProducto(data.getCnfProducto());
+                    stock.setInvAlmacen(actComprobante.getInvAlmacen());
+                    stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
+                    invAlmacenProductoRepository.save(stock);
 
-                InvMovimientoProducto mov = new InvMovimientoProducto();
-                mov.setCnfProducto(data.getCnfProducto());
-                mov.setInvAlmacen(actComprobante.getInvAlmacen());
-                mov.setActComprobante(actComprobante);
-                mov.setFecha(actComprobante.getFecha());
-                mov.setFechaRegistro(LocalDateTime.now());
-                mov.setCantidad(data.getCantidad().multiply(BigDecimal.valueOf(-1)));
-                mov.setValor(data.getPrecio());
-                invMovimientoProductoRepository.save(mov);
+                    InvMovimientoProducto mov = new InvMovimientoProducto();
+                    mov.setCnfProducto(data.getCnfProducto());
+                    mov.setInvAlmacen(actComprobante.getInvAlmacen());
+                    mov.setActComprobante(actComprobante);
+                    mov.setFecha(actComprobante.getFecha());
+                    mov.setFechaRegistro(LocalDateTime.now());
+                    mov.setCantidad(data.getCantidad().multiply(BigDecimal.valueOf(-1)));
+                    mov.setValor(data.getPrecio());
+                    invMovimientoProductoRepository.save(mov);
+                }
+                
             });
 
             //save pagos programacion
             
-            saveActPagoProgramacion(actComprobante, actCajaTurno);
-
-            
+            saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno,"1");
 
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -183,13 +185,13 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     public ActComprobante saveActComprobanteCompra(ActComprobante actComprobante) throws Exception {
         ActComprobante actComprobanteResult = null;
 
-//        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actComprobante.getSegUsuario().getId());
-//        actCajaTurno = actCajaTurno.stream()
-//                .filter(item -> item.getEstado().equals("1"))
-//                .collect(Collectors.toList());
-//        if (actCajaTurno.isEmpty()) {
-//            throw new Exception("El usuario no tiene caja aperturada");
-//        }
+        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actComprobante.getSegUsuario().getId());
+        actCajaTurno = actCajaTurno.stream()
+                .filter(item -> item.getEstado().equals("1"))
+                .collect(Collectors.toList());
+        if (actCajaTurno.isEmpty()) {
+            throw new Exception("El usuario no tiene caja aperturada");
+        }
         try {
             actComprobante.setFechaRegistro(LocalDateTime.now());
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
@@ -230,7 +232,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             });
             //save pagos programacion
             
-            saveActPagoProgramacion(actComprobante, null);
+            saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno,"2");
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //            e.printStackTrace();
@@ -314,7 +316,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                     InvAlmacenProducto invBalance
                             = invAlmacenProductoRepository.findByCnfProductoIdAndInvAlmacenId(
                                     item.getCnfProducto().getId(), actInvoice.getInvAlmacen().getId());
-                    BigDecimal currentQty = invBalance.getCantidad();
+                    BigDecimal currentQty = invBalance.getCantidad(); 
                     if (actInvoice.getFlagIsventa().equals("1")) {
                         invBalance.setCantidad(currentQty.add(item.getCantidad()));
                     } else {
@@ -365,7 +367,8 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         }
         return result;
     }
-    private void saveActPagoProgramacion(ActComprobante actComprobante, List<ActCajaTurno> actCajaTurno) {
+    private void saveActPagoProgramacionOrCajaOperacion(ActComprobante actComprobante, 
+            List<ActCajaTurno> actCajaTurno,String flagIngreso) {
         BigDecimal pending = actComprobante.getTotal();
             LocalDate dueDate = actComprobante.getFecha();
         List<CnfFormaPagoDetalle> list = cnfFormaPagoDetalleRepository.findByCnfFormaPagoId(
@@ -417,7 +420,8 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             actCajaOperacion.setFecha(LocalDate.now());
             actCajaOperacion.setFechaRegistro(LocalDateTime.now());
             actCajaOperacion.setMonto(actComprobante.getTotal());
-            actCajaOperacion.setFlagIngreso("1");
+            actCajaOperacion.setFlagIngreso(flagIngreso);
+            actCajaOperacion.setEstado("1");
             actCajaOperacionRepository.save(actCajaOperacion);
         }
     }

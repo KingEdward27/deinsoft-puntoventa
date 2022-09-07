@@ -11,6 +11,8 @@ import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
 import com.deinsoft.puntoventa.business.service.ActCajaTurnoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.model.SegUsuario;
+import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,10 +22,13 @@ public class ActCajaTurnoServiceImpl extends CommonServiceImpl<ActCajaTurno, Act
 
     @Autowired
     ActCajaTurnoRepository actCajaTurnoRepository;
-
+    
     public List<ActCajaTurno> getAllActCajaTurno(ActCajaTurno actCajaTurno) {
         List<ActCajaTurno> actCajaTurnoList = (List<ActCajaTurno>) actCajaTurnoRepository.getAllActCajaTurno(actCajaTurno.getEstado().toUpperCase());
-        return actCajaTurnoList;
+        return actCajaTurnoList.stream()
+                .filter(item -> listRoles().stream()
+                        .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActCaja().getCnfEmpresa().getId()))
+                .collect(Collectors.toList());
     }
 
     public ActCajaTurno getActCajaTurno(Long id) {
@@ -57,7 +62,10 @@ public class ActCajaTurnoServiceImpl extends CommonServiceImpl<ActCajaTurno, Act
 
     public List<ActCajaTurno> getAllActCajaTurnoBySegUsuario(long id) {
         List<ActCajaTurno> actCajaTurnoList = (List<ActCajaTurno>) actCajaTurnoRepository.findBySegUsuarioId(id);
-        return actCajaTurnoList;
+        return actCajaTurnoList.stream()
+                .filter(item -> listRoles().stream()
+                        .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActCaja().getCnfEmpresa().getId()))
+                .collect(Collectors.toList());
     }
 
     @Override

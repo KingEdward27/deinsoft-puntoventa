@@ -13,6 +13,7 @@ import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.service.ActCajaOperacionService;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/business/act-caja-operacion")
@@ -39,6 +40,10 @@ public class ActCajaOperacionController extends CommonController<ActCajaOperacio
 
     @PostMapping(value = "/save-act-caja-operacion")
     public ResponseEntity<?> saveActCajaOperacion(@Valid @RequestBody ActCajaOperacion actCajaOperacion, BindingResult result) {
+        if (actCajaOperacion.getActComprobante() != null && actCajaOperacion.getActComprobante().getId() == 0) actCajaOperacion.setActComprobante(null);
+        if (actCajaOperacion.getActPago()!= null && actCajaOperacion.getActPago().getId() == 0) actCajaOperacion.setActPago(null);
+        actCajaOperacion.setEstado("1");
+        actCajaOperacion.setFechaRegistro(LocalDateTime.now());
         return super.crear(actCajaOperacion, result);
     }
 

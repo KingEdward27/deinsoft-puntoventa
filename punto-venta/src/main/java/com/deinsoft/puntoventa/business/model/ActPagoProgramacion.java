@@ -40,6 +40,9 @@ public class ActPagoProgramacion implements Serializable {
     private ActComprobante actComprobante;
 
     @Transient
+    private SegUsuario segUsuario;
+    
+    @Transient
     BigDecimal amtToPay;
     
     public long getId() {
@@ -96,6 +99,14 @@ public class ActPagoProgramacion implements Serializable {
 
     public void setAmtToPay(BigDecimal amtToPay) {
         this.amtToPay = amtToPay;
+    }
+
+    public SegUsuario getSegUsuario() {
+        return segUsuario;
+    }
+
+    public void setSegUsuario(SegUsuario segUsuario) {
+        this.segUsuario = segUsuario;
     }
 
     @Override

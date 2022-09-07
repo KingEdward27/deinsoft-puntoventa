@@ -16,7 +16,7 @@ public interface ActPagoService extends CommonService<ActPago> {
 
     public ActPago getActPago(Long id);
 
-    public ActPago saveActPago(ActPago actPago);
+    public ActPago saveActPago(ActPago actPago)  throws Exception ;
 
     public List<ActPago> getAllActPago();
 
@@ -24,5 +24,5 @@ public interface ActPagoService extends CommonService<ActPago> {
 
     public void delete(long id);
 
-    public List<ActPago> saveActPaymentDetailFromList(List<ActPagoProgramacion> listActPayment);
+    public List<ActPago> saveActPaymentDetailFromList(List<ActPagoProgramacion> listActPayment) throws Exception ;
 }

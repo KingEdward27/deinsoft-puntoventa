@@ -853,6 +853,12 @@ CHANGE COLUMN description descripcion VARCHAR(255) NULL DEFAULT NULL ;
 insert into seg_accion (seg_accion_id,nombre,descripcion)
 values (1,'VER','');
 
+ALTER TABLE act_pago
+CHANGE COLUMN seg_usuario_id seg_usuario_id INT NULL DEFAULT NULL ;
+
+alter table act_pago
+add constraint fk_act_pago_seg_usuario foreign key (seg_usuario_id) references seg_usuario(seg_usuario_id);
+
 insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
 values (1,'ADMINISTRACION',null,1,'',null);
 insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
@@ -946,7 +952,6 @@ insert into seg_menu (seg_menu_id,nombre,parent_id,seqorder,icon,path)
 values (null,'Kardex valorizado',7,1,'','/rpt-movimiento-producto');
 
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,1,1);
-insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,2,1);
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,3,1);
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,4,1);
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,5,1);
@@ -987,7 +992,6 @@ insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,40,1);
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,41,1);
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,42,1);
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(1,43,1);
-insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,2,1);
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,3,1);
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,4,1);
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,5,1);
@@ -1016,3 +1020,66 @@ insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,40,1);
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,41,1);
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,42,1);
 insert into seg_permiso (seg_rol_id,seg_menu_id,seg_accion_id) values(2,43,1);
+
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'4A','BOBINAS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'BJ','BALDE','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'BLL','BARRILES','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'BG','BOLSA','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'BO','BOTELLAS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'BX','CAJA','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'CT','CARTONES','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'CMK','CENTIMETRO CUADRADO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'CMQ','CENTIMETRO CUBICO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'CMT','CENTIMETRO LINEAL','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'CEN','CIENTO DE UNIDADES','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'CY','CILINDRO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'CJ','CONOS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'DZN','DOCENA','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'DZP','DOCENA POR 10**6','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'BE','FARDO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'GLI','GALON INGLES (4,545956L)','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'GRM','GRAMO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'GRO','GRUESA','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'HLT','HECTOLITRO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'LEF','HOJA','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'SET','JUEGO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'KGM','KILOGRAMO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'KTM','KILOMETRO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'KWH','KILOVATIO HORA','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'KT','KIT','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'CA','LATAS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'LBR','LIBRAS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'LTR','LITRO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'MWH','MEGAWATT HORA','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'MTR','METRO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'MTK','METRO CUADRADO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'MTQ','METRO CUBICO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'MGM','MILIGRAMOS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'MLT','MILILITRO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'MMT','MILIMETRO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'MMK','MILIMETRO CUADRADO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'MMQ','MILIMETRO CUBICO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'MLL','MILLARES','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'UM','MILLON DE UNIDADES','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'ONZ','ONZAS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'PF','PALETAS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'PK','PAQUETE','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'PR','PAR','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'FOT','PIES','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'FTK','PIES CUADRADOS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'FTQ','PIES CUBICOS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'C62','PIEZAS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'PG','PLACAS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'ST','PLIEGO','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'INH','PULGADAS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'RM','RESMA','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'DR','TAMBOR','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'STN','TONELADA CORTA','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'LTN','TONELADA LARGA','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'TNE','TONELADAS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'TU','TUBOS','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'NIU','UNIDAD (BIENES)','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'ZZ','UNIDAD (SERVICIOS)','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'GLL','US GALON (3,7843 L)','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'YRD','YARDA','1');
+insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'YDK','YARDA CUADRADA','1');

@@ -147,6 +147,8 @@
                                                     <ng-container *ngFor="let columnas of item.listData; index as u;">
                                                         <option [selected]="(this.properties.id?(item.value == columnas[0]): (columnas[0]==0))" value="{{columnas[0]}}" >{{columnas[1]}} </option>
                                                     </ng-container>
+                                                
+                                                    
                                                     
                                                     <!-- <option *ngIf="item.tableName == item2[2]" >{{item[1]}} </option> -->
                                                 <!-- <option *ngFor="let item of listLists[i]; index as o;" >{{item[1]}} </option> -->

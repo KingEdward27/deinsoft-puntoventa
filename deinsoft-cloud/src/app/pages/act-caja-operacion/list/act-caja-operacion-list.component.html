@@ -3,13 +3,13 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>{{'webpagos.act_caja_turno.home.title'| translate}}</h1>
+                <h1>{{'webpagos.act_caja_operacion.home.title'| translate}}</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
                     <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.adminModule"></a></li>
-                    <li class="breadcrumb-item active">{{'webpagos.act_caja_turno.home.title'| translate}}</li>
+                    <li class="breadcrumb-item active">{{'webpagos.act_caja_operacion.home.title'| translate}}</li>
                 </ol>
             </div>
         </div>
@@ -23,7 +23,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{'webpagos.act_caja_turno.home.title'| translate}}</h3>
+                <h3 class="card-title">{{'webpagos.act_caja_operacion.home.title'| translate}}</h3>
 
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip"
@@ -37,12 +37,11 @@
                 </div>
             </div>
             <div class="card-body">
-
                 <div class="table-responsive">
                     <div class="row">
                         <div class="col-6">
                             <div class="col-md-12 col-lg-6 col-xl-6 col-xs-9" style="margin-left:-15px">
-                                <a class="btn btn-primary" [routerLink]="['/new-act-caja-turno']" >
+                                <a class="btn btn-primary" [routerLink]="['/new-caja-operacion']" >
                                     <i class="fa fa-plus"></i> {{'webpagos.btnNew' | translate }}
                                 </a>
                             </div>
@@ -50,39 +49,50 @@
                         
                     </div>
                     <br>
-                    <table id="dtDataActCajaTurno"
+                    <table id="dtDataActCajaOperacion"
                         class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
                         <thead>
                             <tr>
                                 <th width="1%">Nro.</th>
-                                <th class="text-nowrap">{{'webpagos.act_caja.nombre' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.act_caja_turno.seg_usuario' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.act_caja_turno.fecha_apertura' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.act_caja_turno.monto_apertura' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.act_caja_turno.fecha_cierre' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.act_caja_turno.monto_cierre' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.act_caja_turno.estado' | translate}}</th>
                                 
+                                <th class="text-nowrap">{{'webpagos.act_caja_operacion.fecha' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_caja_operacion.act_caja_turno' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_caja_operacion.act_comprobante' | translate}}
+                                </th>
+                                <th class="text-nowrap">{{'webpagos.act_caja_operacion.act_pago' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_caja_operacion.monto_salida' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_caja_operacion.monto_ingreso' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.actionsText' | translate}}</th>
                             </tr>
                         </thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
                         <tbody>
 
                             <tr *ngFor="let item of lista; index as i" class="odd gradeX">
                                 <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
-                                <td>{{item.actCaja.nombre}}</td>
-                                <td>{{item.segUsuario?.nombre}}</td>
-                                <td>{{item.fechaApertura}}</td>
-                                <td class="content-number">{{item.montoApertura | number:'1.2-2'}}</td>
-                                <td>{{item.fechaCierre}}</td>
-                                <td class="content-number">{{item.montoCierre | number:'1.2-2'}}</td>
-                                <td>{{item.estado == '0'?'CERRADO':'APERTURADO'}}</td>
+                                
+                                <td>{{item.fecha}}</td>
+                                <td>{{item.actCajaTurno?.actCaja.nombre +' - '+ item.actCajaTurno.fechaApertura}}</td>
+                                <td>{{item.actComprobante?(item.actComprobante.serie + '-' +item.actComprobante.numero):''}}</td>
+                                <td>{{item.actPago?.actPagoProgramacion?.actComprobante?
+                                    (item.actPago.actPagoProgramacion.actComprobante.serie + 
+                                    '-' +
+                                    item.actPago.actPagoProgramacion.actComprobante.numero):''}}</td>
+                                <td class="content-number">{{(item.flagIngreso == '1'?0:item.monto) | number:'1.2-2'}}</td>
+                                <td class="content-number">{{(item.flagIngreso != '1'?0:item.monto) | number:'1.2-2'}}</td>
                                 <td>
                                     <div class="row row2">
-                                        <div class="col-sm-6 col-xs-6 text-right"><a class="fas fa-edit"
+                                        <div *ngIf="!item.actComprobante && !item.actPago && item.actCajaTurno.estado == '1'" class="col-sm-6 col-xs-6 text-right"><a class="fas fa-edit"
                                                 (click)="editar(item)" style="cursor: pointer;"
-                                                title="Cerra caja"></a></div>
-                                        <div class="col-sm-6 col-xs-6"><a (click)="eliminar(item)"
+                                                title="{{'webpagos.btnEdit' | translate}}"></a></div>
+                                        <div *ngIf="!item.actComprobante && !item.actPago && item.actCajaTurno.estado == '1'" class="col-sm-6 col-xs-6"><a (click)="eliminar(item)"
                                                 style="cursor: pointer;"
                                                 title="{{'webpagos.btnDelete' | translate}}"><i
                                                     class="fa fa-trash fa-lg"></i></a></div>
@@ -90,6 +100,14 @@
                                 </td>
                             </tr>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan = "5">Total:</td>
+                                <td class="content-number">{{totalSalida| number:'1.2-2'}}</td>
+                                <td class="content-number">{{totalIngreso| number:'1.2-2'}}</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

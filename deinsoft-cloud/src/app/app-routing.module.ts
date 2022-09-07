@@ -59,6 +59,8 @@ import { SegAccionListComponent } from '@pages/security/seg-accion/list/seg-acci
 import { SegPermisoFormComponent } from '@pages/security/seg-permiso/form/seg-permiso-form.component';
 import { SegPermisoListComponent } from '@pages/security/seg-permiso/list/seg-permiso-list.component';
 import { SegAccionComponent } from '@pages/security/seg-accion/seg_accion';
+import { ActCajaOperacionListComponent } from '@pages/act-caja-operacion/list/act-caja-operacion-list.component';
+import { ActCajaOperacionFormComponent } from '@pages/act-caja-operacion/form/act-caja-operacion-form.component';
 const routes: Routes = [
     {
         path: '',
@@ -116,6 +118,9 @@ const routes: Routes = [
             {path: 'act-caja-turno',component: ActCajaTurnoListComponent},
             {path: 'new-act-caja-turno',component: ActCajaTurnoFormComponent},
             {path: 'new-act-caja-turno/:id',component: ActCajaTurnoFormComponent},
+            {path: 'caja-operacion',component: ActCajaOperacionListComponent},
+            {path: 'new-caja-operacion',component: ActCajaOperacionFormComponent},
+            {path: 'new-caja-operacion/:id',component: ActCajaOperacionFormComponent},
             {path: 'usuario-empresa',component: SegUsuarioEmpresaComponent},
 
             {path: 'accion',component: SegAccionComponent},

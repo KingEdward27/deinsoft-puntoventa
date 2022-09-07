@@ -7,6 +7,8 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
 
 @Entity(name = "segUsuario")
 @Table(name = "seg_usuario")
@@ -40,6 +42,9 @@ public class SegUsuario implements Serializable {
 
     @JoinColumn(name = "cnf_empresa_id")
     private CnfEmpresa cnfEmpresa;
+    
+    @Transient
+    private List<SegRolUsuario> listSegRolUsuario;
     
     public long getId() {
         return id;
@@ -87,6 +92,14 @@ public class SegUsuario implements Serializable {
 
     public void setCnfEmpresa(CnfEmpresa cnfEmpresa) {
         this.cnfEmpresa = cnfEmpresa;
+    }
+
+    public List<SegRolUsuario> getListSegRolUsuario() {
+        return listSegRolUsuario;
+    }
+
+    public void setListSegRolUsuario(List<SegRolUsuario> listSegRolUsuario) {
+        this.listSegRolUsuario = listSegRolUsuario;
     }
 
     @Override

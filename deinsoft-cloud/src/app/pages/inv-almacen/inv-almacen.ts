@@ -14,7 +14,7 @@ export class InvAlmacenComponent extends GenericListComponent implements OnInit{
   //baseEndpoint = environment.apiUrl + '/get-all-cnf-org';
   prop ={
     "tableName": "inv_almacen",
-    "title": "Locales",
+    "title": "Almacenes",
     "columnsList":[{tableName: "inv_almacen", columnName:"nombre",filterType:"text"},
                    {tableName: "cnf_local",columnName:"nombre",filterType:"none"}],
     //"columnsList":["name","address","cnf_company.name","cnf_district.name"],
