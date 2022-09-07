@@ -49,24 +49,30 @@ export class JwtInterceptor implements HttpInterceptor{
                         this.utilService.msgAccessDeniedWithMessage(error.error);
                       }
                       if (error.status === 400) {
-                        
-                        if (error.error.message.includes("Date")) {
+                        if (error.error.message?.includes("Date")) {
+                          
                           this.utilService.msgProblemDate();
                         }else{
-                          this.utilService.msgHTTP400WithMessage(error.error);
+                          if (error.error.message) {
+                            this.utilService.msgHTTP400WithMessage(error.error.message);
+                          } else {
+                            this.utilService.msgHTTP400WithMessage(error.error);
+                          }
                         }
-                      }
-                      if(error.status === 500 && error.error.message.includes("ConstraintViolationException")){
-                        if(error?.url?.includes("delete")){
-                          this.utilService.msgProblemDelete();
+                      } else {
+                        if(error.status === 500 && error.error.message.includes("ConstraintViolationException")){
+                          if(error?.url?.includes("delete")){
+                            this.utilService.msgProblemDelete();
+                          }else{
+                            this.utilService.msgHTTP400WithMessage(error.error.message);
+                          }
+                          
                         }else{
+                          // this.utilService.msgHTTP400WithMessage(error.error?error.error:error.message);
                           this.utilService.msgHTTP400WithMessage(error.error.message);
                         }
-                        
-                      }else{
-                        // this.utilService.msgHTTP400WithMessage(error.error?error.error:error.message);
-                        this.utilService.msgHTTP400WithMessage(error.error.message);
                       }
+                      
                     }
                     
                   }

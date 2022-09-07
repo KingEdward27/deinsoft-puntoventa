@@ -99,31 +99,16 @@ public class SegPermisoServiceImpl extends CommonServiceImpl<SegPermiso, SegPerm
             return segPermisoList.stream()
                     .filter( distinctByKey(p -> p.getSegMenu().getNombre()))
                     .map(item -> {
-                        System.out.println("item.getSegMenu().getId()"+ "/"+ item.getSegMenu().getId());
                         Set<SegMenu> list = 
                                 item.getSegMenu().getChildren().stream()
                                         .filter(predicate -> {
                                           return segPermisoList.stream().anyMatch(i -> i.getSegMenu().getId() == predicate.getId());
-    //                                      System.out.println("item.getSegMenu().getId()"+ 
-    //                                              item.getSegMenu().getNombre() +"-"+ predicate.getId() + "/"+ item.getSegMenu().getId());
-    //                                      return predicate.getId() == item.getSegMenu().getId();  
                                         })
                                         .collect(Collectors.toSet());
                         item.getSegMenu().setChildren(list);
-                        System.out.println("list"+ list.size());
                         return item;
                     })
-                    //.filter( filter -> !filter.getSegMenu().getChildren().isEmpty())
-                    .collect( Collectors.toList() );
-    //        System.out.println("item.getSegMenu().getId()"+ "/"+ item.getSegMenu().getId());
-    //                    Set<SegMenu> list = 
-    //                            item.getSegMenu().getChildren().stream()
-    //                                    .filter(predicate -> predicate.getId() == item.getSegMenu().getId())
-    //                                    .collect(Collectors.toSet());
-    //                    item.getSegMenu().setChildren(list);
-    //                    System.out.println("list"+ list.size());
-    //                    return item;
-    //        return segPermisoList;
+                    .collect( Collectors.toList());
         }
         
     }

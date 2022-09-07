@@ -72,7 +72,7 @@ export class SegMenuFormComponent implements OnInit {
       this.utilService.msgOkSave()
       this.router.navigate([this.redirect]);
     }, err => {
-      if (err.status === 400) {
+      if (err.status === 422) {
         this.error = err.error;
         console.log(this.error);
       }

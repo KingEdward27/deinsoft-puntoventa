@@ -113,7 +113,14 @@ export class InvMovimientoProductoReportFormComponent extends CommonReportFormCo
   }
   getListData() {
     this.model.flagIsventa = '1';
-    
+    if (this.model.cnfLocal.id == 0) {
+      this.deps.utilService.msgWarning("No puede continuar","Debe seleccionar el local")
+      return
+    }
+    if (this.model.invAlmacen.id == 0) {
+      this.deps.utilService.msgWarning("No puede continuar","Debe seleccionar el almacén")
+      return
+    }
     this.deps.invMovimientoProductoService.getReport(this.model).subscribe(data => {
       
       this.listData = data;

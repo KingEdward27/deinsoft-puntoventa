@@ -13,6 +13,7 @@ import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.SegMenu;
 import com.deinsoft.puntoventa.business.service.SegMenuService;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/seg-menu")
@@ -39,6 +40,9 @@ public class SegMenuController extends CommonController<SegMenu, SegMenuService>
 
     @PostMapping(value = "/save-seg-menu")
     public ResponseEntity<?> saveSegMenu(@Valid @RequestBody SegMenu segMenu, BindingResult result) {
+        if (segMenu.getId() != 0 && segMenu.getParent().getId() == segMenu.getId()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se puede relacionar con la misma opción de menú");
+        }
         return super.crear(segMenu, result);
     }
 
