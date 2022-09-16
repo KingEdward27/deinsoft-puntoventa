@@ -136,27 +136,6 @@
 
 
                         <div class="form-group-sm row tex">
-                            <div class="col-sm-12 text-right" *ngIf="listData && listData.length > 0">
-                                <div class="row text-right">
-                                    <div class="col-lg-4"></div>
-                                    <div class="col-lg-3 col-sm-12"><label >A pagar:</label></div>
-                                    <div class="col-lg-3 col-sm-12">
-                                        <input (input)="onChangeTotal($event)" 
-                                        [(ngModel)]="total"
-                                        name="total"
-                                        class="form-control-sm" type="text">
-                                    </div>
-                                    <div class="col-lg-2 col-sm-12">
-                                        <button class="btn btn-danger" (click)="save()">
-                                            <i class="fa fa-plus"></i> {{'webpagos.btnSave' | translate }}
-                                        </button>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-
-                            <br>
-                            <br>
                             <div class="col-sm-12 col-lg-12">
                                 <div>
                                     <table id="dtDataListActPagoProgramacion"
@@ -164,10 +143,8 @@
                                         <thead>
                                             <tr>
                                                 <th width="1%">Nro.</th>
-                                                <th class="text-nowrap">{{'webpagos.act_comprobante.fecha' | translate}}
-                                                </th>
                                                 <th class="text-nowrap">
-                                                    {{'webpagos.act_comprobante.cnf_tipo_comprobante' | translate}}</th>
+                                                    {{'webpagos.act_comprobante.cnf_maestro' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.numero' |
                                                     translate}}</th>
                                                 <th class="text-nowrap">
@@ -182,7 +159,7 @@
                                                     {{'webpagos.act_pago_programacion.monto_pendiente' | translate}}
                                                 </th>
                                                 <th class="text-nowrap">
-                                                    {{'webpagos.act_pago_programacion.monto_pagar' | translate}}
+                                                    {{'webpagos.act_pago_programacion.estado' | translate}}
                                                 </th>
                                             </tr>
                                         </thead>
@@ -190,27 +167,19 @@
 
                                             <tr *ngFor="let item of listData; index as i" class="odd gradeX">
                                                 <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
-                                                <td>{{item.actComprobante.fecha}}</td>
-                                                <td>{{item.actComprobante.cnfTipoComprobante.nombre}}</td>
+                                                <td>{{item.actComprobante.cnfMaestro.nombres}}</td>
                                                 <td>{{item.actComprobante.serie + '-' +item.actComprobante.numero}}</td>
                                                 <td>{{item.fechaVencimiento}}</td>
                                                 <td class="content-number">{{item.actComprobante.cnfMoneda.nombre}}</td>
                                                 <td class="content-number">{{item.monto | number:'1.2-2'}}</td>
                                                 <td class="content-number">{{item.montoPendiente | number:'1.2-2'}}</td>
-                                                <td *ngIf="item.montoPendiente && item.montoPendiente > 0" style="width: 20%;" class="content-number">
-                                                    <input type="number" 
-                                                    [(ngModel)]="item.amtToPay" 
-                                                    maxlength="10" 
-                                                    name="amtToPay-{{i}}"
-                                                    class="form-control-sm col-sm-12 col-lg-12"
-                                                    placeholder="Ingrese monto a pagar"/></td>
-                                                <td *ngIf="item.montoPendiente == 0">Cancelado</td> 
+                                                <td >{{item.montoPendiente == 0? 'CANCELADO':'PENDIENTE'}}</td> 
                                                     
                                             </tr>
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan = "6">Total:</td>
+                                                <td colspan = "5">Total:</td>
                                                 <td class="content-number">{{totalMontos| number:'1.2-2'}}</td>
                                                 <td class="content-number">{{totalPendiente| number:'1.2-2'}}</td>
                                                 <td colspan = "1"></td>

@@ -24,10 +24,11 @@ export class CnfNumComprobanteComponent extends GenericListComponent implements 
                      {"tableName":"cnf_local","idValue":"cnf_local_id"}],
     "columnsForm":[
       {tableName: "cnf_local", "columnName":"nombre","type":"select",loadState : 1,
-                   relatedBy:"cnf_local_id",filters:[]},             
+                   relatedBy:"cnf_local_id",filters:[]},       
+      {tableName: "cnf_tipo_comprobante", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_tipo_comprobante_id"},      
       {tableName: "cnf_num_comprobante", "columnName":"serie","type":"input"},
-                   {tableName: "cnf_num_comprobante", "columnName":"ultimo_nro","type":"input"},
-                   {tableName: "cnf_tipo_comprobante", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_tipo_comprobante_id"},
+                   {tableName: "cnf_num_comprobante", "columnName":"ultimo_nro","type":"input"}
+                   
                    
            ],
     //filters sería para filtros adicionales

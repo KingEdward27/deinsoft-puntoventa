@@ -152,7 +152,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     this.model.descuento = 0;
     this.model.fecha = this.dateAdapter.toModel(this.ngbCalendar.getToday())!;
     this.model.flagEstado = "1";
-    this.model.flagIsventa = '0';
+    this.model.flagIsventa = '2';
     return this.route.paramMap.subscribe(params => {
       this.id = params.get('id')!;
       console.log(this.id);

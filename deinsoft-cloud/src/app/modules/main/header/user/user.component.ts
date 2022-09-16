@@ -12,11 +12,11 @@ export class UserComponent implements OnInit {
 
     constructor(private appService: AppService) {}
     ngOnInit() {
-        console.log("asdf");
-        console.log(this.appService.user);
+        // console.log("asdf");
+        // console.log(this.appService.user);
         
         this.user = this.appService.user;
-        console.log("asd: ", this.user);
+        // console.log("asd: ", this.user);
         
     }
 

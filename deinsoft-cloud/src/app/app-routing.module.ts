@@ -61,6 +61,7 @@ import { SegPermisoListComponent } from '@pages/security/seg-permiso/list/seg-pe
 import { SegAccionComponent } from '@pages/security/seg-accion/seg_accion';
 import { ActCajaOperacionListComponent } from '@pages/act-caja-operacion/list/act-caja-operacion-list.component';
 import { ActCajaOperacionFormComponent } from '@pages/act-caja-operacion/form/act-caja-operacion-form.component';
+import { ActPagoProgramacionReportComponent } from '@pages/reports/act-pago-programacion/act-pago-programacion-report.component';
 const routes: Routes = [
     {
         path: '',
@@ -139,7 +140,8 @@ const routes: Routes = [
             {path: 'rpt-ventas',component: ActComprobanteReportFormComponent},
             {path: 'rpt-compras',component: ActComprobanteCompraReportFormComponent},
             {path: 'rpt-almacen',component: InvAlmacenReportFormComponent},
-            {path: 'rpt-movimiento-producto',component: InvMovimientoProductoReportFormComponent}
+            {path: 'rpt-movimiento-producto',component: InvMovimientoProductoReportFormComponent},
+            {path: 'rpt-pago-programacion',component: ActPagoProgramacionReportComponent}
         ]
     },
     {

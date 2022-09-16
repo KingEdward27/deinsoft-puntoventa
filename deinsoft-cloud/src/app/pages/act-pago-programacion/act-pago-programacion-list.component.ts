@@ -112,6 +112,10 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
     //this.getListData();
   }
   getListData() {
+    if (!this.model.cnfMaestro.id) {
+      this.deps.utilService.msgWarning("No puede continuar","Debe seleccionar al cliente o proveedor")
+      return
+    }
     this.model.flagIsventa = '1';
     this.totalMontos = 0
     this.totalPendiente = 0

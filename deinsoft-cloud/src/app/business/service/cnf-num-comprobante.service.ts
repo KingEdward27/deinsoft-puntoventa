@@ -35,7 +35,7 @@ export class CnfNumComprobanteService {
     return this.http.get<CnfNumComprobante>(`${this.url}/get-cnf-num-comprobante`,{params});
   }
   public getDataByCnfTipoComprobanteIdAndCnfLocalId(arg1:string,idLocal:string):Observable<any>{
-    let params = new HttpParams().set("id",arg1).set("idLocal",arg1)
+    let params = new HttpParams().set("id",arg1).set("idLocal",idLocal)
     return this.http.get<CnfNumComprobante>(`${this.url}/get-cnf-num-comprobante-by-cnf-tipo-comprobante-and-cnf-local`,{params});
   }
   public save(form:any): Observable<CnfNumComprobante>{

@@ -46,7 +46,7 @@ public class ActCajaTurnoServiceImpl extends CommonServiceImpl<ActCajaTurno, Act
         
         actCajaTurnoList = actCajaTurnoList.stream()
                 .filter(item -> item.getActCaja().getId() == actCajaTurno.getActCaja().getId())
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); 
         
         if (actCajaTurno.getId() == 0 && !actCajaTurnoList.isEmpty()){
             throw new Exception("La caja " + actCajaTurno.getActCaja().getNombre() + " ya se encuentra aperturada");

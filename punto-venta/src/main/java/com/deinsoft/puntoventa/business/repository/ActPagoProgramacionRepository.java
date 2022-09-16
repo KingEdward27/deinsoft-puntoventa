@@ -19,8 +19,8 @@ public interface ActPagoProgramacionRepository extends JpaRepository<ActPagoProg
 	List<ActPagoProgramacion>findByActComprobanteId(long id);
 
         @Query(value="select p from actPagoProgramacion p "+
-			"where p.actComprobante.cnfMaestro.id = :id "
-                + "and (:fechaVencimiento = null or p.fechaVencimiento <= :fechaVencimiento)")
+			"where (:id = 0l or p.actComprobante.cnfMaestro.id = :id) "
+                + "and (:fechaVencimiento = null or p.fechaVencimiento <= :fechaVencimiento) order by p.id")
 	List<ActPagoProgramacion>findByCnfMaestroId(@Param("id") long id,@Param("fechaVencimiento") LocalDate fechaVencimiento);
         
         void deleteByActComprobante(ActComprobante actComprobante);

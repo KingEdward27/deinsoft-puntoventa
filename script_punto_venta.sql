@@ -1083,3 +1083,7 @@ insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_est
 insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'GLL','US GALON (3,7843 L)','1');
 insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'YRD','YARDA','1');
 insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_estado) values (null,'YDK','YARDA CUADRADA','1');
+
+-- 2022-09-12
+
+update act_comprobante set flag_isventa = '2' where flag_isventa = '0' and act_comprobante_id > 0

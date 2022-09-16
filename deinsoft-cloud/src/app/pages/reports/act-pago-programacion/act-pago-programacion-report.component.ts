@@ -11,43 +11,23 @@ import { CnfFormaPago } from '@/business/model/cnf-forma-pago.model';
 import { CnfMaestro } from '@/business/model/cnf-maestro.model';
 import { CnfTipoComprobante } from '@/business/model/cnf-tipo-comprobante.model';
 import { InvAlmacen } from '@/business/model/inv-almacen.model';
-import { CnfMaestroService } from '@/business/service/cnf-maestro.service';
-import { CnfFormaPagoService } from '@/business/service/cnf-forma-pago.service';
-import { CnfMonedaService } from '@/business/service/cnf-moneda.service';
-import { CnfLocalService } from '@/business/service/cnf-local.service';
-import { CnfTipoComprobanteService } from '@/business/service/cnf-tipo-comprobante.service';
-import { InvAlmacenService } from '@/business/service/inv-almacen.service';
-import { ActComprobanteDetalleService } from '@/business/service/act-comprobante-detalle.service';
-import { UtilService } from '@services/util.service';
 import { CustomAdapter, CustomDateParserFormatter } from '@/base/util/CustomDate';
-import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
-import { CnfProductoService } from '@/business/service/cnf-producto.service';
-import { CnfProducto } from '@/business/model/cnf-producto.model';
-import { ActComprobanteDetalle } from '@/business/model/act-comprobante-detalle.model';
-import { CnfImpuestoCondicion } from '@/business/model/cnf-impuesto-condicion.model';
-import { CnfImpuestoCondicionService } from '@/business/service/cnf-impuesto-condicion.service';
-import { CnfNumComprobanteService } from '@/business/service/cnf-num-comprobante.service';
-import { CommonService } from '@/base/services/common.service';
-import { UpdateParam } from '@/base/components/model/UpdateParam';
-import dayjs from 'dayjs';
-import { AppService } from '@services/app.service';
 import { ActComprobante } from '@pages/act-comprobante/act-comprobante.model';
-import { ActComprobanteService } from '@pages/act-comprobante/act-comprobante.service';
 import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
 import { CommonReportFormComponent, MyBaseComponentDependences } from '@pages/reports/base/common-report.component';
 
 
 
 @Component({
-  selector: 'app-act-pago-programacion-compra-list',
-  templateUrl: './act-pago-programacion-compra-list.component.html',
+  selector: 'app-act-pago-programacion-report',
+  templateUrl: './act-pago-programacion-report.component.html',
   providers: [
     { provide: NgbDateAdapter, useClass: CustomAdapter },
     { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
     MyBaseComponentDependences
   ]
 })
-export class ActPagoProgramacionCompraListFormComponent extends CommonReportFormComponent implements OnInit {
+export class ActPagoProgramacionReportComponent extends CommonReportFormComponent implements OnInit {
 
   //generic variables
   error: any;
@@ -107,26 +87,23 @@ export class ActPagoProgramacionCompraListFormComponent extends CommonReportForm
   }
   ngOnInit(): void {
     this.isDataLoaded = false;
-    this.titleExport = "Lista de Cuentas x Pagar"
+    this.model.fechaVencimiento = this.deps.dateAdapter.toModel(this.deps.ngbCalendar.getToday())!.toString();
+    this.titleExport = "Lista de Cuentas x Cobrar/x Pagar"
     super.ngOnInit();
     //this.getListData();
   }
   getListData() {
-    if (!this.model.cnfMaestro.id) {
-      this.deps.utilService.msgWarning("No puede continuar","Debe seleccionar al cliente o proveedor")
-      return
-    }
     this.model.flagIsventa = '1';
     this.totalMontos = 0
     this.totalPendiente = 0
     this.indexInputs = [8]
     this.model.fechaVencimiento = this.model.fechaVencimiento?this.model.fechaVencimiento:''
     return this.deps.actPagoProgramacionService
-    .getAllCompraByCnfMaestroId(this.model.cnfMaestro.id,this.model.fechaVencimiento).subscribe(data => {
+    .getAllByCnfMaestroId(this.model.cnfMaestro.id,this.model.fechaVencimiento).subscribe(data => {
       this.listData = data;
       this.loadingCnfMaestro = false;
       setTimeout(() => {
-        this.dataTable = $('#dtDataListActPagoProgramacionCompra').DataTable(this.datablesSettingsWithInputs);
+        this.dataTable = $('#dtDataListActPagoProgramacion').DataTable(this.datablesSettingsWithInputs);
       }, 1);
       this.dataTable?.destroy();
       this.listData.forEach(element => {
@@ -135,52 +112,6 @@ export class ActPagoProgramacionCompraListFormComponent extends CommonReportForm
       });
       console.log(data);
     })
-  }
-  calculateFromTotal(){
-    let total = this.total;
-    this.listData.forEach((element: any) => {
-      console.log(total);
-      if(total >= element.montoPendiente){
-        element.amtToPay = element.montoPendiente;
-        total = total - element.montoPendiente;
-      }else{
-        element.amtToPay = total;
-        total = 0;
-      }
-    });
-  }
-  onChangeTotal(event: any): void {  
-    this.calculateFromTotal();
-  }
-  save() {
-    if(!this.listData || this.listData?.length == 0){
-      this.deps.utilService.msgProblemNoItems();
-      return;
-    }
-    if(!this.total || this.total == 0){
-      Swal.fire('Problema para continuar', `Debe ingresar un monto a pagar`, 'error');
-      return;
-    }
-    let error;
-    // this.listData.forEach((element: any) => {
-    //   if(element.amtToPay == 0){
-    //     this.deps.utilService.msgProblemItemsCero();
-    //     error = true;
-    //   }
-    // });
-    if(!error){
-      console.log(this.listData);
-      this.deps.actPagoService.saveFromList(this.listData).subscribe(m => {
-        console.log(m);
-        this.isOk = true;
-        this.deps.utilService.msgOkSave();
-        window.location.reload();
-      }, err => {
-        console.log(err);
-      });
-    }
-    
-
   }
 }
 

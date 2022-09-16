@@ -198,6 +198,8 @@
                                                     translate}}</th>
                                                 <th class="text-nowrap">
                                                     {{'webpagos.act_comprobante.cnf_tipo_comprobante' | translate}}</th>
+                                                    <th class="text-nowrap">
+                                                        {{'webpagos.act_comprobante.cnf_forma_pago' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.numero' |
                                                     translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.cnf_maestro' |
@@ -221,6 +223,7 @@
                                                 <td>{{item.cnfLocal.nombre}}</td>
                                                 <td>{{item.invAlmacen.nombre}}</td>
                                                 <td>{{item.cnfTipoComprobante.nombre}}</td>
+                                                <td>{{item.cnfFormaPago.nombre}}</td>
                                                 <td>{{item.serie + '-' +item.numero}}</td>
                                                 <td>{{item.cnfMaestro.apellidoPaterno + ' ' +
                                                     item.cnfMaestro.apellidoMaterno + ' ' + item.cnfMaestro.nombres}}
@@ -229,7 +232,7 @@
                                                 <td>{{item.flagEstado == '1'? "Registrado":"Anulado"}}</td>
                                                 <td>{{item.envio_pse_flag == '1'?"ENVIADO":"RECHAZADO"}}</td>
                                                 <td>
-                                                    <div class="row">
+                                                    <div class="row row2">
                                                         <div class="col-lg-4 col-sm-6 col-xs-6"><a (click) = "print(item)" style="cursor: pointer;"
                                                                 title="Imprimir"><i
                                                                     class="fa fa-print fa-md"></i></a></div>

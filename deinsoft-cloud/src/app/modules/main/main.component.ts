@@ -1,3 +1,4 @@
+import { CnfEmpresaService } from '@/business/service/cnf-empresa.service';
 import {AppState} from '@/store/state';
 import {ToggleSidebarMenu} from '@/store/ui/actions';
 import {UiState} from '@/store/ui/state';
@@ -16,7 +17,8 @@ export class MainComponent implements OnInit {
     completedClass = false;
     public ui: Observable<UiState>;
 
-    constructor(private renderer: Renderer2, private store: Store<AppState>) {}
+    constructor(private renderer: Renderer2, private store: Store<AppState>,
+        private cnfEmpresaService:CnfEmpresaService) {}
     onStarted() {
         this.startedClass = true;
         setTimeout(() => {
@@ -31,6 +33,7 @@ export class MainComponent implements OnInit {
         }, 800);
       }
     ngOnInit() {
+        this.cnfEmpresaService.getAllDataCombo().subscribe(data => {})
         this.ui = this.store.select('ui');
         this.renderer.removeClass(
             document.querySelector('app-root'),

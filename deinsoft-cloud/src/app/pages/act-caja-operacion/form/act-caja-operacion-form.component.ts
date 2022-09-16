@@ -8,6 +8,7 @@ import { ActPagoService } from '@/business/service/act-pago.service';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbCalendar, NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { AppService } from '@services/app.service';
 import { UtilService } from '@services/util.service';
 import { ActComprobante } from "../../act-comprobante/act-comprobante.model";
 import { ActComprobanteService } from "../../act-comprobante/act-comprobante.service";
@@ -57,6 +58,7 @@ export class ActCajaOperacionFormComponent implements OnInit {
     private utilService: UtilService,
     private actCajaTurnoService: ActCajaTurnoService,
     private actComprobanteService: ActComprobanteService,
+    private appService:AppService,
     private actPagoService: ActPagoService,
     private route: ActivatedRoute,) {
   }
@@ -105,11 +107,11 @@ export class ActCajaOperacionFormComponent implements OnInit {
   getListActCajaTurno() {
     this.loadingActCajaTurno = true;
     console.log(this.chargingsb);
+    let user = this.appService.getProfile()
     return this.actCajaTurnoService.getAllDataCombo().subscribe(data => {
       this.listActCajaTurno = data;
       this.loadingActCajaTurno = false;
-      console.log(this.listActCajaTurno);
-      
+      this.listActCajaTurno = this.listActCajaTurno.filter(obj => obj.segUsuario.id == user.id);
       this.listActCajaTurno = this.listActCajaTurno.filter(obj => obj.estado == '1');
     })
 

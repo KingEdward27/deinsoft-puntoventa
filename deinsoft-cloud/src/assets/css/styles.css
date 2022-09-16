@@ -210,3 +210,7 @@ table.dataTable{
 tfoot>tr>td{
   font-weight: bold;
 }
+table > thead {
+  background-color: #343a40;
+  color: rgb(223, 222, 222);
+}

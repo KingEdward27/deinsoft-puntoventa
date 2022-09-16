@@ -16,7 +16,9 @@ export class CnfFormaPagoComponent extends GenericListComponent implements OnIni
   prop ={
     "tableName": "cnf_forma_pago",
     "title": "Formas de Pago",
-    "columnsList":[{tableName: "cnf_forma_pago", columnName:"nombre",filterType:"text"}
+    "columnsList":[
+              {tableName: "cnf_forma_pago", columnName:"nombre",filterType:"text"},
+              {tableName: "cnf_forma_pago", columnName:"tipo",filterType:"none"}
                 ],
     childTables:[
                   {tableName: "cnf_forma_pago_detalle",tableNameDetail: "cnf_forma_pago_detalle",
@@ -29,7 +31,9 @@ export class CnfFormaPagoComponent extends GenericListComponent implements OnIni
                                   ]
                   }
     ],
-    "columnsForm":[{tableName: "cnf_forma_pago", "columnName":"nombre","type":"input"}
+    "columnsForm":[{tableName: "cnf_forma_pago", "columnName":"nombre","type":"input"},
+                   {tableName: "cnf_forma_pago", columnName:"tipo","type":"select", relatedBy :"tipo",
+                   listData:[]}
            ],
     //filters sería para filtros adicionales
     "conditions":[],
@@ -43,7 +47,9 @@ export class CnfFormaPagoComponent extends GenericListComponent implements OnIni
   ngOnInit(): void {
     super.baseEndpoint = this.baseEndpoint;
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
-    
+    this.prop.columnsForm[1].listData.push([0, "- Seleccione -"]);
+    this.prop.columnsForm[1].listData.push([1, "Hasta el monto"]);
+    this.prop.columnsForm[1].listData.push([2, "Valor fijo repetitivo"]); 
     this.prop.conditions.push({"columnName":"cnf_forma_pago.cnf_empresa_id","value":cnfEmpresa});
     this.prop.preSave.push({columnForm:"cnf_empresa_id",value:cnfEmpresa});
     super.properties = this.prop;

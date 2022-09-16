@@ -20,20 +20,19 @@ export class MenuSidebarComponent implements OnInit {
     public menu;
 
     constructor(
-        private cnfEmpresaService:CnfEmpresaService,
         public appService: AppService,
         private store: Store<AppState>
     ) {}
 
     ngOnInit() {
-        this.cnfEmpresaService.getAllDataCombo().subscribe(data => {})
+        
         this.ui = this.store.select('ui');
         this.ui.subscribe((state: UiState) => {
             this.classes = `${BASE_CLASSES} ${state.sidebarSkin}`;
         });
         this.user = this.appService.user;
         this.menu = this.appService.getMenu()
-        console.log(this.menu);
+        //console.log(this.menu);
         
     }
 }

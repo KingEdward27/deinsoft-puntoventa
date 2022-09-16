@@ -152,7 +152,8 @@
       },
       "id": "ID",
       "nombre": "Forma de pago",
-      "cnf_forma_pago_detalle":"Programación de formas de pago"
+      "cnf_forma_pago_detalle":"Programación de formas de pago",
+      "tipo": "Tipo"
     },
     "act_comprobante": {
       "home": {
@@ -340,7 +341,8 @@
       "fecha_vencimiento":"Fecha vencimiento",
       "monto": "Monto",
       "monto_pendiente": "Monto pendiente",
-      "monto_pagar": "Monto a pagar"
+      "monto_pagar": "Monto a pagar",
+      "estado":"Estado"
     },
     "act_pago_programacion_compra": {
       "home": {

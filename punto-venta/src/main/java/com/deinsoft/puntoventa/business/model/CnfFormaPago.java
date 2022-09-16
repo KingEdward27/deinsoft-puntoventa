@@ -31,6 +31,9 @@ public class CnfFormaPago implements Serializable {
     @JoinColumn(name = "cnf_empresa_id")
     private CnfEmpresa cnfEmpresa;
 
+    @Column(name = "tipo", length = 1, nullable = true)
+    private Integer tipo;
+    
     public long getId() {
         return id;
     }
@@ -61,6 +64,14 @@ public class CnfFormaPago implements Serializable {
 
     public void setCnfEmpresa(CnfEmpresa cnfEmpresa) {
         this.cnfEmpresa = cnfEmpresa;
+    }
+
+    public Integer getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Integer tipo) {
+        this.tipo = tipo;
     }
 
     @Override
