@@ -11,6 +11,18 @@ import com.deinsoft.puntoventa.business.model.CnfProducto;
 import com.deinsoft.puntoventa.business.repository.CnfProductoRepository;
 import com.deinsoft.puntoventa.business.service.CnfProductoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.framework.util.CodigoQR;
+import com.deinsoft.puntoventa.framework.util.GenerateItextPdf;
+import com.deinsoft.puntoventa.framework.util.Util;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
+import org.apache.commons.lang3.StringUtils;
 
 @Service
 @Transactional
@@ -86,4 +98,38 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
 //        }
         return cnfProductList;
     }
+    @Override
+    public byte[] getPdfcodeBars() throws ParseException, Exception {
+        GenerateItextPdf generateItextPdf = new GenerateItextPdf();
+        List<CnfProducto> cnfProductoList = (List<CnfProducto>) cnfProductoRepository.findAll()
+                .stream().filter(predicate -> !predicate.getCnfUnidadMedida().getCodigoSunat().equals("ZZ"))
+                .collect(Collectors.toList());
+        List<byte[]> list = new ArrayList<>();
+        List<String> listCodes = new ArrayList<>();
+        for (CnfProducto cnfProducto : cnfProductoList) {
+            String code = StringUtils.leftPad(String.valueOf(cnfProducto.getCnfEmpresa().getId()),3,"0")
+                + StringUtils.leftPad(String.valueOf(cnfProducto.getCnfMarca().getId()),3,"0")
+                + StringUtils.leftPad(String.valueOf(cnfProducto.getCnfCategoria().getId()),3,"0")
+                + StringUtils.leftPad(String.valueOf(cnfProducto.getId()),3,"0");
+            
+            int[] i = {1,3,1,3,1,3,1,3,1,3,1,3};
+            int sum = 0;
+            for (int j = 0; j < code.length(); j++) {
+                sum = sum + Integer.valueOf(String.valueOf(code.charAt(j))) * i[j];
+            }
+            int checkSum = Math.round(Util.round((sum + 9) / 10, 0)) * 10 - sum;
+
+            listCodes.add(code + checkSum);
+            list.add(CodigoQR.generateEAN13BarcodeImage(code + checkSum)); 
+        }
+        int[] anchoColumnas = {100,100,100,100,100};
+        generateItextPdf.setTitle("Códigos de Barras");
+        generateItextPdf.setSubTitle(" ");
+        generateItextPdf.setAnchoColumnas(anchoColumnas);
+        byte[] array = generateItextPdf.generateFromLinearDataImages(list,listCodes);
+//        byte[] array = new byte[ius.available()];
+//        ius.read(array);
+
+        return array;
+    }    
 }

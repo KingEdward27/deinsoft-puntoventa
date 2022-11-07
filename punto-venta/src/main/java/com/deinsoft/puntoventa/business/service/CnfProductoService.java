@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deinsoft.puntoventa.business.commons.service.CommonService;
 
 import com.deinsoft.puntoventa.business.model.CnfProducto;
+import java.text.ParseException;
 
 @Service
 @Transactional
@@ -30,4 +31,6 @@ public interface CnfProductoService extends CommonService<CnfProducto> {
     public void delete(long id);
 
     public List<CnfProducto> getAllCnfProductTypeHead(String nameOrValue, long invWarehouseId);
+    
+    public byte[] getPdfcodeBars() throws ParseException, Exception;
 }

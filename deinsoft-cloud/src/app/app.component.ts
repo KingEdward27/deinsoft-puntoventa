@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { UtilService } from '@services/util.service';
+import { BnNgIdleService } from 'bn-ng-idle'; 
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,8 @@ export class AppComponent {
   title = 'ventas-app';
   mySubscription;
   
-  constructor(private router: Router, private translate: TranslateService, private utilService: UtilService) {
+  constructor(private router: Router, private translate: TranslateService, 
+    private utilService: UtilService, private bnIdle: BnNgIdleService) {
     this.setAppLanguage();
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.mySubscription = this.router.events.subscribe((event) => {
@@ -22,7 +24,17 @@ export class AppComponent {
       }
     });
   }
-  
+  ngOnInit(): void {
+    console.log("asadfds");
+    
+    //60 = 1 minute
+    this.bnIdle.startWatching(60).subscribe((res) => {
+      if (res) {
+        console.log('session expired');
+        // this.router.navigateByUrl('logout');
+      }
+    });
+  }
   setAppLanguage() {
     this.translate.addLangs(['es', 'en']);
     this.translate.setDefaultLang("es");

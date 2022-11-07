@@ -11,8 +11,10 @@ import com.google.zxing.Result;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.oned.EAN13Writer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.itextpdf.text.pdf.BarcodeQRCode;
@@ -22,6 +24,7 @@ import com.itextpdf.text.pdf.*;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -121,5 +124,16 @@ public class CodigoQR {
         QRCodeReader reader = new QRCodeReader();
         Result result = reader.decode(bitmap);
         return new String(result.getText());
+    }
+    public static byte[] generateEAN13BarcodeImage(String barcodeText) throws Exception {
+        EAN13Writer barcodeWriter = new EAN13Writer();
+        
+        BitMatrix bitMatrix = barcodeWriter.encode(barcodeText, BarcodeFormat.EAN_13, 300, 150);
+
+        BufferedImage bi = MatrixToImageWriter.toBufferedImage(bitMatrix);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bi, "png", baos);
+        byte[] bytes = baos.toByteArray();
+        return bytes;
     }
 }

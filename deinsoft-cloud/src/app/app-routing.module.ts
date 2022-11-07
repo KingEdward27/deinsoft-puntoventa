@@ -62,6 +62,11 @@ import { SegAccionComponent } from '@pages/security/seg-accion/seg_accion';
 import { ActCajaOperacionListComponent } from '@pages/act-caja-operacion/list/act-caja-operacion-list.component';
 import { ActCajaOperacionFormComponent } from '@pages/act-caja-operacion/form/act-caja-operacion-form.component';
 import { ActPagoProgramacionReportComponent } from '@pages/reports/act-pago-programacion/act-pago-programacion-report.component';
+import { InvTipoMovComponent } from '@pages/inv-tipo-mov/inv-tipo-mov';
+import { InvMovAlmacenListComponent } from '@pages/inv-mov-almacen/list/inv-mov-almacen-list.component';
+import { AddNewInvMovAlmacenDetComponent } from '@pages/inv-mov-almacen/add-new-inv-mov-almacen-det/add-new-inv-mov-almacen-det.component';
+import { InvMovAlmacenFormComponent } from '@pages/inv-mov-almacen/inv-mov-almacen-form/inv-mov-almacen-form.component';
+import { CnfProductoListComponent } from '@pages/cnf-producto/cnf-producto-list.component';
 const routes: Routes = [
     {
         path: '',
@@ -123,7 +128,7 @@ const routes: Routes = [
             {path: 'new-caja-operacion',component: ActCajaOperacionFormComponent},
             {path: 'new-caja-operacion/:id',component: ActCajaOperacionFormComponent},
             {path: 'usuario-empresa',component: SegUsuarioEmpresaComponent},
-
+            {path: 'tipo-mov',component: InvTipoMovComponent},
             {path: 'accion',component: SegAccionComponent},
             // {path: 'new-accion/:id',component: SegAccionFormComponent},
             // {path: 'new-accion/:id',component: SegAccionFormComponent},
@@ -141,7 +146,14 @@ const routes: Routes = [
             {path: 'rpt-compras',component: ActComprobanteCompraReportFormComponent},
             {path: 'rpt-almacen',component: InvAlmacenReportFormComponent},
             {path: 'rpt-movimiento-producto',component: InvMovimientoProductoReportFormComponent},
-            {path: 'rpt-pago-programacion',component: ActPagoProgramacionReportComponent}
+            {path: 'rpt-pago-programacion',component: ActPagoProgramacionReportComponent},
+
+            {path: 'mov-almacen',component: InvMovAlmacenListComponent},
+            {path: 'new-mov-almacen',component: InvMovAlmacenFormComponent},
+            {path: 'new-mov-almacen/:id',component: InvMovAlmacenFormComponent},
+            {path: 'add-new-mov-almacen-det/:id',component: AddNewInvMovAlmacenDetComponent},
+
+            {path: 'producto-list',component: CnfProductoListComponent}
         ]
     },
     {

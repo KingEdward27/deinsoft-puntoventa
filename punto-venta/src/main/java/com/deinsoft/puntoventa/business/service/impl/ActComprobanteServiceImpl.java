@@ -29,6 +29,7 @@ import com.deinsoft.puntoventa.business.repository.CnfFormaPagoDetalleRepository
 import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
 import com.deinsoft.puntoventa.business.repository.InvAlmacenProductoRepository;
 import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoRepository;
+import com.deinsoft.puntoventa.business.service.InvAlmacenProductoService;
 import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -58,6 +59,9 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     @Autowired
     InvAlmacenProductoRepository invAlmacenProductoRepository;
 
+    @Autowired
+    InvAlmacenProductoService invAlmacenProductoService;
+    
     @Autowired
     InvMovimientoProductoRepository invMovimientoProductoRepository;
 
@@ -116,12 +120,12 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             if (numComprobante.isEmpty()) {
                 throw new Exception("No existe numeración para el tipo de comprobante y el local");
             }
-            if (numComprobante.isEmpty()) {
-                throw new Exception("No existe numeración para el tipo de comprobante y el local");
-            }
-            if (numComprobante.isEmpty()) {
-                throw new Exception("No existe numeración para el tipo de comprobante y el local");
-            }
+//            if (numComprobante.isEmpty()) {
+//                throw new Exception("No existe numeración para el tipo de comprobante y el local");
+//            }
+//            if (numComprobante.isEmpty()) {
+//                throw new Exception("No existe numeración para el tipo de comprobante y el local");
+//            }
             actComprobante.setFechaRegistro(LocalDateTime.now());
             actComprobante.setNumero(String.valueOf(numComprobante.get(0).getUltimoNro() + 1));
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
@@ -135,35 +139,36 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             cnfNumComprobanteRepository.save(cnfNumComprobante);
 
             //update stock
-            actComprobante.getListActComprobanteDetalle().forEach(data -> {
-                if (!data.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
-                    List<InvAlmacenProducto> list
-                            = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
-
-                    if (list.size() > 1) {
-                        throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
-                    }
-                    if (list.size() == 0) {
-                        throw new RuntimeException("No existe stock para el almacen y producto seleccionados");
-                    }
-                    InvAlmacenProducto stock = list.get(0);
-                    stock.setCnfProducto(data.getCnfProducto());
-                    stock.setInvAlmacen(actComprobante.getInvAlmacen());
-                    stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
-                    invAlmacenProductoRepository.save(stock);
-
-                    InvMovimientoProducto mov = new InvMovimientoProducto();
-                    mov.setCnfProducto(data.getCnfProducto());
-                    mov.setInvAlmacen(actComprobante.getInvAlmacen());
-                    mov.setActComprobante(actComprobante);
-                    mov.setFecha(actComprobante.getFecha());
-                    mov.setFechaRegistro(LocalDateTime.now());
-                    mov.setCantidad(data.getCantidad().multiply(BigDecimal.valueOf(-1)));
-                    mov.setValor(data.getPrecio());
-                    invMovimientoProductoRepository.save(mov);
-                }
-
-            });
+            invAlmacenProductoService.registerProductMovementAndUpdateStock(actComprobante, null);
+//            actComprobante.getListActComprobanteDetalle().forEach(data -> {
+//                if (!data.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
+//                    List<InvAlmacenProducto> list
+//                            = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
+//
+//                    if (list.size() > 1) {
+//                        throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
+//                    }
+//                    if (list.size() == 0) {
+//                        throw new RuntimeException("No existe stock para el almacen y producto seleccionados");
+//                    }
+//                    InvAlmacenProducto stock = list.get(0);
+//                    stock.setCnfProducto(data.getCnfProducto());
+//                    stock.setInvAlmacen(actComprobante.getInvAlmacen());
+//                    stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
+//                    invAlmacenProductoRepository.save(stock);
+//
+//                    InvMovimientoProducto mov = new InvMovimientoProducto();
+//                    mov.setCnfProducto(data.getCnfProducto());
+//                    mov.setInvAlmacen(actComprobante.getInvAlmacen());
+//                    mov.setActComprobante(actComprobante);
+//                    mov.setFecha(actComprobante.getFecha());
+//                    mov.setFechaRegistro(LocalDateTime.now());
+//                    mov.setCantidad(data.getCantidad().multiply(BigDecimal.valueOf(-1)));
+//                    mov.setValor(data.getPrecio());
+//                    invMovimientoProductoRepository.save(mov);
+//                }
+//
+//            });
 
             //save pagos programacion
             saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno, "1");
@@ -197,38 +202,39 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             actComprobanteResult = actComprobanteRepository.save(actComprobante);
 
             //update stock
-            actComprobante.getListActComprobanteDetalle().forEach(data -> {
-                List<InvAlmacenProducto> list
-                        = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
+            invAlmacenProductoService.registerProductMovementAndUpdateStock(actComprobante, null);
+//            actComprobante.getListActComprobanteDetalle().forEach(data -> {
+//                List<InvAlmacenProducto> list
+//                        = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
+//
+//                if (list.size() > 1) {
+//                    throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
+//                }
+//                if (list.size() == 0) {
+//                    InvAlmacenProducto stock = new InvAlmacenProducto();
+//                    stock.setCnfProducto(data.getCnfProducto());
+//                    stock.setInvAlmacen(actComprobante.getInvAlmacen());
+//                    stock.setCantidad(data.getCantidad());
+//                    invAlmacenProductoRepository.save(stock);
+//                } else {
+//                    InvAlmacenProducto stock = list.get(0);
+//                    stock.setCnfProducto(data.getCnfProducto());
+//                    stock.setInvAlmacen(actComprobante.getInvAlmacen());
+//                    stock.setCantidad(stock.getCantidad().add(data.getCantidad()));
+//                    invAlmacenProductoRepository.save(stock);
+//                }
+//                InvMovimientoProducto mov = new InvMovimientoProducto();
+//                mov.setCnfProducto(data.getCnfProducto());
+//                mov.setInvAlmacen(actComprobante.getInvAlmacen());
+//                mov.setActComprobante(actComprobante);
+//                mov.setFecha(actComprobante.getFecha());
+//                mov.setFechaRegistro(LocalDateTime.now());
+//                mov.setCantidad(data.getCantidad());
+//                mov.setValor(data.getPrecio());
+//                invMovimientoProductoRepository.save(mov);
+//            });
 
-                if (list.size() > 1) {
-                    throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
-                }
-                if (list.size() == 0) {
-                    InvAlmacenProducto stock = new InvAlmacenProducto();
-                    stock.setCnfProducto(data.getCnfProducto());
-                    stock.setInvAlmacen(actComprobante.getInvAlmacen());
-                    stock.setCantidad(data.getCantidad());
-                    invAlmacenProductoRepository.save(stock);
-                } else {
-                    InvAlmacenProducto stock = list.get(0);
-                    stock.setCnfProducto(data.getCnfProducto());
-                    stock.setInvAlmacen(actComprobante.getInvAlmacen());
-                    stock.setCantidad(stock.getCantidad().add(data.getCantidad()));
-                    invAlmacenProductoRepository.save(stock);
-                }
-                InvMovimientoProducto mov = new InvMovimientoProducto();
-                mov.setCnfProducto(data.getCnfProducto());
-                mov.setInvAlmacen(actComprobante.getInvAlmacen());
-                mov.setActComprobante(actComprobante);
-                mov.setFecha(actComprobante.getFecha());
-                mov.setFechaRegistro(LocalDateTime.now());
-                mov.setCantidad(data.getCantidad());
-                mov.setValor(data.getPrecio());
-                invMovimientoProductoRepository.save(mov);
-            });
             //save pagos programacion
-
             saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno, "2");
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -421,18 +427,16 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                     actPayment.setFecha(actComprobante.getFecha());
                     actPayment.setFechaVencimiento(
                             actComprobante.getFecha()
-                            .plusMonths(i)); 
+                                    .plusMonths(i));
                     if (actPayment.getFechaVencimiento().lengthOfMonth() < list.get(0).getModoDiaVencimiento()) {
                         actPayment.setFechaVencimiento(actPayment.getFechaVencimiento()
                                 .withDayOfMonth(actPayment.getFechaVencimiento().lengthOfMonth()));
                     } else {
                         actPayment.setFechaVencimiento(
-                            actPayment.getFechaVencimiento()
-                            .withDayOfMonth(list.get(0).getModoDiaVencimiento())); 
+                                actPayment.getFechaVencimiento()
+                                        .withDayOfMonth(list.get(0).getModoDiaVencimiento()));
                     }
-                    
-                    
-                            
+
                     actPayment.setMonto(list.get(0).getModoMonto());
                     actPayment.setMontoPendiente(list.get(0).getModoMonto());
                     actPagoProgramacionRepository.save(actPayment);

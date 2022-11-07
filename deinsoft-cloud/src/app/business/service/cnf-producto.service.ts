@@ -59,5 +59,8 @@ export class CnfProductoService {
     .set("cnfEmpresaId",cnfEmpresaId.toString());
     return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-typehead`, { params });
   }
+  public getPdfCodeBars(jsonData:any): Observable<any> {
+    return this.http.post(`${this.url}/getpdf-codebars`, jsonData,{observe: 'response', responseType: 'blob'});
+  }
 }
 

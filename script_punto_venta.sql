@@ -669,14 +669,14 @@ update cnf_forma_pago set cnf_empresa_id = 1 where cnf_empresa_id is null;
 ALTER TABLE seg_usuario
 ADD CONSTRAINT email_UNIQUE UNIQUE (email);
 
-UPDATE `punto_venta`.`seg_usuario` SET `email` = 'edward21.sistemas@gmail.com' WHERE (`seg_usuario_id` = '1');
-UPDATE `punto_venta`.`seg_usuario` SET `email` = 'facturacionelectronica@opendeinsoft.com' WHERE (`seg_usuario_id` = '3');
+UPDATE punto_venta.seg_usuario SET email = 'edward21.sistemas@gmail.com' WHERE (seg_usuario_id = '1');
+UPDATE punto_venta.seg_usuario SET email = 'facturacionelectronica@opendeinsoft.com' WHERE (seg_usuario_id = '3');
 
-ALTER TABLE `punto_venta`.`cnf_producto` 
-ADD COLUMN `barcode` VARCHAR(100) NULL AFTER `cnf_empresa_id`;
+ALTER TABLE punto_venta.cnf_producto 
+ADD COLUMN barcode VARCHAR(100) NULL AFTER cnf_empresa_id;
 
-UPDATE `punto_venta`.`seg_rol_usuario` SET `cnf_local_id` = null WHERE (`seg_rol_usuario_id` = '1');
-UPDATE `punto_venta`.`seg_rol_usuario` SET `cnf_local_id` = null WHERE (`seg_rol_usuario_id` = '2');
+UPDATE punto_venta.seg_rol_usuario SET cnf_local_id = null WHERE (seg_rol_usuario_id = '1');
+UPDATE punto_venta.seg_rol_usuario SET cnf_local_id = null WHERE (seg_rol_usuario_id = '2');
 
 
 alter table seg_rol_usuario
@@ -684,11 +684,11 @@ add constraint fk_seg_rol_usuario_cnf_empresa foreign key (cnf_empresa_id) refer
 alter table seg_rol_usuario
 add constraint fk_seg_rol_usuario_cnf_local foreign key (cnf_local_id) references cnf_local(cnf_local_id);
 
-ALTER TABLE `punto_venta`.`cnf_producto` 
-DROP INDEX `codigo_UNIQUE` ;
+ALTER TABLE punto_venta.cnf_producto 
+DROP INDEX codigo_UNIQUE ;
 ;
-ALTER TABLE `punto_venta`.`inv_movimiento_producto` 
-RENAME TO  `punto_venta`.`inv_almacen_producto` ;
+ALTER TABLE punto_venta.inv_movimiento_producto 
+RENAME TO  punto_venta.inv_almacen_producto ;
 
 alter table cnf_empresa
 add ruta_pse varchar(500);
@@ -1086,4 +1086,95 @@ insert into cnf_unidad_medida (cnf_unidad_medida_id,codigo_sunat,nombre,flag_est
 
 -- 2022-09-12
 
-update act_comprobante set flag_isventa = '2' where flag_isventa = '0' and act_comprobante_id > 0
+update act_comprobante set flag_isventa = '2' where flag_isventa = '0' and act_comprobante_id > 0;
+
+-- 2022-11-01
+
+CREATE TABLE inv_tipo_mov_almacen(
+	inv_tipo_mov_almacen_id int PRIMARY KEY AUTO_INCREMENT,
+    nombre varchar(100),
+    codigo_sunat varchar(2),
+    naturaleza char(1)
+)ENGINE=InnoDB;
+
+CREATE TABLE inv_mov_almacen (
+  inv_mov_almacen_id int(11) NOT NULL AUTO_INCREMENT,
+  inv_tipo_mov_almacen_id int(11) DEFAULT NULL,
+  cnf_tipo_comprobante_id int(11) DEFAULT NULL,
+  inv_almacen_id int(11) DEFAULT NULL,
+  cnf_maestro_id int(11) DEFAULT NULL,
+  serie varchar(4) DEFAULT NULL,
+  numero varchar(8) DEFAULT NULL,
+  numero_ref varchar(18) DEFAULT NULL,
+  fecha date DEFAULT NULL,
+  observacion varchar(300) DEFAULT NULL,
+  subtotal decimal(13,2) DEFAULT NULL,
+  igv decimal(13,2) DEFAULT NULL,
+  total decimal(13,2) DEFAULT NULL,
+  seg_usuario_id int(11) DEFAULT NULL,
+  fechareg date DEFAULT NULL,
+  flag_estado char(1) DEFAULT NULL,
+  PRIMARY KEY (inv_mov_almacen_id)
+) ENGINE=InnoDB;
+
+alter table inv_mov_almacen
+add constraint fk_inv_mov_almacen_inv_tipo_mov_almacen foreign key (inv_tipo_mov_almacen_id) 
+references inv_tipo_mov_almacen(inv_tipo_mov_almacen_id);
+
+alter table inv_mov_almacen
+add constraint fk_inv_mov_almacen_cnf_tipo_comprobante foreign key (cnf_tipo_comprobante_id) 
+references cnf_tipo_comprobante(cnf_tipo_comprobante_id);
+
+alter table inv_mov_almacen
+add constraint fk_inv_mov_almacen_inv_almacen foreign key (inv_almacen_id) 
+references inv_almacen(inv_almacen_id);
+
+alter table inv_mov_almacen
+add constraint fk_inv_mov_almacen_cnf_maestro foreign key (cnf_maestro_id) 
+references cnf_maestro(cnf_maestro_id);
+
+alter table inv_mov_almacen
+add constraint fk_inv_mov_almacen_seg_usuario foreign key (seg_usuario_id) 
+references seg_usuario(seg_usuario_id);
+
+alter table inv_mov_almacen
+add cnf_local_id INT NOT NULL;
+
+alter table inv_mov_almacen
+add constraint fk_inv_mov_almacen_cnf_local foreign key (cnf_local_id) references cnf_local(cnf_local_id);
+
+CREATE TABLE inv_mov_almacen_det (
+  inv_mov_almacen_det_id int(11) NOT NULL AUTO_INCREMENT,
+  inv_mov_almacen_id int(11),
+  cnf_producto_id int(11) DEFAULT NULL,
+  cantidad decimal(13,2) DEFAULT NULL,
+  precio decimal(13,2) DEFAULT NULL,
+  importe decimal(13,2) DEFAULT NULL,
+  nroserie varchar(30) DEFAULT NULL,
+  PRIMARY KEY (inv_mov_almacen_det_id)
+) ENGINE=InnoDB;
+
+alter table inv_mov_almacen_det
+add constraint fk_inv_mov_almacen_inv_mov_almacen foreign key (inv_mov_almacen_id) 
+references inv_mov_almacen(inv_mov_almacen_id);
+
+alter table inv_mov_almacen_det
+add constraint fk_inv_mov_almacen_cnf_producto foreign key (cnf_producto_id) 
+references cnf_producto(cnf_producto_id);
+
+select inv_tipo_mov_almacen.,inv_tipo_mov_almacen.nombre as inv_tipo_mov_almacen_column_1,
+inv_tipo_mov_almacen.codigo_sunat as inv_tipo_mov_almacen_column_2,inv_tipo_mov_almacen.naturaleza 
+as inv_tipo_mov_almacen_column_3 
+from inv_tipo_mov_almacen order by inv_tipo_mov_almacen.inv_tipo_mov_almacen_id desc
+
+ALTER TABLE cnf_producto
+CHANGE COLUMN cnf_categoria_id cnf_categoria_id INT  NULL ;
+
+alter table cnf_producto
+add constraint fk_cnf_producto_cnf_categoria foreign key (cnf_categoria_id) 
+references cnf_categoria(cnf_categoria_id);
+
+UPDATE `punto_venta`.`cnf_producto` SET `cnf_categoria_id` = '1' WHERE (`cnf_producto_id` = '1');
+UPDATE `punto_venta`.`cnf_producto` SET `cnf_categoria_id` = '2' WHERE (`cnf_producto_id` = '5');
+UPDATE `punto_venta`.`cnf_producto` SET `cnf_categoria_id` = null WHERE (`cnf_producto_id` = '6');
+UPDATE `punto_venta`.`cnf_producto` SET `cnf_categoria_id` = null WHERE (`cnf_producto_id` = '7');

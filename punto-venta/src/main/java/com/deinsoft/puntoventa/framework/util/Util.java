@@ -4,6 +4,9 @@
  */
 package com.deinsoft.puntoventa.framework.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -64,5 +67,11 @@ public class Util {
         BigDecimal bd = new BigDecimal(Float.toString(d));
         bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
         return bd.floatValue();
+    }
+    public static byte[] OutputStreamToByteArray(OutputStream myOutputStream) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+        baos.writeTo(myOutputStream); 
+        byte[] x = baos.toByteArray();
+        return x;
     }
 }

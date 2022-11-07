@@ -1,0 +1,338 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{'webpagos.inv_mov_almacen.home.title'| translate}}</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.adminModule"></a></li>
+                    <li class="breadcrumb-item active">{{'webpagos.inv_mov_almacen.home.title'| translate}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{'webpagos.inv_mov_almacen.home.title'| translate}}</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip"
+                        title="Collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip"
+                        title="Remove">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <form class="col-sm-12" style="padding-top: 6px;">
+                        <div class="form-group-sm row">
+                            <label class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.cnf_local' |
+                                translate}} <span *ngIf="loadingCnfLocal"
+                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-9">
+                                <select name="model.cnfLocal" [compareWith]="compareCnfLocal"
+                                    [(ngModel)]="model.cnfLocal" class="form-control-sm col-sm-12 col-lg-6">
+                                    <option *ngIf="loadingCnfLocal" [ngValue]="0" selected="selected">Cargando...
+                                    </option>
+                                    <option *ngIf="!loadingCnfLocal" [ngValue]="selectDefaultCnfLocal">
+                                        {{selectDefaultCnfLocal.name}}</option>
+                                    <option *ngFor="let item of listCnfLocal; index as i;" [ngValue]="item">
+                                        {{item.nombre}}</option>
+
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6"
+                                    *ngIf="error?['cnfLocal.nombre']:false">{{error["cnfLocal.nombre"] }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.inv_almacen' |
+                                translate}} <span *ngIf="loadingInvAlmacen"
+                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-9">
+                                <select name="model.invAlmacen" [compareWith]="compareInvAlmacen"
+                                    [(ngModel)]="model.invAlmacen" class="form-control-sm col-sm-12 col-lg-6">
+                                    <option *ngIf="loadingInvAlmacen" [ngValue]="0" selected="selected">Cargando...
+                                    </option>
+                                    <option *ngIf="!loadingInvAlmacen" [ngValue]="selectDefaultInvAlmacen">
+                                        {{selectDefaultInvAlmacen.name}}</option>
+                                    <option *ngFor="let item of listInvAlmacen; index as i;" [ngValue]="item">
+                                        {{item.nombre}}</option>
+
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6"
+                                    *ngIf="error?['invAlmacen.nombre']:false">{{error["invAlmacen.nombre"] }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="fecha"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.fecha' |
+                                translate}}</label>
+                            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                <div class="input-group input-group-sm">
+                                    <input placeholder="dd/mm/yyyy"
+                                        class="form-control-sm-dp col-xs-10 col-sm-10 col-lg-5" id="fecha"
+                                        name="model.fecha" maxlength="200" [(ngModel)]="model.fecha" ngbDatepicker
+                                        #dfecha="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary calendar button-dp"
+                                            (click)="dfecha.toggle()" type="button">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.fecha">{{ error.fecha
+                                    }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.inv_tipo_mov_almacen'
+                                | translate}} <span *ngIf="loadingInvTipoMovAlmacen"
+                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-9">
+                                <select name="model.invTipoMovAlmacen" [compareWith]="compareInvTipoMovAlmacen"
+                                    [(ngModel)]="model.invTipoMovAlmacen" class="form-control-sm col-sm-12 col-lg-6">
+                                    <option *ngIf="loadingInvTipoMovAlmacen" [ngValue]="0" selected="selected">
+                                        Cargando...</option>
+                                    <option *ngIf="!loadingInvTipoMovAlmacen"
+                                        [ngValue]="selectDefaultInvTipoMovAlmacen">
+                                        {{selectDefaultInvTipoMovAlmacen.name}}</option>
+                                    <option *ngFor="let item of listInvTipoMovAlmacen; index as i;" [ngValue]="item">
+                                        {{item.nombre}}</option>
+
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6"
+                                    *ngIf="error?['invTipoMovAlmacen.nombre']:false">{{error["invTipoMovAlmacen.nombre"]
+                                    }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.cnf_maestro' |
+                                translate}} <span *ngIf="loadingCnfMaestro"
+                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-9">
+                                <select name="model.cnfMaestro" [compareWith]="compareCnfMaestro"
+                                    [(ngModel)]="model.cnfMaestro" class="form-control-sm col-sm-12 col-lg-6">
+                                    <option *ngIf="loadingCnfMaestro" [ngValue]="0" selected="selected">Cargando...
+                                    </option>
+                                    <option *ngIf="!loadingCnfMaestro" [ngValue]="selectDefaultCnfMaestro">
+                                        {{selectDefaultCnfMaestro.name}}</option>
+                                    <option *ngFor="let item of listCnfMaestro; index as i;" [ngValue]="item">
+                                        {{item.apellidoPaterno + ' ' + item.apellidoMaterno + ' ' + item.nombres}}</option>
+
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6"
+                                    *ngIf="error?['cnfMaestro.nombre']:false">{{error["cnfMaestro.nombre"] }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.cnf_tipo_comprobante'
+                                | translate}} <span *ngIf="loadingCnfTipoComprobante"
+                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-9">
+                                <select name="model.cnfTipoComprobante" [compareWith]="compareCnfTipoComprobante"
+                                    [(ngModel)]="model.cnfTipoComprobante" class="form-control-sm col-sm-12 col-lg-6">
+                                    <option *ngIf="loadingCnfTipoComprobante" [ngValue]="0" selected="selected">
+                                        Cargando...</option>
+                                    <option *ngIf="!loadingCnfTipoComprobante"
+                                        [ngValue]="selectDefaultCnfTipoComprobante">
+                                        {{selectDefaultCnfTipoComprobante.name}}</option>
+                                    <option *ngFor="let item of listCnfTipoComprobante; index as i;" [ngValue]="item">
+                                        {{item.nombre}}</option>
+
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6"
+                                    *ngIf="error?['cnfTipoComprobante.nombre']:false">
+                                    {{error["cnfTipoComprobante.nombre"] }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="serie"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.serie' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="text" [(ngModel)]="model.serie" maxlength="4" name="serie" id="serie"
+                                    name="serie" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese serie" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.serie">{{ error.serie
+                                    }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="numero"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.numero' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="text" [(ngModel)]="model.numero" maxlength="8" name="numero" id="numero"
+                                    name="numero" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese numero" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.numero">{{ error.numero
+                                    }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="numeroRef"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.numero_ref' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="text" [(ngModel)]="model.numeroRef" maxlength="18" name="numeroRef"
+                                    id="numeroRef" name="numeroRef" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese numeroRef" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.numeroRef">{{
+                                    error.numeroRef }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group-sm row">
+                            <label for="total"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.total' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="text" [(ngModel)]="model.total" maxlength="15" name="total" id="total"
+                                    name="total" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese total" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.total">{{ error.total
+                                    }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="subtotal"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.subtotal' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="text" [(ngModel)]="model.subtotal" maxlength="15" name="subtotal"
+                                    id="subtotal" name="subtotal" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese subtotal" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.subtotal">{{
+                                    error.subtotal }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="igv" class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.igv'
+                                | translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="text" [(ngModel)]="model.igv" maxlength="15" name="igv" id="igv" name="igv"
+                                    class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese igv" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.igv">{{ error.igv }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="observacion"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.observacion' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="text" [(ngModel)]="model.observacion" maxlength="300" name="observacion"
+                                    id="observacion" name="observacion" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese observacion" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.observacion">{{
+                                    error.observacion }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group-sm row" *ngIf="id">
+                            <label
+                                class="col-xl-3 col-lg-3 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.inv_mov_almacen_det'
+                                | translate}}: <span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+
+                            <div class="col-sm-12 col-lg-9">
+                                <div
+                                    *ngIf="model.listInvMovAlmacenDet && model.listInvMovAlmacenDet.length > 0? false:true">
+                                    {{'webpagos.noRows' | translate }}
+                                </div>
+                                <div
+                                    *ngIf="model.listInvMovAlmacenDet && model.listInvMovAlmacenDet.length > 0?true:false">
+                                    <table id="dtData"
+                                        class="col-xl-6 col-lg-6 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
+                                        <thead>
+                                            <tr>
+                                                <th width="1%">Nro.</th>
+                                                <th class="text-nowrap">{{'webpagos.cnf_producto.nombre' | translate}}
+                                                </th>
+                                                <th width="1%" class="text-nowrap">{{'webpagos.actionsText' |
+                                                    translate}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr *ngFor="let item of model.listInvMovAlmacenDet; index as i"
+                                                class="odd gradeX">
+                                                <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
+                                                <td>{{item.cnfProducto.nombre}}</td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col-sm-6 col-xs-6 text-right"><a class="fas fa-edit"
+                                                                style="cursor: pointer;"
+                                                                (click)="editarInvMovAlmacenDet(item)"
+                                                                title="Modificar"></a>
+                                                        </div>
+                                                        <div class="col-sm-6 col-xs-6"><a
+                                                                (click)="quitarInvMovAlmacenDet(item)"
+                                                                style="cursor: pointer;" title="Cambiar estado"><i
+                                                                    class="fa fa-trash fa-lg"></i></a></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div>
+                                    <a style="color: blue;text-decoration: underline;cursor: pointer;"
+                                        (click)="agregarInvMovAlmacenDet()">A�adir InvMovAlmacenDet</a>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+
+                            <div class="col-sm-12" style="padding-top: 20px;">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-2 col-sm-4 col-xs-5" style="margin-left: 50x;">
+                                        <button class="btn btn-default col-12" (click)="getBack()">
+                                            <i class="fa fa-arrow-circle-left"></i> {{'webpagos.btnBack' | translate
+                                            }}
+                                        </button>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-4 col-xs-5" style="margin-left: 20x;">
+                                        <button class="btn btn-primary col-12" (click)="save()">
+                                            <i [ngClass]="model.id ? 'fa fa-pen' : 'fa fa-plus'"></i> {{ model.id ?
+                                            ('webpagos.btnEdit' | translate):('webpagos.btnSave' | translate) }}
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">Footer</div>
+            <!-- /.card-footer-->
+        </div>
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->

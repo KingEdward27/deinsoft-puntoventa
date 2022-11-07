@@ -38,6 +38,8 @@ import { InvAlmacenProductoService } from '@/business/service/inv-almacen-produc
 import { InvMovimientoProductoService } from '@/business/service/inv-movimiento-producto.service';
 import { ActPagoProgramacionService } from '@/business/service/act-pago-programacion.service';
 import { ActPagoService } from '@/business/service/act-pago.service';
+import { CnfCategoria } from '@/business/model/cnf-categoria.model';
+import { CnfCategoriaService } from '@/business/service/cnf-categoria.service';
 
 @Injectable()
 export class MyBaseComponentDependences {
@@ -63,7 +65,8 @@ export class MyBaseComponentDependences {
     public invAlmacenProductoService: InvAlmacenProductoService,
     public invMovimientoProductoService: InvMovimientoProductoService,
     public actPagoProgramacionService:ActPagoProgramacionService,
-    public actPagoService:ActPagoService
+    public actPagoService:ActPagoService,
+    public cnfCategoriaService: CnfCategoriaService
   ) { }
 }
 @Directive()
@@ -124,6 +127,12 @@ export class CommonReportFormComponent implements OnInit {
   datablesSettings:any
   indexInputs:any;
   datablesSettingsWithInputs:any;
+
+  selectDefaultCnfCategoria: any = { id: 0, nombre: "- Seleccione -" };
+  listCnfCategoria: any;
+  cnfCategoria: CnfCategoria = new CnfCategoria();
+  loadingCnfCategoria : boolean = false;
+
   constructor(public deps: MyBaseComponentDependences) {
   }
   ngOnInit(): void {
@@ -249,6 +258,7 @@ export class CommonReportFormComponent implements OnInit {
     this.getListCnfMoneda();
     this.getListCnfLocal();
     this.getListCnfTipoComprobante();
+    this.getListCnfCategoria();
     console.log(this.listCnfLocal);
     
     
@@ -594,6 +604,30 @@ export class CommonReportFormComponent implements OnInit {
       window.URL.revokeObjectURL(data);
       link.remove
     }, 100);
+  }
+
+  getListCnfCategoria() {
+    this.loadingCnfCategoria = true;
+    let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
+    if(cnfEmpresa == '*') {
+      return this.deps.cnfCategoriaService.getAllDataCombo().subscribe(data => {
+        this.listCnfCategoria = data;
+        this.loadingCnfCategoria = false;
+      })
+    }else{
+      return this.deps.cnfCategoriaService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
+        this.listCnfCategoria = data;
+        this.loadingCnfCategoria = false;
+      })
+    }
+  }
+  compareCnfCategoria(a1: CnfCategoria, a2: CnfCategoria): boolean {
+    if (a1 === undefined && a2 === undefined) {
+      return true;
+    }
+
+    return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
+      ? false : a1.id === a2.id;
   }
 }
 

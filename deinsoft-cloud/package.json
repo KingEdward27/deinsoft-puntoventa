@@ -44,6 +44,7 @@
     "@types/datatables.net-buttons": "^1.4.7",
     "angular-datatables": "13.0.1",
     "angular-jwt": "^0.1.11",
+    "bn-ng-idle": "^2.0.4",
     "bootstrap": "^4.6.0",
     "core-js": "3.8.0",
     "datatables.net": "1.11.3",

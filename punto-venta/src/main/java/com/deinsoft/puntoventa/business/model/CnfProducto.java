@@ -74,6 +74,12 @@ public class CnfProducto implements Serializable {
     @JoinColumn(name = "cnf_marca_id")
     private CnfMarca cnfMarca;
 
+    @NotNull
+    @Valid
+    @OneToOne
+    @JoinColumn(name = "cnf_categoria_id")
+    private CnfCategoria cnfCategoria;
+    
     public long getId() {
         return id;
     }
@@ -178,6 +184,14 @@ public class CnfProducto implements Serializable {
         this.cnfMarca = cnfMarca;
     }
 
+    public CnfCategoria getCnfCategoria() {
+        return cnfCategoria;
+    }
+
+    public void setCnfCategoria(CnfCategoria cnfCategoria) {
+        this.cnfCategoria = cnfCategoria;
+    }
+
     public BigDecimal getCosto() {
         return costo;
     }
@@ -185,7 +199,6 @@ public class CnfProducto implements Serializable {
     public void setCosto(BigDecimal costo) {
         this.costo = costo;
     }
-
     @Override
     public String toString() {
         return "cnfProducto [id=" + id + ", codigo=" + codigo + ", cnfEmpresa=" + (cnfEmpresa != null ? cnfEmpresa : "") + ", cnfMarca=" + (cnfMarca != null ? cnfMarca : "") + ", cnfSubCategoria=" + (cnfSubCategoria != null ? cnfSubCategoria : "") + ", cnfUnidadMedida=" + (cnfUnidadMedida != null ? cnfUnidadMedida : "") + ", nombre=" + nombre + ", precio=" + precio + ", existencia=" + existencia + ", fechaRegistro=" + fechaRegistro + ", rutaImagen=" + rutaImagen + ", flagEstado=" + flagEstado + ", barcode=" + barcode + "]";

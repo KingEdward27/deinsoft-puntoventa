@@ -41,6 +41,8 @@ export class AuthenticationService {
   }
   public isAuthenticated(): boolean {
     const token = this.getToken();
+    // console.log(token);
+    
     return !helper.isTokenExpired(token) //tokenNotExpired(null,token);
   }
 }

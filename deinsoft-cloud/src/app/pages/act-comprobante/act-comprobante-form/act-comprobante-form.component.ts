@@ -578,7 +578,8 @@ export class ActComprobanteFormComponent implements OnInit {
     console.log(convMapDetail);
 
     mp.map = convMapDetail;
-    this.commonService.genericPostRequest("/api/business/getpdflocal", mp, 'blob').subscribe(data => {
+    this.commonService.genericPostRequest("/api/business/getpdflocal", mp, 'blob')
+    .subscribe(data => {
       console.log(data);
       if (data.type != 'application/json') {
         var contentType = 'application/pdf';

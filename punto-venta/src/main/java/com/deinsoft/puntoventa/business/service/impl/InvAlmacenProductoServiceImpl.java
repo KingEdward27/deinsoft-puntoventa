@@ -13,11 +13,19 @@ import com.deinsoft.puntoventa.business.repository.InvAlmacenProductoRepository;
 import com.deinsoft.puntoventa.business.service.InvAlmacenProductoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.model.ActComprobante;
+import com.deinsoft.puntoventa.business.model.InvMovAlmacen;
+import com.deinsoft.puntoventa.business.model.InvMovimientoProducto;
+import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoRepository;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
-public class InvAlmacenProductoServiceImpl extends CommonServiceImpl<InvAlmacenProducto, 
-        InvAlmacenProductoRepository> implements InvAlmacenProductoService {
+public class InvAlmacenProductoServiceImpl 
+        extends CommonServiceImpl<InvAlmacenProducto, InvAlmacenProductoRepository> implements InvAlmacenProductoService {
+
+    @Autowired
+    InvMovimientoProductoRepository invMovimientoProductoRepository;
 
     @Autowired
     InvAlmacenProductoRepository invAlmacenProductoRepository;
@@ -66,10 +74,78 @@ public class InvAlmacenProductoServiceImpl extends CommonServiceImpl<InvAlmacenP
             invAlmacenProductoRepository.delete(invAlmacenProducto);
         }
     }
+
     @Override
     public List<InvAlmacenProducto> getReportInvAlmacen(ParamBean paramBean) {
-        List<InvAlmacenProducto> list = (List<InvAlmacenProducto>) 
-                invAlmacenProductoRepository.getReportInvAlmacen(paramBean);
+        List<InvAlmacenProducto> list = (List<InvAlmacenProducto>) invAlmacenProductoRepository.getReportInvAlmacen(paramBean);
         return list;
+    }
+
+    @Override
+    public void registerProductMovementAndUpdateStock(ActComprobante actComprobante, InvMovAlmacen invMovAlmacen) {
+        if (actComprobante != null) {
+            actComprobante.getListActComprobanteDetalle().forEach(data -> {
+                if (!data.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
+                    List<InvAlmacenProducto> list
+                            = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
+
+                    if (list.size() > 1) {
+                        throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
+                    }
+                    if (list.size() == 0) {
+                        throw new RuntimeException("No existe stock para el almacen y producto seleccionados");
+                    }
+                    InvAlmacenProducto stock = list.get(0);
+                    stock.setCnfProducto(data.getCnfProducto());
+                    stock.setInvAlmacen(actComprobante.getInvAlmacen());
+                    stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
+                    invAlmacenProductoRepository.save(stock);
+
+                    InvMovimientoProducto mov = new InvMovimientoProducto();
+                    mov.setCnfProducto(data.getCnfProducto());
+                    mov.setInvAlmacen(actComprobante.getInvAlmacen());
+                    mov.setActComprobante(actComprobante);
+                    mov.setFecha(actComprobante.getFecha());
+                    mov.setFechaRegistro(LocalDateTime.now());
+                    mov.setCantidad(data.getCantidad().multiply(
+                            actComprobante.getFlagIsventa().equals("0") ? BigDecimal.valueOf(-1) : BigDecimal.ZERO));
+                    mov.setValor(data.getPrecio());
+                    invMovimientoProductoRepository.save(mov);
+                }
+
+            });
+        }
+        if (invMovAlmacen != null) {
+            invMovAlmacen.getListInvMovAlmacenDet().forEach(data -> {
+                if (!data.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
+                    List<InvAlmacenProducto> list
+                            = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
+
+                    if (list.size() > 1) {
+                        throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
+                    }
+                    if (list.size() == 0) {
+                        throw new RuntimeException("No existe stock para el almacen y producto seleccionados");
+                    }
+                    InvAlmacenProducto stock = list.get(0);
+                    stock.setCnfProducto(data.getCnfProducto());
+                    stock.setInvAlmacen(invMovAlmacen.getInvAlmacen());
+                    stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
+                    invAlmacenProductoRepository.save(stock);
+
+                    InvMovimientoProducto mov = new InvMovimientoProducto();
+                    mov.setCnfProducto(data.getCnfProducto());
+                    mov.setInvAlmacen(invMovAlmacen.getInvAlmacen());
+                    mov.setFecha(invMovAlmacen.getFecha());
+                    mov.setFechaRegistro(LocalDateTime.now());
+                    mov.setCantidad(data.getCantidad().multiply(
+                            invMovAlmacen.getInvTipoMovAlmacen().getNaturaleza().equals("-1") ? BigDecimal.valueOf(-1) : BigDecimal.ZERO));
+                    mov.setValor(data.getPrecio());
+                    invMovimientoProductoRepository.save(mov);
+                }
+
+            });
+        }
+
     }
 }

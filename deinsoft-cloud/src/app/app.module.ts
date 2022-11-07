@@ -101,8 +101,14 @@ import { SegAccionComponent } from '@pages/security/seg-accion/seg_accion';
 import { ActCajaOperacionListComponent } from '@pages/act-caja-operacion/list/act-caja-operacion-list.component';
 import { ActCajaOperacionFormComponent } from '@pages/act-caja-operacion/form/act-caja-operacion-form.component';
 import { ActPagoProgramacionReportComponent } from '@pages/reports/act-pago-programacion/act-pago-programacion-report.component';
+import { BnNgIdleService } from 'bn-ng-idle';
+import { InvTipoMovComponent } from '@pages/inv-tipo-mov/inv-tipo-mov';
 registerLocaleData(localeEn, 'en-EN');
 
+import { AddNewInvMovAlmacenDetComponent } from './pages/inv-mov-almacen/add-new-inv-mov-almacen-det/add-new-inv-mov-almacen-det.component';
+import { InvMovAlmacenListComponent } from '@pages/inv-mov-almacen/list/inv-mov-almacen-list.component';
+import { InvMovAlmacenFormComponent } from '@pages/inv-mov-almacen/inv-mov-almacen-form/inv-mov-almacen-form.component';
+import { CnfProductoListComponent } from '@pages/cnf-producto/cnf-producto-list.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -190,7 +196,12 @@ registerLocaleData(localeEn, 'en-EN');
         SegAccionComponent,
         ActCajaOperacionListComponent,
         ActCajaOperacionFormComponent,
-        ActPagoProgramacionReportComponent
+        ActPagoProgramacionReportComponent,
+		AddNewInvMovAlmacenDetComponent,
+        InvTipoMovComponent,
+        InvMovAlmacenListComponent,
+        InvMovAlmacenFormComponent,
+        CnfProductoListComponent
     ],
     imports: [
         BrowserModule,
@@ -223,7 +234,8 @@ registerLocaleData(localeEn, 'en-EN');
     ],
     providers: [
         HttpClientModule,
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        [BnNgIdleService]
     ],
     bootstrap: [AppComponent]
 })

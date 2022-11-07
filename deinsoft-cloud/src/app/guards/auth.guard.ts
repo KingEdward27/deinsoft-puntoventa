@@ -25,51 +25,51 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         | Promise<boolean | UrlTree>
         | boolean
         | UrlTree {
-        // const isAuthenticated = this.authenticationService.isAuthenticated();
-        // console.log(isAuthenticated);
+        const isAuthenticated = this.authenticationService.isAuthenticated();
+        console.log(isAuthenticated);
 
-        // if(!isAuthenticated){
-        //     this.router.navigate(['/login']); // , { queryParams: { returnUrl: state.url }}
-        //     return false;
-        // }
-        // return true;
-        console.log(state.url);
-        let optionValid = []
-        return this.getProfile();
-        let wa = this.appService.getMenu();
-        console.log(wa);
-        for (let we in wa){
-            console.log(we);
+        if(!isAuthenticated){
+            this.appService.logout() // , { queryParams: { returnUrl: state.url }}
+            return false;
         }
+        // return true;
+        // console.log(state.url);
+        let optionValid = []
+        // return this.getProfile();
+        let wa = this.appService.getMenu();
+        // console.log(wa);
+        // for (let we in wa){
+        //     console.log(we);
+        // }
         wa?.forEach(element => {
-            console.log(element);
+            // console.log(element);
             
             // console.log(element.children);
-            // if (!element.segMenu) {
-            //     optionValid.push(element)
-            // }
-            // else if (!element.segMenu.children) {
-            //     if (element.segMenu.path[0] == state.url) {
-            //         optionValid.push(element.segMenu)
-            //     }
-            // } else {
-            //     console.log(element.segMenu.children);
-            //     let wa = element.segMenu.children.filter(
-            //         item => item.path[0] == state.url)
-            //     console.log(wa);
+            if (!element.segMenu) {
+                optionValid.push(element)
+            }
+            else if (!element.segMenu.children) {
+                if (element.segMenu.path[0] == state.url) {
+                    optionValid.push(element.segMenu)
+                }
+            } else {
+                console.log(element.segMenu.children);
+                let wa = element.segMenu.children.filter(
+                    item => item.path[0] == state.url)
+                // console.log(wa);
 
-            //     if (wa.length > 0) {
-            //         optionValid.push(wa);
-            //     }
+                if (wa.length > 0) {
+                    optionValid.push(wa);
+                }
 
-            // }
+            }
         }, err => {
             return false
         });
-        console.log(optionValid);
+        // console.log(optionValid);
         if (optionValid.length > 0 || state.url == '/' 
         || state.url == '/generic-form' || state.url == '/generic-child-form' || state.url == '/swagger-ui') {
-            return true;
+            return this.getProfile();
         }
         else {
             // this.router.navigate(['']); // , { queryParams: { returnUrl: state.url }}
@@ -100,8 +100,10 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
         try {
             await this.appService.getProfile();
+            console.log("sdf");
             return true;
         } catch (error) {
+            console.log(error);
             return false;
         }
     }

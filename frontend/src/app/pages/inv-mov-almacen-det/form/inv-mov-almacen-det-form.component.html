@@ -1,0 +1,102 @@
+<ol class="breadcrumb float-xl-right">
+    <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+    <li class="breadcrumb-item"><a href="javascript:;" translate = "ocscloudApp.securityModule"></a></li>
+    <li class="breadcrumb-item active" translate = "ocscloudApp.invMovAlmacenDet.home.title"></li>
+</ol>
+<h1 class="page-header" translate = "ocscloudApp.invMovAlmacenDet.home.title"><small translate = "ocscloudApp.invMovAlmacenDet.home.subTitleForm"></small></h1>
+
+<div class="panel panel-inverse" *ngIf="isDataLoaded">
+    <!-- begin panel-heading -->
+    <div class="panel-heading">
+        <h4 class="panel-title" translate = "ocscloudApp.invMovAlmacenDet.home.title"></h4>
+        <div class="panel-heading-btn">
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i
+                    class="fa fa-expand"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i
+                    class="fa fa-redo"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i
+                    class="fa fa-minus"></i></a>
+
+        </div>
+    </div>
+    <!-- end panel-heading -->
+    <!-- begin panel-body -->
+    <div class="panel-body">
+        <div class="table-responsive">
+            <h4 style="border-bottom: solid 1px;padding-bottom: 6px;">{{'ocscloudApp.register' | translate}} - {{'ocscloudApp.invMovAlmacenDet.home.title' | translate}}</h4>
+            <form class="col-sm-12" style="padding-top: 6px;"  >
+                <div class="form-group-sm row" >
+	                <label for="cantidad" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.invMovAlmacenDet.cantidad' | translate}}</label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.cantidad" maxlength="15" name="cantidad" id="cantidad" name = "cantidad" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese cantidad"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.cantidad">{{ error.cantidad }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label for="precio" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.invMovAlmacenDet.precio' | translate}}</label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.precio" maxlength="15" name="precio" id="precio" name = "precio" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese precio"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.precio">{{ error.precio }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label for="importe" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.invMovAlmacenDet.importe' | translate}}</label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.importe" maxlength="15" name="importe" id="importe" name = "importe" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese importe"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.importe">{{ error.importe }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label for="nroserie" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.invMovAlmacenDet.nroserie' | translate}}</label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.nroserie" maxlength="30" name="nroserie" id="nroserie" name = "nroserie" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese nroserie"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.nroserie">{{ error.nroserie }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.invMovAlmacenDet.invMovAlmacen' | translate}} <span *ngIf="loadingInvMovAlmacen" class="spinner-border spinner-border-sm mr-1"></span><span style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                    <div class="col-sm-12 col-lg-9">
+	                    <select name="model.invMovAlmacen" [compareWith]="compareInvMovAlmacen" [(ngModel)]="model.invMovAlmacen" 
+                                class="form-control-sm col-sm-12 col-lg-6">
+                                    <option *ngIf="loadingInvMovAlmacen" [ngValue]="0" selected="selected">Cargando...</option>
+                                    <option *ngIf="!loadingInvMovAlmacen" [ngValue]="selectDefaultInvMovAlmacen" >{{selectDefaultInvMovAlmacen.name}}</option>
+                                    <option *ngFor="let item of listInvMovAlmacen; index as i;" [ngValue]="item" >{{item.numero}}</option>
+                                    
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?['invMovAlmacen.numero']:false">{{error["invMovAlmacen.numero"] }}</div>
+                    </div>
+                            </div>
+                <div class="form-group-sm row" >
+	                <label class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.invMovAlmacenDet.cnfProducto' | translate}} <span *ngIf="loadingCnfProducto" class="spinner-border spinner-border-sm mr-1"></span><span style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                    <div class="col-sm-12 col-lg-9">
+	                    <select name="model.cnfProducto" [compareWith]="compareCnfProducto" [(ngModel)]="model.cnfProducto" 
+                                class="form-control-sm col-sm-12 col-lg-6">
+                                    <option *ngIf="loadingCnfProducto" [ngValue]="0" selected="selected">Cargando...</option>
+                                    <option *ngIf="!loadingCnfProducto" [ngValue]="selectDefaultCnfProducto" >{{selectDefaultCnfProducto.name}}</option>
+                                    <option *ngFor="let item of listCnfProducto; index as i;" [ngValue]="item" >{{item.nombre}}</option>
+                                    
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?['cnfProducto.nombre']:false">{{error["cnfProducto.nombre"] }}</div>
+                    </div>
+                            </div>
+<div class="form-group row">
+
+                    <div class="col-sm-12" style="padding-top: 20px;">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-2 col-sm-4 col-xs-5" style="margin-left: 50x;">
+                                <button class="btn btn-default col-12" (click)="getBack()" >
+                                    <i class="fa fa-arrow-circle-left"></i> {{'ocscloudApp.btnBack' | translate }}
+                                </button>
+                            </div>
+                            <div class="col-lg-2 col-sm-4 col-xs-5" style="margin-left: 20x;">
+                                <button class="btn btn-orange col-12" (click)="save()" >
+                                    <i [ngClass]="model.id ? 'fa fa-pen' : 'fa fa-plus'"></i> {{ model.id ? ('ocscloudApp.btnEdit' | translate):('ocscloudApp.btnSave' | translate) }}
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div></form>
+        </div>
+      </div>
+</div>

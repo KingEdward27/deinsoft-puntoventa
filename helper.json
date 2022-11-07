@@ -866,6 +866,128 @@
                 generateFrontend: true,
                 regenerate: true,
                 typeDeleteVoid: "2"
+        },
+        {
+                tableName: "inv_tipo_mov_almacen",
+                title: "inv_tipo_mov_almacen",
+                columnsForm: [
+                    {columnName: "nombre",inputType: "text"},
+                    {columnName: "codigo_sunat",inputType: "text"},
+                    {columnName: "naturaleza",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "codigo_sunat",filterType: "text"},
+                    {columnName: "naturaleza",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "inv_mov_almacen",
+                title: "inv_mov_almacen",
+                foreignTables: [
+                {tableName: "inv_tipo_mov_almacen",idValue: "inv_tipo_mov_almacen_id",descriptionColumn : "nombre"
+                },
+                {tableName: "cnf_maestro",idValue: "cnf_maestro_id",descriptionColumn : "nombre"
+                },
+                {tableName: "cnf_local",idValue: "cnf_local_id",descriptionColumn : "nombre"
+                },
+                {tableName: "cnf_tipo_comprobante",idValue: "cnf_tipo_comprobante_id",descriptionColumn : "nombre"
+                },
+                {tableName: "inv_almacen",idValue: "inv_almacen_id",descriptionColumn : "nombre"
+                }
+            ],
+                  childTables: [
+                {tableName: "inv_mov_almacen_det",tableNameDetail: "inv_mov_almacen_det",
+                        idValue: "inv_mov_almacen_det_id",columnsForm: [
+                        {tableName: "cnf_producto", columnName: "nombre",inputType: "select"
+                        }
+                    ]
+                }
+            ],
+                columnsForm: [
+                {columnName: "fecha",inputType: "number"
+                },
+                {columnName: "serie",inputType: "number"
+                },
+                {columnName: "numero",inputType: "text"
+                },
+                {columnName: "numero_ref",inputType: "text"
+                },
+                {columnName: "fechareg",inputType: "text"
+                },
+                {columnName: "total",inputType: "text"
+                },
+                {columnName: "subtotal",inputType: "text"
+                },
+                {columnName: "igv",inputType: "text"
+                },
+                {columnName: "observacion",inputType: "text"
+                },
+                {columnName: "flag_estado",inputType: "text"
+                },
+            ],
+                columnsList: [
+                    {columnName: "fecha",filterType: "number"
+                },
+                {columnName: "serie",filterType: "number"
+                },
+                {columnName: "numero",filterType: "text"
+                },
+                {columnName: "numero_ref",filterType: "text"
+                },
+                {columnName: "fechareg",filterType: "text"
+                },
+                {columnName: "total",filterType: "text"
+                },
+                {columnName: "subtotal",filterType: "text"
+                },
+                {columnName: "igv",filterType: "text"
+                },
+                {columnName: "observacion",filterType: "text"
+                },
+                {columnName: "flag_estado",filterType: "text"
+                }
+            ],
+                typeDeleteVoid: "2",
+                regenerate: true,
+                generateFrontend: true
+        },
+        {
+                tableName: "inv_mov_almacen_det",
+                title: "inv_mov_almacen_det",
+                foreignTables: [
+                {tableName: "inv_mov_almacen",idValue: "inv_mov_almacen_id",
+                descriptionColumn : "numero"
+                },
+                {tableName: "cnf_producto",idValue: "cnf_producto_id",descriptionColumn : "nombre"
+                }
+            ],
+                columnsForm: [
+                {columnName: "cantidad",inputType: "number"
+                },
+                {columnName: "precio",inputType: "number"
+                },
+                {columnName: "importe",inputType: "number"
+                },
+                {columnName: "nroserie",inputType: "number"
+                }
+            ],
+                columnsList: [
+                    {columnName: "cantidad",filterType: "text"
+                },
+                {columnName: "precio",filterType: "text"
+                },
+                {columnName: "importe",filterType: "text"
+                },
+                {columnName: "nroserie",filterType: "text"
+                }
+            ],
+                typeDeleteVoid: "2",
+                regenerate: true,
+                generateFrontend: true
         }
     ]
 }

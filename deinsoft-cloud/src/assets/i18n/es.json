@@ -260,9 +260,9 @@
     },
     "cnf_producto": {
       "home": {
-        "title": "Tipo de Comprobante",
-        "subTitleForm": " Mantenimiento de Centro de Costo",
-        "subTitleList": " Listado de Centros de Costo"
+        "title": "Productos",
+        "subTitleForm": " Mantenimiento de Productos",
+        "subTitleList": " Listado de Productos"
       },
       "id": "ID",
       "nombre": "Producto",
@@ -272,7 +272,10 @@
       "cnf_producto.cnf_producto_id, cnf_producto.nombre":"Producto",
       "barcode":"Código de barras",
       "costo":"Costo",
-      "flag_servicio":"Es servicio"
+      "flag_servicio":"Es servicio",
+      "cnf_marca":"Marca",
+      "cnf_categoria":"Categoria",
+      "cnf_sub_categoria":"Sub categoria"
     },
     "inv_almacen": {
       "home": {
@@ -433,6 +436,63 @@
       "estado":"Estado",
       "monto_salida":"Salida",
       "monto_ingreso":"Ingreso"
+    },
+    "inv_tipo_mov_almacen": {
+      "home": {
+        "title": "Tipos de Movimiento de Almacén",
+        "subTitleForm": " Mantenimiento de Tipos de Movimiento de Almacén",
+        "subTitleList": " Listado de Tipos de Movimiento de Almacén"
+      },
+      "id": "ID",
+      "nombre":"Nombre",
+      "codigo_sunat":"Código SUNAT",
+      "naturaleza":"Naturaleza"
+    },
+    "inv_mov_almacen": {
+      "home": {
+        "title": "Movimiento de Almacén",
+        "titleCompra": "Compra de Productos",
+        "subTitleForm": " ovimiento de Alamacén",
+        "subTitleList": " Listado de Movimiento de Alamacén"
+      },
+      "id": "ID",
+      "fecha": "Fecha",
+      "fechareg": "Fecha Registro",
+      "numero": "Número",
+      "numero_ref": "Número referencial",
+      "total": "Total",
+      "observacion": "Observación",
+      "igv":"IGV",
+      "subtotal":"Subtotal",
+      "serie":"Serie",
+      "envio_pse_mensaje":"Envío F.E.",
+      "cnf_maestro":"Cliente",
+      "cnf_tipo_comprobante":"Tipo",
+      "cnf_forma_pago":"Forma de pago",
+      "cnf_local":"Local",
+      "inv_almacen":"Almacén",
+      "flag_estado":"Estado",
+      "cnf_moneda":"Moneda",
+      "descuento":"Descuento",
+      "act_comprobante_detalle":"Detalle de Comprobante",
+      "proveedor":"Proveedor",
+      "fechaDesde":"Fecha inicio",
+      "fechaHasta":"Fecha fin",
+      "fecha_vencimiento":"Fecha vencimiento",
+      "inv_tipo_mov_almacen":"Tipo de movimiento",
+      "inv_mov_almacen_det":"Productos"
+    },
+    "inv_mov_almacen_det": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "cantidad": "Cantidad",
+      "precio": "Precio",
+      "importe":"Importe",
+      "cnf_producto":"Producto"
     },
     "reportes": {
       "act_comprobante_listado":"Listado de Ventas",

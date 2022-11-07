@@ -13,7 +13,14 @@ import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.CnfProducto;
 import com.deinsoft.puntoventa.business.service.CnfProductoService;
+import com.deinsoft.puntoventa.framework.model.UpdateParam;
+import java.io.ByteArrayInputStream;
+import java.text.ParseException;
+import java.util.Map;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping("/api/business/cnf-producto")
@@ -80,10 +87,36 @@ public class CnfProductoController extends CommonController<CnfProducto, CnfProd
     }
 
     @GetMapping(value = "/get-all-cnf-producto-typehead")
-    public ResponseEntity<?> getAllCnfProductTypeHead(String nameOrCode, long cnfEmpresaId, 
+    public ResponseEntity<?> getAllCnfProductTypeHead(String nameOrCode, long cnfEmpresaId,
             HttpServletRequest request) {
         List<CnfProducto> cnfProductList = cnfProductoService
                 .getAllCnfProductTypeHead(nameOrCode, cnfEmpresaId);
         return ResponseEntity.status(HttpStatus.OK).body(cnfProductList);
+    }
+
+    @PostMapping(value = "/getpdf-codebars")
+    public ResponseEntity<?> getPdfCodeBars(@RequestBody UpdateParam param) throws ParseException, Exception {
+        HttpHeaders headers = new HttpHeaders();
+        MediaType mediaType = MediaType.APPLICATION_PDF;
+//        Map<String, Object> map = param.getMap();
+//        String id = map.get("id").toString();
+//        int tipo = Integer.parseInt(map.get("tipo").toString());
+        byte[] data = cnfProductoService.getPdfcodeBars();
+        if (data != null) {
+//            String type = "pdf";
+            ByteArrayInputStream stream = new ByteArrayInputStream(data);
+            headers.add("Content-Disposition", "inline; filename=pdf.pdf");
+            mediaType = MediaType.APPLICATION_PDF;
+//            if (type.equals("pdf")) {
+//                headers.add("Content-Disposition", "inline; filename=pdf.pdf");
+//                mediaType = MediaType.APPLICATION_PDF;
+//            } else if (type.equals("excel")) {
+//                headers.add("Content-Disposition", "attachment; filename=excel.xlsx");
+//                mediaType = MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+//            }
+            return ResponseEntity.status(HttpStatus.CREATED).headers(headers).contentType(mediaType).body(new InputStreamResource(stream));
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).headers(headers).contentType(mediaType).body("Ocurrió un error en el servidor");
+
     }
 }

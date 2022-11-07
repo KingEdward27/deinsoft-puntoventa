@@ -35,7 +35,7 @@ public class JpaUserDetailsService implements UserDetailsService {
 
     @Autowired
     JdbcRepository jdbcRepository;
-    
+
     private Logger logger = LoggerFactory.getLogger(JpaUserDetailsService.class);
 
     @Override
@@ -59,28 +59,27 @@ public class JpaUserDetailsService implements UserDetailsService {
         } else {
             for (SecRoleUser roleUser : usuario.getListSecRoleUser()) {
                 logger.info("Role: ".concat(roleUser.getSecRole().getName()));
-                if(roleUser.getEmpresa() == null) {
+                if (roleUser.getEmpresa() == null) {
                     authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() + "|*|*"));
                     totalAccess = true;
                     break;
                 }
-                if(roleUser.getEmpresa() != null && roleUser.getLocal() == null) {
-                    authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() + "|"+String.valueOf(roleUser.getEmpresa().getId())+"|*"));
+                if (roleUser.getEmpresa() != null && roleUser.getLocal() == null) {
+                    authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() + "|" + String.valueOf(roleUser.getEmpresa().getId()) + "|*"));
                     totalAccess = true;
                     break;
                 }
-                if(roleUser.getEmpresa() != null && roleUser.getLocal() != null) {
-                    locales = locales + roleUser.getSecRole().getName() 
-                            + "|" + String.valueOf(roleUser.getEmpresa().getId()) 
+                if (roleUser.getEmpresa() != null && roleUser.getLocal() != null) {
+                    locales = locales + roleUser.getSecRole().getName()
+                            + "|" + String.valueOf(roleUser.getEmpresa().getId())
                             + "|" + String.valueOf(roleUser.getLocal().getId());
                 }
             }
-            if(!totalAccess){
+            if (!totalAccess) {
                 authorities.add(new SimpleGrantedAuthority(locales));
             }
         }
-        
-        
+
         if (authorities.isEmpty()) {
             logger.error("Error en el Login: Usuario '" + email + "' no tiene roles asignados!");
             throw new UsernameNotFoundException("Error en el Login: usuario '" + email + "' no tiene roles asignados!");
