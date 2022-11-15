@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,5 +33,9 @@ public interface CnfProductoService extends CommonService<CnfProducto> {
 
     public List<CnfProducto> getAllCnfProductTypeHead(String nameOrValue, long invWarehouseId);
     
-    public byte[] getPdfcodeBars() throws ParseException, Exception;
+    public List<CnfProducto> getAllCnfProductoCodeBarsPre(ParamBean param);
+            
+    public byte[] getPdfcodeBars(ParamBean param) throws ParseException, Exception;
+    
+    public List<CnfProducto> getAllCnfProductTypeHeadNoServicios(String nameOrValue, long cnfEmpresaId);
 }

@@ -4,6 +4,8 @@
  */
 package com.deinsoft.puntoventa.business.bean;
 
+import com.deinsoft.puntoventa.business.model.CnfCategoria;
+import com.deinsoft.puntoventa.business.model.CnfEmpresa;
 import com.deinsoft.puntoventa.business.model.CnfFormaPago;
 import com.deinsoft.puntoventa.business.model.CnfLocal;
 import com.deinsoft.puntoventa.business.model.CnfMaestro;
@@ -38,6 +40,8 @@ public class ParamBean {
 
     private CnfMaestro cnfMaestro;
 
+    private CnfEmpresa cnfEmpresa;
+    
     private CnfFormaPago cnfFormaPago;
 
     private CnfMoneda cnfMoneda;
@@ -48,6 +52,7 @@ public class ParamBean {
 
     private InvAlmacen invAlmacen;
 
+    private CnfCategoria CnfCategoria;
     
     public ParamBean() {
     }
@@ -123,6 +128,22 @@ public class ParamBean {
 
     public void setInvAlmacen(InvAlmacen invAlmacen) {
         this.invAlmacen = invAlmacen;
+    }
+
+    public CnfEmpresa getCnfEmpresa() {
+        return cnfEmpresa;
+    }
+
+    public void setCnfEmpresa(CnfEmpresa cnfEmpresa) {
+        this.cnfEmpresa = cnfEmpresa;
+    }
+
+    public CnfCategoria getCnfCategoria() {
+        return CnfCategoria;
+    }
+
+    public void setCnfCategoria(CnfCategoria CnfCategoria) {
+        this.CnfCategoria = CnfCategoria;
     }
     
     

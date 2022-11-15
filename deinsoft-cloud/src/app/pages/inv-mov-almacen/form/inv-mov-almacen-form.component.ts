@@ -84,7 +84,9 @@ export class InvMovAlmacenForm2Component implements OnInit {
     this.loadData();
   }
   getBack() {
-    this.router.navigate([this.redirect]);
+    console.log("wa");
+    
+    this.router.navigate(['/mov-almacen']);
   }
   loadData() {
     this.getListInvTipoMovAlmacen();
@@ -105,7 +107,7 @@ export class InvMovAlmacenForm2Component implements OnInit {
           this.isDataLoaded = true;
           //this.titulo = 'Editar ' + this.nombreModel;
         });
-      }
+      } 
 
     })
 

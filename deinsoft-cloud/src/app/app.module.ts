@@ -109,6 +109,7 @@ import { AddNewInvMovAlmacenDetComponent } from './pages/inv-mov-almacen/add-new
 import { InvMovAlmacenListComponent } from '@pages/inv-mov-almacen/list/inv-mov-almacen-list.component';
 import { InvMovAlmacenFormComponent } from '@pages/inv-mov-almacen/inv-mov-almacen-form/inv-mov-almacen-form.component';
 import { CnfProductoListComponent } from '@pages/cnf-producto/cnf-producto-list.component';
+import { InvMovAlmacenForm2Component } from '@pages/inv-mov-almacen/form/inv-mov-almacen-form.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -201,7 +202,8 @@ import { CnfProductoListComponent } from '@pages/cnf-producto/cnf-producto-list.
         InvTipoMovComponent,
         InvMovAlmacenListComponent,
         InvMovAlmacenFormComponent,
-        CnfProductoListComponent
+        CnfProductoListComponent,
+        InvMovAlmacenForm2Component
     ],
     imports: [
         BrowserModule,

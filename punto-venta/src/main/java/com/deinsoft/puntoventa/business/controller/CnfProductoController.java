@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.controller;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.*;
@@ -93,15 +94,26 @@ public class CnfProductoController extends CommonController<CnfProducto, CnfProd
                 .getAllCnfProductTypeHead(nameOrCode, cnfEmpresaId);
         return ResponseEntity.status(HttpStatus.OK).body(cnfProductList);
     }
-
+    @GetMapping(value = "/get-all-cnf-producto-typehead-no-servicios")
+    public ResponseEntity<?> getAllCnfProductTypeHeadNoServicios(String nameOrCode, long cnfEmpresaId,
+            HttpServletRequest request) {
+        List<CnfProducto> cnfProductList = cnfProductoService
+                .getAllCnfProductTypeHeadNoServicios(nameOrCode, cnfEmpresaId);
+        return ResponseEntity.status(HttpStatus.OK).body(cnfProductList);
+    }
+    @PostMapping(value = "/get-all-cnf-producto-getpdf-codebars-pre")
+    public List<CnfProducto> getCnfProductosPdfCodeBarsPre(@RequestBody ParamBean param){
+        List<CnfProducto> cnfProductoList = cnfProductoService.getAllCnfProductoCodeBarsPre(param);
+        return cnfProductoList;
+    }
     @PostMapping(value = "/getpdf-codebars")
-    public ResponseEntity<?> getPdfCodeBars(@RequestBody UpdateParam param) throws ParseException, Exception {
+    public ResponseEntity<?> getPdfCodeBars(@RequestBody ParamBean param) throws ParseException, Exception {
         HttpHeaders headers = new HttpHeaders();
         MediaType mediaType = MediaType.APPLICATION_PDF;
 //        Map<String, Object> map = param.getMap();
 //        String id = map.get("id").toString();
 //        int tipo = Integer.parseInt(map.get("tipo").toString());
-        byte[] data = cnfProductoService.getPdfcodeBars();
+        byte[] data = cnfProductoService.getPdfcodeBars(param);
         if (data != null) {
 //            String type = "pdf";
             ByteArrayInputStream stream = new ByteArrayInputStream(data);

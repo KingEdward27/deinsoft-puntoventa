@@ -67,6 +67,7 @@ import { InvMovAlmacenListComponent } from '@pages/inv-mov-almacen/list/inv-mov-
 import { AddNewInvMovAlmacenDetComponent } from '@pages/inv-mov-almacen/add-new-inv-mov-almacen-det/add-new-inv-mov-almacen-det.component';
 import { InvMovAlmacenFormComponent } from '@pages/inv-mov-almacen/inv-mov-almacen-form/inv-mov-almacen-form.component';
 import { CnfProductoListComponent } from '@pages/cnf-producto/cnf-producto-list.component';
+import { InvMovAlmacenForm2Component } from '@pages/inv-mov-almacen/form/inv-mov-almacen-form.component';
 const routes: Routes = [
     {
         path: '',

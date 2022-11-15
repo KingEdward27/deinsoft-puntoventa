@@ -59,6 +59,15 @@ export class CnfProductoService {
     .set("cnfEmpresaId",cnfEmpresaId.toString());
     return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-typehead`, { params });
   }
+  public getAllDataComboTypeHeadNoServicios(name_value: string,cnfEmpresaId:number): Observable<any> {
+    let params = new HttpParams()
+    .set("nameOrCode",name_value)
+    .set("cnfEmpresaId",cnfEmpresaId.toString());
+    return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-typehead-no-servicios`, { params });
+  }
+  public getPdfCodeBarsPre(jsonData:any): Observable<any> {
+    return this.http.post<CnfProducto[]>(`${this.url}/get-all-cnf-producto-getpdf-codebars-pre`, jsonData);
+  }
   public getPdfCodeBars(jsonData:any): Observable<any> {
     return this.http.post(`${this.url}/getpdf-codebars`, jsonData,{observe: 'response', responseType: 'blob'});
   }

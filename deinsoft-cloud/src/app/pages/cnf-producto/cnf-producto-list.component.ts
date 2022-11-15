@@ -116,17 +116,15 @@ export class CnfProductoListComponent extends CommonReportFormComponent implemen
     //this.getListData();
   }
   getListData() {
-    this.model.flagIsventa = '1';
-    this.totalMontos = 0
-    this.totalPendiente = 0
     this.indexInputs = [8]
-    this.model.fechaVencimiento = this.model.fechaVencimiento?this.model.fechaVencimiento:''
-    let user = this.deps.appService.getProfile();
-    console.log(user);
+    // let user = this.deps.appService.getProfile();
+    // console.log(user);
+    // let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
     let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
-
-    return this.deps.cnfProductoService
-    .getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
+    this.model.cnfEmpresa.id = cnfEmpresa;
+    console.log(this.model);
+    
+    return this.deps.cnfProductoService.getPdfCodeBarsPre(this.model).subscribe(data => {
       this.listData = data;
       this.loadingCnfMaestro = false;
       setTimeout(() => {
@@ -143,6 +141,9 @@ export class CnfProductoListComponent extends CommonReportFormComponent implemen
 
   }
   process() {
+    console.log(this.model);
+    let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
+    this.model.cnfEmpresa.id = cnfEmpresa;
     this.deps.cnfProductoService.getPdfCodeBars(this.model).subscribe(data => {
       console.log(data);
       if (data.body.type != 'application/json') {

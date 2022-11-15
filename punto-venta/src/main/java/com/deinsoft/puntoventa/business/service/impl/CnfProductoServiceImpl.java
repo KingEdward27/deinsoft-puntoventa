@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service.impl;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,17 +93,38 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
         List<CnfProducto> cnfProductList = (List<CnfProducto>) cnfProductoRepository.getAllCnfProductTypeHead
         (nameOrValue.toUpperCase(),cnfEmpresaId);
         
-//        for (CnfProducto cnfProduct2 : cnfProductList) {
-//            InvBalance invBalance = invBalanceService.findByCnfProductIdAndWarehouseId(cnfProduct2.getId(), invWarehouseId);
-//            cnfProduct2.setBalance(invBalance == null ? BigDecimal.ZERO : invBalance.getBalance());
-//        }
         return cnfProductList;
     }
     @Override
-    public byte[] getPdfcodeBars() throws ParseException, Exception {
+    public List<CnfProducto> getAllCnfProductTypeHeadNoServicios(String nameOrValue, long cnfEmpresaId) {
+        List<CnfProducto> cnfProductList = (List<CnfProducto>) cnfProductoRepository.getAllCnfProductTypeHead
+        (nameOrValue.toUpperCase(),cnfEmpresaId).stream()
+                .filter(predicate -> !predicate.getCnfUnidadMedida().getCodigoSunat().equals("ZZ"))
+                .collect(Collectors.toList());
+        
+        return cnfProductList;
+    }
+    @Override
+    public List<CnfProducto> getAllCnfProductoCodeBarsPre(ParamBean param) {
+        List<CnfProducto> cnfProductoList 
+                = (List<CnfProducto>) cnfProductoRepository
+                        .findByCnfEmpresaId(param.getCnfEmpresa().getId())
+                        .stream()
+                .filter(predicate -> !predicate.getCnfUnidadMedida().getCodigoSunat().equals("ZZ"))
+                .filter(predicate -> param.getCnfCategoria().getId() == 0 || 
+                        predicate.getCnfCategoria().getId() == param.getCnfCategoria().getId())
+                .collect(Collectors.toList());
+        return cnfProductoList;
+    }
+    
+    @Override
+    public byte[] getPdfcodeBars(ParamBean param) throws ParseException, Exception {
         GenerateItextPdf generateItextPdf = new GenerateItextPdf();
-        List<CnfProducto> cnfProductoList = (List<CnfProducto>) cnfProductoRepository.findAll()
-                .stream().filter(predicate -> !predicate.getCnfUnidadMedida().getCodigoSunat().equals("ZZ"))
+        List<CnfProducto> cnfProductoList = (List<CnfProducto>) cnfProductoRepository.findByCnfEmpresaId(
+                param.getCnfEmpresa().getId())
+                .stream()
+                .filter(predicate -> !predicate.getCnfUnidadMedida().getCodigoSunat().equals("ZZ"))
+                .filter(predicate -> param.getCnfCategoria().getId() == 0 || predicate.getCnfCategoria().getId() == param.getCnfCategoria().getId())
                 .collect(Collectors.toList());
         List<byte[]> list = new ArrayList<>();
         List<String> listCodes = new ArrayList<>();

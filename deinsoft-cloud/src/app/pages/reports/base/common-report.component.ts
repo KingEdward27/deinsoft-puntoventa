@@ -40,6 +40,7 @@ import { ActPagoProgramacionService } from '@/business/service/act-pago-programa
 import { ActPagoService } from '@/business/service/act-pago.service';
 import { CnfCategoria } from '@/business/model/cnf-categoria.model';
 import { CnfCategoriaService } from '@/business/service/cnf-categoria.service';
+import { InvMovAlmacenService } from '@/business/service/inv-mov-almacen.service';
 
 @Injectable()
 export class MyBaseComponentDependences {
@@ -66,7 +67,8 @@ export class MyBaseComponentDependences {
     public invMovimientoProductoService: InvMovimientoProductoService,
     public actPagoProgramacionService:ActPagoProgramacionService,
     public actPagoService:ActPagoService,
-    public cnfCategoriaService: CnfCategoriaService
+    public cnfCategoriaService: CnfCategoriaService,
+    public invMovAlmacenService: InvMovAlmacenService
   ) { }
 }
 @Directive()

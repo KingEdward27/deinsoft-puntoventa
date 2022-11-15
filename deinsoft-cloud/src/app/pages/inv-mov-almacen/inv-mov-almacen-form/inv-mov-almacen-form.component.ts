@@ -141,7 +141,7 @@ export class InvMovAlmacenFormComponent implements OnInit {
 
   }
   getBack() {
-    this.router.navigate([this.redirect]);
+    this.router.navigate(['/mov-almacen']);
   }
   loadData() {
     this.getListCnfMaestro();
@@ -184,7 +184,7 @@ export class InvMovAlmacenFormComponent implements OnInit {
     if (term.length >= 2) {
       console.log(this.model.invAlmacen.id);
       let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];  
-      return this.cnfProductoService.getAllDataComboTypeHead(term, cnfEmpresa)
+      return this.cnfProductoService.getAllDataComboTypeHeadNoServicios(term, cnfEmpresa)
         .pipe(
           tap(() => this.searchFailed = false),
           catchError((err: any) => {

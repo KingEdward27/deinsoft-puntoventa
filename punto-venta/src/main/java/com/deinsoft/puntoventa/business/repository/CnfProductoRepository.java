@@ -38,5 +38,6 @@ public interface CnfProductoRepository extends JpaRepository<CnfProducto, Long> 
                         + "or upper(p.barcode) like CONCAT('%',:nombre,'%')) "
                         + "and (p.cnfEmpresa.id = :empresaId) "
 			)
-	List<CnfProducto> getAllCnfProductTypeHead(@Param("nombre") String nombre,@Param("empresaId") long empresaId);
+    List<CnfProducto> getAllCnfProductTypeHead(@Param("nombre") String nombre,@Param("empresaId") long empresaId);
+    
 }

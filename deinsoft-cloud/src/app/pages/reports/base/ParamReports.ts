@@ -1,5 +1,6 @@
 
 import { CnfCategoria } from '@/business/model/cnf-categoria.model';
+import { CnfEmpresa } from '@/business/model/cnf-empresa.model';
 import { CnfFormaPago } from '@/business/model/cnf-forma-pago.model';
 import { CnfLocal } from '@/business/model/cnf-local.model';
 import { CnfMaestro } from '@/business/model/cnf-maestro.model';
@@ -25,6 +26,6 @@ export class ParamBean {
     fechaHasta?: dayjs.Dayjs;
 	flagIsventa:string;
 	fechaVencimiento: string;
-
-	cnfCategoria:CnfCategoria;
+	cnfEmpresa:CnfEmpresa = new CnfEmpresa();
+	cnfCategoria:CnfCategoria = new CnfCategoria();
 };
