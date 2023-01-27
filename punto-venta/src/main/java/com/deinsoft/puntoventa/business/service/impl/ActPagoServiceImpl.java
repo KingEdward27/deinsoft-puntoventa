@@ -70,7 +70,7 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
         actCajaOperacion.setActComprobante(null);
         actCajaOperacion.setFecha(LocalDate.now());
         actCajaOperacion.setFechaRegistro(LocalDateTime.now());
-        actCajaOperacion.setMonto(actPago.getMonto());
+        actCajaOperacion.setMonto(actPago.getTotal());
         actCajaOperacion.setFlagIngreso(actPago.getActPagoProgramacion().getActComprobante().getFlagIsventa());
         actCajaOperacion.setEstado("1");
         actCajaOperacionRepository.save(actCajaOperacion);
@@ -116,12 +116,12 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
                 ActPago detail = new ActPago();
                 detail.setActPagoProgramacion(actPayment);
                 detail.setFecha(LocalDate.now());
-                detail.setMonto(actPayment.getAmtToPay());
+                detail.setTotal(actPayment.getAmtToPay());
                 detail.setSegUsuario(actPayment.getSegUsuario());
                 list.add(detail);
 
                 ActPagoProgramacion actPaymentToSave = actPayment;
-                actPaymentToSave.setMontoPendiente(actPayment.getMontoPendiente().subtract(detail.getMonto()));
+                actPaymentToSave.setMontoPendiente(actPayment.getMontoPendiente().subtract(detail.getTotal()));
                 actPagoProgramacionRepository.save(actPaymentToSave);
 
             }
@@ -143,7 +143,7 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
             actCajaOperacion.setActComprobante(null);
             actCajaOperacion.setFecha(LocalDate.now());
             actCajaOperacion.setFechaRegistro(LocalDateTime.now());
-            actCajaOperacion.setMonto(actPago.getMonto());
+            actCajaOperacion.setMonto(actPago.getTotal());
             actCajaOperacion.setFlagIngreso(actPago.getActPagoProgramacion().getActComprobante().getFlagIsventa());
             actCajaOperacion.setEstado("1");
             actCajaOperacionRepository.save(actCajaOperacion);
