@@ -1,6 +1,6 @@
 package com.deinsoft.puntoventa.framework.repository;
 
-import com.deinsoft.puntoventa.business.config.AppConfig;
+import com.deinsoft.puntoventa.framework.AppConfig;
 import com.deinsoft.puntoventa.framework.model.*;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
