@@ -39,6 +39,11 @@ public class CnfNumComprobante implements Serializable {
     @JoinColumn(name = "cnf_local_id")
     private CnfLocal cnfLocal;
 
+    
+    @OneToOne
+    @JoinColumn(name = "cnf_empresa_id")
+    private CnfEmpresa cnfEmpresa;
+    
     public long getId() {
         return id;
     }
@@ -77,6 +82,14 @@ public class CnfNumComprobante implements Serializable {
 
     public void setCnfLocal(CnfLocal cnfLocal) {
         this.cnfLocal = cnfLocal;
+    }
+
+    public CnfEmpresa getCnfEmpresa() {
+        return cnfEmpresa;
+    }
+
+    public void setCnfEmpresa(CnfEmpresa cnfEmpresa) {
+        this.cnfEmpresa = cnfEmpresa;
     }
 
     @Override
