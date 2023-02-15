@@ -40,6 +40,7 @@ public class SegUsuario implements Serializable {
     @Column(name = "estado", length = 10, nullable = false)
     private int estado;
 
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "cnf_empresa_id")
     private CnfEmpresa cnfEmpresa;
     
