@@ -94,7 +94,7 @@ public class SegPermisoServiceImpl extends CommonServiceImpl<SegPermiso, SegPerm
             });
             return segPermisoList;
         } else {
-            final List<SegPermiso> segPermisoList = (List<SegPermiso>) segPermisoRepository.getAllSegPermiso();
+            final List<SegPermiso> segPermisoList = (List<SegPermiso>) segPermisoRepository.getAllSegPermisoByRolName(nombre);
             
             return segPermisoList.stream()
                     .filter( distinctByKey(p -> p.getSegMenu().getNombre()))
