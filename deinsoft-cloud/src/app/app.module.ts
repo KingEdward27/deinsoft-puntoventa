@@ -74,7 +74,6 @@ import { SegUsuarioComponent } from '@pages/security/seg-usuario/seg_usuario';
 import { SegRolComponent } from '@pages/security/seg-rol/seg_rol';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
-import { ActComprobanteCompraFormComponent } from '@pages/act-comprobante/act-comprobante-compra/act-comprobante-compra-form.component';
 import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
 import { ActComprobanteFormComponent } from '@pages/act-comprobante/act-comprobante-form/act-comprobante-form.component';
 import { ActComprobanteCompraReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-compra/act-comprobante-compra-report.component';
@@ -108,8 +107,14 @@ registerLocaleData(localeEn, 'en-EN');
 import { AddNewInvMovAlmacenDetComponent } from './pages/inv-mov-almacen/add-new-inv-mov-almacen-det/add-new-inv-mov-almacen-det.component';
 import { InvMovAlmacenListComponent } from '@pages/inv-mov-almacen/list/inv-mov-almacen-list.component';
 import { InvMovAlmacenFormComponent } from '@pages/inv-mov-almacen/inv-mov-almacen-form/inv-mov-almacen-form.component';
-import { CnfProductoListComponent } from '@pages/cnf-producto/cnf-producto-list.component';
 import { InvMovAlmacenForm2Component } from '@pages/inv-mov-almacen/form/inv-mov-almacen-form.component';
+import { CnfProductoCodeBarListComponent } from './pages/cnf-producto/codebar/cnf-producto-codebar-list.component';
+import { CnfProductoListComponent } from './pages/cnf-producto/list/cnf-producto-list.component';
+import { CnfProductoFormComponent } from './pages/cnf-producto/form/cnf-producto-form.component';
+import { ActComprobanteCompraListFormComponent } from '@pages/act-comprobante/act-comprobante-compra/list/act-comprobante-compra-list.component';
+import { ActComprobanteCompraFormComponent } from './pages/act-comprobante/act-comprobante-compra/form/act-comprobante-compra-form.component';
+import { ActContratoFormComponent } from './pages/act-contrato/act-contrato-form/act-contrato-form.component';
+import { CnfPlanContratoComponent } from './pages/cnf-plan-contrato/cnf-plan-contrato';
 @NgModule({
     declarations: [
         AppComponent,
@@ -202,8 +207,13 @@ import { InvMovAlmacenForm2Component } from '@pages/inv-mov-almacen/form/inv-mov
         InvTipoMovComponent,
         InvMovAlmacenListComponent,
         InvMovAlmacenFormComponent,
+        CnfProductoCodeBarListComponent,
+        InvMovAlmacenForm2Component,
         CnfProductoListComponent,
-        InvMovAlmacenForm2Component
+        CnfProductoFormComponent,
+        ActComprobanteCompraListFormComponent,
+        ActContratoFormComponent,
+        CnfPlanContratoComponent
     ],
     imports: [
         BrowserModule,

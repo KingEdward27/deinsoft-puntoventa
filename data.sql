@@ -26,13 +26,63 @@ VALUES (7,'diana2','edward21.sistemas2@gmail.com','$2a$10$1o1fhysFm2i/ZLZwH.mGA.
 
 INSERT INTO seg_accion (seg_accion_id,nombre) values (1,'VER OPCIÓN');
 
-INSERT INTO `deinsoftcloud`.`cnf_local` (`nombre`, `cnf_empresa_id`) VALUES ('LOCAL PRINCIPAL', '1');
-INSERT INTO `deinsoftcloud`.`cnf_local` (`nombre`, `cnf_empresa_id`) VALUES ('LOCAL PRINCIPAL', '2');
+INSERT INTO `cnf_local` (`nombre`, `cnf_empresa_id`) VALUES ('LOCAL PRINCIPAL', '1');
+INSERT INTO `cnf_local` (`nombre`, `cnf_empresa_id`) VALUES ('LOCAL PRINCIPAL', '2');
 
 INSERT INTO seg_rol_usuario (`seg_rol_usuario_id`,`seg_rol_id`,`seg_usuario_id`,`cnf_empresa_id`,`cnf_local_id`) VALUES (1,1,1,1,NULL);
 INSERT INTO seg_rol_usuario (`seg_rol_usuario_id`,`seg_rol_id`,`seg_usuario_id`,`cnf_empresa_id`,`cnf_local_id`) VALUES (2,2,3,1,NULL);
 INSERT INTO seg_rol_usuario (`seg_rol_usuario_id`,`seg_rol_id`,`seg_usuario_id`,`cnf_empresa_id`,`cnf_local_id`) VALUES (3,1,4,2,NULL);
 INSERT INTO seg_rol_usuario (`seg_rol_usuario_id`,`seg_rol_id`,`seg_usuario_id`,`cnf_empresa_id`,`cnf_local_id`) VALUES (6,2,7,2,2);
+
+
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (1,NULL,'ADMINISTRACION',1,'fa-user-shield',NULL);
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (2,NULL,'SEGURIDAD',1,'fa-shield-alt',NULL);
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (3,NULL,'CONFIGURACION',3,'fa-cog',NULL);
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (4,NULL,'INVENTARIO',4,'fa-box',NULL);
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (5,NULL,'VENTAS',5,'fa-cart-plus',NULL);
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (6,NULL,'CAJA',6,'fa-money-bill',NULL);
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (7,NULL,'REPORTES',7,'fa-file',NULL);
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (9,1,'Región',1,'','/region');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (10,1,'Provincia',2,'','/provincia');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (11,1,'Distrito',3,'','/distrito');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (12,1,'Tipo de documento de identidad',4,'','/tipo-documento');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (13,1,'Moneda',5,'','/moneda');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (14,1,'Empresa',6,'','/empresa');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (15,1,'Unidad de medida',7,'','/unidad-medida');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (16,2,'Perfiles',1,'','/perfil');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (17,2,'Acciones',2,'','/accion');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (18,2,'Opciones de menú',3,'','/menu');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (19,2,'Permisos',4,'','/permiso');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (20,2,'Usuarios',5,'','/usuario');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (21,3,'Usuarios',1,'','/usuario-empresa');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (22,3,'Tipo de comprobante',2,'','/tipo-comprobante');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (23,3,'Numeración de comprobante',3,'','/numcomprobante');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (24,3,'Forma de pago',4,'','/forma-pago');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (25,3,'Cajas',5,'','/caja');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (26,3,'Clientes y Proveedores',5,'','/maestro');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (27,4,'Local',1,'','/local');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (28,4,'Almacén',2,'','/almacen');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (29,4,'Marca',3,'','/marca');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (30,4,'Categoría',4,'','/categoria');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (31,4,'Sub categoria',5,'','/subcategoria');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (32,4,'Unidad de medida',6,'','/unidadmedida');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (33,4,'Producto',7,'','/producto');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (34,4,'Compra',8,'','/compra');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (35,5,'Venta',1,'','/venta');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (36,5,'Listado de ventas',2,'','/list-ventas');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (37,6,'Turno de caja',1,'','/act-caja-turno');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (38,6,'Cuentas por pagar',3,'','/cuentas-pagar');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (39,6,'Cuentas por cobrar',4,'','/cuentas-cobrar');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (40,7,'Reporte ventas',1,'','/rpt-ventas');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (41,7,'Reporte compras',2,'','/rpt-compras');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (42,7,'Stock valorizado',1,'','/rpt-almacen');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (43,7,'Kardex valorizado',1,'','/rpt-movimiento-producto');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (44,6,'Operaciones de Caja',2,'','/caja-operacion');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (45,7,'Cuentas pendientes',5,'','/rpt-pago-programacion');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (46,3,'Tipos de Movimiento',9,'','/tipo-mov');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (47,4,'Movimiento de Almacén',9,'','/mov-almacen');
+INSERT INTO seg_menu (`seg_menu_id`,`parent_id`,`nombre`,`seqorder`,`icon`,`path`) VALUES (48,4,'Generación de códigos de barras',11,'','/producto-list');
+
 
 INSERT INTO seg_permiso (`seg_permiso_id`,`seg_rol_id`,`seg_menu_id`,`seg_accion_id`) VALUES (2,1,1,1);
 INSERT INTO seg_permiso (`seg_permiso_id`,`seg_rol_id`,`seg_menu_id`,`seg_accion_id`) VALUES (4,1,3,1);

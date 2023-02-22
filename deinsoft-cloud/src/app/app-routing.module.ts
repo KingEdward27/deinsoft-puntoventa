@@ -38,7 +38,6 @@ import { RptActCompraComponent } from '@pages/reports/act-compra/rpt-act-compra.
 import { GenericChildFormComponent } from './base/components/generic-child/generic-child-form.component';
 import { SegRolComponent } from '@pages/security/seg-rol/seg_rol';
 import { SegUsuarioComponent } from '@pages/security/seg-usuario/seg_usuario';
-import { ActComprobanteCompraFormComponent } from '@pages/act-comprobante/act-comprobante-compra/act-comprobante-compra-form.component';
 import { ActComprobanteFormComponent } from '@pages/act-comprobante/act-comprobante-form/act-comprobante-form.component';
 import { ActComprobanteCompraReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-compra/act-comprobante-compra-report.component';
 import { ActComprobanteListFormComponent } from '@pages/reports/act-comprobante/list-act-comprobante-venta/act-comprobante-list.component';
@@ -66,8 +65,14 @@ import { InvTipoMovComponent } from '@pages/inv-tipo-mov/inv-tipo-mov';
 import { InvMovAlmacenListComponent } from '@pages/inv-mov-almacen/list/inv-mov-almacen-list.component';
 import { AddNewInvMovAlmacenDetComponent } from '@pages/inv-mov-almacen/add-new-inv-mov-almacen-det/add-new-inv-mov-almacen-det.component';
 import { InvMovAlmacenFormComponent } from '@pages/inv-mov-almacen/inv-mov-almacen-form/inv-mov-almacen-form.component';
-import { CnfProductoListComponent } from '@pages/cnf-producto/cnf-producto-list.component';
-import { InvMovAlmacenForm2Component } from '@pages/inv-mov-almacen/form/inv-mov-almacen-form.component';
+import { CnfProductoCodeBarListComponent } from './pages/cnf-producto/codebar/cnf-producto-codebar-list.component';
+import { CnfProductoListComponent } from './pages/cnf-producto/list/cnf-producto-list.component';
+import { CnfProductoFormComponent } from './pages/cnf-producto/form/cnf-producto-form.component';
+import { ActComprobanteCompraListFormComponent } from '@pages/act-comprobante/act-comprobante-compra/list/act-comprobante-compra-list.component';
+import { ActComprobanteCompraFormComponent } from './pages/act-comprobante/act-comprobante-compra/form/act-comprobante-compra-form.component';
+import { ActContrato } from './pages/act-contrato/act-contrato.model';
+import { ActContratoFormComponent } from './pages/act-contrato/act-contrato-form/act-contrato-form.component';
+import { CnfPlanContratoComponent } from './pages/cnf-plan-contrato/cnf-plan-contrato';
 const routes: Routes = [
     {
         path: '',
@@ -107,7 +112,6 @@ const routes: Routes = [
             {path: 'local',component: CnfLocalComponent},
             {path: 'tipo-comprobante',component: CnfTipoComprobanteComponent},
             {path: 'venta',component: ActComprobanteFormComponent},
-            {path: 'producto',component: CnfProductoComponent},
             {path: 'marca',component: CnfMarcaComponent},
             {path: 'categoria',component: CnfCategoriaComponent},
             {path: 'unidadmedida',component: CnfUnidadMedidaComponent},
@@ -154,7 +158,16 @@ const routes: Routes = [
             {path: 'new-mov-almacen/:id',component: InvMovAlmacenFormComponent},
             {path: 'add-new-mov-almacen-det/:id',component: AddNewInvMovAlmacenDetComponent},
 
-            {path: 'producto-list',component: CnfProductoListComponent}
+            
+            {path: 'producto',component: CnfProductoListComponent},
+            {path: 'cnf-producto',component: CnfProductoListComponent},
+            {path: 'new-cnf-producto',component: CnfProductoFormComponent},
+            {path: 'new-cnf-producto/:id',component: CnfProductoFormComponent},
+
+            {path: 'producto-list',component: CnfProductoCodeBarListComponent},
+            {path: 'list-compras',component: ActComprobanteCompraListFormComponent},
+            {path: 'plan-contrato',component: CnfPlanContratoComponent},
+            {path: 'contrato',component: ActContratoFormComponent},
         ]
     },
     {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 import com.deinsoft.puntoventa.business.commons.controller.CommonController;
+import com.deinsoft.puntoventa.business.model.ActComprobante;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import javax.validation.Valid;
@@ -17,6 +18,7 @@ import com.deinsoft.puntoventa.business.service.CnfProductoService;
 import com.deinsoft.puntoventa.framework.model.UpdateParam;
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.Map;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -48,7 +50,23 @@ public class CnfProductoController extends CommonController<CnfProducto, CnfProd
 
     @PostMapping(value = "/save-cnf-producto")
     public ResponseEntity<?> saveCnfProducto(@Valid @RequestBody CnfProducto cnfProducto, BindingResult result) {
-        return super.crear(cnfProducto, result);
+        
+        if (result.hasErrors()) {
+            return this.validar(result);
+        }
+        Map<String, Object> errores = new HashMap<>();
+        if(cnfProducto.getCnfUnidadMedida().getId() == 0){
+            errores.put("cnfUnidadMedida.nombre", " Debe seleccionar la unidad de medida");
+        }
+        if(cnfProducto.getCnfSubCategoria().getId() == 0){
+            errores.put("cnfSubCategoria.nombre", " Debe seleccionar la sub categoria");
+        }
+        if(!errores.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errores);
+        }
+        CnfProducto cnfProductoResult = cnfProductoService.saveCnfProducto(cnfProducto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cnfProductoResult);
+//        return super.crear(cnfProducto, result);
     }
 
     @GetMapping(value = "/get-all-cnf-producto-combo")

@@ -7,8 +7,7 @@ import { UtilService } from '@services/util.service';
 
 @Component({
   selector: 'app-seg-menu-form',
-  templateUrl: './seg-menu-form.component.html',
-  styleUrls: ['./seg-menu-form.component.css']
+  templateUrl: './seg-menu-form.component.html'
 })
 export class SegMenuFormComponent implements OnInit {
 
@@ -57,6 +56,9 @@ export class SegMenuFormComponent implements OnInit {
         this.segMenuService.getData(this.id).subscribe(data => {
           this.model = data;
           console.log(this.model);
+          if (this.model.parent == null) {
+            this.model.parent = this.selectDefaultSegMenu;
+          }
           this.isDataLoaded = true;
           //this.titulo = 'Editar ' + this.nombreModel;
         });

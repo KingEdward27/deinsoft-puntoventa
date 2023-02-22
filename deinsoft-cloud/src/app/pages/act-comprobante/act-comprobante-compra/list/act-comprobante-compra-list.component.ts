@@ -11,43 +11,23 @@ import { CnfFormaPago } from '@/business/model/cnf-forma-pago.model';
 import { CnfMaestro } from '@/business/model/cnf-maestro.model';
 import { CnfTipoComprobante } from '@/business/model/cnf-tipo-comprobante.model';
 import { InvAlmacen } from '@/business/model/inv-almacen.model';
-import { CnfMaestroService } from '@/business/service/cnf-maestro.service';
-import { CnfFormaPagoService } from '@/business/service/cnf-forma-pago.service';
-import { CnfMonedaService } from '@/business/service/cnf-moneda.service';
-import { CnfLocalService } from '@/business/service/cnf-local.service';
-import { CnfTipoComprobanteService } from '@/business/service/cnf-tipo-comprobante.service';
-import { InvAlmacenService } from '@/business/service/inv-almacen.service';
-import { ActComprobanteDetalleService } from '@/business/service/act-comprobante-detalle.service';
-import { UtilService } from '@services/util.service';
 import { CustomAdapter, CustomDateParserFormatter } from '@/base/util/CustomDate';
-import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
-import { CnfProductoService } from '@/business/service/cnf-producto.service';
-import { CnfProducto } from '@/business/model/cnf-producto.model';
-import { ActComprobanteDetalle } from '@/business/model/act-comprobante-detalle.model';
-import { CnfImpuestoCondicion } from '@/business/model/cnf-impuesto-condicion.model';
-import { CnfImpuestoCondicionService } from '@/business/service/cnf-impuesto-condicion.service';
-import { CnfNumComprobanteService } from '@/business/service/cnf-num-comprobante.service';
-import { CommonService } from '@/base/services/common.service';
-import { UpdateParam } from '@/base/components/model/UpdateParam';
-import dayjs from 'dayjs';
-import { AppService } from '@services/app.service';
 import { ActComprobante } from '@pages/act-comprobante/act-comprobante.model';
-import { ActComprobanteService } from '@pages/act-comprobante/act-comprobante.service';
 import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
 import { CommonReportFormComponent, MyBaseComponentDependences } from '@pages/reports/base/common-report.component';
 
 
 
 @Component({
-  selector: 'app-act-comprobante-compra-report',
-  templateUrl: './act-comprobante-compra-report.component.html',
+  selector: 'app-act-comprobante-compra-list',
+  templateUrl: './act-comprobante-compra-list.component.html',
   providers: [
     { provide: NgbDateAdapter, useClass: CustomAdapter },
     { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
     MyBaseComponentDependences
   ]
 })
-export class ActComprobanteCompraReportFormComponent extends CommonReportFormComponent implements OnInit {
+export class ActComprobanteCompraListFormComponent extends CommonReportFormComponent implements OnInit {
 
   //generic variables
   error: any;
@@ -99,7 +79,6 @@ export class ActComprobanteCompraReportFormComponent extends CommonReportFormCom
   listImpuestoCondicion: any;
   public modalRef!: NgbModalRef;
   listData: any;
-  total:any
   constructor(public deps: MyBaseComponentDependences) {
     super(deps);
   }
@@ -111,7 +90,6 @@ export class ActComprobanteCompraReportFormComponent extends CommonReportFormCom
   }
   getListData() {
     this.model.flagIsventa = '2';
-    this.total = 0
     return this.deps.actComprobanteService.getReport(this.model).subscribe(data => {
       this.listData = data;
       this.loadingCnfMaestro = false;
@@ -120,9 +98,6 @@ export class ActComprobanteCompraReportFormComponent extends CommonReportFormCom
       }, 1);
       this.dataTable?.destroy();
       console.log(data);
-      this.listData.forEach(element => {
-        this.total = this.total + element.total
-      });
     })
   }
   print(item: any) {
@@ -155,6 +130,24 @@ export class ActComprobanteCompraReportFormComponent extends CommonReportFormCom
       this.generateAttachment(blob, extension);
     })
     
+  }
+  anular(item:any) {
+    if (item.flagEstado == '0'){
+      this.deps.utilService.msgWarning("No puede continuar","El comprobante ya se encuentra anulado")
+    }
+    this.deps.utilService.confirmOperation(null).then((result) => {
+      if (result) {
+        this.deps.actComprobanteService.invalidateActComprobante(item.id).subscribe(data => {
+          this.deps.utilService.msgOkOperation();
+          this.getListData();
+        })
+      }
+    });
+  }
+  editar(item:any) {
+    if (this.deps.utilService.validateDeactivate(item)) {
+      this.deps.router.navigate(["/compra", { id: item.id }]);
+    }
   }
 }
 

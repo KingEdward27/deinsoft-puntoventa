@@ -6,7 +6,7 @@
 --
 -- Estructura de tabla para la tabla `cnf_region`
 --
-insert into cnf_pais values (null,'PERÚ','PE');
+insert into cnf_pais (cnf_pais_id,nombre,isocode) values (null,'PERÚ','PE');
 --
 -- Volcar la base de datos para la tabla `cnf_region`
 --

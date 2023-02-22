@@ -59,7 +59,7 @@ export class RptActCompraComponent extends GenericList2Component implements OnIn
   ngOnInit(): void {
     super.baseEndpoint = this.baseEndpoint;
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
-    this.prop.columnsListParams.push({"columnName":"act_comprobante.flag_isventa","value":0});
+    this.prop.columnsListParams.push({"columnName":"act_comprobante.flag_isventa","value":2});
     this.prop.columnsListParams.push({"columnName":"cnf_local.cnf_empresa_id","value":cnfEmpresa});
     super.properties = this.prop;
 

@@ -1,0 +1,230 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{'webpagos.cnf_producto.home.title'| translate}}</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.adminModule"></a></li>
+                    <li class="breadcrumb-item active">{{'webpagos.cnf_producto.home.title'| translate}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{'webpagos.cnf_producto.home.title'| translate}}</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip"
+                        title="Collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip"
+                        title="Remove">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <h4 style="border-bottom: solid 1px;padding-bottom: 6px;">{{'webpagos.register' | translate}} -
+                        {{'webpagos.cnf_producto.home.title' | translate}}</h4>
+                    <form class="col-sm-12" style="padding-top: 6px;">
+                        <div class="form-group-sm row">
+                            <label class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.cnf_unidad_medida'
+                                | translate}} <span *ngIf="loadingCnfUnidadMedida"
+                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-9">
+                                <select name="model.cnfUnidadMedida" [compareWith]="compareCnfUnidadMedida"
+                                    [(ngModel)]="model.cnfUnidadMedida" class="form-control-sm col-sm-12 col-lg-6">
+                                    <option *ngIf="loadingCnfUnidadMedida" [ngValue]="0" selected="selected">Cargando...
+                                    </option>
+                                    <option *ngIf="!loadingCnfUnidadMedida" [ngValue]="selectDefaultCnfUnidadMedida">
+                                        {{selectDefaultCnfUnidadMedida.nombre}}</option>
+                                    <option *ngFor="let item of listCnfUnidadMedida; index as i;" [ngValue]="item">
+                                        {{item.nombre}}</option>
+
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.cnfUnidadMedida">{{
+                                    error.cnfUnidadMedida }}</div>
+                                <div class="alert alert-danger col-sm-12 col-lg-6"
+                                    *ngIf="error?.cnfUnidadMedida">{{error["cnfUnidadMedida.nombre"] }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group-sm row">
+                            <label class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.cnf_empresa' |
+                                translate}} <span *ngIf="loadingCnfEmpresa"
+                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-9">
+                                <select name="model.cnfEmpresa" [compareWith]="compareCnfEmpresa"
+                                    [(ngModel)]="model.cnfEmpresa" class="form-control-sm col-sm-12 col-lg-6">
+                                    <option *ngIf="loadingCnfEmpresa" [ngValue]="0" selected="selected">Cargando...
+                                    </option>
+                                    <option *ngIf="!loadingCnfEmpresa" [ngValue]="selectDefaultCnfEmpresa">
+                                        {{selectDefaultCnfEmpresa.name}}</option>
+                                    <option *ngFor="let item of listCnfEmpresa; index as i;" [ngValue]="item">
+                                        {{item.nombre}}</option>
+
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6"
+                                    *ngIf="error?['cnfEmpresa.nombre']:false">{{error["cnfEmpresa.nombre"] }}</div>
+                            </div>
+                        </div> -->
+                        <div class="form-group-sm row">
+                            <label class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.cnf_sub_categoria'
+                                | translate}} <span *ngIf="loadingCnfSubCategoria"
+                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-9">
+                                <select name="model.cnfSubCategoria" [compareWith]="compareCnfSubCategoria"
+                                    [(ngModel)]="model.cnfSubCategoria" class="form-control-sm col-sm-12 col-lg-6">
+                                    <option *ngIf="loadingCnfSubCategoria" [ngValue]="0" selected="selected">Cargando...
+                                    </option>
+                                    <option *ngIf="!loadingCnfSubCategoria" [ngValue]="selectDefaultCnfSubCategoria">
+                                        {{selectDefaultCnfSubCategoria.nombre}}</option>
+                                    <option *ngFor="let item of listCnfSubCategoria; index as i;" [ngValue]="item">
+                                        {{item.nombre}}</option>
+
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6"
+                                    *ngIf="error?.cnfSubCategoria">{{error["cnfSubCategoria.nombre"] }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.cnf_marca' |
+                                translate}} <span *ngIf="loadingCnfMarca"
+                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-9">
+                                <select name="model.cnfMarca" [compareWith]="compareCnfMarca"
+                                    [(ngModel)]="model.cnfMarca" class="form-control-sm col-sm-12 col-lg-6">
+                                    <option *ngIf="loadingCnfMarca" [ngValue]="0" selected="selected">Cargando...
+                                    </option>
+                                    <option *ngIf="!loadingCnfMarca" [ngValue]="selectDefaultCnfMarca || null">
+                                        {{selectDefaultCnfMarca.nombre}}</option>
+                                    <option *ngFor="let item of listCnfMarca; index as i;" [ngValue]="item">
+                                        {{item.nombre}}</option>
+
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6"
+                                    *ngIf="error?.cnfMarca">{{error["cnfMarca.nombre"] }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="codigo"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.codigo' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="text" [(ngModel)]="model.codigo" maxlength="15" name="codigo" id="codigo"
+                                    name="codigo" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese codigo" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.codigo">{{ error.codigo
+                                    }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="nombre"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.nombre' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="text" [(ngModel)]="model.nombre" maxlength="100" name="nombre" id="nombre"
+                                    name="nombre" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese nombre" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.nombre">{{ error.nombre
+                                    }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="costo"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.costo' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="number" [(ngModel)]="model.costo" maxlength="14" name="costo" id="costo"
+                                    name="costo" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese costo" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.costo">{{ error.costo }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="precio"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.precio' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="number" [(ngModel)]="model.precio" maxlength="14" name="precio" id="precio"
+                                    name="precio" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese precio" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.precio">{{ error.precio
+                                    }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="rutaImagen"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.ruta_imagen' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="text" [(ngModel)]="model.rutaImagen" maxlength="100" name="rutaImagen"
+                                    id="rutaImagen" name="rutaImagen" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese rutaImagen" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.rutaImagen">{{
+                                    error.rutaImagen }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="barcode"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.barcode' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input type="text" [(ngModel)]="model.barcode" maxlength="100" name="barcode"
+                                    id="barcode" name="barcode" class="form-control-sm col-sm-12 col-lg-6"
+                                    placeholder="Ingrese barcode" />
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.barcode">{{
+                                    error.barcode }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+
+                            <div class="col-sm-12" style="padding-top: 20px;">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-2 col-sm-4 col-xs-5" style="margin-left: 50x;">
+                                        <button class="btn btn-default col-12" (click)="getBack()">
+                                            <i class="fa fa-arrow-circle-left"></i> {{'webpagos.btnBack' | translate
+                                            }}
+                                        </button>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-4 col-xs-5" style="margin-left: 20x;">
+                                        <button class="btn btn-primary col-12" (click)="save()">
+                                            <i [ngClass]="model.id ? 'fa fa-pen' : 'fa fa-plus'"></i> {{ model.id ?
+                                            ('webpagos.btnEdit' | translate):('webpagos.btnSave' | translate) }}
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">Footer</div>
+            <!-- /.card-footer-->
+        </div>
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->

@@ -1,0 +1,129 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{'webpagos.cnf_producto.home.title'| translate}}</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.adminModule"></a></li>
+                    <li class="breadcrumb-item active">{{'webpagos.cnf_producto.home.title'| translate}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{'webpagos.cnf_producto.home.title'| translate}}</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip"
+                        title="Collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip"
+                        title="Remove">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="col-md-12 col-lg-6 col-xl-6 col-xs-9" style="margin-left:-15px">
+                                <button class="btn btn-primary" [routerLink]="['/new-cnf-producto']"
+                                        data-toggle="modal">
+                                        <i class="fa fa-plus"></i> {{'webpagos.btnNew' | translate }}
+                                    </button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <br>
+                    <table id="dtDataCnfProducto"
+                        class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
+                        <thead>
+                            <tr>
+                                <th width="1%">Nro.</th>
+                                <th class="text-nowrap">{{'webpagos.cnf_producto.codigo' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.cnf_producto.nombre' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.cnf_producto.precio' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.cnf_producto.ruta_imagen' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.cnf_producto.barcode' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.cnf_producto.cnf_unidad_medida' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.cnf_producto.cnf_sub_categoria' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.cnf_producto.cnf_marca' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.cnf_producto.flag_estado' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.actionsText' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <th></th>
+                            <th><input type="text" class="form-control-sm"
+                                    placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.cnf_producto.codigo' | translate}}"
+                                    name="search-id" [(ngModel)]="modelSearch.codigo" (keyUp.enter)="getAllData()" />
+                            </th>
+                            <th><input type="text" class="form-control-sm"
+                                    placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.cnf_producto.nombre' | translate}}"
+                                    name="search-id" [(ngModel)]="modelSearch.nombre" (keyUp.enter)="getAllData()" />
+                            </th>
+                            <th></th>
+                            <th></th>
+                            
+                            <th><input type="text" class="form-control-sm"
+                                    placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.cnf_producto.barcode' | translate}}"
+                                    name="search-id" [(ngModel)]="modelSearch.barcode" (keyUp.enter)="getAllData()" />
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tbody>
+
+                            <tr *ngFor="let item of lista; index as i" class="odd gradeX">
+                                <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
+                                <td>{{item.codigo}}</td>
+                                <td>{{item.nombre}}</td>
+                                <td>{{item.precio}}</td>
+                                <td>{{item.rutaImagen}}</td>
+                                <td>{{item.barcode}}</td>
+                                <td>{{item.cnfUnidadMedida?.nombre}}</td>
+                                <td>{{item.cnfSubCategoria?.nombre}}</td>
+                                <td>{{item.cnfMarca?.nombre}}</td>
+                                <td>{{item.flagEstado}}</td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-xs-6 text-right"><a class="fas fa-edit"
+                                                (click)="editar(item)" style="cursor: pointer;"
+                                                title="{{'webpagos.btnEdit' | translate}}"></a></div>
+                                        <div class="col-sm-6 col-xs-6"><a (click)="eliminar(item)"
+                                                style="cursor: pointer;"
+                                                title="{{'webpagos.btnDelete' | translate}}"><i
+                                                    class="fa fa-trash fa-lg"></i></a></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">Footer</div>
+            <!-- /.card-footer-->
+        </div>
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->

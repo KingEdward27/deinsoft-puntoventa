@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,7 +35,12 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
     CnfProductoRepository cnfProductoRepository;
 
     public List<CnfProducto> getAllCnfProducto(CnfProducto cnfProducto) {
-        List<CnfProducto> cnfProductoList = (List<CnfProducto>) cnfProductoRepository.getAllCnfProducto(cnfProducto.getCodigo().toUpperCase(), cnfProducto.getNombre().toUpperCase(), cnfProducto.getRutaImagen().toUpperCase(), cnfProducto.getFlagEstado().toUpperCase(), cnfProducto.getBarcode().toUpperCase());
+        List<CnfProducto> cnfProductoList = (List<CnfProducto>) cnfProductoRepository.getAllCnfProducto(
+                cnfProducto.getCodigo().toUpperCase(), 
+                cnfProducto.getNombre().toUpperCase(), 
+                cnfProducto.getRutaImagen().toUpperCase(), 
+                cnfProducto.getFlagEstado().toUpperCase(), 
+                cnfProducto.getBarcode().toUpperCase());
         return cnfProductoList;
     }
 
@@ -48,6 +54,16 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
     }
 
     public CnfProducto saveCnfProducto(CnfProducto cnfProducto) {
+        if(cnfProducto.getCnfSubCategoria().getId() == 0){
+            cnfProducto.setCnfSubCategoria(null);
+        }
+        if(cnfProducto.getCnfMarca() != null && cnfProducto.getCnfMarca().getId() == 0){
+            cnfProducto.setCnfMarca(null);
+        }
+        if(cnfProducto.getCnfUnidadMedida().getId() == 0){
+            cnfProducto.setCnfUnidadMedida(null);
+        }
+        cnfProducto.setFechaRegistro(LocalDateTime.now());
         CnfProducto cnfProductoResult = cnfProductoRepository.save(cnfProducto);
         return cnfProductoResult;
     }
@@ -112,7 +128,7 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
                         .stream()
                 .filter(predicate -> !predicate.getCnfUnidadMedida().getCodigoSunat().equals("ZZ"))
                 .filter(predicate -> param.getCnfCategoria().getId() == 0 || 
-                        predicate.getCnfCategoria().getId() == param.getCnfCategoria().getId())
+                        predicate.getCnfSubCategoria().getCnfCategoria().getId() == param.getCnfCategoria().getId())
                 .collect(Collectors.toList());
         return cnfProductoList;
     }
@@ -124,14 +140,14 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
                 param.getCnfEmpresa().getId())
                 .stream()
                 .filter(predicate -> !predicate.getCnfUnidadMedida().getCodigoSunat().equals("ZZ"))
-                .filter(predicate -> param.getCnfCategoria().getId() == 0 || predicate.getCnfCategoria().getId() == param.getCnfCategoria().getId())
+                .filter(predicate -> param.getCnfCategoria().getId() == 0 || predicate.getCnfSubCategoria().getCnfCategoria().getId() == param.getCnfCategoria().getId())
                 .collect(Collectors.toList());
         List<byte[]> list = new ArrayList<>();
         List<String> listCodes = new ArrayList<>();
         for (CnfProducto cnfProducto : cnfProductoList) {
             String code = StringUtils.leftPad(String.valueOf(cnfProducto.getCnfEmpresa().getId()),3,"0")
                 + StringUtils.leftPad(String.valueOf(cnfProducto.getCnfMarca().getId()),3,"0")
-                + StringUtils.leftPad(String.valueOf(cnfProducto.getCnfCategoria().getId()),3,"0")
+                + StringUtils.leftPad(String.valueOf(cnfProducto.getCnfSubCategoria().getCnfCategoria().getId()),3,"0")
                 + StringUtils.leftPad(String.valueOf(cnfProducto.getId()),3,"0");
             
             int[] i = {1,3,1,3,1,3,1,3,1,3,1,3};

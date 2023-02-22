@@ -19,8 +19,9 @@ export class CnfSubCategoriaComponent extends GenericListComponent implements On
     "columnsList":[{tableName: "cnf_sub_categoria", columnName:"nombre",filterType:"text"}
                 ],
     "foreignTables":[{"tableName":"cnf_categoria","idValue":"cnf_categoria_id"}],       
-    "columnsForm":[{tableName: "cnf_sub_categoria", "columnName":"nombre","type":"input"},
-                   {tableName: "cnf_categoria", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_categoria_id"}
+    "columnsForm":[{tableName: "cnf_categoria", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_categoria_id"},
+                   {tableName: "cnf_sub_categoria", "columnName":"nombre","type":"input"}
+                   
            ],
     //filters sería para filtros adicionales
     "conditions":[],

@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 
 @Service
 @Transactional
-public class InvAlmacenProductoServiceImpl 
+public class InvAlmacenProductoServiceImpl
         extends CommonServiceImpl<InvAlmacenProducto, InvAlmacenProductoRepository> implements InvAlmacenProductoService {
 
     @Autowired
@@ -92,13 +92,32 @@ public class InvAlmacenProductoServiceImpl
                     if (list.size() > 1) {
                         throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
                     }
-                    if (list.size() == 0) {
+                    if (list.size() == 0 && actComprobante.getFlagIsventa().equals("1")) {
                         throw new RuntimeException("No existe stock para el almacen y producto seleccionados");
                     }
-                    InvAlmacenProducto stock = list.get(0);
+                    //actualizar stock almacen
+                    InvAlmacenProducto stock = new InvAlmacenProducto();
+                    if (!actComprobante.getFlagIsventa().equals("1")) {
+                        if (list.size() == 0) {
+                            stock = new InvAlmacenProducto();
+                            stock.setCantidad(data.getCantidad());
+
+                        } else {
+                            stock = list.get(0);
+                            stock.setCantidad(stock.getCantidad().add(data.getCantidad()));
+                        }
+                    } else {
+                        if (list.size() == 0) {
+                            stock = new InvAlmacenProducto();
+                            stock.setCantidad(data.getCantidad());
+
+                        } else {
+                            stock = list.get(0);
+                            stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
+                        }
+                    }
                     stock.setCnfProducto(data.getCnfProducto());
                     stock.setInvAlmacen(actComprobante.getInvAlmacen());
-                    stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
                     invAlmacenProductoRepository.save(stock);
 
                     InvMovimientoProducto mov = new InvMovimientoProducto();
@@ -108,7 +127,7 @@ public class InvAlmacenProductoServiceImpl
                     mov.setFecha(actComprobante.getFecha());
                     mov.setFechaRegistro(LocalDateTime.now());
                     mov.setCantidad(data.getCantidad().multiply(
-                            actComprobante.getFlagIsventa().equals("0") ? BigDecimal.valueOf(-1) : BigDecimal.ZERO));
+                            actComprobante.getFlagIsventa().equals("1") ? BigDecimal.valueOf(-1) : BigDecimal.ONE));
                     mov.setValor(data.getPrecio());
                     invMovimientoProductoRepository.save(mov);
                 }

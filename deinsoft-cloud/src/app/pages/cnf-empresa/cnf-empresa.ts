@@ -27,15 +27,17 @@ export class CnfEmpresaComponent extends GenericListComponent implements OnInit{
                      {"tableName":"cnf_tipo_documento","idValue":"cnf_tipo_documento_id"}],
     "columnsForm":[{tableName: "cnf_empresa", columnName:"nombre",type:"input"},
                    {tableName: "cnf_empresa", columnName:"descripcion",type:"input"},
+                   {tableName: "cnf_tipo_documento", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_tipo_documento_id"},
                    {tableName: "cnf_empresa", "columnName":"nro_documento","type":"input"},
                    {tableName: "cnf_empresa", "columnName":"direccion","type":"input"},  
                    {tableName: "cnf_empresa",columnName:"telefono",type:"input"},
-                   {tableName: "cnf_tipo_documento", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_tipo_documento_id"},
                    {tableName: "cnf_region", "columnName":"nombre","type":"select",loadState : 1,loadFor:"cnf_distrito_id",load:{tableName:"cnf_provincia",loadBy:"cnf_region_id"}},
                    {tableName: "cnf_provincia", "columnName":"nombre","type":"select",loadState : 0,loadFor:"cnf_distrito_id",load:{tableName:"cnf_distrito",loadBy:"cnf_provincia_id"}},
                    {tableName: "cnf_distrito", "columnName":"nombre","type":"select",loadState : 0,loadFor:"cnf_distrito_id",relatedBy:"cnf_distrito_id"},
                    {tableName: "cnf_empresa",columnName:"ruta_pse",type:"input"},
-                   {tableName: "cnf_empresa",columnName:"token",type:"input"}
+                   {tableName: "cnf_empresa",columnName:"token",type:"input"},
+                   {tableName: "cnf_empresa",columnName:"perfil_empresa","type":"select",loadState : 1, relatedBy :"perfil_empresa",
+                   listData:[]}
            ],
     //filters sería para filtros adicionales
     "conditions":[],
@@ -49,6 +51,11 @@ export class CnfEmpresaComponent extends GenericListComponent implements OnInit{
   }
   ngOnInit(): void {
     super.baseEndpoint = this.baseEndpoint;
+    this.prop.columnsForm[11].listData.push([0, "- Seleccione -"]);
+    this.prop.columnsForm[11].listData.push([1, "Venta de productos y servicios"]);
+    this.prop.columnsForm[11].listData.push([2, "Servicio de pago mensual"]); 
+    this.prop.columnsForm[11].listData.push([3, "Colegio"]); 
+    this.prop.columnsForm[11].listData.push([4, "Lavanderia"]); 
     super.properties = this.prop;
     console.log(this.prop);
     super.ngOnInit();

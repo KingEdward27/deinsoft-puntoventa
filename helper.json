@@ -988,6 +988,84 @@
                 typeDeleteVoid: "2",
                 regenerate: true,
                 generateFrontend: true
+        },
+        {
+                tableName: "cnf_plan_contrato",
+                title: "Planes de Contrato",
+                foreignTables: [
+                    {tableName: "cnf_empresa",idValue: "cnf_empresa_id",
+                    descriptionColumn : "nombre"
+                    }
+                ],
+                columnsForm: [
+                {columnName: "nombre",inputType: "text"},
+                {columnName: "precio",inputType: "text"}
+            ],
+                columnsList: [
+                    {columnName: "nombre",filterType: "text"},
+                    {columnName: "precio",filterType: "text"}
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
+        },
+        {
+                tableName: "act_contrato",
+                title: "Planes de Contrato",
+                foreignTables: [
+                {tableName: "cnf_maestro",idValue: "cnf_maestro_id",descriptionColumn : "nombre"
+                },
+                {tableName: "cnf_local",idValue: "cnf_local_id",descriptionColumn : "nombre"
+                },
+                {tableName: "cnf_tipo_comprobante",idValue: "cnf_tipo_comprobante_id",descriptionColumn : "nombre"
+                },
+                {tableName: "cnf_forma_pago",idValue: "cnf_forma_pago_id",descriptionColumn : "nombre"
+                },
+                {tableName: "cnf_plan_contrato",idValue: "cnf_plan_contrato_id",descriptionColumn : "nombre"
+                }
+            ],
+               
+            columnsForm: [
+                {columnName: "fecha",inputType: "number"
+                },
+                {columnName: "serie",inputType: "number"
+                },
+                {columnName: "numero",inputType: "text"
+                },
+                {columnName: "fecha_registro",inputType: "text"
+                },
+                {columnName: "observacion",inputType: "text"
+                },
+                {columnName: "flag_estado",inputType: "text"
+                },
+                {columnName: "nro_poste",inputType: "text"
+                },
+                {columnName: "url_map",inputType: "text"
+                }
+                
+            ],
+                columnsList: [
+                    {columnName: "fecha",filterType: "number"
+                },
+                {columnName: "serie",filterType: "number"
+                },
+                {columnName: "numero",filterType: "text"
+                },
+                {columnName: "fecha_registro",filterType: "text"
+                },
+                {columnName: "observacion",filterType: "text"
+                },
+                {columnName: "flag_estado",filterType: "text"
+                },
+                {columnName: "nro_poste",filterType: "text"
+                },
+                {columnName: "url_map",filterType: "text"
+                }
+                
+            ],
+                generateFrontend: true,
+                regenerate: true,
+                typeDeleteVoid: "2"
         }
     ]
 }

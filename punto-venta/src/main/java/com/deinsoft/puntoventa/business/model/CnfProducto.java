@@ -23,6 +23,8 @@ public class CnfProducto implements Serializable {
     @Column(name = "codigo", length = 15, nullable = true)
     private String codigo;
 
+    @NotNull
+    @NotEmpty
     @Size(max = 100)
     @Column(name = "nombre", length = 100, nullable = true)
     private String nombre;
@@ -36,12 +38,10 @@ public class CnfProducto implements Serializable {
     @Column(name = "existencia", length = 14, nullable = true)
     private BigDecimal existencia;
 
-    @Size(max = 0)
-    @Column(name = "fecha_registro", length = 0, nullable = true)
+    @Column(name = "fecha_registro", nullable = true)
     private LocalDateTime fechaRegistro;
 
-    @Size(max = 100)
-    @Column(name = "ruta_imagen", length = 100, nullable = true)
+    @Column(name = "ruta_imagen", length = 900, nullable = true)
     private String rutaImagen;
 
     @Size(max = 1)
@@ -58,6 +58,8 @@ public class CnfProducto implements Serializable {
     @JoinColumn(name = "cnf_unidad_medida_id")
     private CnfUnidadMedida cnfUnidadMedida;
 
+    @NotNull
+    @Valid
     @OneToOne
     @JoinColumn(name = "cnf_empresa_id")
     private CnfEmpresa cnfEmpresa;
@@ -68,14 +70,13 @@ public class CnfProducto implements Serializable {
     @JoinColumn(name = "cnf_sub_categoria_id")
     private CnfSubCategoria cnfSubCategoria;
 
-    @NotNull
-    @Valid
+    
     @OneToOne
     @JoinColumn(name = "cnf_marca_id")
     private CnfMarca cnfMarca;
 
-    @NotNull
-    @Valid
+//    @NotNull
+//    @Valid
     @OneToOne
     @JoinColumn(name = "cnf_categoria_id")
     private CnfCategoria cnfCategoria;

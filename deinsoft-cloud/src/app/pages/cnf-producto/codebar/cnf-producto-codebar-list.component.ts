@@ -35,19 +35,20 @@ import { ActComprobante } from '@pages/act-comprobante/act-comprobante.model';
 import { ActComprobanteService } from '@pages/act-comprobante/act-comprobante.service';
 import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
 import { CommonReportFormComponent, MyBaseComponentDependences } from '@pages/reports/base/common-report.component';
+import { CnfCategoria } from '@/business/model/cnf-categoria.model';
 
 
 
 @Component({
-  selector: 'app-act-comprobante-compra-report',
-  templateUrl: './act-comprobante-compra-report.component.html',
+  selector: 'app-cnf-producto-codebar-list',
+  templateUrl: './cnf-producto-codebar-list.component.html',
   providers: [
     { provide: NgbDateAdapter, useClass: CustomAdapter },
     { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
     MyBaseComponentDependences
   ]
 })
-export class ActComprobanteCompraReportFormComponent extends CommonReportFormComponent implements OnInit {
+export class CnfProductoCodeBarListComponent extends CommonReportFormComponent implements OnInit {
 
   //generic variables
   error: any;
@@ -99,30 +100,38 @@ export class ActComprobanteCompraReportFormComponent extends CommonReportFormCom
   listImpuestoCondicion: any;
   public modalRef!: NgbModalRef;
   listData: any;
-  total:any
+  total :any = 0;
+  totalMontos :any = 0;
+  totalPendiente :any = 0;
+
+  
+
   constructor(public deps: MyBaseComponentDependences) {
     super(deps);
   }
   ngOnInit(): void {
     this.isDataLoaded = false;
-    this.titleExport = "Reporte de Ventas"
+    this.titleExport = "Lista de Productos"
     super.ngOnInit();
     //this.getListData();
   }
   getListData() {
-    this.model.flagIsventa = '2';
-    this.total = 0
-    return this.deps.actComprobanteService.getReport(this.model).subscribe(data => {
+    this.indexInputs = [8]
+    // let user = this.deps.appService.getProfile();
+    // console.log(user);
+    // let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
+    let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
+    this.model.cnfEmpresa.id = cnfEmpresa;
+    console.log(this.model);
+    
+    return this.deps.cnfProductoService.getPdfCodeBarsPre(this.model).subscribe(data => {
       this.listData = data;
       this.loadingCnfMaestro = false;
       setTimeout(() => {
-        this.dataTable = $('#dtData').DataTable(this.datablesSettings);
+        this.dataTable = $('#dtDataListCnfProducto').DataTable(this.datablesSettingsWithInputs);
       }, 1);
       this.dataTable?.destroy();
       console.log(data);
-      this.listData.forEach(element => {
-        this.total = this.total + element.total
-      });
     })
   }
   print(item: any) {
@@ -131,29 +140,33 @@ export class ActComprobanteCompraReportFormComponent extends CommonReportFormCom
     this.modalRef.componentInstance.id = item.id;
 
   }
-  sendApi(item: any) {
-    this.deps.utilService.confirmOperation(null).then((result) => {
-      if (result) {
-        this.deps.actComprobanteService.sendApi("act_comprobante", item.id.toString()).subscribe(() => {
-          this.deps.utilService.msgOkOperation();
-          this.loadData();
-        });
+  process() {
+    console.log(this.model);
+    let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
+    this.model.cnfEmpresa.id = cnfEmpresa;
+    this.deps.cnfProductoService.getPdfCodeBars(this.model).subscribe(data => {
+      console.log(data);
+      if (data.body.type != 'application/json') {
+        var contentType = 'application/pdf';
+        var extension = "pdf";
+
+        const blob = new Blob([data.body], { type: contentType });
+        this.generateAttachment(blob, extension);
       }
 
     });
-  }
-  export() {
-    var contentType = 'application/pdf';
-    var extension = "pdf";
-    this.deps.actComprobanteService.genReportExcel(this.model).subscribe(data => {
-      if (data.body.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-        data.body.type == "application/octet-stream") {
-        contentType = data.body.type;
-        extension = "xlsx";
-      }
-      const blob = new Blob([data.body], { type: contentType });
-      this.generateAttachment(blob, extension);
-    })
+
+    // var contentType = 'application/pdf';
+    // var extension = "pdf";
+    // this.deps.actComprobanteService.genReportExcel(this.model).subscribe(data => {
+    //   if (data.body.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+    //     data.body.type == "application/octet-stream") {
+    //     contentType = data.body.type;
+    //     extension = "xlsx";
+    //   }
+    //   const blob = new Blob([data.body], { type: contentType });
+    //   this.generateAttachment(blob, extension);
+    // })
     
   }
 }

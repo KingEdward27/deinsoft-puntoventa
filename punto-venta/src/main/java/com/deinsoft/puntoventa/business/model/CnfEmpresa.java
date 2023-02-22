@@ -56,6 +56,9 @@ public class CnfEmpresa implements Serializable {
     @Column(name = "ruta_pse", length = 1000, nullable = true)
     private String rutaPse;
 
+    @Column(name = "perfil_empresa", length = 1000, nullable = true)
+    private Integer perfilEmpresa;
+    
     @NotNull
     @Valid
     @OneToOne
@@ -160,6 +163,14 @@ public class CnfEmpresa implements Serializable {
 
     public void setRutaPse(String rutaPse) {
         this.rutaPse = rutaPse;
+    }
+
+    public Integer getPerfilEmpresa() {
+        return perfilEmpresa;
+    }
+
+    public void setPerfilEmpresa(Integer perfilEmpresa) {
+        this.perfilEmpresa = perfilEmpresa;
     }
 
     @Override

@@ -273,9 +273,13 @@
       "barcode":"Código de barras",
       "costo":"Costo",
       "flag_servicio":"Es servicio",
+      "ruta_imagen":"Ruta imagen",
+      "cnf_unidad_medida": "Unidad de medida",
       "cnf_marca":"Marca",
+      "cnf_empresa":"Empresa",
       "cnf_categoria":"Categoria",
-      "cnf_sub_categoria":"Sub categoria"
+      "cnf_sub_categoria":"Sub categoria",
+      "flag_estado":"Estado"
     },
     "inv_almacen": {
       "home": {
@@ -494,8 +498,42 @@
       "importe":"Importe",
       "cnf_producto":"Producto"
     },
+    "act_contrato": {
+      "home": {
+        "title": "Venta de Productos y Servicios",
+        "titleCompra": "Compra de Productos",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "fecha": "Fecha",
+      "fecha_registro": "Fecha Registro",
+      "numero": "Número",
+      "total": "Total",
+      "observacion": "Observación",
+      "igv":"IGV",
+      "subtotal":"Subtotal",
+      "serie":"Serie",
+      "envio_pse_mensaje":"Envío F.E.",
+      "cnf_maestro":"Cliente",
+      "cnf_tipo_comprobante":"Tipo",
+      "cnf_forma_pago":"Forma de pago",
+      "cnf_local":"Local",
+      "inv_almacen":"Almacén",
+      "flag_estado":"Estado",
+      "cnf_moneda":"Moneda",
+      "descuento":"Descuento",
+      "act_comprobante_detalle":"Detalle de Comprobante",
+      "proveedor":"Proveedor",
+      "fechaDesde":"Fecha inicio",
+      "fechaHasta":"Fecha fin",
+      "envio_pse_flag":"Envío SUNAT",
+      "fecha_vencimiento":"Fecha vencimiento",
+      "cnf_plan_contrato":"Plan"
+    },
     "reportes": {
       "act_comprobante_listado":"Listado de Ventas",
+      "act_comprobante_compra_listado":"Listado de Compras",
       "act_comprobante":"Reporte de Ventas",
       "act_comprobante_compra":"Reporte de Compra",
       "inv_almacen_producto":"Reporte de Stock Valorizado",

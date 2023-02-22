@@ -48,7 +48,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
     return convMap;
   }
   load(columnForm: any, index: number) {
-    console.log("waaa");
+    console.log("load()");
     if (columnForm.load) {
       console.log(this.properties);
       let column = columnForm?.tableName + "." + columnForm?.load.loadBy;
@@ -90,7 +90,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
             element.value = 0;
             element.listData = data
           }
-          if (element.order > columnForm.order + 1) {
+          if (element.order > columnForm.order + 1 && element.columnName != element.relatedBy) {
             let dataVacia: any[] = [];
             dataVacia.push([0, "- Seleccione -", element.tableName]);
             element.listData = dataVacia;
@@ -130,14 +130,14 @@ export class GenericFormComponent extends CommonService implements OnInit {
     await this.properties.columnsForm.forEach((element: any) => {
       if (element.type == 'date') {
         let wa = this.format(this.fromModel(element.value));
-        console.log(wa);
+        
 
         element.value = wa;
       }
       this.id = this.properties.id;
       if (element.type != 'input' && element.type != 'date') {
         if (this.properties.id == 0) {
-          if (element.loadState == 1) {
+          if (element.loadState == 1 && element.columnName != element.relatedBy) {
             let condition = ""
             element.filters?.forEach((elementFilter: any) => {
               condition = condition + elementFilter.columnName + " = " + elementFilter.value + " and"
@@ -157,7 +157,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
             
           }
         } else {
-          if (element.loadState == 1) {
+          if (element.loadState == 1 && element.columnName != element.relatedBy) {
             super.getListComboByTableName(element.tableName, element.columnName,"").subscribe(data => {
               console.log(data);
               data.push([0, "- Seleccione -"]);
