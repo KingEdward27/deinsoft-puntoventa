@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy WAR app to Azure Web App - deinsoft-cloud
+name: Build and deploy JAR app to Azure Web App - deinsoft-cloud
 
 on:
   push:
@@ -22,15 +22,13 @@ jobs:
           java-version: '8'
 
       - name: Build with Maven
-        run: |
-             cd ./punto-venta
-             mvn clean install -DskipTests
+        run: mvn clean install
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: java-app
-          path: '${{ github.workspace }}/punto-venta/target/*.jar'
+          path: '${{ github.workspace }}/target/*.jar'
 
   deploy:
     runs-on: ubuntu-latest
@@ -38,7 +36,7 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
@@ -51,5 +49,5 @@ jobs:
         with:
           app-name: 'deinsoft-cloud'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CAA1201804B54EA4A3F9B88A2575AA07 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BBF547D6C0B04DC69E2500E9489A2478 }}
           package: '*.jar'
