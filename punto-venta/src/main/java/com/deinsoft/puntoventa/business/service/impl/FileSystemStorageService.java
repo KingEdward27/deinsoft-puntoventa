@@ -121,7 +121,7 @@ public class FileSystemStorageService implements StorageService {
     public byte[] loadAsBytes(Path resourcesFolder, String filename) {
         try {
             Path file = load(resourcesFolder, appConfig.getFileSystemBasePath() + "/" + filename);
-            Resource resource = new UrlResource(file.toUri());
+            Resource resource = new UrlResource(file.toUri()); 
             if (resource.exists() || resource.isReadable()) {
                 return resource.getInputStream().readAllBytes();
             } else {
