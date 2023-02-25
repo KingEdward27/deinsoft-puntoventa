@@ -2,6 +2,7 @@ package com.deinsoft.puntoventa.business.repository;
 
 import com.deinsoft.puntoventa.business.bean.ParamBean;
 import com.deinsoft.puntoventa.business.model.ActComprobante;
+import com.deinsoft.puntoventa.business.model.InvMovAlmacen;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,7 +32,8 @@ public interface InvMovimientoProductoRepository extends JpaRepository<InvMovimi
     @Query(value = "select p from invMovimientoProducto p "
             + "where (:#{#paramBean.cnfLocal.id} = 0l or p.invAlmacen.cnfLocal.id = :#{#paramBean.cnfLocal.id}) "
             + "and (:#{#paramBean.invAlmacen.id} = 0l or p.invAlmacen.id = :#{#paramBean.invAlmacen.id}) "
-            + "and (p.fecha between :#{#paramBean.fechaDesde} and :#{#paramBean.fechaHasta})")
+            + "and (p.fecha between :#{#paramBean.fechaDesde} and :#{#paramBean.fechaHasta})"
+            + "and (p.cnfProducto.id = :#{#paramBean.cnfProducto.id})")
     List<InvMovimientoProducto> getReportInvMovimientoProducto(@Param("paramBean") ParamBean paramBean);
     
     @Query(value = "select p from invMovimientoProducto p "
@@ -41,4 +43,6 @@ public interface InvMovimientoProductoRepository extends JpaRepository<InvMovimi
     List<InvMovimientoProducto> getSaldoReportInvMovimientoProducto(@Param("paramBean") ParamBean paramBean);
     
     void deleteByActComprobante(ActComprobante actComprobante);
+    
+    void deleteByInvMovAlmacen(InvMovAlmacen invMovAlmacen);
 }

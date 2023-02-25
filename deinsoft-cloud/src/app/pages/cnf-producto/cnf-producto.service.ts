@@ -46,8 +46,15 @@ export class CnfProductoService {
     let params = new HttpParams().set("id", arg1)
     return this.http.get<CnfProducto>(`${this.url}/get-cnf-producto`, { params });
   }
-  public save(form: any): Observable<CnfProducto> {
-    return this.http.post<CnfProducto>(this.url + '/save-cnf-producto', form);
+  public save(form: any, fileToUpload:any): Observable<CnfProducto> {
+    const formData: FormData = new FormData();
+    const mData = JSON.stringify(form);
+    formData.append('cnfProducto', mData);
+    if (fileToUpload) {
+      formData.append('file', fileToUpload, fileToUpload?.name);
+    }
+    
+    return this.http.post<CnfProducto>(this.url + '/save-cnf-producto',formData);
   }
   public delete(arg1: string): Observable<HttpResponse<{}>> {
     let params = new HttpParams().set("id", arg1);

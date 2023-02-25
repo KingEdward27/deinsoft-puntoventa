@@ -96,6 +96,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   selectDefaultImpuestoCondicion: any = { id: 0, nombre: "- Seleccione -" };
   listImpuestoCondicion: any;
   public modalRef!: NgbModalRef;
+  option:string = "1";
   constructor(private actComprobanteService: ActComprobanteService,
     private router: Router,
     private utilService: UtilService,
@@ -154,8 +155,11 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     this.model.flagIsventa = '2';
     return this.route.paramMap.subscribe(params => {
       this.id = params.get('id')!;
+      this.option = params.get('option')!;
       console.log(this.id);
       if (!this.id) {
+        
+        this.option = "1";
         this.isDataLoaded = true;
       }
       if (this.id) {
@@ -208,13 +212,13 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     actComprobanteDetalle.descripcion = event.item.nombre
     actComprobanteDetalle.cantidad = 1
     actComprobanteDetalle.cnfImpuestoCondicion.id = 1
-    actComprobanteDetalle.precio = event.item.precio
-    actComprobanteDetalle.importe = event.item.precio
+    actComprobanteDetalle.precio = event.item.costo
+    actComprobanteDetalle.importe = event.item.costo
     actComprobanteDetalle.cnfImpuestoCondicion.id = 1
     actComprobanteDetalle.afectacionIgv
       = actComprobanteDetalle.importe - actComprobanteDetalle.importe / 1.18
 
-    this.model.total = Math.round((this.model.total + event.item.precio + Number.EPSILON) * 100) / 100;
+    this.model.total = Math.round((this.model.total + event.item.costo + Number.EPSILON) * 100) / 100;
     this.model.subtotal = Math.round((this.model.total / 1.18 + Number.EPSILON) * 100) / 100;
     this.model.descuento = 0
     this.model.igv = Math.round((this.model.total - this.model.subtotal + Number.EPSILON) * 100) / 100
@@ -250,6 +254,10 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   }
   save() {
     console.log(this.model);
+    if (this.model.id > 0 && this.model.flagEstado != "1") {
+      this.utilService.msgHTTP400WithMessage("No pude hacer modificaciones. La compra no está en estado Registrado");
+      return;
+    }
     if (this.model.listActComprobanteDetalle.length == 0) {
       this.error = []
       this.error.push("Debe agregar productos y servicios al comprobante")

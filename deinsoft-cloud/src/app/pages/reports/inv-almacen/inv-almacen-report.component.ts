@@ -122,7 +122,7 @@ export class InvAlmacenReportFormComponent extends CommonReportFormComponent imp
       this.dataTable?.destroy();
       console.log(data);
       this.listData.forEach(element => {
-        this.total = this.total + (element.cantidad * element.cnfProducto.costo?element.cnfProducto.costo:0)
+        this.total = this.total + (element.cantidad * (element.cnfProducto.costo?element.cnfProducto.costo:0))
       });
     })
     

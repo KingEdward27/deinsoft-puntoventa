@@ -94,7 +94,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 			//.antMatcher("/api/**")
                         .authorizeRequests()
 				.antMatchers(HttpMethod.POST,"/login").permitAll()
-                                .antMatchers("/swagger-ui/**","/v3/**").permitAll()
+                                .antMatchers("/swagger-ui/**","/v3/**", "/resources/**").permitAll()
 //                                .antMatchers(HttpMethod.GET,"/login").permitAll()
 //                                .antMatchers("/ventas-backend/login").permitAll() 
 			.anyRequest().authenticated()

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity(name = "cnfEmpresa")
 @Table(name = "cnf_empresa")
@@ -69,6 +70,18 @@ public class CnfEmpresa implements Serializable {
     @JoinColumn(name = "cnf_distrito_id")
     private CnfDistrito cnfDistrito;
 
+    @ColumnDefault("0")
+    @Column(name = "flag_compra_rapida", length = 1, nullable = false)
+    private int flagCompraRapida;
+
+    @ColumnDefault("0")
+    @Column(name = "flag_venta_rapida", length = 1, nullable = false)
+    private int flagVentaRapida;
+    
+    @OneToOne
+    @JoinColumn(name = "cnf_moneda_id")
+    private CnfMoneda cnfMoneda;
+    
     public long getId() {
         return id;
     }
@@ -171,6 +184,30 @@ public class CnfEmpresa implements Serializable {
 
     public void setPerfilEmpresa(Integer perfilEmpresa) {
         this.perfilEmpresa = perfilEmpresa;
+    }
+
+    public int getFlagCompraRapida() {
+        return flagCompraRapida;
+    }
+
+    public void setFlagCompraRapida(int flagCompraRapida) {
+        this.flagCompraRapida = flagCompraRapida;
+    }
+
+    public int getFlagVentaRapida() {
+        return flagVentaRapida;
+    }
+
+    public void setFlagVentaRapida(int flagVentaRapida) {
+        this.flagVentaRapida = flagVentaRapida;
+    }
+
+    public CnfMoneda getCnfMoneda() {
+        return cnfMoneda;
+    }
+
+    public void setCnfMoneda(CnfMoneda cnfMoneda) {
+        this.cnfMoneda = cnfMoneda;
     }
 
     @Override

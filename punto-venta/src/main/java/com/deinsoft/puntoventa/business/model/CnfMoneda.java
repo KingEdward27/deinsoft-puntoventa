@@ -27,6 +27,14 @@ public class CnfMoneda implements Serializable {
     @Column(name = "nombre", length = 50, nullable = true)
     private String nombre;
 
+    @Size(max = 5)
+    @Column(name = "simbolo", length = 5, nullable = true)
+    private String simbolo;
+    
+    @Size(max = 500)
+    @Column(name = "descripcion_plural", length = 500, nullable = true)
+    private String descripcionPlural;
+    
     @Size(max = 1)
     @Column(name = "flag_estado", length = 1, nullable = true)
     private String flagEstado;
@@ -61,6 +69,22 @@ public class CnfMoneda implements Serializable {
 
     public void setFlagEstado(String flagEstado) {
         this.flagEstado = flagEstado;
+    }
+
+    public String getSimbolo() {
+        return simbolo;
+    }
+
+    public void setSimbolo(String simbolo) {
+        this.simbolo = simbolo;
+    }
+
+    public String getDescripcionPlural() {
+        return descripcionPlural;
+    }
+
+    public void setDescripcionPlural(String descripcionPlural) {
+        this.descripcionPlural = descripcionPlural;
     }
 
     @Override

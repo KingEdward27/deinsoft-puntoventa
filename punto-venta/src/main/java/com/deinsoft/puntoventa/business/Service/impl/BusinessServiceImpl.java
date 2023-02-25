@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.deinsoft.puntoventa.business.Service.impl;
+package com.deinsoft.puntoventa.business.service.impl;
 
-import com.deinsoft.puntoventa.business.Service.BusinessService;
+import com.deinsoft.puntoventa.business.model.ActComprobante;
+import com.deinsoft.puntoventa.business.service.BusinessService;
 import com.deinsoft.puntoventa.facturador.client.EnvioPSE;
 import com.deinsoft.puntoventa.facturador.client.RespuestaPSE;
 import com.deinsoft.puntoventa.framework.model.Detail;
@@ -214,6 +215,22 @@ public class BusinessServiceImpl implements BusinessService {
     }
     private byte[] print(int tipo, Map<String, Object> mapVenta,boolean isTicket) throws Exception {
         ByteArrayInputStream stream = Impresion.Imprimir(tipo, mapVenta, isTicket);
+        if (stream == null) {
+            System.out.println("Ocurrió un error al generar el pdf desde la base de datos");
+            return null;
+        }
+        int n = stream.available();
+        byte[] bytes = new byte[n];
+        stream.read(bytes, 0, n);
+        return bytes;
+    }
+    @Override
+    public byte[] print2(int tipo, ActComprobante actComprobante,boolean isTicket) throws Exception {
+        ByteArrayInputStream stream = Impresion.Imprimir2(tipo, actComprobante, isTicket);
+        if (stream == null) {
+            System.out.println("Ocurrió un error al generar el pdf desde la base de datos");
+            return null;
+        }
         int n = stream.available();
         byte[] bytes = new byte[n];
         stream.read(bytes, 0, n);

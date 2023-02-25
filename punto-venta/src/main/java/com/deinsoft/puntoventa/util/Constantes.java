@@ -25,6 +25,6 @@ public class Constantes {
     public static final String INCLUIR_XML = "false";
     public static final String DESCRIPCION_UNIDAD = "ZZ";
     public static final String RESOLUCION = "N° 097-2021/SUNAT";
-    public static final String PAGINA_WEB = "www.keyfacil.com";
+    public static final String PAGINA_WEB = "www.deinsoft-la.com";
     public static final String RUTA_DOC_PC = "E:/Sistema/";
 }

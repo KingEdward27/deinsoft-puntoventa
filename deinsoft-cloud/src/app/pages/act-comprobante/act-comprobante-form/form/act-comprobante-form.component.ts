@@ -1,7 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ActComprobante } from '../act-comprobante.model';
-import { ActComprobanteService } from '../act-comprobante.service';
 import Swal from 'sweetalert2';
 import { Observable, of } from 'rxjs';
 
@@ -32,9 +30,12 @@ import { CnfNumComprobanteService } from '@/business/service/cnf-num-comprobante
 import { CommonService } from '@/base/services/common.service';
 import { UpdateParam } from '@/base/components/model/UpdateParam';
 import dayjs from 'dayjs';
-import { MessageModalComponent } from '../modal/message-modal.component';
 import { AppService } from '@services/app.service';
 import { CnfMaestroFormModalComponent } from '@pages/cnf-maestro/cnf-maestro-modal/cnf-maestro-form-modal.component';
+import { ActComprobante } from '../../act-comprobante.model';
+import { ActComprobanteService } from '../../act-comprobante.service';
+import { MessageModalComponent } from '../../modal/message-modal.component';
+import { Location } from '@angular/common';
 
 
 
@@ -100,6 +101,8 @@ export class ActComprobanteFormComponent implements OnInit {
   listImpuestoCondicion: any;
   selectedCnfMaestro: any;
   public modalRef!: NgbModalRef;
+  option:string = "1";
+
   constructor(private actComprobanteService: ActComprobanteService,
     private router: Router,
     private utilService: UtilService,
@@ -116,7 +119,7 @@ export class ActComprobanteFormComponent implements OnInit {
     private commonService: CommonService,
     private dateAdapter: NgbDateAdapter<dayjs.Dayjs>,
     private ngbCalendar: NgbCalendar,
-    private modalService: NgbModal,
+    private modalService: NgbModal, private _location: Location,
     private route: ActivatedRoute, config: NgbModalConfig,private appService:AppService) {
     config.backdrop = 'static';
     config.keyboard = false;
@@ -133,7 +136,8 @@ export class ActComprobanteFormComponent implements OnInit {
 
   }
   getBack() {
-    this.router.navigate([this.redirect]);
+    this._location.back();
+    // this.router.navigate([this.redirect]);
   }
   loadData() {
     this.getListCnfMaestro();
@@ -158,8 +162,10 @@ export class ActComprobanteFormComponent implements OnInit {
     this.model.flagIsventa = '1';
     return this.route.paramMap.subscribe(params => {
       this.id = params.get('id')!;
+      this.option = params.get('option')!;
       console.log(this.id);
       if (!this.id) {
+        this.option = "1";
         this.isDataLoaded = true;
       }
       if (this.id) {
@@ -254,6 +260,10 @@ export class ActComprobanteFormComponent implements OnInit {
   }
   save() {
     console.log(this.model);
+    if (this.model.id > 0 && this.model.flagEstado != "1") {
+      this.utilService.msgHTTP400WithMessage("No pude hacer modificaciones. La compra no está en estado Registrado");
+      return;
+    }
     this.model.numero = "1"
     if (this.model.listActComprobanteDetalle.length == 0) {
       this.error = []

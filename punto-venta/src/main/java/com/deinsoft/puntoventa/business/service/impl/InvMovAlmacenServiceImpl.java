@@ -59,12 +59,7 @@ public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen, I
             if (numComprobante.isEmpty()) {
                 throw new Exception("No existe numeración para el tipo de comprobante y el local");
             }
-//            if (numComprobante.isEmpty()) {
-//                throw new Exception("No existe numeración para el tipo de comprobante y el local");
-//            }
-//            if (numComprobante.isEmpty()) {
-//                throw new Exception("No existe numeración para el tipo de comprobante y el local");
-//            }
+            
             invMovAlmacen.setFechareg(LocalDateTime.now());
             invMovAlmacen.setNumero(String.valueOf(numComprobante.get(0).getUltimoNro() + 1));
             invMovAlmacen.getListInvMovAlmacenDet().forEach(data -> {
@@ -79,7 +74,7 @@ public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen, I
             cnfNumComprobanteRepository.save(cnfNumComprobante);
             
             //update stock and register product movement
-            invAlmacenProductoService.registerProductMovementAndUpdateStock(null, invMovAlmacen);
+//            invAlmacenProductoService.registerProductMovementAndUpdateStock(null, invMovAlmacen);
             
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -89,6 +84,14 @@ public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen, I
         return invMovAlmacenResult;
     }
 
+    @Override
+    public void validate (InvMovAlmacen invMovAlmacen) {
+        invAlmacenProductoService.registerProductMovementAndUpdateStock(null, invMovAlmacen);
+        
+        invMovAlmacen.setFlagEstado("2");
+        invMovAlmacenRepository.save(invMovAlmacen);
+    }
+    
     public List<InvMovAlmacen> getAllInvMovAlmacen() {
         List<InvMovAlmacen> invMovAlmacenList = (List<InvMovAlmacen>) invMovAlmacenRepository.findAll();
         return invMovAlmacenList;

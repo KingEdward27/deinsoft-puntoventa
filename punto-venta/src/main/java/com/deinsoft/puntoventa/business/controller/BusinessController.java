@@ -4,7 +4,7 @@
  */
 package com.deinsoft.puntoventa.business.controller;
 
-import com.deinsoft.puntoventa.business.Service.BusinessService;
+import com.deinsoft.puntoventa.business.service.BusinessService;
 import com.deinsoft.puntoventa.framework.model.JsonData;
 import com.deinsoft.puntoventa.framework.model.UpdateParam;
 import com.deinsoft.puntoventa.framework.repository.JdbcRepository;

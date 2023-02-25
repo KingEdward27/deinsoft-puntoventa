@@ -1,6 +1,6 @@
 package com.deinsoft.puntoventa.business.service.impl;
 
-import com.deinsoft.puntoventa.business.Service.BusinessService;
+import com.deinsoft.puntoventa.business.service.BusinessService;
 import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +20,7 @@ import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.model.CnfFormaPagoDetalle;
 import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
 import com.deinsoft.puntoventa.business.model.InvAlmacenProducto;
+import com.deinsoft.puntoventa.business.model.InvMovAlmacen;
 import com.deinsoft.puntoventa.business.model.InvMovimientoProducto;
 import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
 import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
@@ -61,7 +62,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
 
     @Autowired
     InvAlmacenProductoService invAlmacenProductoService;
-    
+
     @Autowired
     InvMovimientoProductoRepository invMovimientoProductoRepository;
 
@@ -77,6 +78,12 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     @Autowired
     ActCajaOperacionRepository actCajaOperacionRepository;
 
+    @Autowired
+    BusinessService businessService;
+    
+    @Autowired
+    AuthenticationHelper auth;
+    
     public List<ActComprobante> getAllActComprobante(ActComprobante actComprobante) {
         List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getAllActComprobante(
                 actComprobante.getSerie().toUpperCase(), actComprobante.getNumero().toUpperCase(),
@@ -138,41 +145,12 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             cnfNumComprobante.setUltimoNro(numComprobante.get(0).getUltimoNro() + 1);
             cnfNumComprobanteRepository.save(cnfNumComprobante);
 
-            //update stock
-            invAlmacenProductoService.registerProductMovementAndUpdateStock(actComprobante, null);
-//            actComprobante.getListActComprobanteDetalle().forEach(data -> {
-//                if (!data.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
-//                    List<InvAlmacenProducto> list
-//                            = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
-//
-//                    if (list.size() > 1) {
-//                        throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
-//                    }
-//                    if (list.size() == 0) {
-//                        throw new RuntimeException("No existe stock para el almacen y producto seleccionados");
-//                    }
-//                    InvAlmacenProducto stock = list.get(0);
-//                    stock.setCnfProducto(data.getCnfProducto());
-//                    stock.setInvAlmacen(actComprobante.getInvAlmacen());
-//                    stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
-//                    invAlmacenProductoRepository.save(stock);
-//
-//                    InvMovimientoProducto mov = new InvMovimientoProducto();
-//                    mov.setCnfProducto(data.getCnfProducto());
-//                    mov.setInvAlmacen(actComprobante.getInvAlmacen());
-//                    mov.setActComprobante(actComprobante);
-//                    mov.setFecha(actComprobante.getFecha());
-//                    mov.setFechaRegistro(LocalDateTime.now());
-//                    mov.setCantidad(data.getCantidad().multiply(BigDecimal.valueOf(-1)));
-//                    mov.setValor(data.getPrecio());
-//                    invMovimientoProductoRepository.save(mov);
-//                }
-//
-//            });
+            if (actComprobanteResult.getCnfLocal().getCnfEmpresa().getFlagVentaRapida() == 1) {
+                validate(actComprobante.getId());
 
-            //save pagos programacion
-            saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno, "1");
-
+                actComprobanteResult.setFlagEstado("2");
+                actComprobanteRepository.save(actComprobante);
+            }
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //            e.printStackTrace();
@@ -187,13 +165,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     public ActComprobante saveActComprobanteCompra(ActComprobante actComprobante) throws Exception {
         ActComprobante actComprobanteResult = null;
 
-        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actComprobante.getSegUsuario().getId());
-        actCajaTurno = actCajaTurno.stream()
-                .filter(item -> item.getEstado().equals("1"))
-                .collect(Collectors.toList());
-        if (actCajaTurno.isEmpty()) {
-            throw new Exception("El usuario no tiene caja aperturada");
-        }
+        
         try {
             actComprobante.setFechaRegistro(LocalDateTime.now());
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
@@ -201,41 +173,13 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             });
             actComprobanteResult = actComprobanteRepository.save(actComprobante);
 
-            //update stock
-            invAlmacenProductoService.registerProductMovementAndUpdateStock(actComprobante, null);
-//            actComprobante.getListActComprobanteDetalle().forEach(data -> {
-//                List<InvAlmacenProducto> list
-//                        = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
-//
-//                if (list.size() > 1) {
-//                    throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
-//                }
-//                if (list.size() == 0) {
-//                    InvAlmacenProducto stock = new InvAlmacenProducto();
-//                    stock.setCnfProducto(data.getCnfProducto());
-//                    stock.setInvAlmacen(actComprobante.getInvAlmacen());
-//                    stock.setCantidad(data.getCantidad());
-//                    invAlmacenProductoRepository.save(stock);
-//                } else {
-//                    InvAlmacenProducto stock = list.get(0);
-//                    stock.setCnfProducto(data.getCnfProducto());
-//                    stock.setInvAlmacen(actComprobante.getInvAlmacen());
-//                    stock.setCantidad(stock.getCantidad().add(data.getCantidad()));
-//                    invAlmacenProductoRepository.save(stock);
-//                }
-//                InvMovimientoProducto mov = new InvMovimientoProducto();
-//                mov.setCnfProducto(data.getCnfProducto());
-//                mov.setInvAlmacen(actComprobante.getInvAlmacen());
-//                mov.setActComprobante(actComprobante);
-//                mov.setFecha(actComprobante.getFecha());
-//                mov.setFechaRegistro(LocalDateTime.now());
-//                mov.setCantidad(data.getCantidad());
-//                mov.setValor(data.getPrecio());
-//                invMovimientoProductoRepository.save(mov);
-//            });
+            if (actComprobanteResult.getCnfLocal().getCnfEmpresa().getFlagCompraRapida() == 1) {
+                validate(actComprobante.getId());
 
-            //save pagos programacion
-            saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno, "2");
+                actComprobanteResult.setFlagEstado("2");
+                actComprobanteRepository.save(actComprobante);
+            }
+
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //            e.printStackTrace();
@@ -243,6 +187,28 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         }
 
         return actComprobanteResult;
+    }
+
+    @Override
+    public void validate(long id) throws Exception {
+        
+        ActComprobante actComprobante = getActComprobante(id);
+        //update stock
+        invAlmacenProductoService.registerProductMovementAndUpdateStock(actComprobante, null);
+
+        //save pagos programacion
+        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(auth.getLoggedUserdata().getId());
+        actCajaTurno = actCajaTurno.stream()
+                .filter(item -> item.getEstado().equals("1"))
+                .collect(Collectors.toList());
+        if (actCajaTurno.isEmpty()) {
+            throw new Exception("El usuario no tiene caja aperturada");
+        }
+        
+        saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno, actComprobante.getFlagIsventa().equals("1")?false:true);
+
+        actComprobante.setFlagEstado("2");
+        actComprobanteRepository.save(actComprobante);
     }
 
     public List<ActComprobante> getAllActComprobante() {
@@ -372,7 +338,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     }
 
     private void saveActPagoProgramacionOrCajaOperacion(ActComprobante actComprobante,
-            List<ActCajaTurno> actCajaTurno, String flagIngreso) throws Exception {
+            List<ActCajaTurno> actCajaTurno, boolean flagIngreso) throws Exception {
         BigDecimal pending = actComprobante.getTotal();
         LocalDate dueDate = actComprobante.getFecha();
         List<CnfFormaPagoDetalle> list = cnfFormaPagoDetalleRepository.findByCnfFormaPagoId(
@@ -453,9 +419,14 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             actCajaOperacion.setFecha(LocalDate.now());
             actCajaOperacion.setFechaRegistro(LocalDateTime.now());
             actCajaOperacion.setMonto(actComprobante.getTotal());
-            actCajaOperacion.setFlagIngreso(flagIngreso);
+            actCajaOperacion.setFlagIngreso(flagIngreso?"1":"2");
             actCajaOperacion.setEstado("1");
             actCajaOperacionRepository.save(actCajaOperacion);
         }
+    }
+    @Override
+    public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception {
+        byte[] bytes = businessService.print2(tipo,getActComprobante(id),false);
+        return bytes;
     }
 }

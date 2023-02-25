@@ -10,6 +10,7 @@ import com.deinsoft.puntoventa.business.model.CnfFormaPago;
 import com.deinsoft.puntoventa.business.model.CnfLocal;
 import com.deinsoft.puntoventa.business.model.CnfMaestro;
 import com.deinsoft.puntoventa.business.model.CnfMoneda;
+import com.deinsoft.puntoventa.business.model.CnfProducto;
 import com.deinsoft.puntoventa.business.model.CnfTipoComprobante;
 import com.deinsoft.puntoventa.business.model.InvAlmacen;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -53,6 +54,8 @@ public class ParamBean {
     private InvAlmacen invAlmacen;
 
     private CnfCategoria CnfCategoria;
+    
+    private CnfProducto cnfProducto;
     
     public ParamBean() {
     }
@@ -144,6 +147,14 @@ public class ParamBean {
 
     public void setCnfCategoria(CnfCategoria CnfCategoria) {
         this.CnfCategoria = CnfCategoria;
+    }
+
+    public CnfProducto getCnfProducto() {
+        return cnfProducto;
+    }
+
+    public void setCnfProducto(CnfProducto cnfProducto) {
+        this.cnfProducto = cnfProducto;
     }
     
     

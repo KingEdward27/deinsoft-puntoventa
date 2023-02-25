@@ -237,16 +237,28 @@
                                                 <td>{{item.cnfMaestro.apellidoPaterno + ' ' +
                                                     item.cnfMaestro.apellidoMaterno + ' ' + item.cnfMaestro.nombres}}
                                                 </td>
-                                                <td class="content-number">{{item.total | number:'1.2-2'}}</td>
-                                                <td>{{item.flagEstado == '1'? "Registrado":"Anulado"}}</td>
+                                                <td class="content-number">{{item.cnfMoneda.simbolo + ' ' + (item.total | number:'1.2-2')}}</td>
+                                                <td><p [ngClass]="'state' + item.flagEstado">{{item.flagEstado == '1'? "Registrado":item.flagEstado == '2'? "Finalizado" :"Anulado"}}</p> </td>
                                                 <td>
                                                     <div class="row row2">
-                                                        <div class="col-sm-6 col-xs-6 text-right"><a class="fas fa-edit"
+                                                        <div 
+                                                        class="col-sm-3 col-xs-3 text-right"><a class="fas fa-eye"
+                                                            (click)="verDetalle(item)" style="cursor: pointer;"
+                                                            title="Ver detalle"></a></div>
+                                                        <div *ngIf="item.flagEstado == '1'" class="col-lg-3 col-sm-6 col-xs-6 text-right">
+                                                            <a class="fas fa-edit"
                                                             (click)="editar(item)" style="cursor: pointer;"
                                                             title="{{'webpagos.btnEdit' | translate}}"></a></div>
-                                                        <div *ngIf="item.flagEstado != '0'" class="col-lg-4 col-sm-6 col-xs-6"><a style="cursor: pointer;"
+                                                        <div *ngIf="item.flagEstado == '1'" class="col-lg-3 col-sm-6 col-xs-6"><a 
+                                                            class="fas fa-ban fa-md" 
+                                                            style="cursor: pointer;"
                                                                 title="Anular" (click) = "anular(item)"><i
-                                                                    class="fa fa-ban fa-md"></i></a></div>
+                                                                    ></i></a></div>
+                                                        <div *ngIf="item.flagEstado == '1' && model.cnfLocal.cnfEmpresa.flagCompraRapida == 0" class="col-lg-3 col-sm-6 col-xs-6"><a 
+                                                            class="fas fa-check"
+                                                            style="cursor: pointer;"
+                                                                        title="Finalizar" (click) = "finalizar(item)"><i
+                                                                            ></i></a></div>
                                                     </div>
                                                 </td>
                                             </tr>

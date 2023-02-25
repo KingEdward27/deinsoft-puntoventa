@@ -59,9 +59,6 @@
                                 </select>
                                 <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.cnfUnidadMedida">{{
                                     error.cnfUnidadMedida }}</div>
-                                <div class="alert alert-danger col-sm-12 col-lg-6"
-                                    *ngIf="error?.cnfUnidadMedida">{{error["cnfUnidadMedida.nombre"] }}
-                                </div>
                             </div>
                         </div>
                         <!-- <div class="form-group-sm row">
@@ -101,15 +98,14 @@
 
                                 </select>
                                 <div class="alert alert-danger col-sm-12 col-lg-6"
-                                    *ngIf="error?.cnfSubCategoria">{{error["cnfSubCategoria.nombre"] }}
+                                    *ngIf="error?.cnfSubCategoria">{{error.cnfSubCategoria }}
                                 </div>
                             </div>
                         </div>
                         <div class="form-group-sm row">
                             <label class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.cnf_marca' |
                                 translate}} <span *ngIf="loadingCnfMarca"
-                                    class="spinner-border spinner-border-sm mr-1"></span><span
-                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                    class="spinner-border spinner-border-sm mr-1"></span></label>
                             <div class="col-sm-12 col-lg-9">
                                 <select name="model.cnfMarca" [compareWith]="compareCnfMarca"
                                     [(ngModel)]="model.cnfMarca" class="form-control-sm col-sm-12 col-lg-6">
@@ -140,7 +136,8 @@
                         <div class="form-group-sm row">
                             <label for="nombre"
                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.nombre' |
-                                translate}}</label>
+                                translate}} <span
+                                style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                             <div class="col-sm-12 col-lg-9">
                                 <input type="text" [(ngModel)]="model.nombre" maxlength="100" name="nombre" id="nombre"
                                     name="nombre" class="form-control-sm col-sm-12 col-lg-6"
@@ -177,11 +174,23 @@
                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.ruta_imagen' |
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-9">
-                                <input type="text" [(ngModel)]="model.rutaImagen" maxlength="100" name="rutaImagen"
+                                <div class="row">
+                                    <input class="col-xs-10 col-sm-10 col-lg-6" type="file" id="file"
+                                        (change)="handleFileInput($event)" >
+                                </div>
+                                
+                                <div class="row p-2">
+                                    <div class="col">
+                                        <img [src]="model.rutaImagen" width="100px" height="100px" alt="">
+                                    </div>
+                                </div>    
+                                
+                                
+                                <!-- <input type="text" [(ngModel)]="model.rutaImagen" maxlength="100" name="rutaImagen"
                                     id="rutaImagen" name="rutaImagen" class="form-control-sm col-sm-12 col-lg-6"
                                     placeholder="Ingrese rutaImagen" />
                                 <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.rutaImagen">{{
-                                    error.rutaImagen }}</div>
+                                    error.rutaImagen }}</div> -->
                             </div>
                         </div>
                         <div class="form-group-sm row">

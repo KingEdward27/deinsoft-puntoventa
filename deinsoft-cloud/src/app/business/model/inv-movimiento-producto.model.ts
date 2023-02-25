@@ -11,5 +11,6 @@ export class InvMovimientoProducto {
 	invAlmacen: InvAlmacen = new InvAlmacen();
 	cnfProducto: CnfProducto = new CnfProducto();
 	actComprobante: ActComprobante = new ActComprobante();
+	costoTotal!: number;
 	token?: string = "";
 };

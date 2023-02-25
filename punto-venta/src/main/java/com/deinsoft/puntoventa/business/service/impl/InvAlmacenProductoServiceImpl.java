@@ -13,10 +13,13 @@ import com.deinsoft.puntoventa.business.repository.InvAlmacenProductoRepository;
 import com.deinsoft.puntoventa.business.service.InvAlmacenProductoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.model.ActComprobante;
+import com.deinsoft.puntoventa.business.model.CnfProducto;
 import com.deinsoft.puntoventa.business.model.InvMovAlmacen;
 import com.deinsoft.puntoventa.business.model.InvMovimientoProducto;
+import com.deinsoft.puntoventa.business.repository.CnfProductoRepository;
 import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoRepository;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 @Service
@@ -30,6 +33,9 @@ public class InvAlmacenProductoServiceImpl
     @Autowired
     InvAlmacenProductoRepository invAlmacenProductoRepository;
 
+    @Autowired
+    CnfProductoRepository cnfProductoRepository;
+    
     public List<InvAlmacenProducto> getAllInvAlmacenProducto(InvAlmacenProducto invAlmacenProducto) {
         List<InvAlmacenProducto> invAlmacenProductoList = (List<InvAlmacenProducto>) invAlmacenProductoRepository.getAllInvAlmacenProducto();
         return invAlmacenProductoList;
@@ -84,6 +90,7 @@ public class InvAlmacenProductoServiceImpl
     @Override
     public void registerProductMovementAndUpdateStock(ActComprobante actComprobante, InvMovAlmacen invMovAlmacen) {
         if (actComprobante != null) {
+            invMovimientoProductoRepository.deleteByActComprobante(actComprobante);
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
                 if (!data.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
                     List<InvAlmacenProducto> list
@@ -130,11 +137,32 @@ public class InvAlmacenProductoServiceImpl
                             actComprobante.getFlagIsventa().equals("1") ? BigDecimal.valueOf(-1) : BigDecimal.ONE));
                     mov.setValor(data.getPrecio());
                     invMovimientoProductoRepository.save(mov);
+                    
+                    List<InvMovimientoProducto> listMovs = (List<InvMovimientoProducto>) 
+                            invMovimientoProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
+                    BigDecimal costo = BigDecimal.ZERO;
+                    BigDecimal costoTotal = BigDecimal.ZERO;
+                    BigDecimal cantidad = BigDecimal.ZERO;
+                    for (InvMovimientoProducto invMovimientoProducto : listMovs) {
+                        cantidad = cantidad.add(invMovimientoProducto.getCantidad());
+                        costoTotal = costoTotal.add(invMovimientoProducto.getCantidad().multiply(invMovimientoProducto.getValor()));
+                        
+
+//                        invMovimientoProducto.setCant(cantidad);
+//                        invMovimientoProducto.setCostoTotal(costoTotal);
+//                        invMovimientoProducto.setCosto(costo);
+                    }
+                    costo = costoTotal.divide(cantidad, 2, RoundingMode.HALF_UP);
+                    //actualizar costo
+                    CnfProducto cnfProducto = cnfProductoRepository.getById(data.getCnfProducto().getId());
+                    cnfProducto.setCosto(costo);
+                    cnfProductoRepository.save(cnfProducto);
                 }
 
             });
         }
         if (invMovAlmacen != null) {
+            invMovimientoProductoRepository.deleteByInvMovAlmacen(invMovAlmacen);
             invMovAlmacen.getListInvMovAlmacenDet().forEach(data -> {
                 if (!data.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
                     List<InvAlmacenProducto> list

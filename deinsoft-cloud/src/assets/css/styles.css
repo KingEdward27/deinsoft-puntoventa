@@ -214,3 +214,44 @@ table > thead {
   background-color: #343a40;
   color: rgb(223, 222, 222);
 }
+[type="file"] {
+  /* Style the color of the message that says 'No file chosen' */
+    color: #878787;
+  }
+[type="file"]::-webkit-file-upload-button {
+    background-color: #007bff;
+    border-color: #007bff;
+    box-shadow: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    outline: none;
+    text-transform: uppercase;
+    transition: all 1s ease;
+  }
+  
+[type="file"]::-webkit-file-upload-button:hover {
+    background: rgb(24, 13, 83);
+    border: 2px solid #535353;
+    color: #fff;
+  }
+
+  .state0 {
+    background: rgb(124, 37, 37);
+    border: 2px solid #535353;
+    color: #fff;
+    border-radius: .25rem;
+  }
+  .state1 {
+    background: rgb(38, 107, 36);
+    border: 2px solid #535353;
+    color: #fff;
+    border-radius: .25rem;
+  } 
+  .state2 {
+    background: rgb(21, 47, 105);
+    border: 2px solid #535353;
+    color: #fff;
+    border-radius: .25rem;
+  }

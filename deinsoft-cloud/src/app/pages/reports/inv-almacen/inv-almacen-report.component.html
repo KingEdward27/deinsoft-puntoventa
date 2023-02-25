@@ -143,7 +143,7 @@
                                                 <td>{{item.cnfProducto.nombre}}</td>
                                                 <td class="content-number">{{item.cantidad}}</td>
                                                 <td class="content-number">{{item.cnfProducto.costo?item.cnfProducto.costo:0}}</td>
-                                                <td class="content-number">{{item.cantidad * item.cnfProducto.costo?item.cnfProducto.costo:0 | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{(item.cantidad * (item.cnfProducto.costo?item.cnfProducto.costo:0)) | number:'1.2-2'}}</td>
                                             </tr>
                                         </tbody>
                                         <tfoot>

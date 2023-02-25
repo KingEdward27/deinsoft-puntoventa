@@ -12,5 +12,7 @@ export class CnfEmpresa {
 	estado: string = "";
 	cnfTipoDocumento: CnfTipoDocumento = new CnfTipoDocumento();
 	cnfDistrito: CnfDistrito = new CnfDistrito();
+	flagCompraRapida:number;
+	flagVentaRapida:number;
 	token?: string = "";
 };

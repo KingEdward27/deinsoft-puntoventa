@@ -6,7 +6,9 @@
         servicePath: "backend/src/main/java/com/deinsoft/puntoventa/business/service",
         controllerPath: "backend/src/main/java/com/deinsoft/puntoventa/business/controller",
         frontendPath: "frontend/src/app/pages",
-        pathModule: "./pages"
+        pathModule: "./pages",
+        "appName": "webpagos",
+        "databaseName":"dbpuntoventa"
     },
     tables: [
         {

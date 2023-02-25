@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deinsoft.puntoventa.business.commons.service.CommonService;
 
 import com.deinsoft.puntoventa.business.model.ActComprobante;
+import java.text.ParseException;
 
 @Service
 @Transactional
@@ -39,4 +40,8 @@ public interface ActComprobanteService extends CommonService<ActComprobante> {
     public List<ActComprobante> getReportActComprobante(ParamBean paramBean);
     
     public String invalidate(long id)  throws Exception;
+    
+    void validate(long id) throws Exception;
+    
+    public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception;
 }

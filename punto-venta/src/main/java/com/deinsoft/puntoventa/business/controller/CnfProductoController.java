@@ -16,6 +16,9 @@ import javax.validation.Valid;
 import com.deinsoft.puntoventa.business.model.CnfProducto;
 import com.deinsoft.puntoventa.business.service.CnfProductoService;
 import com.deinsoft.puntoventa.framework.model.UpdateParam;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -24,6 +27,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/business/cnf-producto")
@@ -48,23 +52,31 @@ public class CnfProductoController extends CommonController<CnfProducto, CnfProd
         return cnfProducto;
     }
 
-    @PostMapping(value = "/save-cnf-producto")
-    public ResponseEntity<?> saveCnfProducto(@Valid @RequestBody CnfProducto cnfProducto, BindingResult result) {
+    @PostMapping(value = "/save-cnf-producto", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> saveCnfProducto(
+            @RequestPart("cnfProducto") @Valid String cnfProductoDTO, 
+            @RequestPart(name = "file", required = false) MultipartFile file, BindingResult result) throws JsonProcessingException {
         
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        CnfProducto cnfProducto = objectMapper.readValue(cnfProductoDTO, CnfProducto.class);
         if (result.hasErrors()) {
             return this.validar(result);
         }
         Map<String, Object> errores = new HashMap<>();
+        if(cnfProducto.getNombre().isEmpty()){
+            errores.put("nombre", " Debe ingresar el nombre");
+        }
         if(cnfProducto.getCnfUnidadMedida().getId() == 0){
-            errores.put("cnfUnidadMedida.nombre", " Debe seleccionar la unidad de medida");
+            errores.put("cnfUnidadMedida", " Debe seleccionar la unidad de medida");
         }
         if(cnfProducto.getCnfSubCategoria().getId() == 0){
-            errores.put("cnfSubCategoria.nombre", " Debe seleccionar la sub categoria");
+            errores.put("cnfSubCategoria", " Debe seleccionar la sub categoria");
         }
         if(!errores.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errores);
         }
-        CnfProducto cnfProductoResult = cnfProductoService.saveCnfProducto(cnfProducto);
+        CnfProducto cnfProductoResult = cnfProductoService.saveCnfProducto(cnfProducto,file);
         return ResponseEntity.status(HttpStatus.CREATED).body(cnfProductoResult);
 //        return super.crear(cnfProducto, result);
     }

@@ -38,9 +38,8 @@ import { RptActCompraComponent } from '@pages/reports/act-compra/rpt-act-compra.
 import { GenericChildFormComponent } from './base/components/generic-child/generic-child-form.component';
 import { SegRolComponent } from '@pages/security/seg-rol/seg_rol';
 import { SegUsuarioComponent } from '@pages/security/seg-usuario/seg_usuario';
-import { ActComprobanteFormComponent } from '@pages/act-comprobante/act-comprobante-form/act-comprobante-form.component';
 import { ActComprobanteCompraReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-compra/act-comprobante-compra-report.component';
-import { ActComprobanteListFormComponent } from '@pages/reports/act-comprobante/list-act-comprobante-venta/act-comprobante-list.component';
+import { ActComprobanteListFormComponent } from '@pages/act-comprobante/act-comprobante-form/list/act-comprobante-list.component';
 import { ActComprobanteReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-venta/act-comprobante-report.component';
 import { InvAlmacenReportFormComponent } from '@pages/reports/inv-almacen/inv-almacen-report.component';
 import { InvMovimientoProductoReportFormComponent } from '@pages/reports/inv-movimiento-producto/inv-movimiento-producto-report.component';
@@ -73,6 +72,8 @@ import { ActComprobanteCompraFormComponent } from './pages/act-comprobante/act-c
 import { ActContrato } from './pages/act-contrato/act-contrato.model';
 import { ActContratoFormComponent } from './pages/act-contrato/act-contrato-form/act-contrato-form.component';
 import { CnfPlanContratoComponent } from './pages/cnf-plan-contrato/cnf-plan-contrato';
+import { CnfEmpresaEmpresaComponent } from '@pages/cnf-empresa/cnf-empresa-empresa';
+import { ActComprobanteFormComponent } from './pages/act-comprobante/act-comprobante-form/form/act-comprobante-form.component';
 const routes: Routes = [
     {
         path: '',
@@ -161,13 +162,14 @@ const routes: Routes = [
             
             {path: 'producto',component: CnfProductoListComponent},
             {path: 'cnf-producto',component: CnfProductoListComponent},
-            {path: 'new-cnf-producto',component: CnfProductoFormComponent},
-            {path: 'new-cnf-producto/:id',component: CnfProductoFormComponent},
+            {path: 'new-producto',component: CnfProductoFormComponent},
+            {path: 'new-producto/:id',component: CnfProductoFormComponent},
 
             {path: 'producto-list',component: CnfProductoCodeBarListComponent},
             {path: 'list-compras',component: ActComprobanteCompraListFormComponent},
             {path: 'plan-contrato',component: CnfPlanContratoComponent},
             {path: 'contrato',component: ActContratoFormComponent},
+            {path: 'empresa-empresa',component: CnfEmpresaEmpresaComponent},
         ]
     },
     {

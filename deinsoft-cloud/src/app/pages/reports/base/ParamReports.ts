@@ -9,6 +9,7 @@ import { CnfTipoComprobante } from '@/business/model/cnf-tipo-comprobante.model'
 import { InvAlmacen } from '@/business/model/inv-almacen.model';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import * as dayjs from 'dayjs';
+import { CnfProducto } from '../../cnf-producto/cnf-producto.model';
 
 export class GenericBean{
 	id:number = 0;
@@ -28,4 +29,5 @@ export class ParamBean {
 	fechaVencimiento: string;
 	cnfEmpresa:CnfEmpresa = new CnfEmpresa();
 	cnfCategoria:CnfCategoria = new CnfCategoria();
+	cnfProducto:CnfProducto = new CnfProducto();
 };

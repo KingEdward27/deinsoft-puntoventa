@@ -1,6 +1,5 @@
 package com.deinsoft.puntoventa.framework.repository;
 
-import com.deinsoft.puntoventa.framework.AppConfig;
 import com.deinsoft.puntoventa.framework.model.*;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -18,6 +17,7 @@ import org.apache.poi.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -38,8 +38,11 @@ public class JdbcRepository implements IJdbcRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(JdbcRepository.class);
 
-    @Autowired
-    AppConfig appConfig;
+//    @Autowired
+//    AppConfig appConfig;
+    
+    @Value("${app.mysqlDatabase}")
+    private String databaseName;
     
     private static List<MetaData> listMetaData;
 
@@ -118,9 +121,9 @@ public class JdbcRepository implements IJdbcRepository {
         String sql = "select tc.table_name, kcu.referenced_table_name,kcu.referenced_column_name\n"
                 + "			    from information_schema.table_constraints AS tc  \n"
                 + "			    JOIN information_schema.key_column_usage AS kcu ON tc.constraint_name = kcu.constraint_name AND tc.table_schema = kcu.table_schema \n"
-                + "			where tc.constraint_schema = '" + appConfig.getMysqlDatabase() + "'\n"
+                + "			where tc.constraint_schema = '" + databaseName + "'\n"
                 + "			and tc.constraint_type = 'FOREIGN KEY'\n"
-                + "             and tc.constraint_schema = '" + appConfig.getMysqlDatabase() + "'-- c.table_schema\n"
+                + "             and tc.constraint_schema = '" + databaseName + "'-- c.table_schema\n"
                 + "             and tc.table_schema = kcu.table_schema\n"
                 + "             and tc.constraint_schema = kcu.constraint_schema";
         list = namedParameterJdbcTemplate.query(sql,
@@ -182,7 +185,7 @@ public class JdbcRepository implements IJdbcRepository {
                 + "				-- where tc.constraint_type = 'FOREIGN KEY' \n"
                 + "		) wa on (wa.table_name= c.table_name and wa.column_name = c.column_name)\n";
                 sql = sql + "		where c.table_schema = :tableSchema";
-                mapSqlParameterSource.addValue("tableSchema", appConfig.getMysqlDatabase());
+                mapSqlParameterSource.addValue("tableSchema", databaseName);
                 
                 if(!tableName.equals("")){
                     sql = sql + "		where c.table_name = :tableName";
@@ -830,6 +833,9 @@ public class JdbcRepository implements IJdbcRepository {
                     listFks = getListForeignKeys(referenceTable.getTableName());
                     for (ForeignTables fk : listFks) {
                         if(!tableName.equals(fk.getTableName())){
+                            if (fk == null || map1 == null) {
+                                System.out.println("sd");
+                            }
                             Map<String, Object> mapCab = wa(fk, map1);
                             map1.put(fk.getTableName(), mapCab);
                         }

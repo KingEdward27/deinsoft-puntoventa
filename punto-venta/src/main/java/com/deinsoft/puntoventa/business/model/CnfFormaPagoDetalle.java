@@ -15,6 +15,7 @@ public class CnfFormaPagoDetalle implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cnf_forma_pago_detalle_id", nullable = false, unique = true)
     private long id;
 

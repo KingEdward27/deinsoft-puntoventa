@@ -30,4 +30,6 @@ public interface InvMovAlmacenService extends CommonService<InvMovAlmacen> {
     public List<InvMovAlmacen> getAllInvMovAlmacenByInvAlmacen(long id);
 
     public void delete(long id);
+    
+    public void validate (InvMovAlmacen invMovAlmacen);
 }

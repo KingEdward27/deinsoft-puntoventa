@@ -47,7 +47,11 @@
       "nro_documento": "Nro. documento",
       "telefono": "Teléfono",
       "ruta_pse":"Ruta PSE facturación",
-      "token":"Token seguridad"
+      "token":"Token seguridad",
+      "perfil_empresa":"Perfil empresa",
+      "flag_compra_rapida": "Compra rápida?",
+      "flag_venta_rapida": "Venta rápida?",
+      "cnf_moneda":"Moneda principal"
     },
     "cnf_moneda": {
       "home": {
@@ -273,7 +277,7 @@
       "barcode":"Código de barras",
       "costo":"Costo",
       "flag_servicio":"Es servicio",
-      "ruta_imagen":"Ruta imagen",
+      "ruta_imagen":"Imagen",
       "cnf_unidad_medida": "Unidad de medida",
       "cnf_marca":"Marca",
       "cnf_empresa":"Empresa",

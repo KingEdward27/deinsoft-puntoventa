@@ -146,8 +146,24 @@ export class ActComprobanteCompraListFormComponent extends CommonReportFormCompo
   }
   editar(item:any) {
     if (this.deps.utilService.validateDeactivate(item)) {
-      this.deps.router.navigate(["/compra", { id: item.id }]);
+      this.deps.router.navigate(["/compra", { id: item.id, option: '1' }]);
     }
+  }
+  finalizar(item:any) {
+    this.deps.utilService.confirmOperation(null).then((result) => {
+      if (result) {
+        this.deps.actComprobanteService.validateActComprobante(item.id).subscribe(data => {
+          this.deps.utilService.msgOkOperation();
+          this.getListData();
+        })
+      }
+    });
+  }
+  verDetalle(e: any) {
+    if (this.deps.utilService.validateDeactivate(e)) {
+      this.deps.router.navigate(["/compra", { id: e.id, option: '0' }]);
+    }
+
   }
 }
 

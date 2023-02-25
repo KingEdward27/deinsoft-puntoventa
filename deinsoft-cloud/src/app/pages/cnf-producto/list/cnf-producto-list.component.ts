@@ -38,7 +38,7 @@ export class CnfProductoListComponent implements OnInit{
   }
 editar(e: CnfProducto) {
     if (this.utilService.validateDeactivate(e)) {
-      this.router.navigate(["/new-cnf-producto", { id: e.id }]);
+      this.router.navigate(["/new-producto", { id: e.id }]);
     }
 
   }  eliminar(e: CnfProducto){

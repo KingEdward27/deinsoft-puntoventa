@@ -1,6 +1,6 @@
 package com.deinsoft.puntoventa.business.controller;
 
-import com.deinsoft.puntoventa.business.Service.BusinessService;
+import com.deinsoft.puntoventa.business.service.BusinessService;
 import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -17,9 +17,11 @@ import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.business.service.ActComprobanteService;
 import com.deinsoft.puntoventa.framework.model.JsonData;
+import com.deinsoft.puntoventa.framework.model.UpdateParam;
 import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import com.deinsoft.puntoventa.framework.util.ExportUtil;
 import com.deinsoft.puntoventa.framework.util.Util;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -29,7 +31,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping("/api/business/act-comprobante")
@@ -224,5 +229,34 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
         
         
         return ResponseEntity.noContent().build();
+    }
+    @PostMapping(value = "/validate-act-comprobante")
+    public ResponseEntity<?> validate(@Param("id") Long id, HttpServletRequest request) throws  Exception{
+        
+        actComprobanteService.validate(id);
+        return ResponseEntity.noContent().build();
+    }
+    @PostMapping(value = "/getpdflocal")
+    public ResponseEntity<?> getPdfLocal(@RequestBody UpdateParam param) throws ParseException, Exception {
+        HttpHeaders headers = new HttpHeaders();
+        MediaType mediaType = MediaType.APPLICATION_PDF;
+        Map<String, Object> map = param.getMap();
+        String id = map.get("id").toString();
+        int tipo = Integer.parseInt(map.get("tipo").toString());
+        byte[] data = actComprobanteService.getPDFLocal(new Long(id), tipo);
+        if(data != null){
+            String type = "pdf";
+            ByteArrayInputStream stream = new ByteArrayInputStream(data);
+            if (type.equals("pdf")) {
+                headers.add("Content-Disposition", "inline; filename=pdf.pdf");
+                mediaType = MediaType.APPLICATION_PDF;
+            } else if (type.equals("excel")) {
+                headers.add("Content-Disposition", "attachment; filename=excel.xlsx");
+                mediaType = MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).headers(headers).contentType(mediaType).body(new InputStreamResource(stream));
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).headers(headers).contentType(mediaType).body("Ocurrió un error comunicandose con el api facturador");
+        
     }
 }

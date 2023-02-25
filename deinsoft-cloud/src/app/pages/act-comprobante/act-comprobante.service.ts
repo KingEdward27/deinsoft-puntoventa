@@ -89,5 +89,9 @@ export class ActComprobanteService {
     let params = new HttpParams().set("id",arg1);
     return this.http.post(this.url+'/invalidate-act-comprobante', params); 
   }
+  public validateActComprobante(arg1:string): Observable<any>{
+    let params = new HttpParams().set("id",arg1);
+    return this.http.post(this.url+'/validate-act-comprobante', params); 
+  }
 }
 

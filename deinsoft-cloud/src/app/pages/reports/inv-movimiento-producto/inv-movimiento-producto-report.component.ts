@@ -149,6 +149,34 @@ export class InvMovimientoProductoReportFormComponent extends CommonReportFormCo
       
     })
   }
+  getListCnfProductAsObservable(term: any): Observable<any> {
+
+    if (term.length >= 2) {
+      console.log(this.model.invAlmacen.id);
+      let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];  
+      return this.deps.cnfProductoService.getAllDataComboTypeHead(term, cnfEmpresa)
+        .pipe(
+          tap(() => this.searchFailed = false),
+          catchError((err: any) => {
+            console.log(err);
+            this.searchFailed = true;
+            return of([]);
+          })
+        );
+    } else {
+      return <any>[];
+    }
+
+  }
+  searchProduct = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap(term => {
+        return this.getListCnfProductAsObservable(term);
+      })
+    )
+  
   print(item: any) {
     this.modalRef = this.deps.modalService.open(MessageModalComponent);
     this.modalRef.componentInstance.message = "Impresión de comprobante";

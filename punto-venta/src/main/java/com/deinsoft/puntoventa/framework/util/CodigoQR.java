@@ -28,6 +28,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import javax.imageio.ImageIO;
 
 /**
@@ -47,7 +49,7 @@ public class CodigoQR {
     private static final int qr_image_height = 400;
     private static final String IMAGE_FORMAT = "png";
     private static final String IMG_PATH = "qrcode.png";
-    public static String GenerarQR (String pathToGenerate, String data) throws Exception{
+    public static String GenerarQR (String data) throws Exception{
  
         // Encode URL in QR format
         BitMatrix matrix;
@@ -66,12 +68,14 @@ public class CodigoQR {
                     image.setRGB(x, y, (grayValue == 0 ? 0 : 0xFFFFFF));
                 }
             }
+            Path temp = Files.createTempFile("", IMG_PATH);
+            String absolutePath = temp.toString();
             // Write the image to a file
-            FileOutputStream qrCode = new FileOutputStream(pathToGenerate + IMG_PATH);
+            FileOutputStream qrCode = new FileOutputStream(absolutePath);
             ImageIO.write(image, IMAGE_FORMAT, qrCode);
 
             qrCode.close();
-            return pathToGenerate + IMG_PATH;
+            return absolutePath;
         } catch (WriterException e) {
             e.printStackTrace(System.err);
             return "";

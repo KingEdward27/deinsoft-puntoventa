@@ -16,9 +16,13 @@ export class CnfMonedaComponent extends GenericListComponent implements OnInit{
     "tableName": "cnf_moneda",
     "title": "Moneda",
     "columnsList":[{tableName: "cnf_moneda",columnName:"codigo",filterType:"text"},
-                   {tableName: "cnf_moneda",columnName:"nombre",filterType:"none"}],
+                   {tableName: "cnf_moneda",columnName:"nombre",filterType:"none"},
+                   {tableName: "cnf_moneda",columnName:"simbolo",filterType:"none"},
+                   {tableName: "cnf_moneda",columnName:"descripcion_plural",filterType:"none"}],
     "columnsForm":[{tableName: "cnf_moneda", "columnName":"codigo","type":"input"},
-                   {tableName: "cnf_moneda", "columnName":"nombre","type":"input"}
+                   {tableName: "cnf_moneda", "columnName":"nombre","type":"input"},
+                   {tableName: "cnf_moneda", "columnName":"simbolo","type":"input"},
+                   {tableName: "cnf_moneda", "columnName":"descripcion_plural","type":"input"}
            ],
     //filters sería para filtros adicionales
     "conditions":[],

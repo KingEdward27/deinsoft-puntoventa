@@ -12,7 +12,6 @@ export class CnfProducto {
 	costo!: number;
 	precio!: number;
 	existencia!: number;
-	fechaRegistro!: dayjs.Dayjs | null;
 	rutaImagen: string = "";
 	flagEstado: string = "";
 	barcode: string = "";
@@ -21,4 +20,5 @@ export class CnfProducto {
 	cnfSubCategoria: CnfSubCategoria = new CnfSubCategoria();
 	cnfMarca: CnfMarca = new CnfMarca();
 	token?: string = "";
+	file:any;
 };

@@ -12,6 +12,8 @@ import com.deinsoft.puntoventa.business.model.CnfProducto;
 import com.deinsoft.puntoventa.business.repository.CnfProductoRepository;
 import com.deinsoft.puntoventa.business.service.CnfProductoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.service.StorageService;
+import com.deinsoft.puntoventa.config.AppConfig;
 import com.deinsoft.puntoventa.framework.util.CodigoQR;
 import com.deinsoft.puntoventa.framework.util.GenerateItextPdf;
 import com.deinsoft.puntoventa.framework.util.Util;
@@ -20,11 +22,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -34,6 +38,14 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
     @Autowired
     CnfProductoRepository cnfProductoRepository;
 
+    @Autowired
+    StorageService storageService;
+    
+    @Autowired
+    AppConfig appConfig;
+    
+    static DateTimeFormatter YYYYMMDDHHMMSS_FORMATER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    
     public List<CnfProducto> getAllCnfProducto(CnfProducto cnfProducto) {
         List<CnfProducto> cnfProductoList = (List<CnfProducto>) cnfProductoRepository.getAllCnfProducto(
                 cnfProducto.getCodigo().toUpperCase(), 
@@ -52,8 +64,8 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
         }
         return cnfProducto;
     }
-
-    public CnfProducto saveCnfProducto(CnfProducto cnfProducto) {
+    @Transactional
+    public CnfProducto saveCnfProducto(CnfProducto cnfProducto,MultipartFile file) {
         if(cnfProducto.getCnfSubCategoria().getId() == 0){
             cnfProducto.setCnfSubCategoria(null);
         }
@@ -64,6 +76,12 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
             cnfProducto.setCnfUnidadMedida(null);
         }
         cnfProducto.setFechaRegistro(LocalDateTime.now());
+        if (file != null) {
+            String formattedString = cnfProducto.getFechaRegistro().format(YYYYMMDDHHMMSS_FORMATER);
+            cnfProducto.setRutaImagen(appConfig.getUrlBackend() + "/" + appConfig.getFolderResources() + "/" + formattedString + "." + "jpg");
+            storageService.store(file, formattedString + "." + "jpg");
+        }
+        
         CnfProducto cnfProductoResult = cnfProductoRepository.save(cnfProducto);
         return cnfProductoResult;
     }

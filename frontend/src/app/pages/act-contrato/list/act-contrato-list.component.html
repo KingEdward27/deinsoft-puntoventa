@@ -1,0 +1,81 @@
+<ol class="breadcrumb float-xl-right">
+    <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+    <li class="breadcrumb-item"><a href="javascript:;" translate = "webpagos.securityModule"></a></li>
+    <li class="breadcrumb-item active" translate = "webpagos.actContrato.home.title"></li>
+</ol>
+<h1 class="page-header" translate = "webpagos.actContrato.home.title"><small translate = "webpagos.actContrato.home.subTitleList"></small></h1>
+
+<div class="panel panel-inverse">
+    <!-- begin panel-heading -->
+    <div class="panel-heading">
+        <h4 class="panel-title" translate = "webpagos.actContrato.home.title"></h4>
+        <div class="panel-heading-btn">
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i
+                    class="fa fa-expand"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i
+                    class="fa fa-redo"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i
+                    class="fa fa-minus"></i></a>
+
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="col-md-12 table">
+                <tr>
+                    <td>
+                        <div class="col-md-12 col-xs-9" style="margin-left:-15px">
+                            <button class="btn btn-primary" [routerLink]="['/new-act-contrato']"
+                                data-toggle="modal">
+                                <i class="fa fa-plus"></i> {{'webpagos.btnNew' | translate }}
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <table id="dtDataActContrato" class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
+                <thead>
+                    <tr>
+                        <th width="1%">Nro.</th>			<th class="text-nowrap">{{'webpagos.actContrato.fecha' | translate}}</th>
+			<th class="text-nowrap">{{'webpagos.actContrato.serie' | translate}}</th>
+			<th class="text-nowrap">{{'webpagos.actContrato.numero' | translate}}</th>
+			<th class="text-nowrap">{{'webpagos.actContrato.fechaRegistro' | translate}}</th>
+			<th class="text-nowrap">{{'webpagos.actContrato.observacion' | translate}}</th>
+			<th class="text-nowrap">{{'webpagos.actContrato.flagEstado' | translate}}</th>
+			<th class="text-nowrap">{{'webpagos.actContrato.nroPoste' | translate}}</th>
+			<th class="text-nowrap">{{'webpagos.actContrato.urlMap' | translate}}</th>
+			<th class="text-nowrap">{{'webpagos.actContrato.cnfMaestro' | translate}}</th>
+			<th class="text-nowrap">{{'webpagos.actContrato.cnfLocal' | translate}}</th>
+			<th class="text-nowrap">{{'webpagos.actContrato.cnfTipoComprobante' | translate}}</th>
+			<th class="text-nowrap">{{'webpagos.actContrato.cnfFormaPago' | translate}}</th>
+			<th class="text-nowrap">{{'webpagos.actContrato.cnfPlanContrato' | translate}}</th>
+	<th class="text-nowrap">{{'webpagos.actionsText' | translate}}</th>
+		</tr>
+            </thead>
+	<tr>
+                    <th></th>	<th><input type="text" class="form-control-sm" placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.actContrato.serie' | translate}}" name="search-id" [(ngModel)]="modelSearch.serie" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.actContrato.numero' | translate}}" name="search-id" [(ngModel)]="modelSearch.numero" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.actContrato.observacion' | translate}}" name="search-id" [(ngModel)]="modelSearch.observacion" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.actContrato.flagEstado' | translate}}" name="search-id" [(ngModel)]="modelSearch.flagEstado" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.actContrato.nroPoste' | translate}}" name="search-id" [(ngModel)]="modelSearch.nroPoste" (keyUp.enter)="getAllData()"/></th>	<th><input type="text" class="form-control-sm" placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.actContrato.urlMap' | translate}}" name="search-id" [(ngModel)]="modelSearch.urlMap" (keyUp.enter)="getAllData()"/></th>	<th></th>	<th></th>	<th></th>	<th></th>	<th></th></tr><tbody>
+                    
+                    <tr *ngFor="let item of lista; index as i" class="odd gradeX">
+                        <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>			<td>{{item.fecha}}</td>
+			<td>{{item.serie}}</td>
+			<td>{{item.numero}}</td>
+			<td>{{item.fechaRegistro}}</td>
+			<td>{{item.observacion}}</td>
+			<td>{{item.flagEstado}}</td>
+			<td>{{item.nroPoste}}</td>
+			<td>{{item.urlMap}}</td>
+			<td>{{item.cnfMaestro?.nombre}}</td>
+			<td>{{item.cnfLocal?.nombre}}</td>
+			<td>{{item.cnfTipoComprobante?.nombre}}</td>
+			<td>{{item.cnfFormaPago?.nombre}}</td>
+			<td>{{item.cnfPlanContrato?.nombre}}</td>
+<td>
+                            <div class="row">
+                                <div class="col-sm-6 col-xs-6 text-right"><a class="fas fa-edit" (click)="editar(item)" style="cursor: pointer;"
+                                         title="{{'webpagos.btnEdit' | translate}}"></a></div>
+                                <div class="col-sm-6 col-xs-6"><a (click) = "eliminar(item)" style="cursor: pointer;" title="{{'webpagos.btnDelete' | translate}}"><i
+                                            class="fa fa-trash fa-lg"></i></a></div>
+                            </div>
+                        </td></tr>
+                </tbody>	</table>
+    </div>    </div>    </div>

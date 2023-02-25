@@ -48,10 +48,10 @@ export class CnfProductoFormComponent implements OnInit {
   selectDefaultCnfMarca: any = { id: 0, nombre: "- Seleccione -" }; listCnfMarca: any;
   cnfMarca: CnfMarca = new CnfMarca();
   loadingCnfMarca: boolean = false;
-  protected redirect: string = "/cnf-producto";
+  protected redirect: string = "/producto";
   selectedOption: any;
   passwordRepeat: any;
-
+  fileToUpload: File | null = null;
   constructor(private cnfProductoService: CnfProductoService,
     private router: Router,
     private utilService: UtilService,
@@ -95,9 +95,56 @@ export class CnfProductoFormComponent implements OnInit {
     })
 
   }
+  handleFileInput($event: any) {
+    const target = $event.target as HTMLInputElement;
+    this.fileToUpload = $event.target.files.item(0);
+    console.log(this.fileToUpload);
+    // var tmppath = URL.createObjectURL($event.target.files.item(0));
+    // console.log(tmppath);
+    if (this.fileToUpload) {
+      console.log(this.fileToUpload.name);
+      this.model.file = this.fileToUpload;
+
+      // let fileSize0 = this.mediaService.getFileSize(this.fileToUpload.size);
+      // this.fileSize = this.mediaService.getFileSize(this.fileToUpload.size) +
+      //   ' ' +
+      //   this.mediaService.getFileSizeUnit(this.fileToUpload.size);
+      // let fileSizeInWords = this.mediaService.getFileSizeUnit(this.fileToUpload.size);
+      // this.opeVideoService.getVideoPathFromResources(this.fileToUpload.name,this.fileToUpload.size.toString()).subscribe(pathToServedFile => {
+      //   this.opeVideoService.postFile(this.fileToUpload)
+      //     .pipe(map(event => {
+      //       if (event.type == HttpEventType.UploadProgress) {
+      //         var eventTotal = event.total ? event.total : 0;
+      //         this.barWidth = Math.round(event.loaded / eventTotal * 100);
+      //         this.fileProgessSize = `${(
+      //           (fileSize0 * this.barWidth) /
+      //           100
+      //         ).toFixed(2)} ${fileSizeInWords}`;
+      //       } else if (event.type == HttpEventType.Response) {
+      //         this.barWidth = 0;
+      //         this.loadingFile = false;
+      //       }
+      //     })
+      //     )
+      //     .subscribe(data => {
+      //       // console.log(data);
+
+      //     });
+      //   try {
+      //     this.videoSource = pathToServedFile;
+      //   } catch (err) {
+      //     this.errorVideo = 'El video a seleccionar debe estar dentro del servidor establecido en la configuración del sistema';
+      //   }
+      // })
+    }
+    
+
+
+  }
   public save(): void {
     this.model.flagEstado = '1';
-    this.cnfProductoService.save(this.model).subscribe(m => {
+    console.log(this.model);
+    this.cnfProductoService.save(this.model,this.fileToUpload).subscribe(m => {
       console.log(m);
       this.isOk = true;
       this.utilService.msgOkSave();

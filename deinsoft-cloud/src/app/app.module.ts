@@ -75,10 +75,9 @@ import { SegRolComponent } from '@pages/security/seg-rol/seg_rol';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
-import { ActComprobanteFormComponent } from '@pages/act-comprobante/act-comprobante-form/act-comprobante-form.component';
 import { ActComprobanteCompraReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-compra/act-comprobante-compra-report.component';
 import { ActComprobanteReportFormComponent } from '@pages/reports/act-comprobante/act-comprobante-venta/act-comprobante-report.component';
-import { ActComprobanteListFormComponent } from '@pages/reports/act-comprobante/list-act-comprobante-venta/act-comprobante-list.component';
+import { ActComprobanteListFormComponent } from '@pages/act-comprobante/act-comprobante-form/list/act-comprobante-list.component';
 import { InvAlmacenReportFormComponent } from '@pages/reports/inv-almacen/inv-almacen-report.component';
 import { InvMovimientoProductoReportFormComponent } from '@pages/reports/inv-movimiento-producto/inv-movimiento-producto-report.component';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -115,6 +114,8 @@ import { ActComprobanteCompraListFormComponent } from '@pages/act-comprobante/ac
 import { ActComprobanteCompraFormComponent } from './pages/act-comprobante/act-comprobante-compra/form/act-comprobante-compra-form.component';
 import { ActContratoFormComponent } from './pages/act-contrato/act-contrato-form/act-contrato-form.component';
 import { CnfPlanContratoComponent } from './pages/cnf-plan-contrato/cnf-plan-contrato';
+import { CnfEmpresaEmpresaComponent } from '@pages/cnf-empresa/cnf-empresa-empresa';
+import { ActComprobanteFormComponent } from './pages/act-comprobante/act-comprobante-form/form/act-comprobante-form.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -213,7 +214,8 @@ import { CnfPlanContratoComponent } from './pages/cnf-plan-contrato/cnf-plan-con
         CnfProductoFormComponent,
         ActComprobanteCompraListFormComponent,
         ActContratoFormComponent,
-        CnfPlanContratoComponent
+        CnfPlanContratoComponent,
+        CnfEmpresaEmpresaComponent
     ],
     imports: [
         BrowserModule,

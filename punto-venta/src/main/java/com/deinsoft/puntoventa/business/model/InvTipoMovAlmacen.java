@@ -27,8 +27,8 @@ public class InvTipoMovAlmacen implements Serializable {
     @Column(name = "codigo_sunat", length = 2, nullable = true)
     private String codigoSunat;
 
-    @Size(max = 1)
-    @Column(name = "naturaleza", length = 1, nullable = true)
+    @Size(max = 2)
+    @Column(name = "naturaleza", length = 2, nullable = true)
     private String naturaleza;
 
     public long getId() {

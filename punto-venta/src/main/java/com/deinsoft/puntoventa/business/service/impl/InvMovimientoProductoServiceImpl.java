@@ -14,6 +14,8 @@ import com.deinsoft.puntoventa.business.service.InvMovimientoProductoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.model.InvAlmacenProducto;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 @Service
 @Transactional
@@ -73,9 +75,23 @@ public class InvMovimientoProductoServiceImpl
         }
     }
     @Override
+    @Transactional
     public List<InvMovimientoProducto> getReportInvMovimientoProducto(ParamBean paramBean) {
+        
         List<InvMovimientoProducto> list = (List<InvMovimientoProducto>) 
                 invMovimientoProductoRepository.getReportInvMovimientoProducto(paramBean);
+        BigDecimal costo = BigDecimal.ZERO;
+        BigDecimal costoTotal = BigDecimal.ZERO;
+        BigDecimal cantidad = BigDecimal.ZERO;
+        for (InvMovimientoProducto invMovimientoProducto : list) {
+            cantidad = cantidad.add(invMovimientoProducto.getCantidad());
+            costoTotal = costoTotal.add(invMovimientoProducto.getCantidad().multiply(invMovimientoProducto.getValor()));
+            costo = costoTotal.divide(cantidad, 2, RoundingMode.HALF_UP);
+            
+            invMovimientoProducto.setCant(cantidad);
+            invMovimientoProducto.setCostoTotal(costoTotal);
+            invMovimientoProducto.setCosto(costo);
+        }
         return list;
     }
     @Override

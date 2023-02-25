@@ -60,7 +60,7 @@ export class JwtInterceptor implements HttpInterceptor{
                           }
                         }
                       } else {
-                        if(error.status === 500 && error.error.message.includes("ConstraintViolationException")){
+                        if(error.status === 500 && error.error.message?.includes("ConstraintViolationException")){
                           if(error?.url?.includes("delete")){
                             this.utilService.msgProblemDelete();
                           }else{

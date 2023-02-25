@@ -24,7 +24,8 @@ export class CnfEmpresaComponent extends GenericListComponent implements OnInit{
                    {tableName: "cnf_tipo_documento",columnName:"nombre",filterType:"none"}],
     //"columnsList":["name","address","cnf_company.name","cnf_district.name"],
     "foreignTables":[{"tableName":"cnf_distrito","idValue":"cnf_distrito_id"},
-                     {"tableName":"cnf_tipo_documento","idValue":"cnf_tipo_documento_id"}],
+                     {"tableName":"cnf_tipo_documento","idValue":"cnf_tipo_documento_id"},
+                     {"tableName":"cnf_moneda","idValue":"cnf_moneda_id"}],
     "columnsForm":[{tableName: "cnf_empresa", columnName:"nombre",type:"input"},
                    {tableName: "cnf_empresa", columnName:"descripcion",type:"input"},
                    {tableName: "cnf_tipo_documento", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_tipo_documento_id"},
@@ -37,7 +38,12 @@ export class CnfEmpresaComponent extends GenericListComponent implements OnInit{
                    {tableName: "cnf_empresa",columnName:"ruta_pse",type:"input"},
                    {tableName: "cnf_empresa",columnName:"token",type:"input"},
                    {tableName: "cnf_empresa",columnName:"perfil_empresa","type":"select",loadState : 1, relatedBy :"perfil_empresa",
-                   listData:[]}
+                   listData:[]},
+                   {tableName: "cnf_empresa",columnName:"flag_compra_rapida","type":"select",loadState : 1, relatedBy :"flag_compra_rapida",
+                   listData:[]},
+                   {tableName: "cnf_empresa",columnName:"flag_venta_rapida","type":"select",loadState : 1, relatedBy :"flag_venta_rapida",
+                   listData:[]},
+                   {tableName: "cnf_moneda", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_moneda_id"},
            ],
     //filters sería para filtros adicionales
     "conditions":[],
@@ -56,6 +62,12 @@ export class CnfEmpresaComponent extends GenericListComponent implements OnInit{
     this.prop.columnsForm[11].listData.push([2, "Servicio de pago mensual"]); 
     this.prop.columnsForm[11].listData.push([3, "Colegio"]); 
     this.prop.columnsForm[11].listData.push([4, "Lavanderia"]); 
+
+    this.prop.columnsForm[12].listData.push([0, "NO"]);
+    this.prop.columnsForm[12].listData.push([1, "SI"]);
+
+    this.prop.columnsForm[13].listData.push([0, "NO"]);
+    this.prop.columnsForm[13].listData.push([1, "SI"]);
     super.properties = this.prop;
     console.log(this.prop);
     super.ngOnInit();

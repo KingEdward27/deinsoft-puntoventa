@@ -5,11 +5,17 @@ import javax.validation.constraints.*;
 import java.time.*;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity(name = "cnfProducto")
 @Table(name = "cnf_producto")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CnfProducto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,6 +45,8 @@ public class CnfProducto implements Serializable {
     private BigDecimal existencia;
 
     @Column(name = "fecha_registro", nullable = true)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime fechaRegistro;
 
     @Column(name = "ruta_imagen", length = 900, nullable = true)
@@ -52,6 +60,10 @@ public class CnfProducto implements Serializable {
     @Column(name = "barcode", length = 100, nullable = true)
     private String barcode;
 
+//    @Size(max = 300)
+//    @Column(name = "image_path", length = 300, nullable = true)
+//    private String imagePath;
+    
     @NotNull
     @Valid
     @OneToOne
@@ -80,6 +92,9 @@ public class CnfProducto implements Serializable {
     @OneToOne
     @JoinColumn(name = "cnf_categoria_id")
     private CnfCategoria cnfCategoria;
+    
+//    @Transient
+//    private MultipartFile file;
     
     public long getId() {
         return id;
@@ -200,6 +215,7 @@ public class CnfProducto implements Serializable {
     public void setCosto(BigDecimal costo) {
         this.costo = costo;
     }
+
     @Override
     public String toString() {
         return "cnfProducto [id=" + id + ", codigo=" + codigo + ", cnfEmpresa=" + (cnfEmpresa != null ? cnfEmpresa : "") + ", cnfMarca=" + (cnfMarca != null ? cnfMarca : "") + ", cnfSubCategoria=" + (cnfSubCategoria != null ? cnfSubCategoria : "") + ", cnfUnidadMedida=" + (cnfUnidadMedida != null ? cnfUnidadMedida : "") + ", nombre=" + nombre + ", precio=" + precio + ", existencia=" + existencia + ", fechaRegistro=" + fechaRegistro + ", rutaImagen=" + rutaImagen + ", flagEstado=" + flagEstado + ", barcode=" + barcode + "]";

@@ -136,6 +136,26 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label for="numero"
+                                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.nombre'
+                                                | translate}} </label>
+                                            <div class="col-sm-12 col-lg-9">
+                                                <input autofocus class="form-control-sm col-sm-12 col-lg-6"  type="text"
+                                                [(ngModel)]="model.cnfProducto"  
+                                                name="model.cnfProducto"
+                                                #input 
+                                                [ngbTypeahead]="searchProduct"
+                                                [resultTemplate]="rt" 
+                                                [inputFormatter]="formatter"/>
+                                                <ng-template #rt let-r="result" let-t="term">
+                                                    {{ r.nombre}}  -  {{ r.barcode}}
+                                                </ng-template>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
                                 </div>
                             </div>
 
@@ -204,17 +224,17 @@
                                                 <td>{{item.invAlmacen.cnfLocal.nombre}}</td>
                                                 <td>{{item.invAlmacen.nombre}}</td>
                                                 <td>{{item.cnfProducto.nombre}}</td>
-                                                <td class="content-number">{{item.actComprobante.flagIsventa == '0'? item.cantidad : ''}}</td>
-                                                <td class="content-number">{{(item.actComprobante.flagIsventa == '0'? (item.valor?item.valor:0) : '') | number:'1.2-2'}}</td>
-                                                <td class="content-number">{{(item.actComprobante.flagIsventa == '0'? (item.cantidad * (item.valor?item.valor:0)) : '') | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{item.actComprobante.flagIsventa == '2'? item.cantidad : ''}}</td>
+                                                <td class="content-number">{{(item.actComprobante.flagIsventa == '2'? (item.valor?item.valor:0) : '') | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{(item.actComprobante.flagIsventa == '2'? (item.cantidad * (item.valor?item.valor:0)) : '') | number:'1.2-2'}}</td>
                                                 
                                                 <td class="content-number">{{item.actComprobante.flagIsventa == '1'? item.cantidad : ''}}</td>
                                                 <td class="content-number">{{(item.actComprobante.flagIsventa == '1'? (item.valor?item.valor:0) : '') | number:'1.2-2'}}</td>
                                                 <td class="content-number">{{(item.actComprobante.flagIsventa == '1'? (item.cantidad * (item.valor?item.valor:0)) : '') | number:'1.2-2'}}</td>
                                                 
-                                                <td class="content-number">{{item.cantidad}}</td>
-                                                <td class="content-number">{{(item.valor?item.valor:0) | number:'1.2-2'}}</td>
-                                                <td class="content-number">{{(item.cantidad * (item.valor?item.valor:0)) | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{item.cant}}</td>
+                                                <td class="content-number">{{(item.costo) | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{(item.costoTotal) | number:'1.2-2'}}</td>
                                             </tr>
                                         </tbody>
                                         <tfoot>

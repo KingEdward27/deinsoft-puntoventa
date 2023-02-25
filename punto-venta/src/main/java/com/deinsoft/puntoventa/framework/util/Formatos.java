@@ -18,6 +18,7 @@ import java.util.Locale;
 public class Formatos {
 
     public static SimpleDateFormat sdfFecha = new SimpleDateFormat("dd/MM/yyyy");
+    public static SimpleDateFormat sdfFecha3 = new SimpleDateFormat("dd-MM-yyyy");
     public static SimpleDateFormat sdfFecha2 = new SimpleDateFormat("MM/dd/yyyy");
     public static DecimalFormat df = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.US));
     public static DecimalFormat df2 = new DecimalFormat("0.000", DecimalFormatSymbols.getInstance(Locale.US));

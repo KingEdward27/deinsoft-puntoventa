@@ -37,26 +37,16 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         let optionValid = []
         // return this.getProfile();
         let wa = this.appService.getMenu();
-        // console.log(wa);
-        // for (let we in wa){
-        //     console.log(we);
-        // }
+        let url = state.url.split(";").length>0?state.url.split(";")[0].replace("/new-","/"):state.url.replace("/new-","/");
         wa?.forEach(element => {
-            // console.log(element);
-            
-            // console.log(element.children);
-            if (!element.segMenu) {
-                optionValid.push(element)
-            }
-            else if (!element.segMenu.children) {
-                if (element.segMenu.path[0] == state.url) {
-                    optionValid.push(element.segMenu)
+            if (!element.children) {
+                if (element.path == url) {
+                    optionValid.push(element)
                 }
             } else {
-                console.log(element.segMenu.children);
-                let wa = element.segMenu.children.filter(
-                    item => item.path[0] == state.url)
-                // console.log(wa);
+                //console.log(element.children);
+                let wa = element.children.filter(
+                    item => item.path == url || item.children.filter(q => q.path == url).length > 0)
 
                 if (wa.length > 0) {
                     optionValid.push(wa);
@@ -66,16 +56,46 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         }, err => {
             return false
         });
-        // console.log(optionValid);
+        console.log(state.url);
+        
         if (optionValid.length > 0 || state.url == '/' 
-        || state.url == '/generic-form' || state.url == '/generic-child-form' || state.url == '/swagger-ui') {
+        || state.url == '/generic-form' || state.url == '/generic-child-form' || state.url == '/profile' 
+        || state.url == '/swagger-ui' || state.url == '/change-password' || state.url.includes('/recover-password')) {
+            
             return this.getProfile();
         }
         else {
-            // this.router.navigate(['']); // , { queryParams: { returnUrl: state.url }}
             return false;
         }
-        //return this.getProfile();
+        // wa?.forEach(element => {
+        //     if (!element.segMenu) {
+        //         optionValid.push(element)
+        //     }
+        //     else if (!element.segMenu.children) {
+        //         if (element.segMenu.path[0] == state.url) {
+        //             optionValid.push(element.segMenu)
+        //         }
+        //     } else {
+        //         console.log(element.segMenu.children);
+        //         let wa = element.segMenu.children.filter(
+        //             item => item.path[0] == state.url)
+        //         // console.log(wa);
+
+        //         if (wa.length > 0) {
+        //             optionValid.push(wa);
+        //         }
+
+        //     }
+        // }, err => {
+        //     return false
+        // });
+        // if (optionValid.length > 0 || state.url == '/' 
+        // || state.url == '/generic-form' || state.url == '/generic-child-form' || state.url == '/swagger-ui') {
+        //     return this.getProfile();
+        // }
+        // else {
+        //     return false;
+        // }
     }
     canActivateChild(
         next: ActivatedRouteSnapshot,

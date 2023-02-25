@@ -44,6 +44,19 @@ public class InvMovimientoProducto implements Serializable {
     @JoinColumn(name = "act_comprobante_id")
     private ActComprobante actComprobante;
 
+    @OneToOne
+    @JoinColumn(name = "inv_mov_almacen_id")
+    private InvMovAlmacen invMovAlmacen;
+    
+    @Transient
+    private BigDecimal cant;
+    
+    @Transient
+    private BigDecimal costo;
+    
+    @Transient
+    private BigDecimal costoTotal;
+    
     public long getId() {
         return id;
     }
@@ -106,6 +119,38 @@ public class InvMovimientoProducto implements Serializable {
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
+    }
+
+    public InvMovAlmacen getInvMovAlmacen() {
+        return invMovAlmacen;
+    }
+
+    public void setInvMovAlmacen(InvMovAlmacen invMovAlmacen) {
+        this.invMovAlmacen = invMovAlmacen;
+    }
+
+    public BigDecimal getCostoTotal() {
+        return costoTotal;
+    }
+
+    public void setCostoTotal(BigDecimal costoTotal) {
+        this.costoTotal = costoTotal;
+    }
+
+    public BigDecimal getCant() {
+        return cant;
+    }
+
+    public void setCant(BigDecimal cant) {
+        this.cant = cant;
+    }
+
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
     }
 
     @Override

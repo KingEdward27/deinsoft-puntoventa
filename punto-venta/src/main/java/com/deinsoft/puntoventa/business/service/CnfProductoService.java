@@ -8,6 +8,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonService;
 
 import com.deinsoft.puntoventa.business.model.CnfProducto;
 import java.text.ParseException;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -17,7 +18,7 @@ public interface CnfProductoService extends CommonService<CnfProducto> {
 
     public CnfProducto getCnfProducto(Long id);
 
-    public CnfProducto saveCnfProducto(CnfProducto cnfProducto);
+    public CnfProducto saveCnfProducto(CnfProducto cnfProducto,MultipartFile file);
 
     public List<CnfProducto> getAllCnfProducto();
 
