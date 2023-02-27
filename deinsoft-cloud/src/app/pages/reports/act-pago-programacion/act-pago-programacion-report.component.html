@@ -167,10 +167,19 @@
 
                                             <tr *ngFor="let item of listData; index as i" class="odd gradeX">
                                                 <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
-                                                <td>{{item.actComprobante.cnfMaestro.nombres}}</td>
-                                                <td>{{item.actComprobante.serie + '-' +item.actComprobante.numero}}</td>
+                                                <!-- <td>{{item.actComprobante?item.actComprobante.fecha:item.actContrato.fecha}}</td>
+                                                <td>{{item.actComprobante?item.actComprobante.cnfTipoComprobante.nombre : 
+                                                    item.actContrato.cnfTipoComprobante.nombre}}</td>
+                                                <td>{{item.actComprobante?item.actComprobante.serie + '-' +item.actComprobante.numero : 
+                                                    item.actContrato.serie + '-' +item.actContrato.numero}}</td> -->
+
+                                                <td>{{item.actComprobante?
+                                                    item.actComprobante.cnfMaestro.apellidoPaterno + ' ' + item.actComprobante.cnfMaestro.apellidoMaterno + ' ' + item.actComprobante.cnfMaestro.nombres:
+                                                    item.actContrato.cnfMaestro.apellidoPaterno + ' ' + item.actContrato.cnfMaestro.apellidoMaterno + ' ' + item.actContrato.cnfMaestro.nombres}}</td>
+                                                <td>{{item.actComprobante?item.actComprobante.serie + '-' +item.actComprobante.numero : 
+                                                    item.actContrato.serie + '-' +item.actContrato.numero}}</td>
                                                 <td>{{item.fechaVencimiento}}</td>
-                                                <td class="content-number">{{item.actComprobante.cnfMoneda.nombre}}</td>
+                                                <td class="content-number">{{item.actComprobante?item.actComprobante.cnfMoneda.nombre:item.actContrato?.cnfMoneda?.nombre}}</td>
                                                 <td class="content-number">{{item.monto | number:'1.2-2'}}</td>
                                                 <td class="content-number">{{item.montoPendiente | number:'1.2-2'}}</td>
                                                 <td >{{item.montoPendiente == 0? 'CANCELADO':'PENDIENTE'}}</td> 

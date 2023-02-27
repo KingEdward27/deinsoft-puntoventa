@@ -33,12 +33,14 @@ public class ActPagoProgramacion implements Serializable {
     @Column(name = "monto_pendiente", length = 18, nullable = true)
     private BigDecimal montoPendiente;
 
-    @NotNull
-    @Valid
     @OneToOne
     @JoinColumn(name = "act_comprobante_id")
     private ActComprobante actComprobante;
 
+    @OneToOne
+    @JoinColumn(name = "act_contrato_id")
+    private ActContrato actContrato;
+    
     @Transient
     private SegUsuario segUsuario;
     
@@ -109,9 +111,17 @@ public class ActPagoProgramacion implements Serializable {
         this.segUsuario = segUsuario;
     }
 
+    public ActContrato getActContrato() {
+        return actContrato;
+    }
+
+    public void setActContrato(ActContrato actContrato) {
+        this.actContrato = actContrato;
+    }
+
     @Override
     public String toString() {
-        return "actPagoProgramacion [id=" + id + ", actComprobante=" + (actComprobante != null ? actComprobante : "") + ", fecha=" + fecha + ", fechaVencimiento=" + fechaVencimiento + ", monto=" + monto + ", montoPendiente=" + montoPendiente + "]";
+        return "ActPagoProgramacion{" + "id=" + id + ", fecha=" + fecha + ", fechaVencimiento=" + fechaVencimiento + ", monto=" + monto + ", montoPendiente=" + montoPendiente + ", actComprobante=" + actComprobante + ", actContrato=" + actContrato + ", segUsuario=" + segUsuario + ", amtToPay=" + amtToPay + '}';
     }
 
 }

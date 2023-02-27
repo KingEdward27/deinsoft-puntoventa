@@ -161,7 +161,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 			Authentication authentication) throws IOException {
 
 		response.setStatus(HttpStatus.OK.value());
-		objectMapper.writeValue(response.getWriter(), "Yayy you logged in!");
+//		objectMapper.writeValue(response.getWriter(), "Yayy you logged in!");
 	}
 	
 	private void logoutSuccessHandler(
@@ -170,7 +170,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 			Authentication authentication) throws IOException {
 
 		response.setStatus(HttpStatus.OK.value());
-		objectMapper.writeValue(response.getWriter(), "Bye!");
+//		objectMapper.writeValue(response.getWriter(), "Bye!");
 	}
     }
 //    @Order(2)

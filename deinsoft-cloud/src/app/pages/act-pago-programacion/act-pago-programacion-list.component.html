@@ -190,11 +190,13 @@
 
                                             <tr *ngFor="let item of listData; index as i" class="odd gradeX">
                                                 <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
-                                                <td>{{item.actComprobante.fecha}}</td>
-                                                <td>{{item.actComprobante.cnfTipoComprobante.nombre}}</td>
-                                                <td>{{item.actComprobante.serie + '-' +item.actComprobante.numero}}</td>
+                                                <td>{{item.actComprobante?item.actComprobante.fecha:item.actContrato.fecha}}</td>
+                                                <td>{{item.actComprobante?item.actComprobante.cnfTipoComprobante.nombre : 
+                                                    item.actContrato.cnfTipoComprobante.nombre}}</td>
+                                                <td>{{item.actComprobante?item.actComprobante.serie + '-' +item.actComprobante.numero : 
+                                                    item.actContrato.serie + '-' +item.actContrato.numero}}</td>
                                                 <td>{{item.fechaVencimiento}}</td>
-                                                <td class="content-number">{{item.actComprobante.cnfMoneda.nombre}}</td>
+                                                <td class="content-number">{{item.actComprobante?.cnfMoneda.nombre}}</td>
                                                 <td class="content-number">{{item.monto | number:'1.2-2'}}</td>
                                                 <td class="content-number">{{item.montoPendiente | number:'1.2-2'}}</td>
                                                 <td *ngIf="item.montoPendiente && item.montoPendiente > 0" style="width: 20%;" class="content-number">

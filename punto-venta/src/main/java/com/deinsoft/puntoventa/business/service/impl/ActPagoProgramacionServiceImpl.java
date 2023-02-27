@@ -71,7 +71,13 @@ public class ActPagoProgramacionServiceImpl
     public List<ActPagoProgramacion> getAllActPagoProgramacionByCnfMaestro(long id, LocalDate fechaVencimiento) {
         List<ActPagoProgramacion> ActPagoProgramacionList
                 = (List<ActPagoProgramacion>) actPagoProgramacionRepository.findByCnfMaestroId(id,fechaVencimiento)
-                        .stream().filter(item -> item.getActComprobante().getFlagIsventa().equals("1"))
+                        .stream()
+                        .filter(item -> {
+                            System.out.println("getActComprobante " +item.toString());
+                            return (item.getActComprobante() != null && 
+                                item.getActComprobante().getFlagIsventa().equals("1"))
+                                || item.getActComprobante() == null;
+                                })
                         .collect(Collectors.toList());
         return ActPagoProgramacionList;
     }
@@ -79,9 +85,11 @@ public class ActPagoProgramacionServiceImpl
         
         List<ActPagoProgramacion> ActPagoProgramacionList
                 = (List<ActPagoProgramacion>) actPagoProgramacionRepository.findByCnfMaestroId(id,fechaVencimiento)
-                        .stream().filter(item -> !item.getActComprobante().getFlagIsventa().equals("1"))
+                        .stream().filter(item -> item.getActComprobante() != null 
+                                && !item.getActComprobante().getFlagIsventa().equals("1"))
                         .filter(item -> listRoles().stream()
-                                .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActComprobante().getCnfLocal().getCnfEmpresa().getId()))
+                                .anyMatch(predicate -> 
+                                        predicate.getEmpresa().getId() == item.getActComprobante().getCnfLocal().getCnfEmpresa().getId()))
                         .collect(Collectors.toList());
         return ActPagoProgramacionList;
     }

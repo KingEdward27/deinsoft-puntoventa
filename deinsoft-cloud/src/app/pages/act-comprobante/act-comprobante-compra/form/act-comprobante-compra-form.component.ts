@@ -33,6 +33,7 @@ import dayjs from 'dayjs';
 import { AppService } from '@services/app.service';
 import { ActComprobanteService } from '../../act-comprobante.service';
 import { ActComprobante } from '../../act-comprobante.model';
+import { CnfMaestroFormModalComponent } from '../../../cnf-maestro/cnf-maestro-modal/cnf-maestro-form-modal.component';
 
 
 
@@ -91,6 +92,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   public modelOrig: ActComprobante = new ActComprobante();
   cnfProducto: any;
   formatter = (x: { nombre: string }) => x.nombre;
+  formatterCnfMaestro = (x: CnfMaestro ) => (x.apellidoPaterno + ' '+x.apellidoMaterno+ ' '+x.nombres).trim();
 
   loadingCnfImpuestoCondicion: boolean = false;
   selectDefaultImpuestoCondicion: any = { id: 0, nombre: "- Seleccione -" };
@@ -494,5 +496,43 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     this.model.listActComprobanteDetalle.splice(index, 1)
     this.updateTotals()
   }
+  addNewCnfMestro() {
+    this.modalRef = this.modalService.open(CnfMaestroFormModalComponent);
+    this.modalRef.closed.subscribe(result => {
+      this.getListCnfMaestro();
+      // this.model.cnfBpartner = 
+    })
+    this.modalRef.componentInstance.cnfMaestro.subscribe((receivedEntry:CnfMaestro) => {
+      console.log(receivedEntry);
+      this.getListCnfMaestro()
+      this.model.cnfMaestro = receivedEntry
+    })
+  }
+  getListCnfMestroAsObservable(term: any): Observable<any> {
+
+    if (term.length >= 2) {
+      let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+      return this.cnfMaestroService.getAllDataComboTypeHead(term,cnfEmpresa)
+        .pipe(
+          tap(() => this.searchFailed = false),
+          catchError((err: any) => {
+            console.log(err);
+            this.searchFailed = true;
+            return of([]);
+          })
+        );
+    } else {
+      return <any>[];
+    }
+
+  }
+searchCnfMaestro = (text$: Observable<string>) =>
+  text$.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    switchMap(term => {
+      return this.getListCnfMestroAsObservable(term);
+    })
+  )
 }
 

@@ -33,6 +33,9 @@ public class CnfPlanContrato implements Serializable {
     @JoinColumn(name = "cnf_empresa_id")
     private CnfEmpresa cnfEmpresa;
 
+    @Column(name = "dia_vencimiento", length = 2, nullable = true)
+    private Integer diaVencimiento;
+    
     public long getId() {
         return id;
     }
@@ -63,6 +66,14 @@ public class CnfPlanContrato implements Serializable {
 
     public void setCnfEmpresa(CnfEmpresa cnfEmpresa) {
         this.cnfEmpresa = cnfEmpresa;
+    }
+
+    public Integer getDiaVencimiento() {
+        return diaVencimiento;
+    }
+
+    public void setDiaVencimiento(Integer diaVencimiento) {
+        this.diaVencimiento = diaVencimiento;
     }
 
 

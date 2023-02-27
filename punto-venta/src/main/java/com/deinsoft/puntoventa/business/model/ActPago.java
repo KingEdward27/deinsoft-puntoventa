@@ -52,12 +52,18 @@ public class ActPago implements Serializable {
     @Column(name = "vuelto", length = 14, nullable = true)
     private BigDecimal vuelto;
     
+//    @NotNull
+//    @Valid
+//    @OneToOne
+//    @JoinColumn(name = "act_pago_programacion_id")
+//    private ActPagoProgramacion actPagoProgramacion;
+
     @NotNull
     @Valid
     @OneToOne
-    @JoinColumn(name = "act_pago_programacion_id")
-    private ActPagoProgramacion actPagoProgramacion;
-
+    @JoinColumn(name = "cnf_tipo_comprobante_id")
+    private CnfTipoComprobante cnfTipoComprobante;
+    
     @OneToOne
     @JoinColumn(name = "seg_usuario_id")
     private SegUsuario segUsuario;
@@ -66,6 +72,10 @@ public class ActPago implements Serializable {
     @JsonIgnoreProperties(value = {"actPago"}, allowSetters = true)
     private Set<ActPagoDetalle> listActPagoDetalle;
      
+    public void addActPagoDetalle(ActPagoDetalle item) {
+        item.setActPago(this);
+    }
+    
     public long getId() {
         return id;
     }
@@ -82,13 +92,13 @@ public class ActPago implements Serializable {
         this.fecha = fecha;
     }
 
-    public ActPagoProgramacion getActPagoProgramacion() {
-        return actPagoProgramacion;
-    }
-
-    public void setActPagoProgramacion(ActPagoProgramacion actPagoProgramacion) {
-        this.actPagoProgramacion = actPagoProgramacion;
-    }
+//    public ActPagoProgramacion getActPagoProgramacion() {
+//        return actPagoProgramacion;
+//    }
+//
+//    public void setActPagoProgramacion(ActPagoProgramacion actPagoProgramacion) {
+//        this.actPagoProgramacion = actPagoProgramacion;
+//    }
 
     public SegUsuario getSegUsuario() {
         return segUsuario;
@@ -160,6 +170,14 @@ public class ActPago implements Serializable {
 
     public void setVuelto(BigDecimal vuelto) {
         this.vuelto = vuelto;
+    }
+
+    public CnfTipoComprobante getCnfTipoComprobante() {
+        return cnfTipoComprobante;
+    }
+
+    public void setCnfTipoComprobante(CnfTipoComprobante cnfTipoComprobante) {
+        this.cnfTipoComprobante = cnfTipoComprobante;
     }
 
     public Set<ActPagoDetalle> getListActPagoDetalle() {

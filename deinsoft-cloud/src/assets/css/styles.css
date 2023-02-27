@@ -255,3 +255,8 @@ table > thead {
     color: #fff;
     border-radius: .25rem;
   }
+  .map {
+    margin: 10px 0;
+    height: 300px;
+    max-width: 100%;
+  }

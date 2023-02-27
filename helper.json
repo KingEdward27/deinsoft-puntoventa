@@ -1068,6 +1068,29 @@
                 generateFrontend: true,
                 regenerate: true,
                 typeDeleteVoid: "2"
+        },
+        {
+                tableName: "act_pago_detalle",
+                title: "act_pago_detalle",
+                foreignTables: [
+                {tableName: "act_pago",idValue: "act_pago_id",
+                descriptionColumn : "numero"
+                },
+                {tableName: "act_pago_programacion",idValue: "act_pago_programacion_id",
+                descriptionColumn : "fecha"
+                }
+            ],
+                columnsForm: [
+                {columnName: "monto",inputType: "text"
+                }
+            ],
+                columnsList: [
+                    {columnName: "monto",filterType: "text"
+                }
+            ],
+                typeDeleteVoid: "2",
+                regenerate: true,
+                generateFrontend: true
         }
     ]
 }

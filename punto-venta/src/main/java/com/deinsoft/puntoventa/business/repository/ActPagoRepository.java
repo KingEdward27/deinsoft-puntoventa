@@ -12,9 +12,10 @@ public interface ActPagoRepository extends JpaRepository<ActPago,Long> {
 	@Query(value="select p from actPago p ")
 
 	List<ActPago> getAllActPago();
-	@Query(value="select p from actPago p "+
-			"where p.actPagoProgramacion.id =  ?1 ")
-	List<ActPago>findByActPagoProgramacionId(long id);
+        
+//	@Query(value="select p from actPago p "+
+//			"where p.actPagoProgramacion.id =  ?1 ")
+//	List<ActPago>findByActPagoProgramacionId(long id);
 
 
 }

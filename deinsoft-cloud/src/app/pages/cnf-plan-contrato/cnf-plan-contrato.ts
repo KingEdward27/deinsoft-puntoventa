@@ -18,13 +18,12 @@ export class CnfPlanContratoComponent extends GenericListComponent implements On
     "title": "Locales",
     "columnsList":[{tableName: "cnf_plan_contrato", columnName:"nombre",filterType:"text"},
                    {tableName: "cnf_plan_contrato", columnName:"precio",filterType:"text"},
-                   {tableName: "cnf_empresa",columnName:"nombre",filterType:"none"}],
+                   {tableName: "cnf_plan_contrato", columnName:"dia_vencimiento",filterType:"none"}],
     //"columnsList":["name","address","cnf_company.name","cnf_district.name"],
     "foreignTables":[{"tableName":"cnf_empresa","idValue":"cnf_empresa_id"}],
-    "columnsForm":[{tableName: "cnf_empresa", "columnName":"nombre","type":"select",
-                    loadState : 1,relatedBy:"cnf_empresa_id",filters:[]},
-                   {tableName: "cnf_plan_contrato", columnName:"nombre",type:"input"},
-                   {tableName: "cnf_plan_contrato", columnName:"precio",type:"input"}
+    "columnsForm":[{tableName: "cnf_plan_contrato", columnName:"nombre",type:"input"},
+                   {tableName: "cnf_plan_contrato", columnName:"precio",type:"input"},
+                   {tableName: "cnf_plan_contrato", columnName:"dia_vencimiento",type:"input"}
                    
            ],
     //filters sería para filtros adicionales
@@ -44,7 +43,6 @@ export class CnfPlanContratoComponent extends GenericListComponent implements On
     
     let cnfEmpresa = user.profile.split("|")[1];
     this.prop.conditions.push({"columnName":"cnf_plan_contrato.cnf_empresa_id","value":cnfEmpresa});
-    this.prop.columnsForm[0].filters.push({"columnName":"cnf_empresa.cnf_empresa_id","value":cnfEmpresa});
     super.properties = this.prop;
     console.log(this.prop);
     super.ngOnInit();

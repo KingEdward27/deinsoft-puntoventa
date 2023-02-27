@@ -64,7 +64,9 @@
       "codigo": "Codigo ISO",
       "descripcion": "Descripción",
       "validini": "Valido desde",
-      "validfin": "Válido hasta"
+      "validfin": "Válido hasta",
+      "simbolo": "Símbolo",
+      "descripcion_plural": "Descripción plural"
     },
     "cnf_distrito": {
       "home": {
@@ -504,10 +506,9 @@
     },
     "act_contrato": {
       "home": {
-        "title": "Venta de Productos y Servicios",
-        "titleCompra": "Compra de Productos",
-        "subTitleForm": " Mantenimiento de Centro de Costo",
-        "subTitleList": " Listado de Centros de Costo"
+        "title": "Contrato de pagos mensuales",
+        "subTitleForm": " Mantenimiento Contrato de pagos mensuales",
+        "subTitleList": " Listado de Contrato de pagos mensuales"
       },
       "id": "ID",
       "fecha": "Fecha",
@@ -533,7 +534,19 @@
       "fechaHasta":"Fecha fin",
       "envio_pse_flag":"Envío SUNAT",
       "fecha_vencimiento":"Fecha vencimiento",
-      "cnf_plan_contrato":"Plan"
+      "cnf_plan_contrato":"Plan",
+      "direccion":"Direccion"
+    },
+    "cnf_plan_contrato": {
+      "home": {
+        "title": "Planes de contratos",
+        "subTitleForm": " Mantenimiento Planes de contratos",
+        "subTitleList": " Listado de Planes de contratos"
+      },
+      "id": "ID",
+      "nombre": "Plan",
+      "precio": "Precio",
+      "dia_vencimiento":"Día de vencimiento"
     },
     "reportes": {
       "act_comprobante_listado":"Listado de Ventas",

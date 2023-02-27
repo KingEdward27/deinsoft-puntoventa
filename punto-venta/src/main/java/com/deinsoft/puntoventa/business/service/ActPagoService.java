@@ -20,9 +20,9 @@ public interface ActPagoService extends CommonService<ActPago> {
 
     public List<ActPago> getAllActPago();
 
-    public List<ActPago> getAllActPagoByActPagoProgramacion(long id);
+//    public List<ActPago> getAllActPagoByActPagoProgramacion(long id);
 
     public void delete(long id);
 
-    public List<ActPago> saveActPaymentDetailFromList(List<ActPagoProgramacion> listActPayment) throws Exception ;
+//    public List<ActPago> saveActPaymentDetailFromList(List<ActPagoProgramacion> listActPayment) throws Exception ;
 }

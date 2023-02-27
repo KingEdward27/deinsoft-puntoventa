@@ -10,19 +10,25 @@ INSERT INTO cnf_tipo_comprobante (`cnf_tipo_comprobante_id`,`nombre`,`codigo_sun
 INSERT INTO seg_rol (`seg_rol_id`,`descripcion`,`nombre`) VALUES (1,NULL,'ROLE_ADMIN');
 INSERT INTO seg_rol (`seg_rol_id`,`descripcion`,`nombre`) VALUES (2,NULL,'ROLE_USER');
 
-INSERT INTO cnf_empresa (`cnf_empresa_id`,`cnf_tipo_documento_id`,`nombre`,`descripcion`,`nro_documento`,`direccion`,`telefono`,`empresacol`,`cnf_distrito_id`,`estado`,`token`,`ruta_pse`) 
-VALUES (1,3,'DESARROLLO INTEGRAL DE SOFTWARE','DEINSOFT','20534999616','JR LOS CLAVELES 123','1322323',NULL,1004,NULL,NULL,NULL);
-INSERT INTO cnf_empresa (`cnf_empresa_id`,`cnf_tipo_documento_id`,`nombre`,`descripcion`,`nro_documento`,`direccion`,`telefono`,`empresacol`,`cnf_distrito_id`,`estado`,`token`,`ruta_pse`) 
-VALUES (2,3,'BATERIAS DON TELE','BATERIAS DON TELE','12345678901','AV PANAMERICANA SUR 1332 - A','',NULL,1004,'1','Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NTA5MjAwMTYsImlzcyI6IkRFSU5TT0ZUIiwianRpIjoiREVGQUNULUpXVCIsInN1YiI6IjEwNDE0MzE2NTk1L1BFUkVaIERFTEdBRE8gQkxBTkNBIE5FUkkiLCJudW1Eb2MiOiIxMDQxNDMxNjU5NSIsInJhem9uU29jaWFsIjoiUEVSRVogREVMR0FETyBCTEFOQ0EgTkVSSSIsInVzdWF','http://localhost:8080/api/v1/document/send-document');
+INSERT INTO cnf_moneda (cnf_moneda_id, nombre, simbolo, descripcion_plural,codigo) 
+values (1, 'SOL','S/', 'SOLES','PEN');
 
-INSERT INTO seg_usuario (`seg_usuario_id`,`nombre`,`email`,`password`,`estado`,`cnf_empresa_id`,`cnf_empresa`) 
-VALUES (1,'admin','edward21.sistemas@gmail.com','$2a$10$ySSHW/94asbWwyduiUu6t./z761Sqgo0kJA9Q0/DexTBv9wY267wu',1,1,NULL);
-INSERT INTO seg_usuario (`seg_usuario_id`,`nombre`,`email`,`password`,`estado`,`cnf_empresa_id`,`cnf_empresa`) 
-VALUES (3,'antonio','facturacionelectronica@opendeinsoft.com','$2a$10$ySSHW/94asbWwyduiUu6t./z761Sqgo0kJA9Q0/DexTBv9wY267wu',1,1,NULL);
-INSERT INTO seg_usuario (`seg_usuario_id`,`nombre`,`email`,`password`,`estado`,`cnf_empresa_id`,`cnf_empresa`) 
-VALUES (4,'diana','dmra2001@gmail.com','$2a$10$PXjaRqL5mK1fp4kwGdtcO.i53gTzEbRnGOJUHCt4vKlVefdpks0HC',1,2,NULL);
-INSERT INTO seg_usuario (`seg_usuario_id`,`nombre`,`email`,`password`,`estado`,`cnf_empresa_id`,`cnf_empresa`) 
-VALUES (7,'diana2','edward21.sistemas2@gmail.com','$2a$10$1o1fhysFm2i/ZLZwH.mGA.g8XK4u3qT54kNomb9mPZ2/DmOo7VaZC',1,2,NULL);
+INSERT INTO cnf_empresa (`cnf_empresa_id`,`cnf_tipo_documento_id`,`nombre`,`descripcion`,`nro_documento`,`direccion`,`telefono`,`empresacol`,
+`cnf_distrito_id`,`estado`,`token`,`ruta_pse`,cnf_moneda_id) 
+VALUES (1,3,'DESARROLLO INTEGRAL DE SOFTWARE','DEINSOFT','20534999616','JR LOS CLAVELES 123','1322323',NULL,1004,NULL,NULL,NULL,1);
+INSERT INTO cnf_empresa (`cnf_empresa_id`,`cnf_tipo_documento_id`,`nombre`,`descripcion`,`nro_documento`,`direccion`,`telefono`,`empresacol`,
+`cnf_distrito_id`,`estado`,`token`,`ruta_pse`, cnf_moneda_id) 
+VALUES (2,3,'BATERIAS DON TELE','BATERIAS DON TELE','12345678901','AV PANAMERICANA SUR 1332 - A','',NULL,1004,'1',
+'Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NTA5MjAwMTYsImlzcyI6IkRFSU5TT0ZUIiwianRpIjoiREVGQUNULUpXVCIsInN1YiI6IjEwNDE0MzE2NTk1L1BFUkVaIERFTEdBRE8gQkxBTkNBIE5FUkkiLCJudW1Eb2MiOiIxMDQxNDMxNjU5NSIsInJhem9uU29jaWFsIjoiUEVSRVogREVMR0FETyBCTEFOQ0EgTkVSSSIsInVzdWF','http://localhost:8080/api/v1/document/send-document',1);
+
+INSERT INTO seg_usuario (`seg_usuario_id`,`nombre`,`email`,`password`,`estado`,`cnf_empresa_id`) 
+VALUES (1,'admin','edward21.sistemas@gmail.com','$2a$10$ySSHW/94asbWwyduiUu6t./z761Sqgo0kJA9Q0/DexTBv9wY267wu',1,1);
+INSERT INTO seg_usuario (`seg_usuario_id`,`nombre`,`email`,`password`,`estado`,`cnf_empresa_id`) 
+VALUES (3,'antonio','facturacionelectronica@opendeinsoft.com','$2a$10$ySSHW/94asbWwyduiUu6t./z761Sqgo0kJA9Q0/DexTBv9wY267wu',1,1);
+INSERT INTO seg_usuario (`seg_usuario_id`,`nombre`,`email`,`password`,`estado`,`cnf_empresa_id`) 
+VALUES (4,'diana','dmra2001@gmail.com','$2a$10$PXjaRqL5mK1fp4kwGdtcO.i53gTzEbRnGOJUHCt4vKlVefdpks0HC',1,2);
+INSERT INTO seg_usuario (`seg_usuario_id`,`nombre`,`email`,`password`,`estado`,`cnf_empresa_id`) 
+VALUES (7,'diana2','edward21.sistemas2@gmail.com','$2a$10$1o1fhysFm2i/ZLZwH.mGA.g8XK4u3qT54kNomb9mPZ2/DmOo7VaZC',1,2);
 
 INSERT INTO seg_accion (seg_accion_id,nombre) values (1,'VER OPCIÓN');
 
@@ -277,3 +283,5 @@ INSERT INTO inv_tipo_mov_almacen(inv_tipo_mov_almacen_id,nombre,codigo_sunat,nat
 INSERT INTO inv_tipo_mov_almacen(inv_tipo_mov_almacen_id,nombre,codigo_sunat,naturaleza) values(null,'OTROS 7','97','');
 INSERT INTO inv_tipo_mov_almacen(inv_tipo_mov_almacen_id,nombre,codigo_sunat,naturaleza) values(null,'OTROS 8','98','');
 INSERT INTO inv_tipo_mov_almacen(inv_tipo_mov_almacen_id,nombre,codigo_sunat,naturaleza) values(null,'OTROS ','99','');
+
+

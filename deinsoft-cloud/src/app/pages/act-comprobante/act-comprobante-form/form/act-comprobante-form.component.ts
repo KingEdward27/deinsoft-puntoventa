@@ -75,10 +75,12 @@ export class ActComprobanteFormComponent implements OnInit {
   selectDefaultCnfMoneda: any = { id: 0, nombre: "- Seleccione -" }; listCnfMoneda: any;
   cnfMoneda: CnfMoneda = new CnfMoneda();
   loadingCnfMoneda: boolean = false;
-  selectDefaultCnfLocal: any = { id: 0, nombre: "- Seleccione -" }; listCnfLocal: any;
+  selectDefaultCnfLocal: any = { id: 0, nombre: "- Seleccione -" }; 
+  listCnfLocal: any;
   cnfLocal: CnfLocal = new CnfLocal();
   loadingCnfLocal: boolean = false;
-  selectDefaultCnfTipoComprobante: any = { id: 0, nombre: "- Seleccione -" }; listCnfTipoComprobante: any;
+  selectDefaultCnfTipoComprobante: any = { id: 0, nombre: "- Seleccione -" }; 
+  listCnfTipoComprobante: any;
   cnfTipoComprobante: CnfTipoComprobante = new CnfTipoComprobante();
   loadingCnfTipoComprobante: boolean = false;
   selectDefaultInvAlmacen: any = { id: 0, nombre: "- Seleccione -" }; listInvAlmacen: any;

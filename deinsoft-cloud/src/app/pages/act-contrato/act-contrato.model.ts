@@ -35,4 +35,5 @@ export class ActContrato {
 	cnfTipoComprobante: CnfTipoComprobante = new CnfTipoComprobante();
 	cnfPlanContrato: CnfPlanContrato = new CnfPlanContrato();
 	token?: string = "";
+	direccion: string = "";
 };

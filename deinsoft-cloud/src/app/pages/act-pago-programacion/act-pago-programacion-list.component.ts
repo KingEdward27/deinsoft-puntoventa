@@ -35,7 +35,8 @@ import { ActComprobante } from '@pages/act-comprobante/act-comprobante.model';
 import { ActComprobanteService } from '@pages/act-comprobante/act-comprobante.service';
 import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
 import { CommonReportFormComponent, MyBaseComponentDependences } from '@pages/reports/base/common-report.component';
-
+import { ActPagoModalComponent } from '../act-pago/act-pago-modal/act-pago-modal.component';
+import { ActPagoDetalle } from '../../business/model/act-pago-detalle.model';
 
 
 @Component({
@@ -108,9 +109,22 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
   ngOnInit(): void {
     this.isDataLoaded = false;
     this.titleExport = "Lista de Cuentas x Cobrar/x Pagar"
+    
+
+    this.selectThisMonth();
+    // this.model.fechaVencimiento 
+    // = this.deps.dateAdapter.toModel(this.deps.ngbCalendar.getToday()).toString();
     super.ngOnInit();
     //this.getListData();
   }
+  selectThisMonth() {
+    let year = new Date().getFullYear();
+    let month = new Date().getMonth()+1;
+    let day = new Date(year, month, 0).getDate();
+    
+    this.model.fechaVencimiento  = this.deps.dateAdapter
+    .toModel({year: year, month: month, day: day}).toString();
+}
   getListData() {
     if (!this.model.cnfMaestro.id) {
       this.deps.utilService.msgWarning("No puede continuar","Debe seleccionar al cliente o proveedor")
@@ -201,14 +215,36 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
     // });
     if(!error){
       console.log(this.listData);
-      this.deps.actPagoService.saveFromList(this.listData).subscribe(m => {
-        console.log(m);
-        this.isOk = true;
-        this.deps.utilService.msgOkSave();
-        window.location.reload();
-      }, err => {
-        console.log(err);
-      });
+      this.modalRef = this.deps.modalService.open(ActPagoModalComponent, {
+        size: 'lg',
+        });
+
+        this.listData.forEach(element => {
+          if (element.amtToPay > 0) {
+             let actPagoDetalle = new ActPagoDetalle();
+             actPagoDetalle.monto = element.amtToPay
+             actPagoDetalle.actPagoProgramacion = element;
+             this.modalRef.componentInstance.model.cnfMaestro = element.actContrato.cnfMaestro;
+             this.modalRef.componentInstance.model.listActPagoDetalle.push(actPagoDetalle);
+          }
+        });
+        this.modalRef.componentInstance.model.subtotal = this.total / 1.18;
+        this.modalRef.componentInstance.model.igv = this.total - this.modalRef.componentInstance.model.subtotal;
+        this.modalRef.componentInstance.model.total = this.total;
+      ;
+      // this.modalRef.componentInstance.id = m.id;
+      this.modalRef.closed.subscribe(result => {
+        this.deps.router.navigate(["/venta"]);
+        // this.model.cnfBpartner = 
+      })
+      // this.deps.actPagoService.saveFromList(this.listData).subscribe(m => {
+      //   console.log(m);
+      //   this.isOk = true;
+      //   this.deps.utilService.msgOkSave();
+      //   window.location.reload();
+      // }, err => {
+      //   console.log(err);
+      // });
     }
     
 

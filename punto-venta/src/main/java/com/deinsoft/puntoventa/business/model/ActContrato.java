@@ -89,6 +89,9 @@ public class ActContrato implements Serializable {
     @Column(name = "nro_poste", length = 10)
     private String nroPoste;
     
+    @Column(name = "direccion", length = 1000)
+    private String direccion;
+    
     @Column(name = "url_map", length = 1000)
     private String urlMap;
     
@@ -202,6 +205,14 @@ public class ActContrato implements Serializable {
 
     public void setNroPoste(String nroPoste) {
         this.nroPoste = nroPoste;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getUrlMap() {

@@ -40,24 +40,24 @@
                 <div class="table-responsive">
                     <form class="col-sm-12" style="padding-top: 6px;">
                         <div class="row">
-                            <div class="col-lg-12 col-sm-12 col-xs-12">
+                            <div class="col-lg-7 col-sm-12 col-xs-12">
                                 <div class="row">
-                                    <ng-container *ngFor="let item of error" >
+                                    <ng-container *ngFor="let item of error">
                                         <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error">{{item}}</div>
                                     </ng-container>
-                                    
-                                    
+
+
                                 </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-sm-12 col-xs-12">
+                                <div class="row pl-5 pr-5">
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label
-                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_local'
+                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_local'
                                                 |
                                                 translate}} <span *ngIf="loadingCnfLocal"
                                                     class="spinner-border spinner-border-sm mr-1"></span><span
                                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
-                                            <div class="col-sm-12 col-lg-12">
+                                            <div class="col-sm-12 col-lg-7">
                                                 <select name="model.cnfLocal" [compareWith]="compareCnfLocal"
                                                     [(ngModel)]="model.cnfLocal"
                                                     class="form-control-sm col-sm-12 col-lg-12">
@@ -71,19 +71,19 @@
                                                     </option>
 
                                                 </select>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-sm-12 col-xs-12">
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
 
-                                        <div class="form-group-sm">
+                                        <div class="form-group-sm row">
                                             <label for="fecha"
-                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_contrato.fecha'
+                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.fecha'
                                                 |
                                                 translate}} <span
                                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
                                                 <div class="input-group input-group-sm">
                                                     <input placeholder="dd/mm/yyyy"
                                                         class="form-control-sm-dp col-xs-10 col-sm-10 col-md-10 col-lg-8"
@@ -97,24 +97,23 @@
                                                     </div>
 
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-sm-12 col-xs-12">
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label
-                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_tipo_comprobante'
+                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_tipo_comprobante'
                                                 |
                                                 translate}} <span *ngIf="loadingCnfTipoComprobante"
                                                     class="spinner-border spinner-border-sm mr-1"></span><span
                                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
-                                            <div class="col-sm-12 col-lg-12">
+                                            <div class="col-sm-12 col-lg-7">
                                                 <select name="model.cnfTipoComprobante"
                                                     [compareWith]="compareCnfTipoComprobante"
                                                     [(ngModel)]="model.cnfTipoComprobante"
-                                                    class="form-control-sm col-sm-12 col-lg-12"
-                                                    (change)="loadSerie()">
+                                                    class="form-control-sm col-sm-12 col-lg-12" (change)="loadSerie()">
                                                     <option *ngIf="loadingCnfTipoComprobante" [ngValue]="0"
                                                         selected="selected">Cargando...
                                                     </option>
@@ -129,47 +128,45 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    <div class="col-lg-3 col-sm-12 col-xs-12">
+
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label for="serie"
-                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_contrato.serie'
+                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.serie'
                                                 |
                                                 translate}} <span
                                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
-                                            <div class="col-sm-12 col-lg-12">
-                                                <input type="text" 
-                                                    [(ngModel)]="model.serie" maxlength="4" 
-                                                    name="serie"
+                                            <div class="col-sm-12 col-lg-7">
+                                                <input type="text" [(ngModel)]="model.serie" maxlength="4" name="serie"
                                                     id="serie" name="serie" class="form-control-sm col-sm-12 col-lg-12"
                                                     placeholder="Ingrese serie" disabled />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-sm-12 col-xs-12">
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label for="numero"
-                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_contrato.numero'
+                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.numero'
                                                 | translate}} <span
                                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
-                                            <div class="col-sm-12 col-lg-12">
+                                            <div class="col-sm-12 col-lg-7">
                                                 <input type="text" [(ngModel)]="model.numero" maxlength="8"
                                                     name="numero" id="numero" name="numero"
                                                     class="form-control-sm col-sm-12 col-lg-12"
-                                                    placeholder="Número generado" readonly = "readonly" disabled />
+                                                    placeholder="Número generado" readonly="readonly" disabled />
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    <div class="col-lg-6 col-sm-12 col-xs-12">
+
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label
-                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_maestro'
+                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_maestro'
                                                 |
                                                 translate}} <span *ngIf="loadingCnfMaestro"
                                                     class="spinner-border spinner-border-sm mr-1"></span><span
                                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
-                                            <div class="col-sm-12 col-lg-12">
+                                            <div class="col-sm-12 col-lg-7">
                                                 <!-- <ng-select [items]="listCnfMaestro" class="col-sm-12 col-lg-6" 
                                                         name="selectedCnfMaestro"
                                                         bindLabel="name"
@@ -178,21 +175,18 @@
                                                         [(ngModel)]="selectedCnfMaestro"
                                                         [clearable] = "false">
                                                 </ng-select> -->
-                                                <input class="form-control-sm col-sm-12 col-lg-10"  type="text"
-                                                    [(ngModel)]="model.cnfMaestro"  
-                                                    name="model.cnfMaestro"
-                                                    #input2 
-                                                    [ngbTypeahead]="searchCnfMaestro"
-                                                    [resultTemplate]="rt2" 
-                                                    [inputFormatter]="formatterCnfMaestro"/>
-                                                    <ng-template #rt2 let-r="result" let-t="term">
-                                                        {{ r.apellidoPaterno}}  {{ r.apellidoMaterno}}  {{ r.nombres}}  -  {{ r.nroDoc}}
-                                                    </ng-template>
+                                                <input class="form-control-sm col-sm-12 col-lg-10" type="text"
+                                                    [(ngModel)]="model.cnfMaestro" name="model.cnfMaestro" #input2
+                                                    [ngbTypeahead]="searchCnfMaestro" [resultTemplate]="rt2"
+                                                    [inputFormatter]="formatterCnfMaestro" />
+                                                <ng-template #rt2 let-r="result" let-t="term">
+                                                    {{ r.apellidoPaterno}} {{ r.apellidoMaterno}} {{ r.nombres}} - {{
+                                                    r.nroDoc}}
+                                                </ng-template>
                                                 &nbsp;
-                                                <a class="fas fa-plus"
-                                                    style="cursor: pointer;" (click)="addNewCnfMestro()"
-                                                    title="agregar"></a>
-                                                
+                                                <a class="fas fa-plus" style="cursor: pointer;"
+                                                    (click)="addNewCnfMestro()" title="agregar"></a>
+
                                                 <!-- <select name="model.cnfMaestro" [compareWith]="compareCnfMaestro"
                                                     [(ngModel)]="model.cnfMaestro"
                                                     class="form-control-sm col-sm-12 col-lg-12">
@@ -209,15 +203,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-sm-12 col-xs-12">
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label
-                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_forma_pago'
+                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_forma_pago'
                                                 |
                                                 translate}} <span *ngIf="loadingCnfFormaPago"
                                                     class="spinner-border spinner-border-sm mr-1"></span><span
                                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
-                                            <div class="col-sm-12 col-lg-12">
+                                            <div class="col-sm-12 col-lg-7">
                                                 <select name="model.cnfFormaPago" [compareWith]="compareCnfFormaPago"
                                                     [(ngModel)]="model.cnfFormaPago"
                                                     class="form-control-sm col-sm-12 col-lg-12">
@@ -236,19 +230,21 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-3 col-sm-12 col-xs-12">
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label
-                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_plan_contrato'
+                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_plan_contrato'
                                                 |
                                                 translate}} <span *ngIf="loadingCnfPlanContrato"
                                                     class="spinner-border spinner-border-sm mr-1"></span><span
                                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
-                                            <div class="col-sm-12 col-lg-12">
-                                                <select name="model.cnfPlanContrato" [compareWith]="compareCnfPlanContrato"
+                                            <div class="col-sm-12 col-lg-7">
+                                                <select name="model.cnfPlanContrato"
+                                                    [compareWith]="compareCnfPlanContrato"
                                                     [(ngModel)]="model.cnfPlanContrato"
                                                     class="form-control-sm col-sm-12 col-lg-12">
-                                                    <option *ngIf="loadingCnfPlanContrato" [ngValue]="0" selected="selected">
+                                                    <option *ngIf="loadingCnfPlanContrato" [ngValue]="0"
+                                                        selected="selected">
                                                         Cargando...</option>
                                                     <option *ngIf="!loadingCnfPlanContrato"
                                                         [ngValue]="selectDefaultCnfPlanContrato">
@@ -261,15 +257,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    
-                                    <div class="col-lg-9 col-sm-12 col-xs-12">
+
+
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label for="observacion"
-                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_contrato.observacion'
+                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.observacion'
                                                 |
                                                 translate}}</label>
-                                            <div class="col-sm-12 col-lg-12">
+                                            <div class="col-sm-12 col-lg-7">
                                                 <input type="text" [(ngModel)]="model.observacion" maxlength="100"
                                                     name="observacion" id="observacion" name="observacion"
                                                     class="form-control-sm col-sm-12 col-lg-12"
@@ -282,35 +278,94 @@
 
 
                             </div>
-                            
-                            
+                            <div class="col-lg-5 col-sm-12 col-xs-12">
+                                <div class="form-group-sm row">
+                                    <label class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.act_contrato.direccion'
+                                        |
+                                        translate}} <span *ngIf="loadingCnfMaestro"
+                                            class="spinner-border spinner-border-sm mr-1"></span><span
+                                            style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+
+                                    <div class="col-sm-12 col-lg-8">
+                                        <input placeholder="search for location" autocorrect="off" autocapitalize="off"
+                                            spellcheck="off" type="text" class="form-control-sm col-sm-12 col-lg-12"
+                                            #search />
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="map" #map></div>
+
+                                <div *ngFor="let entry of entries">
+                                    <table *ngIf="entry.place" [style.borderColor]="entry.color">
+                                        <thead>
+                                            <tr>
+                                                <th>
+
+                                                </th>
+                                                <th>short_name</th>
+                                                <th>types</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="2">{{ entry.place.name }}</td>
+                                                <td>name</td>
+                                            </tr>
+                                            <tr *ngFor="let component of entry.place.address_components">
+                                                <td>{{ component.long_name }}</td>
+                                                <td>{{ component.short_name }}</td>
+                                                <td>{{ component.types }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2">⇒ Parsed as</th>
+                                                <th>field</th>
+                                            </tr>
+                                            <tr *ngFor="let locationField of locationFields">
+                                                <td colspan="2">{{ entry.location[locationField] }}</td>
+                                                <td>{{ locationField }}</td>
+                                            </tr>
+                                            <!--tr>
+                                          <td colspan="3">
+                                            <pre>{{ entry.place | json }}</pre>
+                                          </td>
+                                        </tr-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="row">
                             <div class="col-lg-12 col-sm-12 col-xs-12 align-middle text-center">
-                            
+
                                 <div class="form-group row">
-        
+
                                     <div class="col-lg-4 col-sm-12" style="padding-top: 20px;margin: auto;">
                                         <div class="row justify-content-center">
                                             <div class="col-xl-6 col-lg-6 col-md-12" style="margin-left: 50x;">
-                                                <a class="btn btn-default col-12" (click)="getBack()" data-toggle="modal">
-                                                    <i class="fa fa-arrow-circle-left"></i> {{'webpagos.btnBack' | translate }}
+                                                <a class="btn btn-default col-12" (click)="getBack()"
+                                                    data-toggle="modal">
+                                                    <i class="fa fa-arrow-circle-left"></i> {{'webpagos.btnBack' |
+                                                    translate }}
                                                 </a>
                                             </div>
                                             <div class="col-xl-6 col-lg-6 col-md-12" style="margin-left: 20x;">
                                                 <a class="btn btn-primary col-12" (click)="save()" data-toggle="modal">
                                                     <i [ngClass]="id ? 'fa fa-pen' : 'fa fa-plus'"></i> {{ id ?
                                                     ('webpagos.btnEdit' | translate):('webpagos.btnSave' | translate) }}
-                                                    </a>
+                                                </a>
                                             </div>
-        
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        
+
                     </form>
                 </div>
             </div>

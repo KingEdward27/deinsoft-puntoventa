@@ -15,7 +15,7 @@ public interface ActContratoService extends CommonService<ActContrato> {
 
     public ActContrato getActContrato(Long id);
 
-    public ActContrato saveActContrato(ActContrato actContrato);
+    public ActContrato saveActContrato(ActContrato actContrato) throws Exception;
 
     public List<ActContrato> getAllActContrato();
 

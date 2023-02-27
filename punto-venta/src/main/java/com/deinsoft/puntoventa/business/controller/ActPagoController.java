@@ -66,20 +66,20 @@ public class ActPagoController extends CommonController<ActPago, ActPagoService>
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/get-all-act-pago-by-act-pago-programacion")
-    public List<ActPago> getAllActPagoByActPagoProgramacion(@Param("id") Long id) {
-        List<ActPago> actPagoList = actPagoService.getAllActPagoByActPagoProgramacion(id);
-        return actPagoList;
-    }
+//    @GetMapping(value = "/get-all-act-pago-by-act-pago-programacion")
+//    public List<ActPago> getAllActPagoByActPagoProgramacion(@Param("id") Long id) {
+//        List<ActPago> actPagoList = actPagoService.getAllActPagoByActPagoProgramacion(id);
+//        return actPagoList;
+//    }
 
-    @PostMapping(value = "/save-list-act-pago")
-    public ResponseEntity<?> saveListActPaymentDetail(
-            @RequestBody List<ActPagoProgramacion> listActPayment, HttpServletRequest request) throws Exception {
-        SegUsuario segUsuario = auth.getLoggedUserdata();
-        listActPayment.forEach(data -> {
-            data.setSegUsuario(segUsuario);
-        });
-        List<ActPago> listActPaymentDetailResult = actPagoService.saveActPaymentDetailFromList(listActPayment);
-        return ResponseEntity.status(HttpStatus.CREATED).body(listActPaymentDetailResult);
-    }
+//    @PostMapping(value = "/save-list-act-pago")
+//    public ResponseEntity<?> saveListActPaymentDetail(
+//            @RequestBody List<ActPagoProgramacion> listActPayment, HttpServletRequest request) throws Exception {
+//        SegUsuario segUsuario = auth.getLoggedUserdata();
+//        listActPayment.forEach(data -> {
+//            data.setSegUsuario(segUsuario);
+//        });
+//        List<ActPago> listActPaymentDetailResult = actPagoService.saveActPaymentDetailFromList(listActPayment);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(listActPaymentDetailResult);
+//    }
 }

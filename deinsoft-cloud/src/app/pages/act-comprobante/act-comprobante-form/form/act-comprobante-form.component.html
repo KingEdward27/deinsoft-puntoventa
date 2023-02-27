@@ -171,14 +171,6 @@
                                                     class="spinner-border spinner-border-sm mr-1"></span><span
                                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                                             <div class="col-sm-12 col-lg-12">
-                                                <!-- <ng-select [items]="listCnfMaestro" class="col-sm-12 col-lg-6" 
-                                                        name="selectedCnfMaestro"
-                                                        bindLabel="name"
-                                                        role="listbox"
-                                                        placeholder = "- Seleccione -"
-                                                        [(ngModel)]="selectedCnfMaestro"
-                                                        [clearable] = "false">
-                                                </ng-select> -->
                                                 <input class="form-control-sm col-sm-12 col-lg-10"  type="text"
                                                     [(ngModel)]="model.cnfMaestro"  
                                                     name="model.cnfMaestro"
@@ -194,19 +186,6 @@
                                                     style="cursor: pointer;" (click)="addNewCnfMestro()"
                                                     title="agregar"></a>
                                                 
-                                                <!-- <select name="model.cnfMaestro" [compareWith]="compareCnfMaestro"
-                                                    [(ngModel)]="model.cnfMaestro"
-                                                    class="form-control-sm col-sm-12 col-lg-12">
-                                                    <option *ngIf="loadingCnfMaestro" [ngValue]="0" selected="selected">
-                                                        Cargando...</option>
-                                                    <option *ngIf="!loadingCnfMaestro"
-                                                        [ngValue]="selectDefaultCnfMaestro">
-                                                        {{selectDefaultCnfMaestro.nombre}}</option>
-                                                    <option *ngFor="let item of listCnfMaestro; index as i;"
-                                                        [ngValue]="item">{{item.apellidoPaterno + ' ' +item.nombres}}
-                                                    </option>
-
-                                                </select> -->
                                             </div>
                                         </div>
                                     </div>
