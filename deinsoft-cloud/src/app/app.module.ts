@@ -117,6 +117,7 @@ import { CnfPlanContratoComponent } from './pages/cnf-plan-contrato/cnf-plan-con
 import { CnfEmpresaEmpresaComponent } from '@pages/cnf-empresa/cnf-empresa-empresa';
 import { ActComprobanteFormComponent } from './pages/act-comprobante/act-comprobante-form/form/act-comprobante-form.component';
 import { ActPagoModalComponent } from './pages/act-pago/act-pago-modal/act-pago-modal.component';
+import { ActContratoListComponent } from './pages/act-contrato/list/act-contrato-list.component';
 
 @NgModule({
     declarations: [
@@ -218,7 +219,8 @@ import { ActPagoModalComponent } from './pages/act-pago/act-pago-modal/act-pago-
         ActContratoFormComponent,
         CnfPlanContratoComponent,
         CnfEmpresaEmpresaComponent,
-        ActPagoModalComponent
+        ActPagoModalComponent,
+        ActContratoListComponent
     ],
     imports: [
         BrowserModule,

@@ -26,6 +26,8 @@ export class ActContratoService {
       .set("xmlhash", arg1.xmlhash)
       .set("codigoqr", arg1.codigoqr)
       .set("numTicket", arg1.numTicket)
+      .set("nroPoste", arg1.nroPoste)
+      .set("urlMap", arg1.urlMap)
       ; return this.http.get<ActContrato[]>(`${this.url}/get-all-act-contrato`, { params });
   }
   public getAllDataCombo(): Observable<any> {

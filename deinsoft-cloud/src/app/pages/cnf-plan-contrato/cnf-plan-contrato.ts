@@ -15,7 +15,7 @@ export class CnfPlanContratoComponent extends GenericListComponent implements On
   //baseEndpoint = environment.apiUrl + '/get-all-cnf-org';
   prop ={
     "tableName": "cnf_plan_contrato",
-    "title": "Locales",
+    "title": "Planes de Contrato",
     "columnsList":[{tableName: "cnf_plan_contrato", columnName:"nombre",filterType:"text"},
                    {tableName: "cnf_plan_contrato", columnName:"precio",filterType:"text"},
                    {tableName: "cnf_plan_contrato", columnName:"dia_vencimiento",filterType:"none"}],
@@ -28,6 +28,7 @@ export class CnfPlanContratoComponent extends GenericListComponent implements On
            ],
     //filters sería para filtros adicionales
     "conditions":[],
+    "preSave":[],
     "orders":["cnf_plan_contrato.cnf_plan_contrato_id"] 
   }
   constructor(private utilServices: UtilService,
@@ -42,6 +43,7 @@ export class CnfPlanContratoComponent extends GenericListComponent implements On
     console.log(user);
     
     let cnfEmpresa = user.profile.split("|")[1];
+    this.prop.preSave.push({columnForm:"cnf_empresa_id",value:cnfEmpresa});
     this.prop.conditions.push({"columnName":"cnf_plan_contrato.cnf_empresa_id","value":cnfEmpresa});
     super.properties = this.prop;
     console.log(this.prop);

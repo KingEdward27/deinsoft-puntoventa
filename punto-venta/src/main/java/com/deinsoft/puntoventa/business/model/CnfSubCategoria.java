@@ -37,6 +37,9 @@ public class CnfSubCategoria implements Serializable {
     @JoinColumn(name = "cnf_empresa_id")
     private CnfEmpresa cnfEmpresa;
 
+    @Transient
+    private long cnfEmpresaId;
+    
     public long getId() {
         return id;
     }
@@ -75,6 +78,14 @@ public class CnfSubCategoria implements Serializable {
 
     public void setCnfEmpresa(CnfEmpresa cnfEmpresa) {
         this.cnfEmpresa = cnfEmpresa;
+    }
+
+    public long getCnfEmpresaId() {
+        return cnfEmpresaId;
+    }
+
+    public void setCnfEmpresaId(long cnfEmpresaId) {
+        this.cnfEmpresaId = cnfEmpresaId;
     }
 
     @Override

@@ -535,7 +535,8 @@
       "envio_pse_flag":"Envío SUNAT",
       "fecha_vencimiento":"Fecha vencimiento",
       "cnf_plan_contrato":"Plan",
-      "direccion":"Direccion"
+      "direccion":"Direccion",
+      "nro_poste" :"Nro poste"
     },
     "cnf_plan_contrato": {
       "home": {

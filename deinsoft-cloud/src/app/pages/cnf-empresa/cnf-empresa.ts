@@ -43,14 +43,15 @@ export class CnfEmpresaComponent extends GenericListComponent implements OnInit{
                    listData:[]},
                    {tableName: "cnf_empresa",columnName:"flag_venta_rapida","type":"select",loadState : 1, relatedBy :"flag_venta_rapida",
                    listData:[]},
-                   {tableName: "cnf_moneda", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_moneda_id"},
+                   {tableName: "cnf_moneda", "columnName":"nombre","type":"select",
+                   loadState : 1,relatedBy:"cnf_moneda_id"},
            ],
     //filters sería para filtros adicionales
     "conditions":[],
     "preSave" : [
       {columnForm:"estado",value:"1"}
     ],
-    "orders":["cnf_empresa.nombre","cnf_empresa.direccion"]
+    "orders":["cnf_empresa.cnf_empresa_id desc","cnf_empresa.direccion"]
   }
   constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 
     super(utilServices,httpClients,routers,_commonService);

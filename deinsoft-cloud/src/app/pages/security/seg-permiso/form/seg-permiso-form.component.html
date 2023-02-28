@@ -78,7 +78,7 @@
                                     <option *ngIf="!loadingSegMenu" [ngValue]="selectDefaultSegMenu">
                                         {{selectDefaultSegMenu.name}}</option>
                                     <option *ngFor="let item of listSegMenu; index as i;" [ngValue]="item">
-                                        {{item.nombre}}
+                                        {{item.parent?(item.parent.nombre + '/' + item.nombre):item.nombre}}
                                     </option>
 
                                 </select>

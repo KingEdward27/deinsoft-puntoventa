@@ -19,7 +19,11 @@ public class CnfSubCategoriaServiceImpl extends CommonServiceImpl<CnfSubCategori
 	CnfSubCategoriaRepository cnfSubCategoriaRepository;
 	
 	public List<CnfSubCategoria> getAllCnfSubCategoria(CnfSubCategoria cnfSubCategoria) {
-		List<CnfSubCategoria> cnfSubCategoriaList = (List<CnfSubCategoria>)cnfSubCategoriaRepository.getAllCnfSubCategoria(cnfSubCategoria.getNombre().toUpperCase(),cnfSubCategoria.getFlagEstado().toUpperCase());
+		List<CnfSubCategoria> cnfSubCategoriaList = (List<CnfSubCategoria>)cnfSubCategoriaRepository
+                        .getAllCnfSubCategoria(
+                                cnfSubCategoria.getCnfEmpresaId(),
+                                cnfSubCategoria.getNombre().toUpperCase()
+                                ,cnfSubCategoria.getFlagEstado().toUpperCase());
 		return cnfSubCategoriaList;
 	}
 	public CnfSubCategoria getCnfSubCategoria(Long id) {

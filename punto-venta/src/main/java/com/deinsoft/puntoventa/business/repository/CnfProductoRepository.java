@@ -11,11 +11,11 @@ import com.deinsoft.puntoventa.business.model.CnfProducto;
 public interface CnfProductoRepository extends JpaRepository<CnfProducto, Long> {
 
     @Query(value = "select p from cnfProducto p "
-            + "where upper(p.codigo) like %?1% and upper(p.nombre) like %?2% "
+            + "where p.cnfEmpresa.id = ?1 and upper(p.codigo) like %?2% and upper(p.nombre) like %?3% "
             + "and upper(p.rutaImagen) "
-            + "like %?3% and upper(p.flagEstado) like %?4% and upper(p.barcode) like %?5% ")
-
-    List<CnfProducto> getAllCnfProducto(String codigo, String nombre, String rutaImagen, String flagEstado, String barcode);
+            + "like %?4% and upper(p.flagEstado) like %?5% and upper(p.barcode) like %?6% ")
+    List<CnfProducto> getAllCnfProducto(long idEmpresa, String codigo, 
+            String nombre, String rutaImagen, String flagEstado, String barcode);
 
     @Query(value = "select p from cnfProducto p "
             + "where p.cnfUnidadMedida.id =  ?1 ")

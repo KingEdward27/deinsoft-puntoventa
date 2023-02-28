@@ -49,6 +49,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
   }
   load(columnForm: any, index: number) {
     console.log("load()");
+    console.log(columnForm);
     if (columnForm.load) {
       console.log(this.properties);
       let column = columnForm?.tableName + "." + columnForm?.load.loadBy;
@@ -81,25 +82,26 @@ export class GenericFormComponent extends CommonService implements OnInit {
       console.log(prop);
 
       super.getListComboWithFilters(prop).subscribe(data => {
-        console.log(data);
+        // console.log(data);
         data.push([0, "- Seleccione -", columnForm.load.tableName]);
         data.sort();
         this.properties.columnsForm.forEach((element: any) => {
-
+          // console.log(element);
+          
           if (columnForm.load.tableName == element.tableName) {
             element.value = 0;
             element.listData = data
           }
-          if (element.order > columnForm.order + 1 && element.columnName != element.relatedBy) {
-            let dataVacia: any[] = [];
-            dataVacia.push([0, "- Seleccione -", element.tableName]);
-            element.listData = dataVacia;
+          // if (columnForm.order == element.order - 1 ) {
+          //   let dataVacia: any[] = [];
+          //   dataVacia.push([0, "- Seleccione -", element.tableName]);
+          //   element.listData = dataVacia;
 
-          }
+          // }
         });
       });
     }
-    console.log(this.properties);
+    // console.log(this.properties);
   }
   fromModel(value: string | null): NgbDateStruct | null {
     if (value) {
@@ -123,11 +125,19 @@ export class GenericFormComponent extends CommonService implements OnInit {
   }
   async loadForm() {
     this.properties = JSON.parse(localStorage.getItem("properties") || '{}');
-    for (let index = 0; index < this.properties.columnsForm.length; index++) {
-      const element = this.properties.columnsForm[index];
-      element.order = index + 1;
-    }
+    // for (let index = 0; index < this.properties.columnsForm.length; index++) {
+    //   // const element = this.properties.columnsForm[index];
+    //   console.log(this.properties.columnsForm[index]);
+    //   this.properties.columnsForm[index].order = 1;
+    // }
+    let index = 0;
     await this.properties.columnsForm.forEach((element: any) => {
+      index ++
+      
+      element.order = index;
+      
+      // console.log(index, element);
+      
       if (element.type == 'date') {
         let wa = this.format(this.fromModel(element.value));
         
@@ -298,7 +308,8 @@ export class GenericFormComponent extends CommonService implements OnInit {
           } else {
             column = element?.tableName + "." + element?.relatedBy;
             let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
-            if(selectValue != "0"){
+            if((selectValue != "0" && element?.columnName != element?.relatedBy )
+            || element?.columnName == element?.relatedBy){
               element.value = selectValue;
               myMap.set(element.relatedBy, selectValue);
             }

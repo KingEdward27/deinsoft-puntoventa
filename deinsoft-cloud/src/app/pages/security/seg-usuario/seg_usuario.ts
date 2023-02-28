@@ -28,10 +28,9 @@ export class SegUsuarioComponent extends GenericListComponent implements OnInit{
                     ,columnsForm: [
                                     {tableName:"seg_rol", columnName:"nombre",
                                     type:"select",loadState:1,relatedBy:"seg_rol_id"},
-                                    {tableName:"cnf_empresa", columnName:"nombre",
-                                    type:"select",loadState:1,relatedBy:"cnf_empresa_id",filters:[]},
-                                    {tableName:"cnf_local", columnName:"nombre",type:"select",loadState:1,
-                                    relatedBy:"cnf_local_id",filters:[]}
+                                    {tableName: "cnf_empresa", "columnName":"nombre","type":"select",loadState : 1,loadFor:"cnf_local_id"
+                                    ,load:{tableName:"cnf_local",loadBy:"cnf_empresa_id"},relatedBy:"cnf_empresa_id"},
+                                    {tableName: "cnf_local", "columnName":"nombre","type":"select",loadState : 0,loadFor:"cnf_local_id",relatedBy:"cnf_local_id"}
                                   ]
                   }
     ],

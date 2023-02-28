@@ -9,10 +9,11 @@ import org.springframework.data.repository.query.Param;
 import com.deinsoft.puntoventa.business.model.CnfSubCategoria;
 
 public interface CnfSubCategoriaRepository extends JpaRepository<CnfSubCategoria,Long> {
+    
 	@Query(value="select p from cnfSubCategoria p "+ 
- "where upper(p.nombre) like %?1% and upper(p.flagEstado) like %?2% ")
-
-	List<CnfSubCategoria> getAllCnfSubCategoria(String nombre,String flagEstado);
+                "where p.cnfEmpresa.id = ?1 and upper(p.nombre) like %?2% and upper(p.flagEstado) like %?3% ")
+	List<CnfSubCategoria> getAllCnfSubCategoria(long empresaId, String nombre,String flagEstado);
+        
 	@Query(value="select p from cnfSubCategoria p "+
 			"where p.cnfCategoria.id =  ?1 ")
 	List<CnfSubCategoria>findByCnfCategoriaId(long id);

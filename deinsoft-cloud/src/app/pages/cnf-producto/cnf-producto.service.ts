@@ -17,6 +17,7 @@ export class CnfProductoService {
 
   public getAllData(arg1: CnfProducto): Observable<any> {
     let params = new HttpParams().set("codigo", arg1.codigo)
+      .set("cnfEmpresaId", arg1.cnfEmpresa.id)
       .set("nombre", arg1.nombre)
       .set("rutaImagen", arg1.rutaImagen)
       .set("flagEstado", arg1.flagEstado)

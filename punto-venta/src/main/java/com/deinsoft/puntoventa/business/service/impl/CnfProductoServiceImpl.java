@@ -14,6 +14,7 @@ import com.deinsoft.puntoventa.business.service.CnfProductoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.service.StorageService;
 import com.deinsoft.puntoventa.config.AppConfig;
+import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import com.deinsoft.puntoventa.framework.util.CodigoQR;
 import com.deinsoft.puntoventa.framework.util.GenerateItextPdf;
 import com.deinsoft.puntoventa.framework.util.Util;
@@ -44,10 +45,14 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
     @Autowired
     AppConfig appConfig;
     
+    @Autowired
+    AuthenticationHelper auth;
+    
     static DateTimeFormatter YYYYMMDDHHMMSS_FORMATER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     
     public List<CnfProducto> getAllCnfProducto(CnfProducto cnfProducto) {
         List<CnfProducto> cnfProductoList = (List<CnfProducto>) cnfProductoRepository.getAllCnfProducto(
+                cnfProducto.getCnfEmpresaId(),
                 cnfProducto.getCodigo().toUpperCase(), 
                 cnfProducto.getNombre().toUpperCase(), 
                 cnfProducto.getRutaImagen().toUpperCase(), 

@@ -204,7 +204,8 @@ export class CnfProductoFormComponent implements OnInit {
   getListCnfSubCategoria() {
     this.loadingCnfSubCategoria = true;
     console.log(this.chargingsb);
-    return this.cnfSubCategoriaService.getAllDataCombo().subscribe(data => {
+    let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+    return this.cnfSubCategoriaService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
       this.listCnfSubCategoria = data;
       this.loadingCnfSubCategoria = false;
     })

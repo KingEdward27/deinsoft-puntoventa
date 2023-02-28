@@ -88,9 +88,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         SecUser usuario = secUserRepository.findByName(username); 
         usuario.setPassword(null);
         
-        ActCajaTurno caja = actCajaTurnoRepository.findBySegUsuarioId(usuario.getId())
-                .stream().filter(item -> item.getFechaCierre() == null)
-                .findFirst().orElse(new ActCajaTurno());
+//        ActCajaTurno caja = actCajaTurnoRepository.findBySegUsuarioId(usuario.getId())
+//                .stream().filter(item -> item.getFechaCierre() == null)
+//                .findFirst().orElse(new ActCajaTurno());
 //        usuario.setActCajaTurno(caja);
         //String idUp = usuario.getUnidadPolicial().getIdUnidadPolicial();
 //        List<SegPermiso> listMenu = null;

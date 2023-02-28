@@ -90,7 +90,7 @@ export class ActContratoFormComponent implements OnInit {
 
   listActContratoDetalle: any;
   selectedOptionActContratoDetalle: any;
-  protected redirect: string = "/act-comprobante";
+  protected redirect: string = "/contrato";
   selectedOption: any;
   passwordRepeat: any;
   isAdding: boolean = false;
@@ -860,7 +860,9 @@ searchMaps = (text$: Observable<string>) =>
     // ellipse.setMap(this.map);
     this.entries = [];
     console.log(place);
-    
+    console.log(location);
+    this.model.direccion = location.name;
+    this.model.urlMap = place.url;
     this.entries.unshift({
       place,
       marker,

@@ -93,8 +93,8 @@ public class CnfProducto implements Serializable {
     @JoinColumn(name = "cnf_categoria_id")
     private CnfCategoria cnfCategoria;
     
-//    @Transient
-//    private MultipartFile file;
+    @Transient
+    private long cnfEmpresaId;
     
     public long getId() {
         return id;
@@ -214,6 +214,14 @@ public class CnfProducto implements Serializable {
 
     public void setCosto(BigDecimal costo) {
         this.costo = costo;
+    }
+
+    public long getCnfEmpresaId() {
+        return cnfEmpresaId;
+    }
+
+    public void setCnfEmpresaId(long cnfEmpresaId) {
+        this.cnfEmpresaId = cnfEmpresaId;
     }
 
     @Override
