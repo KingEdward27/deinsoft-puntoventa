@@ -225,8 +225,8 @@ public class BusinessServiceImpl implements BusinessService {
         return bytes;
     }
     @Override
-    public byte[] print2(int tipo, ActComprobante actComprobante,boolean isTicket) throws Exception {
-        ByteArrayInputStream stream = Impresion.Imprimir2(tipo, actComprobante, isTicket);
+    public byte[] print2(String staticResourcesFolder, int tipo, ActComprobante actComprobante,boolean isTicket) throws Exception {
+        ByteArrayInputStream stream = Impresion.Imprimir2(staticResourcesFolder, tipo, actComprobante, isTicket);
         if (stream == null) {
             System.out.println("Ocurrió un error al generar el pdf desde la base de datos");
             return null;

@@ -31,6 +31,7 @@ import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
 import com.deinsoft.puntoventa.business.repository.InvAlmacenProductoRepository;
 import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoRepository;
 import com.deinsoft.puntoventa.business.service.InvAlmacenProductoService;
+import com.deinsoft.puntoventa.config.AppConfig;
 import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -83,6 +84,9 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     
     @Autowired
     AuthenticationHelper auth;
+    
+    @Autowired
+    AppConfig appConfig;
     
     public List<ActComprobante> getAllActComprobante(ActComprobante actComprobante) {
         List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getAllActComprobante(
@@ -426,7 +430,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     }
     @Override
     public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception {
-        byte[] bytes = businessService.print2(tipo,getActComprobante(id),false);
+        byte[] bytes = businessService.print2(appConfig.getStaticResourcesPath(), tipo,getActComprobante(id),false);
         return bytes;
     }
 }

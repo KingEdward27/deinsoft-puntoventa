@@ -30,6 +30,9 @@ public class AppConfig {
     @Value("${app.config.backend.url}")
     private String urlBackend;
 
+    @Value("${app.staticResourcesPath}")
+    private String staticResourcesPath;
+            
     public String getFileSystemBasePath() {
         return fileSystemBasePath;
     }
@@ -52,6 +55,14 @@ public class AppConfig {
 
     public void setFolderResources(String folderResources) {
         this.folderResources = folderResources;
+    }
+
+    public String getStaticResourcesPath() {
+        return staticResourcesPath;
+    }
+
+    public void setStaticResourcesPath(String staticResourcesPath) {
+        this.staticResourcesPath = staticResourcesPath;
     }
     
     

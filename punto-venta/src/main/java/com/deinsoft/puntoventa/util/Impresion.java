@@ -259,7 +259,7 @@ public class Impresion {
 
     }
 
-    public static ByteArrayInputStream Imprimir2(int tipo, ActComprobante datosVenta, boolean isTicket) {
+    public static ByteArrayInputStream Imprimir2(String staticResourcesFolder, int tipo, ActComprobante datosVenta, boolean isTicket) {
         try {
             DateTimeFormatter YYYYMMDD_FORMATER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             JasperReport reporte = null;
@@ -269,9 +269,9 @@ public class Impresion {
             } else {
                 ubicacion = "/jasper/ticket.jasper";
             }
-            String currentPath = new java.io.File(".").getCanonicalPath();
-            System.out.println("currentPath + ubicacion: " + currentPath + ubicacion);
-            File archivo = new File(currentPath + ubicacion);
+//            String currentPath = new java.io.File(".").getCanonicalPath();
+            System.out.println("currentPath + ubicacion: " + staticResourcesFolder + ubicacion);
+            File archivo = new File(staticResourcesFolder + ubicacion);
             InputStream targetStream = new FileInputStream(archivo);
             reporte = (JasperReport) JRLoader.loadObject(targetStream);
             Map parametros;

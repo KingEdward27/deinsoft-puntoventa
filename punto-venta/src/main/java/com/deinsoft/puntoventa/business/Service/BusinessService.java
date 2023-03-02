@@ -23,5 +23,5 @@ public interface BusinessService {
      
      public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception;
      
-     public byte[] print2(int tipo, ActComprobante actComprobante,boolean isTicket) throws Exception;
+     public byte[] print2(String staticResourcesFolder, int tipo, ActComprobante actComprobante,boolean isTicket) throws Exception;
 }
