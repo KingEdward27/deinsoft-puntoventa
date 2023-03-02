@@ -43,7 +43,7 @@ public class SegMenuController extends CommonController<SegMenu, SegMenuService>
         if (segMenu.getId() != 0 && segMenu.getParent().getId() == segMenu.getId()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se puede relacionar con la misma opción de menú");
         }
-        if (segMenu.getParent().getId() == 0) {
+        if (segMenu.getParent() != null && segMenu.getParent().getId() == 0) {
             segMenu.setParent(null);
         }
         return super.crear(segMenu, result);

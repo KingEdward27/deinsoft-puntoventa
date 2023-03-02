@@ -1,6 +1,7 @@
 package com.deinsoft.puntoventa.business.repository;
 
 import com.deinsoft.puntoventa.business.model.ActComprobante;
+import com.deinsoft.puntoventa.business.model.ActContrato;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,6 @@ public interface ActPagoProgramacionRepository extends JpaRepository<ActPagoProg
 	List<ActPagoProgramacion>findByCnfMaestroId(@Param("id") long id,@Param("fechaVencimiento") LocalDate fechaVencimiento);
         
         void deleteByActComprobante(ActComprobante actComprobante);
+        
+        void deleteByActContrato(ActContrato actContrato);
 }

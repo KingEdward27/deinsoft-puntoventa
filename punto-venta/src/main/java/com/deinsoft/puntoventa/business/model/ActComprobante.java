@@ -139,6 +139,7 @@ public class ActComprobante implements Serializable {
     @JoinColumn(name = "seg_usuario_id")
     private SegUsuario segUsuario;
     
+    
     public void addActComprobanteDetalle(ActComprobanteDetalle item) {
         item.setActComprobante(this);
     }

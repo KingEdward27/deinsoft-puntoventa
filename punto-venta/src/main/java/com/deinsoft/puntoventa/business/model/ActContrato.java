@@ -95,6 +95,9 @@ public class ActContrato implements Serializable {
     @Column(name = "url_map", length = 1000)
     private String urlMap;
     
+    @Transient
+    private long cnfEmpresaId;
+    
     public long getId() {
         return id;
     }
@@ -222,6 +225,15 @@ public class ActContrato implements Serializable {
     public void setUrlMap(String urlMap) {
         this.urlMap = urlMap;
     }
+
+    public long getCnfEmpresaId() {
+        return cnfEmpresaId;
+    }
+
+    public void setCnfEmpresaId(long cnfEmpresaId) {
+        this.cnfEmpresaId = cnfEmpresaId;
+    }
+
     
     public static Map<String, Object> toMap(ActContrato object, String[] visibles) {
         Map<String, Object> map = new HashMap<>();

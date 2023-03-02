@@ -5,6 +5,7 @@ import { ActContrato } from '../act-contrato.model';
 import { ActContratoService } from '../act-contrato.service';
 import { Router } from '@angular/router';
 import { UtilService } from '../../../services/util.service';
+import { AppService } from '../../../services/app.service';
 @Component({
   selector: 'app-act-contrato-list',
   templateUrl: './act-contrato-list.component.html'
@@ -16,18 +17,24 @@ export class ActContratoListComponent implements OnInit{
   nameSearch : string = "";
   modelSearch : ActContrato = new ActContrato();
   dataTable!:DataTables.Api;
-  constructor(private actContratoService: ActContratoService,private utilService:UtilService, private router: Router) { }
+  constructor(private actContratoService: ActContratoService,
+    private utilService:UtilService, 
+    private router: Router,
+    private appService: AppService) { }
 
   ngOnInit(): void {
     this.getAllData();
   }
   public getAllDataByFilters() {
-    this.actContratoService.getAllData(this.modelSearch)
-.subscribe(data => {
+    let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+    this.modelSearch.cnfEmpresaId = cnfEmpresa
+    this.actContratoService.getAllData(this.modelSearch).subscribe(data => {
       this.lista = data;
     });
   }
   public getAllData() {
+    let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+    this.modelSearch.cnfEmpresaId = cnfEmpresa
     this.actContratoService.getAllData(this.modelSearch).subscribe(data => {
       this.lista = data;
       setTimeout(()=>{  

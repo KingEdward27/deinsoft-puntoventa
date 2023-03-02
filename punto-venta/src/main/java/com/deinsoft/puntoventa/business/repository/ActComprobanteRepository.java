@@ -17,7 +17,10 @@ public interface ActComprobanteRepository extends JpaRepository<ActComprobante, 
             + "and upper(p.flagEstado) like %?4% and upper(p.flagIsventa) "
             + "like %?5% and upper(p.envioPseFlag) like %?6% and upper(p.envioPseMensaje) like %?7% "
             + "and upper(p.xmlhash) like %?8% and upper(p.codigoqr) like %?9% and upper(p.numTicket) like %?10% ")
-    List<ActComprobante> getAllActComprobante(String serie, String numero, String observacion, String flagEstado, String flagIsventa, String envioPseFlag, String envioPseMensaje, String xmlhash, String codigoqr, String numTicket);
+    List<ActComprobante> getAllActComprobante(String serie, String numero, 
+                                                String observacion, String flagEstado, 
+                                                String flagIsventa, String envioPseFlag, String envioPseMensaje, 
+                                                String xmlhash, String codigoqr, String numTicket);
 
     @Query(value = "select p from actComprobante p "
             + "where p.cnfMaestro.id =  ?1 ")

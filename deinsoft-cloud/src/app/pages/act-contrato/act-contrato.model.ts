@@ -36,6 +36,7 @@ export class ActContrato {
 	cnfPlanContrato: CnfPlanContrato = new CnfPlanContrato();
 	token?: string = "";
 	direccion: string = "";
-	urlMap: string;
-	nroPoste: string;
+	urlMap: string = "";
+	nroPoste: string = "";
+	cnfEmpresaId:number;
 };

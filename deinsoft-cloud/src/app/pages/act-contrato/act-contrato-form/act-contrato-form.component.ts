@@ -109,10 +109,10 @@ export class ActContratoFormComponent implements OnInit {
   public modalRef!: NgbModalRef;
 
   @ViewChild('search')
-  public searchElementRef: ElementRef;
+  searchElementRef: ElementRef;
 
   @ViewChild('map')
-  public mapElementRef: ElementRef;
+  mapElementRef: ElementRef;
 
   public entries = [];
 
@@ -150,10 +150,7 @@ export class ActContratoFormComponent implements OnInit {
     private apiService: GoogleMapsService, private ngZone: NgZone) {
     config.backdrop = 'static';
     config.keyboard = false;
-    this.apiService.api.then((maps) => {
-      this.initAutocomplete(maps);
-      this.initMap(maps);
-    });
+    
   }
   ngOnInit(): void {
     this.isDataLoaded = false;
@@ -164,7 +161,7 @@ export class ActContratoFormComponent implements OnInit {
     //   this.a4();
     // });
     this.loadData();
-
+    //location.reload();
   }
   getBack() {
     this.router.navigate([this.redirect]);
@@ -191,6 +188,10 @@ export class ActContratoFormComponent implements OnInit {
     this.model.fecha = this.dateAdapter.toModel(this.ngbCalendar.getToday())!;
     this.model.flagEstado = "1";
     this.model.flagIsventa = '1';
+    this.apiService.api.then((maps) => {
+      this.initAutocomplete(maps);
+      this.initMap(maps);
+    });
     return this.route.paramMap.subscribe(params => {
       this.id = params.get('id')!;
       console.log(this.id);
@@ -207,7 +208,7 @@ export class ActContratoFormComponent implements OnInit {
       }
 
     })
-
+    
   }
   // getListCnfProductAsObservable(term: any): Observable<any> {
 

@@ -16,7 +16,9 @@ export class ActContratoService {
   }
 
   public getAllData(arg1: ActContrato): Observable<any> {
-    let params = new HttpParams().set("serie", arg1.serie)
+    let params = new HttpParams()
+      .set("cnfEmpresaId", arg1.cnfEmpresaId)
+      .set("serie", arg1.serie)
       .set("numero", arg1.numero)
       .set("observacion", arg1.observacion)
       .set("flagEstado", arg1.flagEstado)

@@ -51,7 +51,10 @@ export class GoogleMapsService {
       libraries: 'places',
     };
     const params = Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
-    return `//maps.googleapis.com/maps/api/js?${params}&language=pe`;
+    let wa = `//maps.googleapis.com/maps/api/js?${params}&language=pe`;
+    console.log(wa);
+    
+    return wa;
   }
   public getAllDataComboTypeHead(direccion: string): Observable<any> {
     return this.http.get<any[]>(`${this.url}?input=`+direccion+`&inputtype=textquery&fields=formatted_address%2Cgeometry&key=AIzaSyDGEmmGhFeA2PwL-pJrrnwIIrtuY3v8lug`);
