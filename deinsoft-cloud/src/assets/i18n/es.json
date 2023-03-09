@@ -536,7 +536,12 @@
       "fecha_vencimiento":"Fecha vencimiento",
       "cnf_plan_contrato":"Plan",
       "direccion":"Direccion",
-      "nro_poste" :"Nro poste"
+      "nro_poste" :"Nro poste",
+      "vicinity":"Ubicación",
+      "cnf_zona":"Zona",
+      "monto_primer_mes":"Monto primer mes",
+      "ultimo_pago": "Ultimo pago",
+      "monto_deuda": "Monto deuda"
     },
     "cnf_plan_contrato": {
       "home": {
@@ -548,6 +553,33 @@
       "nombre": "Plan",
       "precio": "Precio",
       "dia_vencimiento":"Día de vencimiento"
+    },
+    "act_pago": {
+      "home": {
+        "title": "Pagos",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "cnf_maestro":"Cliente/Proveedor",
+      "fecha_vencimiento":"Fecha vencimiento",
+      "monto": "Monto",
+      "monto_pendiente": "Monto pendiente",
+      "monto_pagar": "Monto a pagar",
+      "estado":"Estado",
+      "fecha": "Fecha",
+      "fechareg": "Fecha Registro",
+      "numero": "Número",
+      "numero_ref": "Número referencial",
+      "total": "Total",
+      "observacion": "Observación",
+      "igv":"IGV",
+      "subtotal":"Subtotal",
+      "serie":"Serie",
+      "envio_pse_mensaje":"Envío F.E.",
+      "cnf_tipo_comprobante":"Tipo",
+      "cnf_forma_pago":"Forma de pago",
+      "cnf_local":"Local"
     },
     "reportes": {
       "act_comprobante_listado":"Listado de Ventas",

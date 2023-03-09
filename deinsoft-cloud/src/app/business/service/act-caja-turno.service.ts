@@ -37,5 +37,8 @@ export class ActCajaTurnoService {
     let params = new HttpParams().set("id",arg1);
     return this.http.delete(this.url+'/delete-act-caja-turno', { observe: 'response' ,params}); 
   }
+  public getReport(form: any): Observable<ActCajaTurno> {
+    return this.http.post<ActCajaTurno>(this.url + '/get-report-act-caja-turno', form);
+  }
 }
 

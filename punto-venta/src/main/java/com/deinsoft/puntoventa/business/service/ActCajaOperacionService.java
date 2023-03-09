@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,4 +27,6 @@ public interface ActCajaOperacionService extends CommonService<ActCajaOperacion>
     public List<ActCajaOperacion> getAllActCajaOperacionByActPago(long id);
 
     public void delete(long id);
+    
+    public List<ActCajaOperacion> getReportActCajaOperacion(ParamBean paramBean);
 }

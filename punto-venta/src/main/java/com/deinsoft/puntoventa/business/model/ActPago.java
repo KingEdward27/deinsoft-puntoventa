@@ -68,6 +68,10 @@ public class ActPago implements Serializable {
     @JoinColumn(name = "seg_usuario_id")
     private SegUsuario segUsuario;
     
+    @OneToOne
+    @JoinColumn(name = "cnf_local_id")
+    private CnfLocal cnfLocal;
+    
     @OneToMany(mappedBy = "actPago", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonIgnoreProperties(value = {"actPago"}, allowSetters = true)
     private Set<ActPagoDetalle> listActPagoDetalle;
@@ -186,6 +190,14 @@ public class ActPago implements Serializable {
 
     public void setListActPagoDetalle(Set<ActPagoDetalle> listActPagoDetalle) {
         this.listActPagoDetalle = listActPagoDetalle;
+    }
+
+    public CnfLocal getCnfLocal() {
+        return cnfLocal;
+    }
+
+    public void setCnfLocal(CnfLocal cnfLocal) {
+        this.cnfLocal = cnfLocal;
     }
 
 

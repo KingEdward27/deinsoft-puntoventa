@@ -10,6 +10,7 @@ import { InvAlmacen } from '@/business/model/inv-almacen.model';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import * as dayjs from 'dayjs';
 import { CnfProducto } from '../../cnf-producto/cnf-producto.model';
+import { CnfZona } from '../../../business/model/cnf-zona';
 
 export class GenericBean{
 	id:number = 0;
@@ -30,4 +31,8 @@ export class ParamBean {
 	cnfEmpresa:CnfEmpresa = new CnfEmpresa();
 	cnfCategoria:CnfCategoria = new CnfCategoria();
 	cnfProducto:CnfProducto = new CnfProducto();
+	direccion: string;;
+	
+	cnfZona:CnfZona = new CnfZona();
+	flagEstado: number = 0;
 };

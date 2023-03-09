@@ -65,7 +65,8 @@ export class ActComprobanteListFormComponent extends CommonReportFormComponent i
   selectDefaultActComprobante: any = { id: 0, nombre: "- Seleccione -" }; listActComprobante: any;
   actComprobante: ActComprobante = new ActComprobante();
   loadingActComprobante: boolean = false;
-  selectDefaultCnfMaestro: any = { id: 0, nombre: "- Seleccione -" }; listCnfMaestro: any;
+  selectDefaultCnfMaestro: any = { id: 0, nombre: "- Seleccione -" }; 
+  listCnfMaestro: any;
   cnfMaestro: CnfMaestro = new CnfMaestro();
   loadingCnfMaestro: boolean = false;
   selectDefaultCnfFormaPago: any = { id: 0, nombre: "- Seleccione -" }; listCnfFormaPago: any;

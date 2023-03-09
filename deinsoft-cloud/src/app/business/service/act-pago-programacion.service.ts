@@ -46,5 +46,6 @@ export class ActPagoProgramacionService {
     .set("fechaVencimiento",fecha);
     return this.http.get<ActPagoProgramacion[]>(`${this.url}/get-all-act-pago-programacion-compra-by-cnf-maestro`,{params});
   } 
+  
 }
 

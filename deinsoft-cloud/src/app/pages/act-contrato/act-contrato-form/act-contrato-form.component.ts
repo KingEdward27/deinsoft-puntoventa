@@ -38,6 +38,8 @@ import { GoogleMapsService, Maps } from '../../../business/service/googlemaps.se
 import * as turf from '@turf/turf'
 import * as geolib from 'geolib'
 import { ApiService } from '../../../services/api.service';
+import { CnfZonaService } from '../../../business/service/cnf-zona';
+import { OpeGenericFormModalComponent } from '../../modal/ope-generic-form-modal.component';
 const place = null as google.maps.places.PlaceResult;
 type Components = typeof place.address_components;
 
@@ -55,7 +57,6 @@ export class ActContratoFormComponent implements OnInit {
   error: any;
   selectedItemsList = [];
   checkedIDs = [];
-  chargingsb: boolean = true;
   isDataLoaded: Boolean = false;
   isOk: boolean = false;
   isWarning: boolean = false;
@@ -83,8 +84,8 @@ export class ActContratoFormComponent implements OnInit {
   selectDefaultCnfTipoComprobante: any = { id: 0, nombre: "- Seleccione -" }; listCnfTipoComprobante: any;
   cnfTipoComprobante: CnfTipoComprobante = new CnfTipoComprobante();
   loadingCnfTipoComprobante: boolean = false;
-  
-  selectDefaultCnfPlanContrato: any = { id: 0, nombre: "- Seleccione -" }; 
+
+  selectDefaultCnfPlanContrato: any = { id: 0, nombre: "- Seleccione -" };
   listCnfPlanContrato: any;
   loadingCnfPlanContrato: boolean = false;
 
@@ -98,9 +99,9 @@ export class ActContratoFormComponent implements OnInit {
   public modelOrig: ActContrato = new ActContrato();
   cnfProducto: any;
   formatter = (x: { nombre: string }) => x.nombre;
-  
+
   formatterDireccion = (x: { formatted_address: string }) => x.formatted_address;
-  formatterCnfMaestro = (x: CnfMaestro ) => (x.apellidoPaterno + ' '+x.apellidoMaterno+ ' '+x.nombres).trim();
+  formatterCnfMaestro = (x: CnfMaestro) => (x.apellidoPaterno + ' ' + x.apellidoMaterno + ' ' + x.nombres).trim();
 
   loadingCnfImpuestoCondicion: boolean = false;
   selectDefaultImpuestoCondicion: any = { id: 0, nombre: "- Seleccione -" };
@@ -127,7 +128,7 @@ export class ActContratoFormComponent implements OnInit {
   ];
 
   private map: google.maps.Map;
-
+  marker: google.maps.Marker;
   constructor(private actContratoService: ActContratoService,
     private router: Router,
     private utilService: UtilService,
@@ -144,13 +145,14 @@ export class ActContratoFormComponent implements OnInit {
     private dateAdapter: NgbDateAdapter<dayjs.Dayjs>,
     private ngbCalendar: NgbCalendar,
     private modalService: NgbModal,
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private googleMapsService: GoogleMapsService,
-    config: NgbModalConfig,private appService:AppService, 
-    private apiService: GoogleMapsService, private ngZone: NgZone) {
+    config: NgbModalConfig, private appService: AppService,
+    private apiService: GoogleMapsService, private ngZone: NgZone, 
+    private cnfZonaService: CnfZonaService) {
     config.backdrop = 'static';
     config.keyboard = false;
-    
+
   }
   ngOnInit(): void {
     this.isDataLoaded = false;
@@ -166,19 +168,18 @@ export class ActContratoFormComponent implements OnInit {
   getBack() {
     this.router.navigate([this.redirect]);
   }
-  loadData() {
+  async loadData() {
+    
+    await this.getListCnfLocal();
     this.getListCnfMaestro();
-    this.getListCnfFormaPago();
     this.getListCnfMoneda();
-    this.getListCnfLocal();
     this.getListCnfTipoComprobante();
     this.getListCnfPlanContrato();
     // this.getListInvAlmacen();
     this.getListImpuestoCondicion();
-    console.log(this.listCnfLocal);
-    
-    
-    
+
+
+
 
 
     this.model.total = 0;
@@ -186,183 +187,61 @@ export class ActContratoFormComponent implements OnInit {
     this.model.igv = 0;
     this.model.descuento = 0;
     this.model.fecha = this.dateAdapter.toModel(this.ngbCalendar.getToday())!;
+    this.model.fechaInstalacion = this.dateAdapter.toModel(this.ngbCalendar.getToday())!;
     this.model.flagEstado = "1";
     this.model.flagIsventa = '1';
     this.apiService.api.then((maps) => {
       this.initAutocomplete(maps);
       this.initMap(maps);
-    });
-    return this.route.paramMap.subscribe(params => {
-      this.id = params.get('id')!;
-      console.log(this.id);
-      if (!this.id) {
-        this.isDataLoaded = true;
-      }
-      if (this.id) {
-        this.actContratoService.getData(this.id).subscribe(data => {
-          this.model = data;
-          console.log(this.model);
+
+      return this.route.paramMap.subscribe(params => {
+        this.id = params.get('id')!;
+        if (!this.id) {
+          this.model.id = 0;
           this.isDataLoaded = true;
-          //this.titulo = 'Editar ' + this.nombreModel;
-        });
-      }
+        }
+        if (this.id) {
+          this.actContratoService.getData(this.id).subscribe(data => {
+            this.model = data;
+            this.map.setCenter(new google.maps.LatLng(this.model.latitude, this.model.longitude));
 
-    })
-    
+            const color = 'red';
+            const pin = this.pin(color);
+
+            this.marker = new google.maps.Marker({
+              position: new google.maps.LatLng(this.model.latitude, this.model.longitude),
+              animation: google.maps.Animation.DROP,
+              map: this.map,
+              icon: this.pin(color),
+            });
+
+            this.isDataLoaded = true;
+            //this.titulo = 'Editar ' + this.nombreModel;
+          });
+        }
+
+      })
+    });
+
+
   }
-  // getListCnfProductAsObservable(term: any): Observable<any> {
-
-  //   if (term.length >= 2) {
-  //     console.log(this.model.invAlmacen.id);
-  //     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];  
-  //     return this.cnfProductoService.getAllDataComboTypeHead(term, cnfEmpresa)
-  //       .pipe(
-  //         tap(() => this.searchFailed = false),
-  //         catchError((err: any) => {
-  //           console.log(err);
-  //           this.searchFailed = true;
-  //           return of([]);
-  //         })
-  //       );
-  //   } else {
-  //     return <any>[];
-  //   }
-
-  // }
-  // searchProduct = (text$: Observable<string>) =>
-  //   text$.pipe(
-  //     debounceTime(200),
-  //     distinctUntilChanged(),
-  //     switchMap(term => {
-  //       return this.getListCnfProductAsObservable(term);
-  //     })
-  //   )
-  
-  // onchangeProduct(event: any, input: any) {
-  //   event.preventDefault();
-  //   console.log(event.item);
-  //   console.log(input.value);
-  //   let actContratoDetalle = new ActContratoDetalle();
-  //   actContratoDetalle.cnfProducto = event.item
-  //   actContratoDetalle.descripcion = event.item.nombre
-  //   actContratoDetalle.cantidad = 1
-  //   actContratoDetalle.cnfImpuestoCondicion.id = 1
-  //   actContratoDetalle.precio = event.item.precio
-  //   actContratoDetalle.importe = event.item.precio
-  //   actContratoDetalle.cnfImpuestoCondicion.id = 1
-  //   actContratoDetalle.afectacionIgv
-  //     = actContratoDetalle.importe - actContratoDetalle.importe / 1.18
-
-  //   this.model.total = Math.round((this.model.total + event.item.precio + Number.EPSILON) * 100) / 100;
-  //   this.model.subtotal = Math.round((this.model.total / 1.18 + Number.EPSILON) * 100) / 100;
-  //   this.model.descuento = 0
-  //   this.model.igv = Math.round((this.model.total - this.model.subtotal + Number.EPSILON) * 100) / 100
-  //   this.model.listActContratoDetalle.push(actContratoDetalle);
-  //   input.value = '';
-  // }
-  // agregarActContratoDetalle(): void {
-  //   this.router.navigate(["/add-new-act-comprobante-detalle", { idParent: this.model.id }]);
-  // }
-  // editarActContratoDetalle(actContratoDetalle: any): void {
-  //   this.router.navigate(["/add-new-act-comprobante-detalle", { idParent: this.model.id, id: actContratoDetalle.id }]);
-  // }
-  // quitarActContratoDetalle(e: any): void {
-  //   if (!this.id) {
-  //     this.model.listActContratoDetalle = 
-  //     this.model.listActContratoDetalle.filter(item => item.id != e.id);
-  //   }
-  //   if (this.id) {
-  //     this.utilService.confirmDelete(e).then((result) => {
-  //       if (result) {
-  //         this.actContratoDetalleService.delete(e.id.toString()).subscribe(() => {
-  //           this.utilService.msgOkDelete();
-  //           this.loadData();
-  //         }, err => {
-  //           if (err.status === 500 && err.error.trace.includes("DataIntegrityViolationException")) {
-  //             this.utilService.msgProblemDelete();
-  //           }
-  //         });
-  //       }
-
-  //     });
-  //   }
-  //   this.updateTotals()
-  // }
   save() {
+    if (!this.model.id) {
+      this.model.numero = "1"
+    }
     console.log(this.model);
-    this.model.numero = "1"
-    // if (this.model.listActContratoDetalle.length == 0) {
-    //   this.error = []
-    //   this.error.push("Debe agregar productos y servicios al comprobante")
-    //   return;
-    // }
+    
     this.actContratoService.save(this.model).subscribe(m => {
-      console.log(m);
-      // this.model.id = m.id
-      // this.model.numero = m.numero;
       this.utilService.msgOkSave()
       this.router.navigate(["/contrato"]);
-      // this.modalRef = this.modalService.open(MessageModalComponent);
-      // this.modalRef.componentInstance.message = "Documento " + m.serie + " - " + m.numero + " generado correctamente";
-      // this.modalRef.componentInstance.id = m.id;
-      // this.modalRef.closed.subscribe(result => {
-      //   this.router.navigate(["/venta"]);
-      // })
-      // this.modalRef.componentInstance.cnfBpartner.subscribe((receivedEntry:CnfBpartner) => {
-      //   console.log(receivedEntry);
-      //   this.getListCnfBpartner()
-      //   this.model.cnfBpartner = receivedEntry
-      // })
-
-      // let rows = [
-      //   {
-      //     columns: [{ type: "a", id: "ticket", value: "Ticket", icon: "fa fa-arrow-circle-left", action: "" },
-      //     { type: "a", id: "a4", value: "A4", icon: "fa fa-arrow-circle-left", action: "" }]
-      //   }
-      // ];
-      // var onBtnClicked = (btnId) => {
-      //   this.ticketChild();
-      // };
-      // Swal.fire({
-      //   title: "asdasd",
-      //   icon: "success",
-      //   html: '<div class="table-responsive">' +
-      //   '<div class="col-sm-12" style="padding-top: 6px;">' +
-      //   '<button (click)="ticketChild()" >wa</button>' +
-      //   '</div>' +
-      //   '</div>',
-      //   showCloseButton: true,
-      //   allowOutsideClick: false,
-      //   showConfirmButton: true,
-
-      //   confirmButtonText:
-      //     '<div ><i class="fa fa-check" ></i> Aceptar</div>',
-
-      // })
-
-      // this.msgConfirmSaveWithButtons(
-      //   "Documento " + m.serie + " - " + m.numero + " generado correctamente",
-      //   "success",
-      //   rows).then((result) => {
-      //     console.log(result);
-
-      //     this.router.navigate(["/venta"]);
-      //   });
 
     }, err => {
       if (err.status === 422) {
         this.error = []
-        console.log(err.error);
 
         for (var prop in err.error) {
-          // console.log("Key:" + prop);
-          // console.log("Value:" + err.error[prop]);
           this.error.push(err.error[prop])
         }
-        // this.error.Results.forEach(element => {
-        //   this.error = this.error + element + "/n"
-        // })
-        // console.log(this.error);
       }
     });
   }
@@ -377,22 +256,21 @@ export class ActContratoFormComponent implements OnInit {
   getListCnfMaestro() {
     this.loadingCnfMaestro = true;
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
-    if(cnfEmpresa == '*') {
+    if (cnfEmpresa == '*') {
       return this.cnfMaestroService.getAllDataCombo().subscribe(data => {
         this.listCnfMaestro = data;
         this.loadingCnfMaestro = false;
       })
-    }else{
+    } else {
       return this.cnfMaestroService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
         this.listCnfMaestro = data;
         this.loadingCnfMaestro = false;
       })
     }
-    
+
 
   }
   getListImpuestoCondicion() {
-    console.log(this.chargingsb);
     this.loadingCnfImpuestoCondicion = true;
     return this.cnfImpuestoCondicionService.getAllDataCombo().subscribe(data => {
       this.listImpuestoCondicion = data;
@@ -416,37 +294,9 @@ export class ActContratoFormComponent implements OnInit {
     return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
       ? false : a1.id === a2.id;
   }
-  getListCnfFormaPago() {
-    this.loadingCnfFormaPago = true;
-    console.log(this.chargingsb);
-    let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
-    if(cnfEmpresa == '*') {
-      return this.cnfFormaPagoService.getAllDataCombo().subscribe(data => {
-        this.listCnfFormaPago = data;
-        this.loadingCnfFormaPago = false;
-      })
-    }else{
-      return this.cnfFormaPagoService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
-        this.listCnfFormaPago = data;
-        this.loadingCnfFormaPago = false;
-      })
-    }
-    
-
-  }
-  compareCnfFormaPago(a1: CnfFormaPago, a2: CnfFormaPago): boolean {
-    if (a1 === undefined && a2 === undefined) {
-      return true;
-    }
-
-    return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
-      ? false : a1.id === a2.id;
-  }
   getListCnfMoneda() {
     this.loadingCnfMoneda = true;
-    console.log(this.chargingsb);
     return this.cnfMonedaService.getAllDataCombo().subscribe(data => {
-      console.log(data);
 
       this.listCnfMoneda = data;
       this.loadingCnfMoneda = false;
@@ -463,26 +313,26 @@ export class ActContratoFormComponent implements OnInit {
   }
   getListCnfLocal() {
     this.loadingCnfLocal = true;
-    console.log(this.chargingsb);
     let user = this.appService.getProfile();
     console.log(user);
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
-    if(cnfEmpresa == '*') {
+    if (cnfEmpresa == '*') {
       return this.cnfLocalService.getAllDataCombo().subscribe(data => {
         this.listCnfLocal = data;
         this.loadingCnfLocal = false;
       })
-    }else{
+    } else {
       return this.cnfLocalService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
         this.listCnfLocal = data;
         this.loadingCnfLocal = false;
 
-        
-        if(this.listCnfLocal.length == 1) {
+
+        if (this.listCnfLocal.length == 1) {
           this.cnfLocalService.getData(this.listCnfLocal[0].id).subscribe(data => {
             this.model.cnfLocal = data
+            this.loadSerie();
             // this.getListInvAlmacen()
-            
+
           })
           // this.model.cnfLocal.id = this.listCnfLocal[0].id;
           // if (this.listInvAlmacen.length == 1){
@@ -491,7 +341,7 @@ export class ActContratoFormComponent implements OnInit {
         }
       })
     }
-    
+
 
   }
   compareCnfLocal(a1: CnfLocal, a2: CnfLocal): boolean {
@@ -504,9 +354,13 @@ export class ActContratoFormComponent implements OnInit {
   }
   getListCnfTipoComprobante() {
     this.loadingCnfTipoComprobante = true;
-    console.log(this.chargingsb);
     return this.cnfTipoComprobanteService.getAllDataCombo().subscribe(data => {
       this.listCnfTipoComprobante = data;
+      this.listCnfTipoComprobante = this.listCnfTipoComprobante.filter(data => data.nombre.toUpperCase().includes("CONTRATO"));
+      this.model.cnfTipoComprobante = this.listCnfTipoComprobante[0];
+      console.log(this.model.cnfTipoComprobante);
+      
+      this.loadSerie()
       this.loadingCnfTipoComprobante = false;
     })
 
@@ -521,7 +375,6 @@ export class ActContratoFormComponent implements OnInit {
   }
   getListCnfPlanContrato() {
     this.loadingCnfPlanContrato = true;
-    console.log(this.chargingsb);
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
     return this.cnfPlanContratoService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
       this.listCnfPlanContrato = data;
@@ -531,7 +384,7 @@ export class ActContratoFormComponent implements OnInit {
       //     this.model.invAlmacen = data;
       //   })
       // }
-      
+
     })
 
   }
@@ -568,6 +421,9 @@ export class ActContratoFormComponent implements OnInit {
   // }
   loadSerie() {
     this.model.serie = "";
+    console.log(this.model.cnfTipoComprobante.id);
+    console.log(this.model.cnfLocal.id);
+    
     return this.cnfNumComprobanteService
       .getDataByCnfTipoComprobanteIdAndCnfLocalId(this.model.cnfTipoComprobante.id.toString()
         , this.model.cnfLocal.id.toString()).subscribe(data => {
@@ -616,21 +472,21 @@ export class ActContratoFormComponent implements OnInit {
 
     mp.map = convMapDetail;
     this.commonService.genericPostRequest("/api/business/getpdflocal", mp, 'blob')
-    .subscribe(data => {
-      console.log(data);
-      if (data.type != 'application/json') {
-        var contentType = 'application/pdf';
-        var extension = "pdf";
+      .subscribe(data => {
+        console.log(data);
+        if (data.type != 'application/json') {
+          var contentType = 'application/pdf';
+          var extension = "pdf";
 
-        if (data.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-          contentType = data.type;
-          extension = "xlsx";
+          if (data.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+            contentType = data.type;
+            extension = "xlsx";
+          }
+          const blob = new Blob([data], { type: contentType });
+          this.generateAttachment(blob, extension);
         }
-        const blob = new Blob([data], { type: contentType });
-        this.generateAttachment(blob, extension);
-      }
 
-    });
+      });
   }
   msgConfirmSaveWithButtons(title: string, icon: any, lines: any) {
     let html: string = "";
@@ -722,17 +578,39 @@ export class ActContratoFormComponent implements OnInit {
       this.getListCnfMaestro();
       // this.model.cnfBpartner = 
     })
-    this.modalRef.componentInstance.cnfMaestro.subscribe((receivedEntry:CnfMaestro) => {
+    this.modalRef.componentInstance.cnfMaestro.subscribe((receivedEntry: CnfMaestro) => {
       console.log(receivedEntry);
       this.getListCnfMaestro()
       this.model.cnfMaestro = receivedEntry
+    })
+  }
+  addNewCnfZona() {
+    // this.modalRef = this.modalService.open(CnfMaestroFormModalComponent);
+    // this.modalRef.closed.subscribe(result => {
+    //   this.getListCnfMaestro();
+    //   // this.model.cnfBpartner = 
+    // })
+    // this.modalRef.componentInstance.cnfMaestro.subscribe((receivedEntry: CnfMaestro) => {
+    //   console.log(receivedEntry);
+    //   this.getListCnfMaestro()
+    //   this.model.cnfMaestro = receivedEntry
+    // })
+    this.modalRef = this.modalService.open(OpeGenericFormModalComponent);
+    this.modalRef.componentInstance.form = 'CnfZona';
+    // this.modalRef.closed.subscribe(result => {
+    //   this.getListCnfMaestro();
+    // })
+    this.modalRef.componentInstance.registerOut.subscribe((receivedEntry: any) => {
+      console.log(receivedEntry);
+      // this.getListCnfMaestro()
+      this.model.cnfZona = receivedEntry;
     })
   }
   getListCnfMestroAsObservable(term: any): Observable<any> {
 
     if (term.length >= 2) {
       let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
-      return this.cnfMaestroService.getAllDataComboTypeHead(term,cnfEmpresa)
+      return this.cnfMaestroService.getAllDataComboTypeHead(term, cnfEmpresa)
         .pipe(
           tap(() => this.searchFailed = false),
           catchError((err: any) => {
@@ -746,19 +624,32 @@ export class ActContratoFormComponent implements OnInit {
     }
 
   }
-searchCnfMaestro = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    distinctUntilChanged(),
-    switchMap(term => {
-      return this.getListCnfMestroAsObservable(term);
-    })
-  )
+  searchCnfMaestro = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap(term => {
+        return this.getListCnfMestroAsObservable(term);
+      })
+    )
 
-  getListMapsAsObservable(term: any): Observable<any> {
+  loadPrecio() {
+    
+    let wa = this.dateAdapter.fromModel(this.model.fecha);
+
+    // let year = new Date().getFullYear();
+    // let month = new Date().getMonth() + 1;
+    let day = new Date(wa.year, wa.month, 0).getDate();
+
+    this.model.montoPrimerMes = (this.model.cnfPlanContrato.precio / day) * (day - wa.day);
+
+    this.model.montoPrimerMes = Math.round((this.model.montoPrimerMes + Number.EPSILON) * 100) / 100;
+  }
+  getListCnfZonaAsObservable(term: any): Observable<any> {
 
     if (term.length >= 2) {
-      return this.googleMapsService.getAllDataComboTypeHead(term)
+      let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+      return this.cnfZonaService.getAllByCnfEmpresaId(cnfEmpresa)
         .pipe(
           tap(() => this.searchFailed = false),
           catchError((err: any) => {
@@ -772,12 +663,12 @@ searchCnfMaestro = (text$: Observable<string>) =>
     }
 
   }
-searchMaps = (text$: Observable<string>) =>
+searchCnfZona = (text$: Observable<string>) =>
   text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
     switchMap(term => {
-      return this.getListMapsAsObservable(term);
+      return this.getListCnfZonaAsObservable(term);
     })
   )
 
@@ -797,6 +688,8 @@ searchMaps = (text$: Observable<string>) =>
       zoom: 13,
     });
     this.map.addListener('click', (event) => {
+      console.log(event);
+
       const ellipsePoints = toEllipse(this.entries[0].location.bounds);
       var line = turf.helpers.lineString(
         ellipsePoints.map((p) => [p.longitude, p.latitude])
@@ -812,6 +705,7 @@ searchMaps = (text$: Observable<string>) =>
       const distance = isInside ? 0 : turf.pointToLineDistance(point, line);
       console.log('distance', distance * 1000);
     });
+
   }
 
   onPlaceChange(place: google.maps.places.PlaceResult) {
@@ -819,12 +713,18 @@ searchMaps = (text$: Observable<string>) =>
 
     const color = 'red';
     const pin = this.pin(color);
-
-    const marker = new google.maps.Marker({
+    this.marker?.setMap(null);
+    this.marker = new google.maps.Marker({
       position: place.geometry.location,
       animation: google.maps.Animation.DROP,
       map: this.map,
       icon: this.pin(color),
+      draggable: true
+    });
+
+    this.marker.addListener('dragend', (event) => {
+      this.model.latitude = this.marker.getPosition().lat();
+      this.model.longitude = this.marker.getPosition().lng();
     });
 
     // const rectangle = new google.maps.Rectangle({
@@ -862,16 +762,21 @@ searchMaps = (text$: Observable<string>) =>
     this.entries = [];
     console.log(place);
     console.log(location);
-    this.model.direccion = location.name;
+    this.model.direccion = place.formatted_address;
     this.model.urlMap = place.url;
+    this.model.latitude = location.coordinates.latitude;
+    this.model.longitude = location.coordinates.longitude;
+    this.model.vicinity = place.vicinity + ", " + location.cityName + ", " + location.stateCode;
     this.entries.unshift({
       place,
-      marker,
+      marker: this.marker,
       color,
       location,
     });
   }
-
+  markerDragEnd(m: any, $event: MouseEvent) {
+    console.log('dragEnd', m, $event);
+  }
 
   pin(color) {
     return {
@@ -966,8 +871,8 @@ function toEllipse({ north, south, east, west }: cosmos.LatLngBoundsLiteral) {
 
 function expandBounds(bounds: cosmos.LatLngBoundsLiteral, meters: number) {
   const SQRT_2 = 1.4142135623730951;
-  console.log(geolib);
-  
+  // console.log(geolib);
+
   const { longitude: west, latitude: north } = geolib.computeDestinationPoint(
     {
       latitude: bounds.north,

@@ -88,7 +88,8 @@
                                                     <input placeholder="dd/mm/yyyy"
                                                         class="form-control-sm-dp col-xs-10 col-sm-10 col-md-10 col-lg-8"
                                                         id="fecha" name="model.fecha" maxlength="200"
-                                                        [(ngModel)]="model.fecha" ngbDatepicker #dfecha="ngbDatepicker">
+                                                        [(ngModel)]="model.fecha" ngbDatepicker #dfecha="ngbDatepicker"
+                                                        (ngModelChange)="loadPrecio()">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-outline-secondary calendar button-dp"
                                                             (click)="dfecha.toggle()" type="button">
@@ -167,14 +168,6 @@
                                                     class="spinner-border spinner-border-sm mr-1"></span><span
                                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                                             <div class="col-sm-12 col-lg-7">
-                                                <!-- <ng-select [items]="listCnfMaestro" class="col-sm-12 col-lg-6" 
-                                                        name="selectedCnfMaestro"
-                                                        bindLabel="name"
-                                                        role="listbox"
-                                                        placeholder = "- Seleccione -"
-                                                        [(ngModel)]="selectedCnfMaestro"
-                                                        [clearable] = "false">
-                                                </ng-select> -->
                                                 <input class="form-control-sm col-sm-12 col-lg-10" type="text"
                                                     [(ngModel)]="model.cnfMaestro" name="model.cnfMaestro" #input2
                                                     [ngbTypeahead]="searchCnfMaestro" [resultTemplate]="rt2"
@@ -187,48 +180,10 @@
                                                 <a class="fas fa-plus" style="cursor: pointer;"
                                                     (click)="addNewCnfMestro()" title="agregar"></a>
 
-                                                <!-- <select name="model.cnfMaestro" [compareWith]="compareCnfMaestro"
-                                                    [(ngModel)]="model.cnfMaestro"
-                                                    class="form-control-sm col-sm-12 col-lg-12">
-                                                    <option *ngIf="loadingCnfMaestro" [ngValue]="0" selected="selected">
-                                                        Cargando...</option>
-                                                    <option *ngIf="!loadingCnfMaestro"
-                                                        [ngValue]="selectDefaultCnfMaestro">
-                                                        {{selectDefaultCnfMaestro.nombre}}</option>
-                                                    <option *ngFor="let item of listCnfMaestro; index as i;"
-                                                        [ngValue]="item">{{item.apellidoPaterno + ' ' +item.nombres}}
-                                                    </option>
-
-                                                </select> -->
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12 col-sm-12 col-xs-12">
-                                        <div class="form-group-sm row">
-                                            <label
-                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_forma_pago'
-                                                |
-                                                translate}} <span *ngIf="loadingCnfFormaPago"
-                                                    class="spinner-border spinner-border-sm mr-1"></span><span
-                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
-                                            <div class="col-sm-12 col-lg-7">
-                                                <select name="model.cnfFormaPago" [compareWith]="compareCnfFormaPago"
-                                                    [(ngModel)]="model.cnfFormaPago"
-                                                    class="form-control-sm col-sm-12 col-lg-12">
-                                                    <option *ngIf="loadingCnfFormaPago" [ngValue]="0"
-                                                        selected="selected">
-                                                        Cargando...</option>
-                                                    <option *ngIf="!loadingCnfFormaPago"
-                                                        [ngValue]="selectDefaultCnfFormaPago">
-                                                        {{selectDefaultCnfFormaPago.nombre}}</option>
-                                                    <option *ngFor="let item of listCnfFormaPago; index as i;"
-                                                        [ngValue]="item">{{item.nombre}}
-                                                    </option>
 
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
 
                                     <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
@@ -242,7 +197,7 @@
                                                 <select name="model.cnfPlanContrato"
                                                     [compareWith]="compareCnfPlanContrato"
                                                     [(ngModel)]="model.cnfPlanContrato"
-                                                    class="form-control-sm col-sm-12 col-lg-12">
+                                                    class="form-control-sm col-sm-12 col-lg-12" (change)="loadPrecio()">
                                                     <option *ngIf="loadingCnfPlanContrato" [ngValue]="0"
                                                         selected="selected">
                                                         Cargando...</option>
@@ -257,8 +212,42 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label
+                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_zona'
+                                                |
+                                                translate}} <span
+                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                            <div class="col-sm-12 col-lg-7">
+                                                <input class="form-control-sm col-sm-12 col-lg-10" type="text"
+                                                    [(ngModel)]="model.cnfZona" name="model.cnfZona" #input2
+                                                    [ngbTypeahead]="searchCnfZona" [resultTemplate]="rt3"
+                                                    [inputFormatter]="formatter" />
+                                                <ng-template #rt3 let-r="result" let-t="term">
+                                                    {{ r.nombre}}
+                                                </ng-template>
+                                                &nbsp;
+                                                <a class="fas fa-plus" style="cursor: pointer;"
+                                                    (click)="addNewCnfZona()" title="agregar"></a>
+                                            </div>
+                                        </div>
+                                    </div>
 
-
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label for="nroPoste"
+                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.nro_poste'
+                                                |
+                                                translate}}</label>
+                                            <div class="col-sm-12 col-lg-7">
+                                                <input type="text" [(ngModel)]="model.nroPoste" maxlength="10"
+                                                    name="nroPoste" id="nroPoste"
+                                                    class="form-control-sm col-sm-12 col-lg-12"
+                                                    placeholder="Ingrese Nro de poste" />
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label for="observacion"
@@ -270,6 +259,20 @@
                                                     name="observacion" id="observacion" name="observacion"
                                                     class="form-control-sm col-sm-12 col-lg-12"
                                                     placeholder="Ingrese observacion" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label for="nroPoste"
+                                                class="col-lg-5 col-sm-12 col-form-label">{{'webpagos.act_contrato.monto_primer_mes'
+                                                |
+                                                translate}}</label>
+                                            <div class="col-sm-12 col-lg-7">
+                                                <input type="text" [ngModel]="model.montoPrimerMes | number: '1.2-2'"
+                                                    maxlength="10" name="model.montoPrimerMes" id="model.montoPrimerMes"
+                                                    class="form-control-sm col-sm-12 col-lg-12"
+                                                    placeholder="Ingrese Monto primer mes" />
                                             </div>
                                         </div>
                                     </div>
@@ -287,9 +290,9 @@
                                             style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
 
                                     <div class="col-sm-12 col-lg-8">
-                                        <input placeholder="search for location" autocorrect="off" autocapitalize="off"
-                                            spellcheck="off" type="text" class="form-control-sm col-sm-12 col-lg-12"
-                                            #search />
+                                        <input placeholder="search for location" [(ngModel)]="model.direccion"
+                                            name="direccion" autocorrect="off" autocapitalize="off" spellcheck="off"
+                                            type="text" class="form-control-sm col-sm-12 col-lg-12" #search />
                                     </div>
 
                                 </div>

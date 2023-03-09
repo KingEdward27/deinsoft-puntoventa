@@ -45,5 +45,8 @@ export class ActCajaOperacionService {
     let params = new HttpParams().set("id",arg1);
     return this.http.delete(this.url+'/delete-act-caja-operacion', { observe: 'response' ,params}); 
   }
+  public getReport(form: any): Observable<ActCajaOperacion> {
+    return this.http.post<ActCajaOperacion>(this.url + '/get-report-act-caja-operacion', form);
+  }
 }
 

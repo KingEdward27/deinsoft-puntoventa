@@ -14,6 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.model.SegMenu;
 import com.deinsoft.puntoventa.business.repository.SegMenuRepository;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -104,7 +105,9 @@ public class SegPermisoServiceImpl extends CommonServiceImpl<SegPermiso, SegPerm
                                         .filter(predicate -> {
                                           return segPermisoList.stream().anyMatch(i -> i.getSegMenu().getId() == predicate.getId());
                                         })
+                                        .sorted(Comparator.comparing(SegMenu::getSeqorder))
                                         .collect(Collectors.toSet());
+                        
                         item.getSegMenu().setChildren(list);
                         return item;
                     })

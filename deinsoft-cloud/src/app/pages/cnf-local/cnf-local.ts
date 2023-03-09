@@ -43,6 +43,8 @@ export class CnfLocalComponent extends GenericListComponent implements OnInit{
     console.log(user);
     
     let cnfEmpresa = user.profile.split("|")[1];
+    console.log(cnfEmpresa);
+    
     this.prop.conditions.push({"columnName":"cnf_local.cnf_empresa_id","value":cnfEmpresa});
     this.prop.columnsForm[0].filters.push({"columnName":"cnf_empresa.cnf_empresa_id","value":cnfEmpresa});
     super.properties = this.prop;

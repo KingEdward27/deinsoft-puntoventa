@@ -221,7 +221,7 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
     myMap.set("id", this.properties.id ? this.properties.id : 0);
     this.properties.columnsForm.forEach((element: any) => {
       if (element.type != "label" && element.type != "hidden") {
-        if (element.relatedBy) {
+        if (((element.type == "select" && element.relatedBy) || element.type != "select") && element.type != "hidden") {
           let column = "";
           if (element.type == "input" || element.type == "date" || element.type == "number") {
             column = element?.tableName + "." + element?.columnName;

@@ -30,6 +30,7 @@ export class ActContratoService {
       .set("numTicket", arg1.numTicket)
       .set("nroPoste", arg1.nroPoste)
       .set("urlMap", arg1.urlMap)
+      .set("direccion", arg1.direccion)
       ; return this.http.get<ActContrato[]>(`${this.url}/get-all-act-contrato`, { params });
   }
   public getAllDataCombo(): Observable<any> {
@@ -83,15 +84,18 @@ export class ActContratoService {
     .set("id", id.toString());
     return this.http.get<any>(this.url + '/sendapi', { params });
   }
-  public getReport(form: any): Observable<ActContrato> {
-    return this.http.post<ActContrato>(this.url + '/get-report-act-contrato', form);
-  }
+  // public getReport(form: any): Observable<ActContrato> {
+  //   return this.http.post<ActContrato>(this.url + '/get-report-act-contrato', form);
+  // }
   public genReportExcel(jsonData:any): Observable<any> {
     return this.http.post(this.url+"/export/excel", jsonData,{observe: 'response', responseType: 'blob'});
   }
   public invalidateActComprobante(arg1:string): Observable<any>{
     let params = new HttpParams().set("id",arg1);
     return this.http.post(this.url+'/invalidate-act-contrato', params); 
+  }
+  public getReport(form: any): Observable<ActContrato> {
+    return this.http.post<ActContrato>(this.url + '/get-report-act-contrato', form);
   }
 }
 

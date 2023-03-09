@@ -1,0 +1,172 @@
+<ol class="breadcrumb float-xl-right">
+    <li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+    <li class="breadcrumb-item"><a href="javascript:;" translate = "webpagos.securityModule"></a></li>
+    <li class="breadcrumb-item active" translate = "webpagos.actPago.home.title"></li>
+</ol>
+<h1 class="page-header" translate = "webpagos.actPago.home.title"><small translate = "webpagos.actPago.home.subTitleForm"></small></h1>
+
+<div class="panel panel-inverse" *ngIf="isDataLoaded">
+    <!-- begin panel-heading -->
+    <div class="panel-heading">
+        <h4 class="panel-title" translate = "webpagos.actPago.home.title"></h4>
+        <div class="panel-heading-btn">
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i
+                    class="fa fa-expand"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i
+                    class="fa fa-redo"></i></a>
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i
+                    class="fa fa-minus"></i></a>
+
+        </div>
+    </div>
+    <!-- end panel-heading -->
+    <!-- begin panel-body -->
+    <div class="panel-body">
+        <div class="table-responsive">
+            <h4 style="border-bottom: solid 1px;padding-bottom: 6px;">{{'webpagos.register' | translate}} - {{'webpagos.actPago.home.title' | translate}}</h4>
+            <form class="col-sm-12" style="padding-top: 6px;"  >
+                <div class="form-group-sm row" >
+	                <label for="fecha" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.actPago.fecha' | translate}}</label>
+	                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12"> 
+                        <div class="input-group input-group-sm" >
+                            <input placeholder="dd/mm/yyyy" class="form-control-sm-dp col-xs-10 col-sm-10 col-lg-5"
+                                   id ="fecha" name="model.fecha" maxlength="200" [(ngModel)]="model.fecha" 
+                                   ngbDatepicker #dfecha="ngbDatepicker">
+                            <div class="input-group-append">
+                              <button class="btn btn-outline-secondary calendar button-dp"  (click)="dfecha.toggle()" type="button">
+                                <i class="fa fa-calendar"></i>
+                              </button>
+                            </div>
+                            
+                          </div>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.fecha">{{ error.fecha }}</div>
+                    </div>                </div>
+                <div class="form-group-sm row" >
+	                <label for="serie" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.actPago.serie' | translate}} <span style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.serie" maxlength="4" name="serie" id="serie" name = "serie" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese serie"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.serie">{{ error.serie }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label for="numero" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.actPago.numero' | translate}} <span style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.numero" maxlength="8" name="numero" id="numero" name = "numero" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese numero"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.numero">{{ error.numero }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label for="fechaRegistro" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.actPago.fechaRegistro' | translate}} <span style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.fechaRegistro" maxlength="200" name="fechaRegistro" id="fechaRegistro" name = "fechaRegistro" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese fechaRegistro"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.fechaRegistro">{{ error.fechaRegistro }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label for="billete" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.actPago.billete' | translate}}</label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.billete" maxlength="21" name="billete" id="billete" name = "billete" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese billete"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.billete">{{ error.billete }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label for="total" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.actPago.total' | translate}}</label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.total" maxlength="21" name="total" id="total" name = "total" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese total"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.total">{{ error.total }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label for="vuelto" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.actPago.vuelto' | translate}}</label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.vuelto" maxlength="21" name="vuelto" id="vuelto" name = "vuelto" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese vuelto"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.vuelto">{{ error.vuelto }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label for="subtotal" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.actPago.subtotal' | translate}}</label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.subtotal" maxlength="21" name="subtotal" id="subtotal" name = "subtotal" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese subtotal"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.subtotal">{{ error.subtotal }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label for="igv" class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.actPago.igv' | translate}}</label>
+                    <div class="col-sm-12 col-lg-9">
+                            <input type="text" [(ngModel)]="model.igv" maxlength="21" name="igv" id="igv" name = "igv" class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese igv"/>
+                        <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.igv">{{ error.igv }}</div>
+                    </div>
+                </div>
+                <div class="form-group-sm row" >
+	                <label class="col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.actPago.cnfTipoComprobante' | translate}} <span *ngIf="loadingCnfTipoComprobante" class="spinner-border spinner-border-sm mr-1"></span><span style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                    <div class="col-sm-12 col-lg-9">
+	                    <select name="model.cnfTipoComprobante" [compareWith]="compareCnfTipoComprobante" [(ngModel)]="model.cnfTipoComprobante" 
+                                class="form-control-sm col-sm-12 col-lg-6">
+                                    <option *ngIf="loadingCnfTipoComprobante" [ngValue]="0" selected="selected">Cargando...</option>
+                                    <option *ngIf="!loadingCnfTipoComprobante" [ngValue]="selectDefaultCnfTipoComprobante" >{{selectDefaultCnfTipoComprobante.name}}</option>
+                                    <option *ngFor="let item of listCnfTipoComprobante; index as i;" [ngValue]="item" >{{item.name}}</option>
+                                    
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?['cnfTipoComprobante.name']:false">{{error["cnfTipoComprobante.name"] }}</div>
+                    </div>
+                            </div>
+                <div class="form-group-sm row" *ngIf="id">
+                    <label class="col-xl-3 col-lg-3 col-sm-12 col-form-label">{{'ocscloudApp.actPago.actPagoDetalle' | translate}}: <span
+                            style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            
+                    <div class="col-sm-12 col-lg-9">
+                        <div *ngIf="model.listActPagoDetalle && model.listActPagoDetalle.length > 0? false:true">
+                                    {{'ocscloudApp.noRows' | translate }}
+                        </div>
+                        <div *ngIf="model.listActPagoDetalle && model.listActPagoDetalle.length > 0?true:false" >
+                            <table id="dtData"
+                                class="col-xl-6 col-lg-6 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
+                                <thead>
+                                    <tr>
+                                        <th width="1%">Nro.</th>
+                                        <th class="text-nowrap">{{'ocscloudApp.actPagoProgramacion.fecha' | translate}}</th>
+                                        <th width="1%" class="text-nowrap">{{'ocscloudApp.actionsText' | translate}}</th>                                    </tr>
+                                </thead>
+                                <tbody>
+    
+                                    <tr *ngFor="let item of model.listActPagoDetalle; index as i" class="odd gradeX">
+                                        <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
+                                        <td>{{item.actPagoProgramacion.fecha}}</td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-sm-6 col-xs-6 text-right"><a class="fas fa-edit" style="cursor: pointer;"                                                         (click) = "editarActPagoDetalle(item)"
+                                                        title="Modificar"></a>
+                                                </div>                                                <div class="col-sm-6 col-xs-6"><a (click)="quitarActPagoDetalle(item)" style="cursor: pointer;"
+                                                        title="Cambiar estado"><i class="fa fa-trash fa-lg"></i></a></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div> 
+                        <div>
+                            <a style="color: blue;text-decoration: underline;cursor: pointer;" (click) = "agregarActPagoDetalle()">A�adir ActPagoDetalle</a>
+                        </div>
+                    </div>
+                    
+                </div><div class="form-group row">
+
+                    <div class="col-sm-12" style="padding-top: 20px;">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-2 col-sm-4 col-xs-5" style="margin-left: 50x;">
+                                <button class="btn btn-default col-12" (click)="getBack()" >
+                                    <i class="fa fa-arrow-circle-left"></i> {{'ocscloudApp.btnBack' | translate }}
+                                </button>
+                            </div>
+                            <div class="col-lg-2 col-sm-4 col-xs-5" style="margin-left: 20x;">
+                                <button class="btn btn-primary col-12" (click)="save()" >
+                                    <i [ngClass]="model.id ? 'fa fa-pen' : 'fa fa-plus'"></i> {{ model.id ? ('ocscloudApp.btnEdit' | translate):('ocscloudApp.btnSave' | translate) }}
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div></form>
+        </div>
+      </div>
+</div>

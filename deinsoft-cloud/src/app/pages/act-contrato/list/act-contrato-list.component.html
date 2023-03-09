@@ -3,13 +3,13 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>{{'webpagos.act_pago_programacion.home.title'| translate}}</h1>
+                <h1>{{'webpagos.act_contrato.home.title'| translate}}</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
                     <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.adminModule"></a></li>
-                    <li class="breadcrumb-item active">{{'webpagos.act_pago_programacion.home.title'| translate}}</li>
+                    <li class="breadcrumb-item active">{{'webpagos.act_contrato.home.title'| translate}}</li>
                 </ol>
             </div>
         </div>
@@ -23,7 +23,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{'webpagos.act_pago_programacion.home.title'| translate}}</h3>
+                <h3 class="card-title">{{'webpagos.act_contrato.home.title'| translate}}</h3>
 
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip"
@@ -57,19 +57,19 @@
                                 <th width="1%">Nro.</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.fecha' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.cnf_local' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.act_contrato.cnf_plan_contrato' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.cnf_maestro' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.cnf_plan_contrato' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.cnf_tipo_comprobante' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.act_contrato.cnf_forma_pago' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.serie' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.numero' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.nro_poste' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.direccion' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.vicinity' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.flag_estado' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.actionsText' | translate}}</th>
                             </tr>
                         </thead>
                         <tr>
-                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -86,11 +86,19 @@
                             </th>
                             
                             <th><input type="text" class="form-control-sm"
-                                    placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.act_contrato.nroPoste' | translate}}"
+                                    placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.act_contrato.nro_poste' | translate}}"
                                     name="search-id" [(ngModel)]="modelSearch.nroPoste" (keyUp.enter)="getAllData()" />
                             </th>
                             <th><input type="text" class="form-control-sm"
-                                placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.act_contrato.flagEstado' | translate}}"
+                                placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.act_contrato.direccion' | translate}}"
+                                name="search-id" [(ngModel)]="modelSearch.direccion" (keyUp.enter)="getAllData()" />
+                        </th>
+                        <th><input type="text" class="form-control-sm"
+                            placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.act_contrato.vicinity' | translate}}"
+                            name="search-id" [(ngModel)]="modelSearch.vicinity" (keyUp.enter)="getAllData()" />
+                    </th>
+                            <th><input type="text" class="form-control-sm"
+                                placeholder="{{'webpagos.searchFor' | translate}} {{'webpagos.act_contrato.flag_estado' | translate}}"
                                 name="search-id" [(ngModel)]="modelSearch.flagEstado"
                                 (keyUp.enter)="getAllData()" /></th>
                             <th></th>
@@ -101,14 +109,15 @@
                                 <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
                                 <td>{{item.fecha}}</td>
                                 <td>{{item.cnfLocal?.nombre}}</td>
-                                <td>{{item.cnfMaestro?.nombre}}</td>
+                                <td>{{item.cnfMaestro?.apellidoPaterno +' '+ item.cnfMaestro?.apellidoMaterno + ' ' + item.cnfMaestro?.nombres}}</td>
                                 <td>{{item.cnfPlanContrato?.nombre}}</td>
                                 <td>{{item.cnfTipoComprobante?.nombre}}</td>
-                                <td>{{item.cnfFormaPago?.nombre}}</td>
                                 <td>{{item.serie}}</td>
                                 <td>{{item.numero}}</td>
                                 <td>{{item.nroPoste}}</td>
-                                <td>{{item.flagEstado}}</td>
+                                <td>{{item.direccion}}</td>
+                                <td>{{item.vicinity}}</td>
+                                <td>{{item.flagEstado === '1'? "Activo": "Anulado"}}</td>
                                 <td>
                                     <div class="row2">
                                         <div class="col-sm-6 col-xs-6 text-right"><a class="fas fa-edit"

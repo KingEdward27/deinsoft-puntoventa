@@ -1,10 +1,13 @@
 package com.deinsoft.puntoventa.business.repository;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
+import com.deinsoft.puntoventa.business.model.ActPago;
+import org.springframework.data.repository.query.Param;
 
 public interface ActCajaOperacionRepository extends JpaRepository<ActCajaOperacion, Long> {
 
@@ -24,4 +27,9 @@ public interface ActCajaOperacionRepository extends JpaRepository<ActCajaOperaci
             + "where p.actPago.id =  ?1 ")
     List<ActCajaOperacion> findByActPagoId(long id);
 
+    @Query(value = "select p from actCajaOperacion p "
+            + "where (p.fecha between :#{#paramBean.fechaDesde} and :#{#paramBean.fechaHasta})")
+    List<ActCajaOperacion> getReportActCajaOperacion(@Param("paramBean") ParamBean paramBean);
+    
+    void deleteByActPago(ActPago actPago);
 }

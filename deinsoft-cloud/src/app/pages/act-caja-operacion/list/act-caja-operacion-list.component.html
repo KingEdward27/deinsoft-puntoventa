@@ -38,6 +38,121 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
+
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group-sm row">
+                                        <label
+                                            class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_local'
+                                            |
+                                            translate}} <span *ngIf="loadingCnfLocal"
+                                                class="spinner-border spinner-border-sm mr-1"></span></label>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <select name="model.cnfLocal" [compareWith]="compareCnfLocal"
+                                                [(ngModel)]="model.cnfLocal"
+                                                class="form-control-sm col-sm-12 col-lg-6">
+                                                <option *ngIf="loadingCnfLocal" [ngValue]="0" selected="selected">
+                                                    Cargando...</option>
+                                                <option *ngIf="!loadingCnfLocal" [ngValue]="selectDefaultCnfLocal">
+                                                    {{selectDefaultCnfLocal.nombre}}</option>
+                                                <option *ngFor="let item of listCnfLocal; index as i;"
+                                                    [ngValue]="item">
+                                                    {{item.nombre}}
+                                                </option>
+
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group-sm row">
+                                        <label for="numero"
+                                            class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.fechaDesde'
+                                            | translate}}</label>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <div class="input-group input-group-sm">
+                                                <input placeholder="dd/mm/yyyy" class="form-control-sm-dp"
+                                                    id="fechaDesde" name="model.fechaDesde" maxlength="200"
+                                                    [(ngModel)]="model.fechaDesde" ngbDatepicker
+                                                    #dfechaDesde="ngbDatepicker">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary calendar button-dp"
+                                                        (click)="dfechaDesde.toggle()" type="button">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group-sm row">
+                                        <label for="numero"
+                                            class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.fechaHasta'
+                                            | translate}} </label>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <div class="input-group input-group-sm">
+                                                <input placeholder="dd/mm/yyyy" class="form-control-sm-dp"
+                                                    id="fechaHasta" name="model.fechaHasta" maxlength="200"
+                                                    [(ngModel)]="model.fechaHasta" ngbDatepicker
+                                                    #dfechaHasta="ngbDatepicker">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary calendar button-dp"
+                                                        (click)="dfechaHasta.toggle()" type="button">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group-sm row">
+                                        <label
+                                            class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_maestro'
+                                            |
+                                            translate}} <span *ngIf="loadingCnfMaestro"
+                                                class="spinner-border spinner-border-sm mr-1"></span></label>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <input class="form-control-sm col-sm-12 col-lg-6"  type="text"
+                                                    [(ngModel)]="model.cnfMaestro"  
+                                                    name="model.cnfMaestro"
+                                                    #input2 
+                                                    [ngbTypeahead]="searchCnfMaestro"
+                                                    [resultTemplate]="rt2" 
+                                                    [inputFormatter]="formatterCnfMaestro"/>
+                                                    <ng-template #rt2 let-r="result" let-t="term">
+                                                        {{ r.apellidoPaterno}}  {{ r.apellidoMaterno}}  {{ r.nombres}}  -  {{ r.nroDoc}}
+                                                    </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-12" style="padding-top: 20px;">
+                            <div class="row justify-content-center">
+                                <div style="margin-left: 20px;">
+                                    <button class="btn btn-primary col-12" (click)="getListData()">
+                                        <i class="fa fa-search"></i> {{'webpagos.btnSearch' | translate }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
                     <div class="row">
                         <div class="col-6">
                             <div class="col-md-12 col-lg-6 col-xl-6 col-xs-9" style="margin-left:-15px">
@@ -75,16 +190,13 @@
                         </tr>
                         <tbody>
 
-                            <tr *ngFor="let item of lista; index as i" class="odd gradeX">
+                            <tr *ngFor="let item of listData; index as i" class="odd gradeX">
                                 <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
                                 
                                 <td>{{item.fecha}}</td>
                                 <td>{{item.actCajaTurno?.actCaja.nombre +' - '+ item.actCajaTurno.fechaApertura}}</td>
                                 <td>{{item.actComprobante?(item.actComprobante.serie + '-' +item.actComprobante.numero):''}}</td>
-                                <td>{{item.actPago?.actPagoProgramacion?.actComprobante?
-                                    (item.actPago.actPagoProgramacion.actComprobante.serie + 
-                                    '-' +
-                                    item.actPago.actPagoProgramacion.actComprobante.numero):''}}</td>
+                                <td>{{item.detail}}</td>
                                 <td class="content-number">{{(item.flagIngreso == '1'?0:item.monto) | number:'1.2-2'}}</td>
                                 <td class="content-number">{{(item.flagIngreso != '1'?0:item.monto) | number:'1.2-2'}}</td>
                                 <td>

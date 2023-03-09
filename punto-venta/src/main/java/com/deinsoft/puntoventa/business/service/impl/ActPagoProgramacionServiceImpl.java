@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service.impl;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.repository.ActPagoProgramacionRepository;
 import com.deinsoft.puntoventa.business.service.ActPagoProgramacionService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import java.time.LocalDate;
@@ -91,7 +93,54 @@ public class ActPagoProgramacionServiceImpl
                                 .anyMatch(predicate -> 
                                         predicate.getEmpresa().getId() == item.getActComprobante().getCnfLocal().getCnfEmpresa().getId()))
                         .collect(Collectors.toList());
-        return ActPagoProgramacionList;
+        return ActPagoProgramacionList; 
     }
+//    @Override
+//    public List<ActPagoProgramacion> getReportActPagoProgramacionContratos(ParamBean paramBean) {
+//        List<ActPagoProgramacion> actCajaOperacionList = (List<ActPagoProgramacion>) actPagoProgramacionRepository.getReportActPagoProgramacionContratos(paramBean);
+//
+//        List<ActPagoProgramacion> actPagoProgramacionList2 = getAllActPagoProgramacion();
+//        
+//        return actCajaOperacionList.stream()
+//                .filter(predicate -> {
+//                    if (paramBean.getCnfLocal().getId() == 0) {
+//                        return true;
+//                    } else {
+//                        if (predicate.getActComprobante() != null 
+//                                && predicate.getActComprobante().getCnfLocal().getId() == paramBean.getCnfLocal().getId()) {
+//                            return true;
+//                        } else if (predicate.getActContrato()!= null) {
+//                            return predicate.getActContrato().getCnfLocal().getId() == paramBean.getCnfLocal().getId();
+//                        }
+//                        return false;
+//                    }
+//                })
+//                .filter(predicate -> {
+//                    if (paramBean.getCnfMaestro().getId() == 0) {
+//                        return true;
+//                    } else {
+//                        if (predicate.getActComprobante() != null 
+//                                && predicate.getActComprobante().getCnfMaestro().getId() == paramBean.getCnfMaestro().getId()) {
+//                            return true;
+//                        } else if (predicate.getActContrato()!= null) {
+//                            return predicate.getActContrato().getCnfMaestro().getId() == paramBean.getCnfMaestro().getId();
+//                        }
+//                        return false;
+//                    }
+//
+//                })
+//                .map(mapper -> {
+//                    actPagoProgramacionList2.forEach(action -> {
+//                        if (true) {
+//                            
+//                        }
+//                    });
+//                    if (mapper.) {
+//                
+//            }
+//                    return mapper;
+//                })
+//                .collect(Collectors.toList());
+//    }
     
 }

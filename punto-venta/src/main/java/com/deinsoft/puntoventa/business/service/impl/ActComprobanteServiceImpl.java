@@ -81,13 +81,13 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
 
     @Autowired
     BusinessService businessService;
-    
+
     @Autowired
     AuthenticationHelper auth;
-    
+
     @Autowired
     AppConfig appConfig;
-    
+
     public List<ActComprobante> getAllActComprobante(ActComprobante actComprobante) {
         List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getAllActComprobante(
                 actComprobante.getSerie().toUpperCase(), actComprobante.getNumero().toUpperCase(),
@@ -125,36 +125,46 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             throw new Exception("El usuario no tiene caja aperturada");
         }
         try {
-            List<CnfNumComprobante> numComprobante = cnfNumComprobanteRepository.findByCnfTipoComprobanteIdAndCnfLocalId(
-                    actComprobante.getCnfTipoComprobante().getId(),
-                    actComprobante.getCnfLocal().getId());
-            if (numComprobante.isEmpty()) {
-                throw new Exception("No existe numeración para el tipo de comprobante y el local");
+
+//            if (numComprobante.isEmpty()) {
+//                throw new Exception("No existe numeración para el tipo de comprobante y el local");
+//            }
+//            if (numComprobante.isEmpty()) {
+//                throw new Exception("No existe numeración para el tipo de comprobante y el local");
+//            }
+            if (actComprobante.getId() == 0) {
+
+                List<CnfNumComprobante> numComprobante = cnfNumComprobanteRepository.findByCnfTipoComprobanteIdAndCnfLocalId(
+                        actComprobante.getCnfTipoComprobante().getId(),
+                        actComprobante.getCnfLocal().getId());
+                if (numComprobante.isEmpty()) {
+                    throw new Exception("No existe numeración para el tipo de comprobante y el local");
+                }
+
+                //update num comprobante
+                CnfNumComprobante cnfNumComprobante = numComprobante.get(0);
+                cnfNumComprobante.setUltimoNro(numComprobante.get(0).getUltimoNro() + 1);
+
+                cnfNumComprobanteRepository.save(cnfNumComprobante);
+
+                actComprobante.setFechaRegistro(LocalDateTime.now());
+                actComprobante.setNumero(String.valueOf(numComprobante.get(0).getUltimoNro() + 1));
             }
-//            if (numComprobante.isEmpty()) {
-//                throw new Exception("No existe numeración para el tipo de comprobante y el local");
-//            }
-//            if (numComprobante.isEmpty()) {
-//                throw new Exception("No existe numeración para el tipo de comprobante y el local");
-//            }
-            actComprobante.setFechaRegistro(LocalDateTime.now());
-            actComprobante.setNumero(String.valueOf(numComprobante.get(0).getUltimoNro() + 1));
+
+            actComprobanteResult = actComprobanteRepository.save(actComprobante);
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
                 actComprobante.addActComprobanteDetalle(data);
             });
-            actComprobanteResult = actComprobanteRepository.save(actComprobante);
 
-            //update num comprobante
-            CnfNumComprobante cnfNumComprobante = numComprobante.get(0);
-            cnfNumComprobante.setUltimoNro(numComprobante.get(0).getUltimoNro() + 1);
-            cnfNumComprobanteRepository.save(cnfNumComprobante);
+            if (actComprobante.getId() == 0) {
+                if (actComprobanteResult.getCnfLocal().getCnfEmpresa().getFlagVentaRapida() == 1) {
+                    validate(actComprobante.getId());
 
-            if (actComprobanteResult.getCnfLocal().getCnfEmpresa().getFlagVentaRapida() == 1) {
-                validate(actComprobante.getId());
-
-                actComprobanteResult.setFlagEstado("2");
-                actComprobanteRepository.save(actComprobante);
+                    actComprobanteResult.setFlagEstado("2");
+                    actComprobanteRepository.save(actComprobante);
+                }
             }
+
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //            e.printStackTrace();
@@ -169,7 +179,6 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     public ActComprobante saveActComprobanteCompra(ActComprobante actComprobante) throws Exception {
         ActComprobante actComprobanteResult = null;
 
-        
         try {
             actComprobante.setFechaRegistro(LocalDateTime.now());
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
@@ -195,7 +204,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
 
     @Override
     public void validate(long id) throws Exception {
-        
+
         ActComprobante actComprobante = getActComprobante(id);
         //update stock
         invAlmacenProductoService.registerProductMovementAndUpdateStock(actComprobante, null);
@@ -208,8 +217,8 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         if (actCajaTurno.isEmpty()) {
             throw new Exception("El usuario no tiene caja aperturada");
         }
-        
-        saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno, actComprobante.getFlagIsventa().equals("1")?false:true);
+
+        saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno, actComprobante.getFlagIsventa().equals("1") ? false : true);
 
         actComprobante.setFlagEstado("2");
         actComprobanteRepository.save(actComprobante);
@@ -351,11 +360,11 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             if (actComprobante.getCnfFormaPago().getTipo() == 1) {
                 for (CnfFormaPagoDetalle cnfFormaPagoDetalle : list) {
                     ActPagoProgramacion p = new ActPagoProgramacion();
+                    p.setFecha(actComprobante.getFecha());
                     p.setActComprobante(actComprobante);
 
                     if (cnfFormaPagoDetalle.getModoDiaVencimiento() != null
                             && cnfFormaPagoDetalle.getModoDiaVencimiento() != 0) {
-                        p.setFecha(actComprobante.getFecha());
                         p.setFechaVencimiento(actComprobante.getFecha()
                                 .plusDays(cnfFormaPagoDetalle.getModoDiaVencimiento()));
                         p.setMonto(cnfFormaPagoDetalle.getModoMonto());
@@ -423,14 +432,15 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             actCajaOperacion.setFecha(LocalDate.now());
             actCajaOperacion.setFechaRegistro(LocalDateTime.now());
             actCajaOperacion.setMonto(actComprobante.getTotal());
-            actCajaOperacion.setFlagIngreso(flagIngreso?"1":"2");
+            actCajaOperacion.setFlagIngreso(flagIngreso ? "1" : "2");
             actCajaOperacion.setEstado("1");
             actCajaOperacionRepository.save(actCajaOperacion);
         }
     }
+
     @Override
     public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception {
-        byte[] bytes = businessService.print2(appConfig.getStaticResourcesPath(), tipo,getActComprobante(id),false);
+        byte[] bytes = businessService.print2(appConfig.getStaticResourcesPath(), tipo, getActComprobante(id), false);
         return bytes;
     }
 }

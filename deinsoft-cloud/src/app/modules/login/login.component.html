@@ -1,6 +1,10 @@
 <div class="card card-outline card-primary">
     <div class="card-header text-center">
-        <a [routerLink]="['/']" class="h1"><b>CLOUD DEINSOFT</b></a>
+        <a [routerLink]="['/']" class="h1">
+            <img src="assets/img/logo_deinsoft.png"
+                alt="Willax Logo"
+                style="opacity: 0.8" width="40%" />
+        </a>
     </div>
     <div class="card-body">
         <p class="login-box-msg">Iniciar sesión</p>
@@ -32,7 +36,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row text-center">
                 <!-- <div class="col-7">
                     <div class="icheck-primary">
                         <input type="checkbox" id="remember" />
@@ -40,7 +44,7 @@
                     </div>
                 </div> -->
                 <!-- /.col -->
-                <div class="col-5">
+                <div class="col-5 m-auto">
                     <app-button
                         [type]="'submit'"
                         [block]="true"

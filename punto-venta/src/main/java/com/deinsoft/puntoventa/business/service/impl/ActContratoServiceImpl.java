@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service.impl;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.model.ActCajaTurno;
@@ -12,18 +13,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deinsoft.puntoventa.business.model.ActContrato;
+import com.deinsoft.puntoventa.business.model.ActPago;
 import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.model.CnfFormaPagoDetalle;
 import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
 import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
 import com.deinsoft.puntoventa.business.repository.ActContratoRepository;
 import com.deinsoft.puntoventa.business.repository.ActPagoProgramacionRepository;
+import com.deinsoft.puntoventa.business.repository.ActPagoRepository;
 import com.deinsoft.puntoventa.business.repository.CnfFormaPagoDetalleRepository;
 import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
 import com.deinsoft.puntoventa.business.service.ActContratoService;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -43,14 +49,20 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 
     @Autowired
     CnfNumComprobanteRepository cnfNumComprobanteRepository;
-    
+
+    @Autowired
+    ActPagoRepository actPagoRepository;
+
     public List<ActContrato> getAllActContrato(ActContrato actContrato) {
         List<ActContrato> actContratoList = (List<ActContrato>) actContratoRepository.getAllActContrato(
                 actContrato.getCnfEmpresaId(),
                 actContrato.getSerie().toUpperCase(),
                 actContrato.getNumero().toUpperCase(),
-                actContrato.getObservacion().toUpperCase(), actContrato.getFlagEstado().toUpperCase(),
-                actContrato.getNroPoste().toUpperCase(), actContrato.getUrlMap().toUpperCase());
+                actContrato.getObservacion().toUpperCase(),
+                actContrato.getFlagEstado().toUpperCase(),
+                actContrato.getNroPoste().toUpperCase(),
+                actContrato.getUrlMap().toUpperCase(),
+                actContrato.getDireccion().toUpperCase());
         return actContratoList;
     }
 
@@ -65,22 +77,41 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 
     @Transactional
     public ActContrato saveActContrato(ActContrato actContrato) throws Exception {
-        if (actContrato.getId() == 0) {
+        long id = actContrato.getId();
+        if (id == 0) {
             actContrato.setFechaRegistro(LocalDateTime.now());
         }
-        List<CnfNumComprobante> numComprobante = cnfNumComprobanteRepository.findByCnfTipoComprobanteIdAndCnfLocalId(
-                actContrato.getCnfTipoComprobante().getId(),
-                actContrato.getCnfLocal().getId());
-        if (numComprobante.isEmpty()) {
-            throw new Exception("No existe numeración para el tipo de comprobante y el local");
+        if (actContrato.getCnfFormaPago() != null && actContrato.getCnfFormaPago().getId() == 0) {
+            actContrato.setCnfFormaPago(null);
         }
-        CnfNumComprobante cnfNumComprobante = numComprobante.get(0);
-        cnfNumComprobante.setUltimoNro(numComprobante.get(0).getUltimoNro() + 1);
-        cnfNumComprobanteRepository.save(cnfNumComprobante);
-        
+        if (id == 0) {
+            List<CnfNumComprobante> numComprobante = cnfNumComprobanteRepository.findByCnfTipoComprobanteIdAndCnfLocalId(
+                    actContrato.getCnfTipoComprobante().getId(),
+                    actContrato.getCnfLocal().getId());
+            if (numComprobante.isEmpty()) {
+                throw new Exception("No existe numeración para el tipo de comprobante y el local");
+            }
+            List<ActContrato> listContratos = actContratoRepository.findByCnfMaestroIdAndCnfPlanContratoId(actContrato.getCnfMaestro().getId(), actContrato.getCnfPlanContrato().getId());
+            if (!listContratos.isEmpty()) {
+                throw new Exception("Ya existe un registro con el mismo plan y mismo cliente");
+            }
+            CnfNumComprobante cnfNumComprobante = numComprobante.get(0);
+            cnfNumComprobante.setUltimoNro(numComprobante.get(0).getUltimoNro() + 1);
+            cnfNumComprobanteRepository.save(cnfNumComprobante);
+
+            actContrato.setNumero(String.valueOf(cnfNumComprobante.getUltimoNro()));
+        }
+
         ActContrato actContratoResult = actContratoRepository.save(actContrato);
 
-        saveActPagoProgramacionOrCajaOperacion(actContratoResult);
+        if (id == 0) {
+            if ((actContrato.getCnfFormaPago() != null && actContrato.getCnfFormaPago().getId() > 0)) {
+                saveActPagoProgramacionOrCajaOperacion(actContratoResult);
+            } else {
+                saveActPagoProgramacionMensualRepetitivo(actContratoResult);
+            }
+        }
+
         return actContratoResult;
     }
 
@@ -120,13 +151,60 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
         Optional<ActContrato> actContratoOptional = actContratoRepository.findById(id);
 
         if (actContratoOptional.isPresent()) {
-            
+
             actContrato = actContratoOptional.get();
-            
+
             // delete payment(remains validate)
             actPagoProgramacionRepository.deleteByActContrato(actContrato);
-            
+
             actContratoRepository.delete(actContrato);
+        }
+    }
+
+    private void saveActPagoProgramacionMensualRepetitivo(ActContrato actContrato) throws Exception {
+        LocalDate dueDate = actContrato.getFecha();
+        ActPagoProgramacion actPayment = new ActPagoProgramacion();
+        actPayment.setActContrato(actContrato);
+        actPayment.setFecha(actContrato.getFecha());
+
+        if (actContrato.getCnfPlanContrato().getDiaVencimiento() == null) {
+            throw new Exception("No se encontró fecha de vencimiento para el plan seleccionado");
+        }
+        if (actContrato.getFecha().lengthOfMonth() < actContrato.getCnfPlanContrato().getDiaVencimiento()) {
+            actPayment.setFechaVencimiento(actContrato.getFecha()
+                    .withDayOfMonth(actPayment.getFechaVencimiento().lengthOfMonth()));
+        } else {
+            actPayment.setFechaVencimiento(
+                    actContrato.getFecha()
+                            .withDayOfMonth(actContrato.getCnfPlanContrato().getDiaVencimiento()));
+        }
+
+        actPayment.setMonto(actContrato.getMontoPrimerMes());
+        actPayment.setMontoPendiente(actContrato.getMontoPrimerMes());
+        actPagoProgramacionRepository.save(actPayment);
+
+        for (int i = 1; i < 12; i++) {
+            actPayment = new ActPagoProgramacion();
+            actPayment.setActContrato(actContrato);
+            actPayment.setFecha(actContrato.getFecha());
+            actPayment.setFechaVencimiento(
+                    actContrato.getFecha()
+                            .plusMonths(i));
+            if (actContrato.getCnfPlanContrato().getDiaVencimiento() == null) {
+                throw new Exception("No se encontró fecha de vencimiento para el plan seleccionado");
+            }
+            if (actPayment.getFechaVencimiento().lengthOfMonth() < actContrato.getCnfPlanContrato().getDiaVencimiento()) {
+                actPayment.setFechaVencimiento(actPayment.getFechaVencimiento()
+                        .withDayOfMonth(actPayment.getFechaVencimiento().lengthOfMonth()));
+            } else {
+                actPayment.setFechaVencimiento(
+                        actPayment.getFechaVencimiento()
+                                .withDayOfMonth(actContrato.getCnfPlanContrato().getDiaVencimiento()));
+            }
+
+            actPayment.setMonto(actContrato.getCnfPlanContrato().getPrecio());
+            actPayment.setMontoPendiente(actContrato.getCnfPlanContrato().getPrecio());
+            actPagoProgramacionRepository.save(actPayment);
         }
     }
 
@@ -219,5 +297,97 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 //            actCajaOperacion.setEstado("1");
 //            actCajaOperacionRepository.save(actCajaOperacion);
 //        }
+    }
+
+    @Override
+    public List<ActContrato> getReportActContratos(ParamBean paramBean) {
+        List<ActContrato> actContratoList = (List<ActContrato>) actContratoRepository.getReportActContrato(paramBean);
+
+        List<ActPagoProgramacion> actPagoProgramacionList = actPagoProgramacionRepository.findAll();
+
+        List<ActPago> actPagoList = actPagoRepository.findAll();
+
+        return actContratoList.stream()
+                .filter(predicate -> {
+                    if (paramBean.getCnfLocal().getId() == 0) {
+                        return true;
+                    } else {
+                        return predicate.getCnfLocal().getId() == paramBean.getCnfLocal().getId();
+
+                    }
+                })
+                .filter(predicate -> {
+                    if (paramBean.getCnfMaestro().getId() == 0) {
+                        return true;
+                    } else {
+                        return predicate.getCnfMaestro().getId() == paramBean.getCnfMaestro().getId();
+                    }
+                })
+                .map(mapper -> {
+                    if (mapper.getMontoPendiente() == null) {
+                        mapper.setMontoPendiente(BigDecimal.ZERO);
+                    }
+                    List<ActPagoProgramacion> actPagoProgramacionList2
+                            = actPagoProgramacionList.stream()
+                                    .filter(data -> data.getActContrato() != null && data.getActContrato().getId() == mapper.getId())
+                                    .collect(Collectors.toList());
+
+                    actPagoProgramacionList2.forEach(action -> {
+                        if ((action.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0)) {
+
+                            ActPago actPago
+                                    = actPagoList.stream()
+                                            .filter(data -> data.getListActPagoDetalle().stream()
+                                            .anyMatch(predicate -> predicate.getActPagoProgramacion() != null
+                                            && predicate.getActPagoProgramacion().getId() == action.getId()))
+                                            .findFirst().orElse(new ActPago());
+
+                            mapper.setUltimoPago(actPago.getSerie() + "-" + actPago.getNumero() + " (" + actPago.getFecha().format(DateTimeFormatter.ISO_DATE) + "): " + actPago.getTotal());
+                        } else {
+                            if (action.getFechaVencimiento().compareTo(paramBean.getFechaVencimiento()) <= 0) {
+
+                                mapper.setMontoPendiente(mapper.getMontoPendiente().add(action.getMontoPendiente()));
+                            }
+                        }
+                    });
+                    return mapper;
+//                            .map(mapper2 -> {
+//                                if ((mapper2.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0)) {
+//                                    mapper.setUltimoPago("xx");
+//                                } else {
+//                                    if (mapper2.getFechaVencimiento().compareTo(paramBean.getFechaVencimiento()) <= 0) {
+//
+//                                        mapper.setMontoPendiente(mapper.getMontoPendiente().add(mapper2.getMontoPendiente()));
+//                                    }
+//                                }
+//                                return mapper2;
+//                            });
+//                    actPagoProgramacionList.forEach(action -> {
+                    //                        if (action.getActContrato() != null && action.getActContrato().getId() == mapper.getId()) {
+                    //                            if ((action.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0)) {
+                    //                                mapper.setUltimoPago("xx");
+                    //                            } else {
+                    //                                if (action.getFechaVencimiento().compareTo(paramBean.getFechaVencimiento()) <= 0) {
+                    //
+                    //                                    mapper.setMontoPendiente(mapper.getMontoPendiente().add(action.getMontoPendiente()));
+                    //                                }
+                    //                            }
+                    //                        }
+                    //                    });
+                    //                    return mapper;
+                })
+                .map(mapper -> {
+                    if (paramBean.getFlagEstado() == 0 && mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 1) {
+                        mapper.setEstadoDescripcion("Afecto a Corte");
+                    }
+                    if (paramBean.getFlagEstado() == 1 && mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0) {
+                        mapper.setEstadoDescripcion("Vigente");
+                    }
+                    return mapper;
+                })
+                .filter(predicate -> (paramBean.getFlagEstado() == 0 && predicate.getMontoPendiente().compareTo(BigDecimal.ZERO) == 1)
+                || (paramBean.getFlagEstado() == 1 && predicate.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0)
+                || paramBean.getFlagEstado() == 2)
+                .collect(Collectors.toList());
     }
 }

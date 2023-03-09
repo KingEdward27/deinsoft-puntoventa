@@ -9,12 +9,17 @@ import com.deinsoft.puntoventa.business.model.CnfCategoria;
 
 @Service
 @Transactional
-public interface CnfCategoriaService extends CommonService<CnfCategoria>{
-	
-	public List<CnfCategoria> getAllCnfCategoria(CnfCategoria cnfCategoria);
-	public CnfCategoria getCnfCategoria(Long id);
-	public CnfCategoria saveCnfCategoria(CnfCategoria cnfCategoria);
-	public List<CnfCategoria> getAllCnfCategoria();
-  public List<CnfCategoria> getAllCnfCategoriaByCnfEmpresa(long id);
-	public void delete(long id);
+public interface CnfCategoriaService extends CommonService<CnfCategoria> {
+
+    public List<CnfCategoria> getAllCnfCategoria(CnfCategoria cnfCategoria);
+
+    public CnfCategoria getCnfCategoria(Long id);
+
+    public CnfCategoria saveCnfCategoria(CnfCategoria cnfCategoria);
+
+    public List<CnfCategoria> getAllCnfCategoria();
+
+    public List<CnfCategoria> getAllCnfCategoriaByCnfEmpresa(long id);
+
+    public void delete(long id);
 }

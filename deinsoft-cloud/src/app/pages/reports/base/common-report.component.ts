@@ -41,6 +41,9 @@ import { ActPagoService } from '@/business/service/act-pago.service';
 import { CnfCategoria } from '@/business/model/cnf-categoria.model';
 import { CnfCategoriaService } from '@/business/service/cnf-categoria.service';
 import { InvMovAlmacenService } from '@/business/service/inv-mov-almacen.service';
+import { ActCajaOperacion } from '../../../business/model/act-caja-operacion.model';
+import { ActCajaOperacionService } from '../../../business/service/act-caja-operacion.service';
+import { CnfZonaService } from '../../../business/service/cnf-zona';
 
 @Injectable()
 export class MyBaseComponentDependences {
@@ -62,13 +65,15 @@ export class MyBaseComponentDependences {
     public ngbCalendar: NgbCalendar,
     public modalService: NgbModal,
     public route: ActivatedRoute, config: NgbModalConfig,
-    public appService:AppService,
+    public appService: AppService,
     public invAlmacenProductoService: InvAlmacenProductoService,
     public invMovimientoProductoService: InvMovimientoProductoService,
-    public actPagoProgramacionService:ActPagoProgramacionService,
-    public actPagoService:ActPagoService,
+    public actPagoProgramacionService: ActPagoProgramacionService,
+    public actPagoService: ActPagoService,
+    public actCajaOperacionService: ActCajaOperacionService,
     public cnfCategoriaService: CnfCategoriaService,
-    public invMovAlmacenService: InvMovAlmacenService
+    public invMovAlmacenService: InvMovAlmacenService,
+    public cnfZonaService: CnfZonaService
   ) { }
 }
 @Directive()
@@ -120,20 +125,21 @@ export class CommonReportFormComponent implements OnInit {
   cnfProducto: any;
   formatter = (x: { nombre: string }) => x.nombre;
 
+  formatterCnfMaestro = (x: CnfMaestro ) => (x.apellidoPaterno + ' '+x.apellidoMaterno+ ' '+x.nombres).trim();
   loadingCnfImpuestoCondicion: boolean = false;
   selectDefaultImpuestoCondicion: any = { id: 0, nombre: "- Seleccione -" };
   listImpuestoCondicion: any;
   public modalRef!: NgbModalRef;
-  listData:any;
-  titleExport:any;
-  datablesSettings:any
-  indexInputs:any;
-  datablesSettingsWithInputs:any;
+  listData: any;
+  titleExport: any;
+  datablesSettings: any
+  indexInputs: any;
+  datablesSettingsWithInputs: any;
 
   selectDefaultCnfCategoria: any = { id: 0, nombre: "- Seleccione -" };
   listCnfCategoria: any;
   cnfCategoria: CnfCategoria = new CnfCategoria();
-  loadingCnfCategoria : boolean = false;
+  loadingCnfCategoria: boolean = false;
 
   constructor(public deps: MyBaseComponentDependences) {
   }
@@ -155,7 +161,7 @@ export class CommonReportFormComponent implements OnInit {
       dom: 'lBftip',
       buttons: [{
         extend: 'excel',
-        title : this.titleExport,
+        title: this.titleExport,
         text: '<i class="fa fa-file-excel"></i>&nbsp; XLS',
         exportOptions: {
           columns: ':visible'
@@ -163,13 +169,13 @@ export class CommonReportFormComponent implements OnInit {
       },
       {
         extend: 'pdf',
-        title : this.titleExport,
+        title: this.titleExport,
         text: ' <i class="fa fa-file-pdf"></i>&nbsp; PDF',
         orientation: 'landscape'
       },
       {
         extend: 'csv',
-        title : this.titleExport,
+        title: this.titleExport,
         text: '<i class="fa fa-file-excel"></i>&nbsp; CSV',
         exportOptions: {
           columns: ':visible'
@@ -205,7 +211,7 @@ export class CommonReportFormComponent implements OnInit {
       dom: 'lBftip',
       buttons: [{
         extend: 'excel',
-        title : this.titleExport,
+        title: this.titleExport,
         text: '<i class="fa fa-file-excel"></i>&nbsp; XLS',
         exportOptions: {
           columns: ':visible'
@@ -213,24 +219,24 @@ export class CommonReportFormComponent implements OnInit {
       },
       {
         extend: 'pdf',
-        title : this.titleExport,
+        title: this.titleExport,
         text: ' <i class="fa fa-file-pdf"></i>&nbsp; PDF',
         orientation: 'landscape'
       },
       {
         extend: 'csv',
-        title : this.titleExport,
+        title: this.titleExport,
         text: '<i class="fa fa-file-excel"></i>&nbsp; CSV',
         exportOptions: {
           columns: ':visible'
         }
       },
-      
+
       ],
       columnDefs: [
         {
-            orderable: false,
-            targets: this.indexInputs,
+          orderable: false,
+          targets: this.indexInputs,
         },
       ],
       language: {
@@ -262,8 +268,8 @@ export class CommonReportFormComponent implements OnInit {
     this.getListCnfTipoComprobante();
     this.getListCnfCategoria();
     console.log(this.listCnfLocal);
-    
-    
+
+
   }
   getListCnfProductAsObservable(term: any): Observable<any> {
 
@@ -293,14 +299,14 @@ export class CommonReportFormComponent implements OnInit {
         return this.getListCnfProductAsObservable(term);
       })
     )
-  
+
   agregarActComprobanteDetalle(): void {
     this.deps.router.navigate(["/add-new-act-comprobante-detalle", { idParent: this.model.id }]);
   }
   editarActComprobanteDetalle(actComprobanteDetalle: any): void {
     this.deps.router.navigate(["/add-new-act-comprobante-detalle", { idParent: this.model.id, id: actComprobanteDetalle.id }]);
   }
-  
+
   compareActComprobante(a1: ActComprobante, a2: ActComprobante): boolean {
     if (a1 === undefined && a2 === undefined) {
       return true;
@@ -312,18 +318,18 @@ export class CommonReportFormComponent implements OnInit {
   getListCnfMaestro() {
     this.loadingCnfMaestro = true;
     let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
-    if(cnfEmpresa == '*') {
+    if (cnfEmpresa == '*') {
       return this.deps.cnfMaestroService.getAllDataCombo().subscribe(data => {
         this.listCnfMaestro = data;
         this.loadingCnfMaestro = false;
       })
-    }else{
+    } else {
       return this.deps.cnfMaestroService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
         this.listCnfMaestro = data;
         this.loadingCnfMaestro = false;
       })
     }
-    
+
 
   }
   getListImpuestoCondicion() {
@@ -355,18 +361,18 @@ export class CommonReportFormComponent implements OnInit {
     this.loadingCnfFormaPago = true;
     console.log(this.chargingsb);
     let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
-    if(cnfEmpresa == '*') {
+    if (cnfEmpresa == '*') {
       return this.deps.cnfFormaPagoService.getAllDataCombo().subscribe(data => {
         this.listCnfFormaPago = data;
         this.loadingCnfFormaPago = false;
       })
-    }else{
+    } else {
       return this.deps.cnfFormaPagoService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
         this.listCnfFormaPago = data;
         this.loadingCnfFormaPago = false;
       })
     }
-    
+
 
   }
   compareCnfFormaPago(a1: CnfFormaPago, a2: CnfFormaPago): boolean {
@@ -402,22 +408,22 @@ export class CommonReportFormComponent implements OnInit {
     let user = this.deps.appService.getProfile();
     console.log(user);
     let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
-    if(cnfEmpresa == '*') {
+    if (cnfEmpresa == '*') {
       return this.deps.cnfLocalService.getAllDataCombo().subscribe(data => {
         this.listCnfLocal = data;
         this.loadingCnfLocal = false;
       })
-    }else{
+    } else {
       return this.deps.cnfLocalService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
         this.listCnfLocal = data;
         this.loadingCnfLocal = false;
 
-        
-        if(this.listCnfLocal.length == 1) {
+
+        if (this.listCnfLocal.length == 1) {
           this.deps.cnfLocalService.getData(this.listCnfLocal[0].id).subscribe(data => {
             this.model.cnfLocal = data
             this.getListInvAlmacen()
-            
+
           })
           // this.model.cnfLocal.id = this.listCnfLocal[0].id;
           // if (this.listInvAlmacen.length == 1){
@@ -426,7 +432,7 @@ export class CommonReportFormComponent implements OnInit {
         }
       })
     }
-    
+
 
   }
   compareCnfLocal(a1: CnfLocal, a2: CnfLocal): boolean {
@@ -460,12 +466,12 @@ export class CommonReportFormComponent implements OnInit {
     return this.deps.invAlmacenService.getAllByCnfLocalId(this.model.cnfLocal.id).subscribe(data => {
       this.listInvAlmacen = data;
       this.loadingInvAlmacen = false;
-      if(this.listInvAlmacen.length == 1){
+      if (this.listInvAlmacen.length == 1) {
         this.deps.invAlmacenService.getData(this.listInvAlmacen[0].id).subscribe(data => {
           this.model.invAlmacen = data;
         })
       }
-      
+
     })
 
   }
@@ -477,7 +483,7 @@ export class CommonReportFormComponent implements OnInit {
     return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
       ? false : a1.id === a2.id;
   }
-  
+
   ticketChild() {
     let myMap = new Map();
     myMap.set("id", this.model.id);
@@ -611,12 +617,12 @@ export class CommonReportFormComponent implements OnInit {
   getListCnfCategoria() {
     this.loadingCnfCategoria = true;
     let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
-    if(cnfEmpresa == '*') {
+    if (cnfEmpresa == '*') {
       return this.deps.cnfCategoriaService.getAllDataCombo().subscribe(data => {
         this.listCnfCategoria = data;
         this.loadingCnfCategoria = false;
       })
-    }else{
+    } else {
       return this.deps.cnfCategoriaService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
         this.listCnfCategoria = data;
         this.loadingCnfCategoria = false;
@@ -631,5 +637,58 @@ export class CommonReportFormComponent implements OnInit {
     return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
       ? false : a1.id === a2.id;
   }
+  getListCnfMestroAsObservable(term: any): Observable<any> {
+
+    if (term.length >= 2) {
+      let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
+      return this.deps.cnfMaestroService.getAllDataComboTypeHead(term,cnfEmpresa)
+        .pipe(
+          tap(() => this.searchFailed = false),
+          catchError((err: any) => {
+            console.log(err);
+            this.searchFailed = true;
+            return of([]);
+          })
+        );
+    } else {
+      return <any>[];
+    }
+
+  }
+searchCnfMaestro = (text$: Observable<string>) =>
+  text$.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    switchMap(term => {
+      return this.getListCnfMestroAsObservable(term);
+    })
+  )
+
+  getListCnfZonaAsObservable(term: any): Observable<any> {
+
+    if (term.length >= 2) {
+      let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
+      return this.deps.cnfZonaService.getAllByCnfEmpresaId(cnfEmpresa)
+        .pipe(
+          tap(() => this.searchFailed = false),
+          catchError((err: any) => {
+            console.log(err);
+            this.searchFailed = true;
+            return of([]);
+          })
+        );
+    } else {
+      return <any>[];
+    }
+
+  }
+searchCnfZona = (text$: Observable<string>) =>
+  text$.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    switchMap(term => {
+      return this.getListCnfZonaAsObservable(term);
+    })
+  )
 }
 

@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service.impl;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
 import com.deinsoft.puntoventa.business.service.ActCajaOperacionService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import java.util.stream.Collectors;
@@ -26,7 +28,7 @@ public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperac
         List<ActCajaOperacion> actCajaOperacionList = (List<ActCajaOperacion>) actCajaOperacionRepository.getAllActCajaOperacion(actCajaOperacion.getEstado().toUpperCase());
         return actCajaOperacionList.stream()
                 .filter(item -> listRoles().stream()
-                        .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActCajaTurno().getActCaja().getCnfEmpresa().getId()))
+                .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActCajaTurno().getActCaja().getCnfEmpresa().getId()))
                 .collect(Collectors.toList());
     }
 
@@ -73,5 +75,54 @@ public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperac
             actCajaOperacion = actCajaOperacionOptional.get();
             actCajaOperacionRepository.delete(actCajaOperacion);
         }
+    }
+
+    @Override
+    public List<ActCajaOperacion> getReportActCajaOperacion(ParamBean paramBean) {
+        List<ActCajaOperacion> actCajaOperacionList = (List<ActCajaOperacion>) actCajaOperacionRepository.getReportActCajaOperacion(paramBean);
+
+        return actCajaOperacionList.stream()
+                .filter(predicate -> {
+                    if (paramBean.getCnfLocal().getId() == 0) {
+                        return true;
+                    } else {
+                        if (predicate.getActComprobante() != null && predicate.getActComprobante().getCnfLocal().getId() == paramBean.getCnfLocal().getId()) {
+                            return true;
+                        } else if (predicate.getActPago() != null) {
+                            return predicate.getActPago().getListActPagoDetalle().stream().anyMatch(data -> {
+                                if (data.getActPagoProgramacion().getActComprobante() != null) {
+                                    return data.getActPagoProgramacion().getActComprobante().getCnfLocal().getId() == paramBean.getCnfLocal().getId();
+                                }
+                                if (data.getActPagoProgramacion().getActContrato() != null) {
+                                    return data.getActPagoProgramacion().getActContrato().getCnfLocal().getId() == paramBean.getCnfLocal().getId();
+                                }
+                                return false;
+                            });
+                        }
+                        return false;
+                    }
+                })
+                .filter(predicate -> {
+                    if (paramBean.getCnfMaestro().getId() == 0) {
+                        return true;
+                    } else {
+                        if (predicate.getActComprobante() != null && predicate.getActComprobante().getCnfMaestro().getId() == paramBean.getCnfMaestro().getId()) {
+                            return true;
+                        } else if (predicate.getActPago() != null) {
+                            return predicate.getActPago().getListActPagoDetalle().stream().anyMatch(data -> {
+                                if (data.getActPagoProgramacion().getActComprobante() != null) {
+                                    return data.getActPagoProgramacion().getActComprobante().getCnfMaestro().getId() == paramBean.getCnfMaestro().getId();
+                                }
+                                if (data.getActPagoProgramacion().getActContrato() != null) {
+                                    return data.getActPagoProgramacion().getActContrato().getCnfMaestro().getId() == paramBean.getCnfMaestro().getId();
+                                }
+                                return false;
+                            });
+                        }
+                        return false;
+                    }
+
+                })
+                .collect(Collectors.toList());
     }
 }

@@ -8,6 +8,33 @@
         <form [formGroup]="registerForm" (ngSubmit)="registerByAuth()">
             <div class="input-group mb-3">
                 <input
+                    formControlName="ruc"
+                    type="number"
+                    maxlength="11"
+                    class="form-control"
+                    placeholder="RUC"
+                />
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-id-card"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <input
+                    formControlName="nombreEmpresa"
+                    type="text"
+                    class="form-control"
+                    disabled
+                />
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-industry"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <input
                     formControlName="email"
                     type="email"
                     class="form-control"

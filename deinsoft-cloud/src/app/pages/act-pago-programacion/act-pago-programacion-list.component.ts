@@ -11,28 +11,8 @@ import { CnfFormaPago } from '@/business/model/cnf-forma-pago.model';
 import { CnfMaestro } from '@/business/model/cnf-maestro.model';
 import { CnfTipoComprobante } from '@/business/model/cnf-tipo-comprobante.model';
 import { InvAlmacen } from '@/business/model/inv-almacen.model';
-import { CnfMaestroService } from '@/business/service/cnf-maestro.service';
-import { CnfFormaPagoService } from '@/business/service/cnf-forma-pago.service';
-import { CnfMonedaService } from '@/business/service/cnf-moneda.service';
-import { CnfLocalService } from '@/business/service/cnf-local.service';
-import { CnfTipoComprobanteService } from '@/business/service/cnf-tipo-comprobante.service';
-import { InvAlmacenService } from '@/business/service/inv-almacen.service';
-import { ActComprobanteDetalleService } from '@/business/service/act-comprobante-detalle.service';
-import { UtilService } from '@services/util.service';
 import { CustomAdapter, CustomDateParserFormatter } from '@/base/util/CustomDate';
-import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
-import { CnfProductoService } from '@/business/service/cnf-producto.service';
-import { CnfProducto } from '@/business/model/cnf-producto.model';
-import { ActComprobanteDetalle } from '@/business/model/act-comprobante-detalle.model';
-import { CnfImpuestoCondicion } from '@/business/model/cnf-impuesto-condicion.model';
-import { CnfImpuestoCondicionService } from '@/business/service/cnf-impuesto-condicion.service';
-import { CnfNumComprobanteService } from '@/business/service/cnf-num-comprobante.service';
-import { CommonService } from '@/base/services/common.service';
-import { UpdateParam } from '@/base/components/model/UpdateParam';
-import dayjs from 'dayjs';
-import { AppService } from '@services/app.service';
 import { ActComprobante } from '@pages/act-comprobante/act-comprobante.model';
-import { ActComprobanteService } from '@pages/act-comprobante/act-comprobante.service';
 import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
 import { CommonReportFormComponent, MyBaseComponentDependences } from '@pages/reports/base/common-report.component';
 import { ActPagoModalComponent } from '../act-pago/act-pago-modal/act-pago-modal.component';
@@ -197,15 +177,15 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
   onChangeTotal(event: any): void {  
     this.calculateFromTotal();
   }
-  save() {
+  async save() {
     if(!this.listData || this.listData?.length == 0){
       this.deps.utilService.msgProblemNoItems();
       return;
     }
-    if(!this.total || this.total == 0){
-      Swal.fire('Problema para continuar', `Debe ingresar un monto a pagar`, 'error');
-      return;
-    }
+    // if(!this.total || this.total == 0){
+    //   Swal.fire('Problema para continuar', `Debe ingresar un monto a pagar`, 'error');
+    //   return;
+    // }
     let error;
     // this.listData.forEach((element: any) => {
     //   if(element.amtToPay == 0){
@@ -213,21 +193,36 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
     //     error = true;
     //   }
     // });
+    let items = this.listData.filter(data => data.amtToPay > 0);
+
+    let itemsActComprobante = this.listData.filter(data => data.amtToPay > 0 && data.actComprobante);
+
+    let itemsActContrato = this.listData.filter(data => data.amtToPay > 0 && data.actContrato);
+    if (items.length == 0) {
+      this.deps.utilService.msgProblemNoItems();
+      return;
+    }
+    if (itemsActComprobante.length > 0 && itemsActContrato.length > 0) {
+      this.deps.utilService.msgHTTP400WithMessage("No puede hacer el pago de contratos y ventas en un solo comprobante");
+      return;
+    }
     if(!error){
       console.log(this.listData);
       this.modalRef = this.deps.modalService.open(ActPagoModalComponent, {
         size: 'lg',
         });
-
-        this.listData.forEach(element => {
+        let list : any[] = [];
+        await this.listData.forEach(element => {
           if (element.amtToPay > 0) {
              let actPagoDetalle = new ActPagoDetalle();
-             actPagoDetalle.monto = element.amtToPay
+             actPagoDetalle.montoDeuda = element.monto;
+             actPagoDetalle.monto = element.amtToPay;
              actPagoDetalle.actPagoProgramacion = element;
-             this.modalRef.componentInstance.model.cnfMaestro = element.actContrato.cnfMaestro;
-             this.modalRef.componentInstance.model.listActPagoDetalle.push(actPagoDetalle);
+             this.modalRef.componentInstance.model.cnfMaestro = element.actContrato?element.actContrato.cnfMaestro : element.actComprobante.cnfMaestro;
+             list.push(actPagoDetalle);
           }
         });
+        this.modalRef.componentInstance.model.listActPagoDetalle = list;
         this.modalRef.componentInstance.model.subtotal = this.total / 1.18;
         this.modalRef.componentInstance.model.igv = this.total - this.modalRef.componentInstance.model.subtotal;
         this.modalRef.componentInstance.model.total = this.total;

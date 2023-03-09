@@ -75,6 +75,8 @@ import { CnfPlanContratoComponent } from './pages/cnf-plan-contrato/cnf-plan-con
 import { CnfEmpresaEmpresaComponent } from '@pages/cnf-empresa/cnf-empresa-empresa';
 import { ActComprobanteFormComponent } from './pages/act-comprobante/act-comprobante-form/form/act-comprobante-form.component';
 import { ActContratoListComponent } from './pages/act-contrato/list/act-contrato-list.component';
+import { ActPagoListComponent } from './pages/act-pago/list/act-pago-list.component';
+import { ActContratoReportComponent } from './pages/reports/act-contrato/act-contrato-report.component';
 const routes: Routes = [
     {
         path: '',
@@ -172,6 +174,8 @@ const routes: Routes = [
             {path: 'new-contrato',component: ActContratoFormComponent},
             {path: 'contrato',component: ActContratoListComponent},
             {path: 'empresa-empresa',component: CnfEmpresaEmpresaComponent},
+            {path: 'list-pagos',component: ActPagoListComponent},
+            {path: 'rpt-contratos',component: ActContratoReportComponent},
         ]
     },
     {

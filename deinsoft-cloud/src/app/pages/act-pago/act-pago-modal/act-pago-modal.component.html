@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{'webpagos.cnf_maestro.home.title'| translate}}</h3>
+                <h3 class="card-title">{{'webpagos.act_pago.home.title'| translate}}</h3>
                 <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -271,10 +271,12 @@
                                             <tr *ngFor="let item of model.listActPagoDetalle; index as i"
                                                 class="odd gradeX">
                                                 <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
-                                                <td>{{item.actPagoProgramacion.actContrato.cnfPlanContrato.nombre}}</td>
-                                                <td>{{item.monto  | number : '1.2-2'}}</td>
+                                                <td>{{item.actPagoProgramacion.actComprobante? 
+                                                    item.actPagoProgramacion.actComprobante.serie+'-'+ item.actPagoProgramacion.actComprobante.numero:
+                                                    item.actPagoProgramacion.actContrato.cnfPlanContrato.nombre}}</td>
+                                                <td>{{item.montoDeuda  | number : '1.2-2'}}</td>
                                                 <td>{{item.actPagoProgramacion.fechaVencimiento}}</td>
-                                                <td>{{item.actPagoProgramacion.amtToPay  | number : '1.2-2'}}</td>
+                                                <td>{{item.monto  | number : '1.2-2'}}</td>
                                             </tr>
                                         </tbody>
                                     </table>

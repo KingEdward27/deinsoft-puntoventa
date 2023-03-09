@@ -5,6 +5,7 @@
  */
 package com.deinsoft.puntoventa.business.controller;
 
+import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.framework.security.model.SecUser;
 import java.security.Principal;
 import org.springframework.ui.Model;
@@ -12,14 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 /**
  *
  * @author EDWARD-PC
  */
 @Controller
 public class LoginController {
-    
+
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
@@ -37,7 +40,13 @@ public class LoginController {
         if (logout != null) {
             model.addAttribute("success", "Ha cerrado sesión con éxito!");
         }
-        model.addAttribute("secUser",new SecUser());
+        model.addAttribute("secUser", new SecUser());
+        return "login";
+    }
+    @GetMapping("/register")
+    public String register(@RequestBody SegUsuario segUsuario) {
+
+        System.out.println("segUsuario: "+ segUsuario);
         return "login";
     }
 }

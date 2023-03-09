@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.controller;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.*;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 import com.deinsoft.puntoventa.business.commons.controller.CommonController;
+import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import javax.validation.Valid;
@@ -65,7 +67,12 @@ public class ActPagoController extends CommonController<ActPago, ActPagoService>
         actPagoService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
+    @PostMapping(value = "/get-report-act-pago")
+    public List<ActPago> getReportActPago(@RequestBody ParamBean paramBean) {
+        logger.info("getReportActCajaOperacion received: " + paramBean.toString());
+        List<ActPago> actPagoList = actPagoService.getReportActPago(paramBean);
+        return actPagoList; 
+    }
 //    @GetMapping(value = "/get-all-act-pago-by-act-pago-programacion")
 //    public List<ActPago> getAllActPagoByActPagoProgramacion(@Param("id") Long id) {
 //        List<ActPago> actPagoList = actPagoService.getAllActPagoByActPagoProgramacion(id);

@@ -16,7 +16,10 @@ export class ActPagoService {
   }
 
   public getAllData(arg1:ActPago):Observable<any>{
-    let params = new HttpParams();    return this.http.get<ActPago[]>(`${this.url}/get-all-act-pago`,{params});
+    let params = new HttpParams()
+    .set("serie",arg1.serie.toString())
+    .set("numero",arg1.numero.toString());    
+    return this.http.get<ActPago[]>(`${this.url}/get-all-act-pago`,{params});
   }
   public getAllDataCombo():Observable<any>{
     return this.http.get<ActPago[]>(`${this.url}/get-all-act-pago-combo`);
@@ -38,6 +41,9 @@ export class ActPagoService {
   }
   public saveFromList(form:any): Observable<any>{
     return this.http.post<any>(this.url+'/save-list-act-pago',form); 
+  }
+  public getReport(form: any): Observable<ActPago> {
+    return this.http.post<ActPago>(this.url + '/get-report-act-pago', form);
   }
 }
 

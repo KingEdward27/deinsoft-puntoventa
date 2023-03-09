@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

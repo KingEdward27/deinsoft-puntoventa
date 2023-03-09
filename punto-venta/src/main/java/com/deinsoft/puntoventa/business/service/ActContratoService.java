@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import com.deinsoft.puntoventa.business.commons.service.CommonService;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -30,4 +31,6 @@ public interface ActContratoService extends CommonService<ActContrato> {
     public List<ActContrato> getAllActContratoByCnfPlanContrato(long id);
 
     public void delete(long id);
+    
+    public List<ActContrato> getReportActContratos(ParamBean paramBean);
 }

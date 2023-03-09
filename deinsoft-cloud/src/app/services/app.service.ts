@@ -24,20 +24,25 @@ export class AppService {
             await this.setMenu();
             this.router.navigate(['/']);
         } catch (error) {
-            this.toastr.error(error.message);
+            if (error.code = 403) {
+                this.toastr.error("Usuario o contraeña incorrecta");
+            } else
+            {
+                this.toastr.error(error.message);
+            }
         }
     }
 
-    // async registerByAuth({email, password}) {
-    //     try {
-    //         const token = await Gatekeeper.registerByAuth(email, password);
-    //         localStorage.setItem('token', token);
-    //         await this.getProfile();
-    //         this.router.navigate(['/']);
-    //     } catch (error) {
-    //         this.toastr.error(error.message);
-    //     }
-    // }
+    async registerByAuth({email, password}) {
+        try {
+            const token = "";//await Gatekeeper.registerByAuth(email, password);
+            localStorage.setItem('token', token);
+            await this.getProfile();
+            this.router.navigate(['/']);
+        } catch (error) {
+            this.toastr.error(error.message);
+        }
+    }
 
     // async loginByGoogle() {
     //     try {

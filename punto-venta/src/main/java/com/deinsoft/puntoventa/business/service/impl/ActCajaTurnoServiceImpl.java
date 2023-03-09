@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service.impl;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,8 +12,10 @@ import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
 import com.deinsoft.puntoventa.business.service.ActCajaTurnoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,5 +80,13 @@ public class ActCajaTurnoServiceImpl extends CommonServiceImpl<ActCajaTurno, Act
             actCajaTurno = actCajaTurnoOptional.get();
             actCajaTurnoRepository.delete(actCajaTurno);
         }
+    }
+    @Override
+    public List<ActCajaTurno> getReportActCajaTurno(ParamBean paramBean) {
+        LocalDateTime localDateTime1 = paramBean.getFechaDesde().atTime(23, 59, 59);
+        LocalDateTime localDateTime2 = paramBean.getFechaHasta().atTime(0, 0, 0);
+        List<ActCajaTurno> actCajaOperacionList = (List<ActCajaTurno>) actCajaTurnoRepository.getReportActCajaTurno(paramBean);
+
+        return actCajaOperacionList;
     }
 }

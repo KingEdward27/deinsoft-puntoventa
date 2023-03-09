@@ -118,6 +118,10 @@ import { CnfEmpresaEmpresaComponent } from '@pages/cnf-empresa/cnf-empresa-empre
 import { ActComprobanteFormComponent } from './pages/act-comprobante/act-comprobante-form/form/act-comprobante-form.component';
 import { ActPagoModalComponent } from './pages/act-pago/act-pago-modal/act-pago-modal.component';
 import { ActContratoListComponent } from './pages/act-contrato/list/act-contrato-list.component';
+import { AllMapActContratoComponent } from '@pages/act-contrato/allmap-acto-contrato/all-map-act-contrato.component';
+import { ActPagoListComponent } from './pages/act-pago/list/act-pago-list.component';
+import { ActContratoReportComponent } from '@pages/reports/act-contrato/act-contrato-report.component';
+import { OpeGenericFormModalComponent } from './pages/modal/ope-generic-form-modal.component';
 
 @NgModule({
     declarations: [
@@ -220,7 +224,11 @@ import { ActContratoListComponent } from './pages/act-contrato/list/act-contrato
         CnfPlanContratoComponent,
         CnfEmpresaEmpresaComponent,
         ActPagoModalComponent,
-        ActContratoListComponent
+        ActContratoListComponent,
+        AllMapActContratoComponent,
+        ActPagoListComponent,
+        ActContratoReportComponent,
+        OpeGenericFormModalComponent
     ],
     imports: [
         BrowserModule,

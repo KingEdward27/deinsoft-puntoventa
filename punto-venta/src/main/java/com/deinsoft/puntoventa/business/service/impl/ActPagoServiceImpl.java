@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service.impl;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,14 +16,17 @@ import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 import com.deinsoft.puntoventa.business.model.ActPagoDetalle;
 import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
+import com.deinsoft.puntoventa.business.model.CnfLocal;
 import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
 import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
 import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
+import com.deinsoft.puntoventa.business.repository.ActPagoDetalleRepository;
 import com.deinsoft.puntoventa.business.repository.ActPagoProgramacionRepository;
 import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -44,9 +48,13 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
 
     @Autowired
     CnfNumComprobanteRepository cnfNumComprobanteRepository;
-    
+
+    @Autowired
+    ActPagoDetalleRepository actPagoDetalleRepository;
+
     public List<ActPago> getAllActPago(ActPago actPago) {
-        List<ActPago> actPagoList = (List<ActPago>) actPagoRepository.getAllActPago();
+        List<ActPago> actPagoList = (List<ActPago>) actPagoRepository.getAllActPago(
+                actPago.getSerie().toUpperCase(), actPago.getNumero().toUpperCase());
         return actPagoList;
     }
 
@@ -68,14 +76,23 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
         if (actCajaTurno.isEmpty()) {
             throw new Exception("El usuario no tiene caja aperturada");
         }
-        List<CnfNumComprobante> numComprobante = 
-                cnfNumComprobanteRepository.findByCnfTipoComprobanteIdAndCnfLocalId(
-                    actPago.getCnfTipoComprobante().getId(),
-                    actPago.getListActPagoDetalle().iterator().next()
-                            .getActPagoProgramacion().getActContrato().getCnfLocal().getId());
-            if (numComprobante.isEmpty()) {
-                throw new Exception("No existe numeración para el tipo de comprobante y el local");
-            }
+        CnfLocal local;
+        if (actPago.getListActPagoDetalle().iterator().next()
+                .getActPagoProgramacion().getActContrato() != null) {
+            local = actPago.getListActPagoDetalle().iterator().next()
+                    .getActPagoProgramacion().getActContrato().getCnfLocal();
+        } else {
+            local = actPago.getListActPagoDetalle().iterator().next()
+                    .getActPagoProgramacion().getActComprobante().getCnfLocal();
+        }
+        List<CnfNumComprobante> numComprobante
+                = cnfNumComprobanteRepository.findByCnfTipoComprobanteIdAndCnfLocalId(
+                        actPago.getCnfTipoComprobante().getId(), local.getId());
+        if (numComprobante.isEmpty()) {
+            throw new Exception("No existe numeración para el tipo de comprobante y el local");
+        }
+        BigDecimal total = BigDecimal.ZERO;
+        String detail = "";
         for (ActPagoDetalle actPagoDetalle : actPago.getListActPagoDetalle()) {
             if (actPagoDetalle.getActPagoProgramacion().getAmtToPay().compareTo(BigDecimal.ZERO) == 1) {
 
@@ -83,12 +100,19 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
                 actPaymentToSave.setMontoPendiente(
                         actPagoDetalle.getActPagoProgramacion().getMontoPendiente().subtract(actPagoDetalle.getMonto()));
                 actPagoProgramacionRepository.save(actPaymentToSave);
+                if (actPagoDetalle.getActPagoProgramacion().getActComprobante() != null) {
+                    detail = detail + actPagoDetalle.getActPagoProgramacion().getActComprobante().getSerie() + "-" + actPagoDetalle.getActPagoProgramacion().getActComprobante().getNumero() + "(" + actPagoDetalle.getActPagoProgramacion().getFechaVencimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "), ";
+                } else {
+                    detail = detail + actPagoDetalle.getActPagoProgramacion().getActContrato().getSerie() + "-" + actPagoDetalle.getActPagoProgramacion().getActContrato().getNumero() + "(" + actPagoDetalle.getActPagoProgramacion().getFechaVencimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "), ";
+                }
 
             }
-
+            total = total.add(actPagoDetalle.getMonto());
         }
+        detail = detail.substring(0, detail.length() - 2);
         actPago.setFechaRegistro(LocalDateTime.now());
         actPago.setNumero(String.valueOf(numComprobante.get(0).getUltimoNro() + 1));
+        actPago.setTotal(total);
         actPago.getListActPagoDetalle().forEach(data -> {
             actPago.addActPagoDetalle(data);
         });
@@ -97,13 +121,14 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
 
         ActCajaOperacion actCajaOperacion = new ActCajaOperacion();
         actCajaOperacion.setActCajaTurno(actCajaTurno == null ? null : actCajaTurno.get(0));
-        actCajaOperacion.setActPago(actPago);
+        actCajaOperacion.setActPago(actPagoResult);
         actCajaOperacion.setActComprobante(null);
         actCajaOperacion.setFecha(LocalDate.now());
         actCajaOperacion.setFechaRegistro(LocalDateTime.now());
-        actCajaOperacion.setMonto(actPago.getTotal());
+        actCajaOperacion.setMonto(total);
         actCajaOperacion.setFlagIngreso("1");
         actCajaOperacion.setEstado("1");
+        actCajaOperacion.setDetail(detail);
         actCajaOperacionRepository.save(actCajaOperacion);
 
         return actPagoResult;
@@ -119,7 +144,6 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
 //        List<ActPago> ActPagoList = (List<ActPago>) actPagoRepository.findByActPagoProgramacionId(id);
 //        return ActPagoList;
 //    }
-
     @Override
     public void delete(long id) {
         ActPago actPago = null;
@@ -127,8 +151,60 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
 
         if (actPagoOptional.isPresent()) {
             actPago = actPagoOptional.get();
+
+            actCajaOperacionRepository.deleteByActPago(actPago);
+
+            for (ActPagoDetalle actPagoDetalle : actPago.getListActPagoDetalle()) {
+
+                ActPagoProgramacion actPagoProgramacion = actPagoDetalle.getActPagoProgramacion();
+
+                actPagoProgramacion.setMontoPendiente(actPagoProgramacion.getMontoPendiente().add(actPagoDetalle.getMonto()));
+                actPagoProgramacionRepository.save(actPagoProgramacion);
+            }
+
+            actPagoDetalleRepository.deleteByActPago(actPago);
             actPagoRepository.delete(actPago);
         }
+    }
+
+    @Override
+    public List<ActPago> getReportActPago(ParamBean paramBean) {
+        List<ActPago> actCajaOperacionList = (List<ActPago>) actPagoRepository.getReportActPago(paramBean);
+
+        return actCajaOperacionList.stream()
+                .filter(predicate -> {
+                    if (paramBean.getCnfLocal().getId() == 0) {
+                        return true;
+                    } else {
+
+                        return predicate.getListActPagoDetalle().stream().anyMatch(data -> {
+                            if (data.getActPagoProgramacion().getActComprobante() != null) {
+                                return data.getActPagoProgramacion().getActComprobante().getCnfLocal().getId() == paramBean.getCnfLocal().getId();
+                            }
+                            if (data.getActPagoProgramacion().getActContrato() != null) {
+                                return data.getActPagoProgramacion().getActContrato().getCnfLocal().getId() == paramBean.getCnfLocal().getId();
+                            }
+                            return false;
+                        });
+                    }
+                })
+                .filter(predicate -> {
+                    if (paramBean.getCnfMaestro().getId() == 0) {
+                        return true;
+                    } else {
+                        return predicate.getListActPagoDetalle().stream().anyMatch(data -> {
+                            if (data.getActPagoProgramacion().getActComprobante() != null) {
+                                return data.getActPagoProgramacion().getActComprobante().getCnfMaestro().getId() == paramBean.getCnfMaestro().getId();
+                            }
+                            if (data.getActPagoProgramacion().getActContrato() != null) {
+                                return data.getActPagoProgramacion().getActContrato().getCnfMaestro().getId() == paramBean.getCnfMaestro().getId();
+                            }
+                            return false;
+                        });
+                    }
+
+                })
+                .collect(Collectors.toList());
     }
 
 //    @Override

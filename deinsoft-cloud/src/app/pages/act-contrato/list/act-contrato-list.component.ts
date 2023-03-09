@@ -1,5 +1,5 @@
 
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ActContrato } from '../act-contrato.model';
 import { ActContratoService } from '../act-contrato.service';
@@ -10,15 +10,15 @@ import { AppService } from '../../../services/app.service';
   selector: 'app-act-contrato-list',
   templateUrl: './act-contrato-list.component.html'
 })
-export class ActContratoListComponent implements OnInit{
+export class ActContratoListComponent implements OnInit {
   lista: any;
   datatableElement!: DataTableDirective;
   dtOptions: DataTables.Settings = {};
-  nameSearch : string = "";
-  modelSearch : ActContrato = new ActContrato();
-  dataTable!:DataTables.Api;
+  nameSearch: string = "";
+  modelSearch: ActContrato = new ActContrato();
+  dataTable!: DataTables.Api;
   constructor(private actContratoService: ActContratoService,
-    private utilService:UtilService, 
+    private utilService: UtilService,
     private router: Router,
     private appService: AppService) { }
 
@@ -37,31 +37,32 @@ export class ActContratoListComponent implements OnInit{
     this.modelSearch.cnfEmpresaId = cnfEmpresa
     this.actContratoService.getAllData(this.modelSearch).subscribe(data => {
       this.lista = data;
-      setTimeout(()=>{  
-        this.dataTable = $('#dtDataActContrato').DataTable(this.utilService.datablesSettings); 
-        }, 0);
+      setTimeout(() => {
+        this.dataTable = $('#dtDataActContrato').DataTable(this.utilService.datablesSettings);
+      }, 0);
       console.log(data);
       this.dataTable?.destroy();
     });
   }
-editar(e: ActContrato) {
+  editar(e: ActContrato) {
     if (this.utilService.validateDeactivate(e)) {
-      this.router.navigate(["/new-act-contrato", { id: e.id }]);
+      this.router.navigate(["/new-contrato", { id: e.id }]);
     }
 
-  }  eliminar(e: ActContrato){
-	 this.utilService.confirmDelete(e).then((result) => { 
-      if(result){
+  } 
+  eliminar(e: ActContrato) {
+    this.utilService.confirmDelete(e).then((result) => {
+      if (result) {
         this.actContratoService.delete(e.id.toString()).subscribe(() => {
           this.utilService.msgOkDelete();
           this.getAllData();
-        },err => {
-          if(err.status === 500 && err.error.trace.includes("DataIntegrityViolationException")){
+        }, err => {
+          if (err.status === 500 && err.error.trace.includes("DataIntegrityViolationException")) {
             this.utilService.msgProblemDelete();
           }
         });
       }
-      
+
     });
   }
 }

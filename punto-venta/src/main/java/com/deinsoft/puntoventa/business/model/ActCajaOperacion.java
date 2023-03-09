@@ -5,7 +5,6 @@ import javax.validation.constraints.*;
 import java.time.*;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
-import javax.validation.Valid;
 import java.math.BigDecimal;
 
 @Entity(name = "actCajaOperacion")
@@ -49,6 +48,9 @@ public class ActCajaOperacion implements Serializable {
     @OneToOne
     @JoinColumn(name = "act_pago_id")
     private ActPago actPago;
+    
+    @Column(name = "detail", length = 300, nullable = true)
+    private String detail;
     
     public long getId() {
         return id;
@@ -120,6 +122,14 @@ public class ActCajaOperacion implements Serializable {
 
     public void setActPago(ActPago actPago) {
         this.actPago = actPago;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
 

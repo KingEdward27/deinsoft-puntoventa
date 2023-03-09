@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.controller;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.*;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 import com.deinsoft.puntoventa.business.commons.controller.CommonController;
+import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import javax.validation.Valid;
@@ -89,4 +91,6 @@ public class ActPagoProgramacionController extends CommonController<ActPagoProgr
         LocalDate date = LocalDate.parse(fechaVencimiento, formatter);
         return date;
     }
+    
+    
 }

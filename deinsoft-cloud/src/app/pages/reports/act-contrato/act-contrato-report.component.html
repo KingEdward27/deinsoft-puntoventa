@@ -1,0 +1,219 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{'webpagos.act_contrato.home.title'| translate}}</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.adminModule"></a></li>
+                    <li class="breadcrumb-item active">{{'webpagos.act_contrato.home.title'| translate}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{'webpagos.act_contrato.home.title'| translate}}</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip"
+                        title="Collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip"
+                        title="Remove">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group-sm row">
+                                        <label
+                                            class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_local'
+                                            |
+                                            translate}} <span *ngIf="loadingCnfLocal"
+                                                class="spinner-border spinner-border-sm mr-1"></span></label>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <select name="model.cnfLocal" [compareWith]="compareCnfLocal"
+                                                [(ngModel)]="model.cnfLocal" class="form-control-sm col-sm-12 col-lg-6"
+                                                (change)="getListInvAlmacen()">
+                                                <option *ngIf="loadingCnfLocal" [ngValue]="0" selected="selected">
+                                                    Cargando...</option>
+                                                <option *ngIf="!loadingCnfLocal" [ngValue]="selectDefaultCnfLocal">
+                                                    {{selectDefaultCnfLocal.nombre}}</option>
+                                                <option *ngFor="let item of listCnfLocal; index as i;" [ngValue]="item">
+                                                    {{item.nombre}}
+                                                </option>
+
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group-sm row">
+                                        <label
+                                            class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_pago_programacion.cnf_maestro'
+                                            |
+                                            translate}} <span *ngIf="loadingCnfMaestro"
+                                                class="spinner-border spinner-border-sm mr-1"></span></label>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <input class="form-control-sm col-sm-12 col-lg-6" type="text"
+                                                [(ngModel)]="model.cnfMaestro" name="model.cnfMaestro" #input2
+                                                [ngbTypeahead]="searchCnfMaestro" [resultTemplate]="rt2"
+                                                [inputFormatter]="formatterCnfMaestro" />
+                                            <ng-template #rt2 let-r="result" let-t="term">
+                                                {{ r.apellidoPaterno}} {{ r.apellidoMaterno}} {{ r.nombres}} - {{
+                                                r.nroDoc}}
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group-sm row">
+                                        <label
+                                            class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_contrato.cnf_zona'
+                                            |
+                                            translate}} </label>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <input class="form-control-sm col-sm-12 col-lg-6" type="text"
+                                                [(ngModel)]="model.cnfZona" name="model.cnfZona" #input2
+                                                [ngbTypeahead]="searchCnfZona" [resultTemplate]="rt3"
+                                                [inputFormatter]="formatter" />
+                                            <ng-template #rt3 let-r="result" let-t="term">
+                                                {{ r.nombre}}
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group-sm row">
+                                        <label
+                                            class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_contrato.direccion'
+                                            |
+                                            translate}} <span *ngIf="loadingCnfMaestro"
+                                                class="spinner-border spinner-border-sm mr-1"></span></label>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <input class="form-control-sm col-sm-12 col-lg-6" type="text"
+                                                [(ngModel)]="model.direccion" name="model.direccion" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group-sm row">
+                                        <label for="numero"
+                                            class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.fecha_vencimiento'
+                                            | translate}} </label>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <div class="input-group input-group-sm">
+                                                <input placeholder="dd/mm/yyyy" class="form-control-sm-dp"
+                                                    id="fechaVencimiento" name="model.fechaVencimiento" maxlength="200"
+                                                    [(ngModel)]="model.fechaVencimiento" ngbDatepicker
+                                                    #dfechaVencimiento="ngbDatepicker">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary calendar button-dp"
+                                                        (click)="dfechaVencimiento.toggle()" type="button">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group-sm row">
+                                        <label
+                                            class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.flag_estado'
+                                            |
+                                            translate}} </label>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <select name="model.flagEstado"
+                                                [(ngModel)]="model.flagEstado" class="form-control-sm col-sm-12 col-lg-6">
+                                                <option [ngValue]="0">Afecto a corte</option>
+                                                <option [ngValue]="1">Vigente</option>
+                                                <option [ngValue]="2">Todos</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-12" style="padding-top: 20px;">
+                            <div class="row justify-content-center">
+                                <div style="margin-left: 20px;">
+                                    <button class="btn btn-primary col-12" (click)="getListData()">
+                                        <i class="fa fa-search"></i> {{'webpagos.btnSearch' | translate }}
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <table id="dtDataActContrato"
+                        class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
+                        <thead>
+                            <tr>
+                                <th width="1%">Nro.</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.cnf_local' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.cnf_maestro' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.cnf_plan_contrato' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.cnf_zona' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.vicinity' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.direccion' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.ultimo_pago' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.monto_deuda' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.nro_poste' | translate}}</th>
+                                <th class="text-nowrap">{{'webpagos.act_contrato.flag_estado' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let item of listData; index as i" class="odd gradeX">
+                                <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
+                                <td>{{item.cnfLocal?.nombre}}</td>
+                                <td>{{item.cnfMaestro?.apellidoPaterno +' '+ item.cnfMaestro?.apellidoMaterno + ' ' +
+                                    item.cnfMaestro?.nombres}}</td>
+                                <td>{{item.cnfPlanContrato?.nombre}}</td>
+                                <td>{{item.cnfZona?.nombre}}</td>
+                                <td>{{item.vicinity}}</td>
+                                <td>{{item.direccion}}</td>
+                                <td>{{item.ultimoPago}}</td>
+                                <td class="content-number">{{item.montoPendiente | number:'1.2-2'}}</td>
+                                <td>{{item.nroPoste}}</td>
+                                <td>{{item.estadoDescripcion}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">Footer</div>
+            <!-- /.card-footer-->
+        </div>
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->

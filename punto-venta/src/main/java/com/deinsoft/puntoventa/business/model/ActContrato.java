@@ -89,14 +89,41 @@ public class ActContrato implements Serializable {
     @Column(name = "nro_poste", length = 10)
     private String nroPoste;
     
+    @Column(name = "vicinity", length = 1000)
+    private String vicinity;
+    
+    @NotNull
+    @NotEmpty
     @Column(name = "direccion", length = 1000)
     private String direccion;
     
     @Column(name = "url_map", length = 1000)
     private String urlMap;
     
+    @Column(name = "latitude")
+    private Float latitude;
+    
+    @Column(name = "longitude")
+    private Float longitude;
+    
+    @OneToOne
+    @JoinColumn(name = "cnf_zona_id")
+    private CnfZona cnfZona;
+    
     @Transient
     private long cnfEmpresaId;
+    
+    @Transient
+    private String ultimoPago;
+    
+    @Transient
+    private BigDecimal montoPendiente;
+    
+    @Transient
+    private BigDecimal montoPrimerMes;
+    
+    @Transient
+    private String estadoDescripcion;
     
     public long getId() {
         return id;
@@ -232,6 +259,70 @@ public class ActContrato implements Serializable {
 
     public void setCnfEmpresaId(long cnfEmpresaId) {
         this.cnfEmpresaId = cnfEmpresaId;
+    }
+
+    public Float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    public Float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Float longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getVicinity() {
+        return vicinity;
+    }
+
+    public void setVicinity(String vicinity) {
+        this.vicinity = vicinity;
+    }
+
+    public CnfZona getCnfZona() {
+        return cnfZona;
+    }
+
+    public void setCnfZona(CnfZona cnfZona) {
+        this.cnfZona = cnfZona;
+    }
+
+    public String getUltimoPago() {
+        return ultimoPago;
+    }
+
+    public void setUltimoPago(String ultimoPago) {
+        this.ultimoPago = ultimoPago;
+    }
+
+    public BigDecimal getMontoPendiente() {
+        return montoPendiente;
+    }
+
+    public void setMontoPendiente(BigDecimal montoPendiente) {
+        this.montoPendiente = montoPendiente;
+    }
+
+    public BigDecimal getMontoPrimerMes() {
+        return montoPrimerMes;
+    }
+
+    public void setMontoPrimerMes(BigDecimal montoPrimerMes) {
+        this.montoPrimerMes = montoPrimerMes;
+    }
+
+    public String getEstadoDescripcion() {
+        return estadoDescripcion;
+    }
+
+    public void setEstadoDescripcion(String estadoDescripcion) {
+        this.estadoDescripcion = estadoDescripcion;
     }
 
     

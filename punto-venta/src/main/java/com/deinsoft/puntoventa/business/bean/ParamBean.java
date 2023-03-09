@@ -12,6 +12,7 @@ import com.deinsoft.puntoventa.business.model.CnfMaestro;
 import com.deinsoft.puntoventa.business.model.CnfMoneda;
 import com.deinsoft.puntoventa.business.model.CnfProducto;
 import com.deinsoft.puntoventa.business.model.CnfTipoComprobante;
+import com.deinsoft.puntoventa.business.model.CnfZona;
 import com.deinsoft.puntoventa.business.model.InvAlmacen;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
@@ -56,6 +57,15 @@ public class ParamBean {
     private CnfCategoria CnfCategoria;
     
     private CnfProducto cnfProducto;
+    
+    private CnfZona cnfZona;
+    
+    private String direccion;
+    
+    private int flagEstado;
+    
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate fechaVencimiento;
     
     public ParamBean() {
     }
@@ -155,6 +165,38 @@ public class ParamBean {
 
     public void setCnfProducto(CnfProducto cnfProducto) {
         this.cnfProducto = cnfProducto;
+    }
+
+    public CnfZona getCnfZona() {
+        return cnfZona;
+    }
+
+    public void setCnfZona(CnfZona cnfZona) {
+        this.cnfZona = cnfZona;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public LocalDate getFechaVencimiento() {
+        return fechaVencimiento;
+    }
+
+    public void setFechaVencimiento(LocalDate fechaVencimiento) {
+        this.fechaVencimiento = fechaVencimiento;
+    }
+
+    public int getFlagEstado() {
+        return flagEstado;
+    }
+
+    public void setFlagEstado(int flagEstado) {
+        this.flagEstado = flagEstado;
     }
     
     

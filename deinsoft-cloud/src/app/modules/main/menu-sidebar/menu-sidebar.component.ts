@@ -31,7 +31,22 @@ export class MenuSidebarComponent implements OnInit {
             this.classes = `${BASE_CLASSES} ${state.sidebarSkin}`;
         });
         this.user = this.appService.user;
-        this.menu = this.appService.getMenu()
+        this.menu = this.appService.getMenu();
+        console.log(this.menu);
+        this.menu.forEach(element => {
+            element.children = element.children.sort((n1,n2) => {
+                if (n1.seqorder > n2.seqorder) {
+                    return 1;
+                }
+            
+                if (n1.seqorder < n2.seqorder) {
+                    return -1;
+                }
+            
+                return 0;
+            });
+        });
+        
         //console.log(this.menu);
         
     }

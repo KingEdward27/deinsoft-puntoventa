@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.controller;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.*;
@@ -12,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
+import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.business.service.ActCajaOperacionService;
 import java.time.LocalDateTime;
 
@@ -75,5 +77,11 @@ public class ActCajaOperacionController extends CommonController<ActCajaOperacio
     public List<ActCajaOperacion> getAllActCajaOperacionByActPago(@Param("id") Long id) {
         List<ActCajaOperacion> actCajaOperacionList = actCajaOperacionService.getAllActCajaOperacionByActPago(id);
         return actCajaOperacionList;
+    }
+    @PostMapping(value = "/get-report-act-caja-operacion")
+    public List<ActCajaOperacion> getReportActCajaOperacion(@RequestBody ParamBean paramBean) {
+        logger.info("getReportActCajaOperacion received: " + paramBean.toString());
+        List<ActCajaOperacion> actCajaOperacionList = actCajaOperacionService.getReportActCajaOperacion(paramBean);
+        return actCajaOperacionList; 
     }
 }

@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,5 +25,7 @@ public interface ActPagoService extends CommonService<ActPago> {
 
     public void delete(long id);
 
+    public List<ActPago> getReportActPago(ParamBean paramBean);
+            
 //    public List<ActPago> saveActPaymentDetailFromList(List<ActPagoProgramacion> listActPayment) throws Exception ;
 }

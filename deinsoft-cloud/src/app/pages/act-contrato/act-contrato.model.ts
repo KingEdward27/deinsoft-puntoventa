@@ -7,6 +7,7 @@ import { CnfMoneda } from '@/business/model/cnf-moneda.model';
 import { CnfTipoComprobante } from '@/business/model/cnf-tipo-comprobante.model';
 import * as dayjs from 'dayjs';
 import { CnfPlanContrato } from '../cnf-plan-contrato/cnf-plan-contrato.model';
+import { CnfZona } from '../../business/model/cnf-zona';
 
 export class ActContrato {
 	id: number = 0;
@@ -38,5 +39,13 @@ export class ActContrato {
 	direccion: string = "";
 	urlMap: string = "";
 	nroPoste: string = "";
+	vicinity: string = "";
 	cnfEmpresaId:number;
+	latitude!: number;
+	longitude!: number;
+	cnfZona: CnfZona;
+	ultimoPago: number;
+	montoPendiente: number;
+	fechaInstalacion: dayjs.Dayjs;
+	montoPrimerMes: number;
 };

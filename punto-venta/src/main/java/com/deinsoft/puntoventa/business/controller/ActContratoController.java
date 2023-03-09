@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.controller;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import com.deinsoft.puntoventa.business.commons.controller.CommonController;
 import com.deinsoft.puntoventa.business.model.ActComprobante;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.ActContrato;
+import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.service.ActContratoService;
 import org.springframework.http.HttpStatus;
 
@@ -88,5 +90,11 @@ public class ActContratoController extends CommonController<ActContrato, ActCont
     public List<ActContrato> getAllActContratoByCnfPlanContrato(@Param("id") Long id) {
         List<ActContrato> actContratoList = actContratoService.getAllActContratoByCnfPlanContrato(id);
         return actContratoList;
+    }
+    @PostMapping(value = "/get-report-act-contrato")
+    public List<ActContrato> getReportActContrato(@RequestBody ParamBean paramBean) {
+        logger.info("getReportActContrato received: " + paramBean.toString());
+        List<ActContrato> actCajaOperacionList = actContratoService.getReportActContratos(paramBean);
+        return actCajaOperacionList; 
     }
 }

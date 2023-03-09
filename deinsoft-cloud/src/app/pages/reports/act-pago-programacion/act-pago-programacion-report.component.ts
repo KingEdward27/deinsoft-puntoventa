@@ -87,11 +87,21 @@ export class ActPagoProgramacionReportComponent extends CommonReportFormComponen
   }
   ngOnInit(): void {
     this.isDataLoaded = false;
-    this.model.fechaVencimiento = this.deps.dateAdapter.toModel(this.deps.ngbCalendar.getToday())!.toString();
+    // this.model.fechaVencimiento = this.deps.dateAdapter.toModel(this.deps.ngbCalendar.getToday())!.toString();
+    
+    this.selectThisMonth();
     this.titleExport = "Lista de Cuentas x Cobrar/x Pagar"
     super.ngOnInit();
     //this.getListData();
   }
+  selectThisMonth() {
+    let year = new Date().getFullYear();
+    let month = new Date().getMonth()+1;
+    let day = new Date(year, month, 0).getDate();
+    
+    this.model.fechaVencimiento  = this.deps.dateAdapter
+    .toModel({year: year, month: month, day: day}).toString();
+}
   getListData() {
     this.model.flagIsventa = '1';
     this.totalMontos = 0
