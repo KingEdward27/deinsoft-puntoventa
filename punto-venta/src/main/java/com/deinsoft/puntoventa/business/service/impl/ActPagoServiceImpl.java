@@ -17,13 +17,17 @@ import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 import com.deinsoft.puntoventa.business.model.ActPagoDetalle;
 import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.model.CnfLocal;
+import com.deinsoft.puntoventa.business.model.CnfMaestro;
 import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
 import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
 import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
 import com.deinsoft.puntoventa.business.repository.ActPagoDetalleRepository;
 import com.deinsoft.puntoventa.business.repository.ActPagoProgramacionRepository;
 import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
+import com.deinsoft.puntoventa.business.service.BusinessService;
+import com.deinsoft.puntoventa.config.AppConfig;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -52,6 +56,12 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
     @Autowired
     ActPagoDetalleRepository actPagoDetalleRepository;
 
+    @Autowired
+    BusinessService businessService;
+    
+    @Autowired
+    AppConfig appConfig;
+    
     public List<ActPago> getAllActPago(ActPago actPago) {
         List<ActPago> actPagoList = (List<ActPago>) actPagoRepository.getAllActPago(
                 actPago.getSerie().toUpperCase(), actPago.getNumero().toUpperCase());
@@ -93,6 +103,7 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
         }
         BigDecimal total = BigDecimal.ZERO;
         String detail = "";
+        CnfMaestro cnfMaestro = null;
         for (ActPagoDetalle actPagoDetalle : actPago.getListActPagoDetalle()) {
             if (actPagoDetalle.getActPagoProgramacion().getAmtToPay().compareTo(BigDecimal.ZERO) == 1) {
 
@@ -101,8 +112,10 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
                         actPagoDetalle.getActPagoProgramacion().getMontoPendiente().subtract(actPagoDetalle.getMonto()));
                 actPagoProgramacionRepository.save(actPaymentToSave);
                 if (actPagoDetalle.getActPagoProgramacion().getActComprobante() != null) {
+                    cnfMaestro = actPagoDetalle.getActPagoProgramacion().getActComprobante().getCnfMaestro();
                     detail = detail + actPagoDetalle.getActPagoProgramacion().getActComprobante().getSerie() + "-" + actPagoDetalle.getActPagoProgramacion().getActComprobante().getNumero() + "(" + actPagoDetalle.getActPagoProgramacion().getFechaVencimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "), ";
                 } else {
+                    cnfMaestro = actPagoDetalle.getActPagoProgramacion().getActContrato().getCnfMaestro();
                     detail = detail + actPagoDetalle.getActPagoProgramacion().getActContrato().getSerie() + "-" + actPagoDetalle.getActPagoProgramacion().getActContrato().getNumero() + "(" + actPagoDetalle.getActPagoProgramacion().getFechaVencimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "), ";
                 }
 
@@ -113,6 +126,7 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
         actPago.setFechaRegistro(LocalDateTime.now());
         actPago.setNumero(String.valueOf(numComprobante.get(0).getUltimoNro() + 1));
         actPago.setTotal(total);
+        actPago.setCnfMaestro(cnfMaestro);
         actPago.getListActPagoDetalle().forEach(data -> {
             actPago.addActPagoDetalle(data);
         });
@@ -206,7 +220,11 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
                 })
                 .collect(Collectors.toList());
     }
-
+    @Override
+    public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception {
+        byte[] bytes = businessService.printPago(appConfig.getStaticResourcesPath(), tipo, getActPago(id), false);
+        return bytes;
+    }
 //    @Override
 //    @Transactional
 //    public List<ActPago> saveActPaymentDetailFromList(List<ActPagoProgramacion> listActPayment) throws Exception {

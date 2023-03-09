@@ -8,6 +8,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonService;
 
 import com.deinsoft.puntoventa.business.model.ActPago;
 import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
+import java.text.ParseException;
 
 @Service
 @Transactional
@@ -26,6 +27,8 @@ public interface ActPagoService extends CommonService<ActPago> {
     public void delete(long id);
 
     public List<ActPago> getReportActPago(ParamBean paramBean);
+    
+    public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception;
             
 //    public List<ActPago> saveActPaymentDetailFromList(List<ActPagoProgramacion> listActPayment) throws Exception ;
 }

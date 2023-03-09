@@ -72,6 +72,14 @@ public class ActPago implements Serializable {
     @JoinColumn(name = "cnf_local_id")
     private CnfLocal cnfLocal;
     
+    @OneToOne
+    @JoinColumn(name = "cnf_maestro_id")
+    private CnfMaestro cnfMaestro;
+    
+    @Size(max = 300)
+    @Column(name = "xmlhash", length = 300, nullable = true)
+    private String xmlhash;
+    
     @OneToMany(mappedBy = "actPago", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonIgnoreProperties(value = {"actPago"}, allowSetters = true)
     private Set<ActPagoDetalle> listActPagoDetalle;
@@ -198,6 +206,22 @@ public class ActPago implements Serializable {
 
     public void setCnfLocal(CnfLocal cnfLocal) {
         this.cnfLocal = cnfLocal;
+    }
+
+    public CnfMaestro getCnfMaestro() {
+        return cnfMaestro;
+    }
+
+    public void setCnfMaestro(CnfMaestro cnfMaestro) {
+        this.cnfMaestro = cnfMaestro;
+    }
+
+    public String getXmlhash() {
+        return xmlhash;
+    }
+
+    public void setXmlhash(String xmlhash) {
+        this.xmlhash = xmlhash;
     }
 
 
