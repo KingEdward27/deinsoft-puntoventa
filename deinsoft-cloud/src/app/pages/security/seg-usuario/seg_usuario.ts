@@ -38,7 +38,7 @@ export class SegUsuarioComponent extends GenericListComponent implements OnInit{
                     loadState : 1,relatedBy:"cnf_empresa_id"},
                    {tableName: "seg_usuario", "columnName":"nombre","type":"input"},
                    {tableName: "seg_usuario", columnName:"email",type:"input"},
-                   {tableName: "seg_usuario", columnName:"password",type:"password"}
+                   {tableName: "seg_usuario", columnName:"password",type:"password", toUpdate:false, toEncrypt:true}
            ],
     "preSave" : [
             {columnForm:"estado",value:"1"}

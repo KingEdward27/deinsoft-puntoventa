@@ -10,7 +10,7 @@ import { UtilService } from '@services/util.service';
   templateUrl: '../../base/components/generic-list/generic-list.component.html'
 })
 
-export class CnfCategoriaComponent extends GenericListComponent implements OnInit{
+export class CnfZonaComponent extends GenericListComponent implements OnInit{
   //baseEndpoint = environment.apiUrl + '/get-all-cnf-org';
   prop ={
     "tableName": "cnf_zona",

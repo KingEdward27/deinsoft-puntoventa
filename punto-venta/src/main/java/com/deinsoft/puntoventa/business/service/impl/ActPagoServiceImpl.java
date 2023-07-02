@@ -107,6 +107,10 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
         for (ActPagoDetalle actPagoDetalle : actPago.getListActPagoDetalle()) {
             if (actPagoDetalle.getActPagoProgramacion().getAmtToPay().compareTo(BigDecimal.ZERO) == 1) {
 
+//                if (actPagoDetalle.getMonto().compareTo(actPagoDetalle.getActPagoProgramacion().getMontoPendiente()) >= 0) {
+//                    actPagoDetalle.setMonto(actPagoDetalle.getActPagoProgramacion().getMontoPendiente());
+//                    actPagoDetalle.set(actPagoDetalle.getActPagoProgramacion().getMontoPendiente());
+//                }
                 ActPagoProgramacion actPaymentToSave = actPagoDetalle.getActPagoProgramacion();
                 actPaymentToSave.setMontoPendiente(
                         actPagoDetalle.getActPagoProgramacion().getMontoPendiente().subtract(actPagoDetalle.getMonto()));

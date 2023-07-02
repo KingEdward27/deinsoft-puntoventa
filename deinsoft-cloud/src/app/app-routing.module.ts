@@ -77,6 +77,7 @@ import { ActComprobanteFormComponent } from './pages/act-comprobante/act-comprob
 import { ActContratoListComponent } from './pages/act-contrato/list/act-contrato-list.component';
 import { ActPagoListComponent } from './pages/act-pago/list/act-pago-list.component';
 import { ActContratoReportComponent } from './pages/reports/act-contrato/act-contrato-report.component';
+import { CnfZonaComponent } from '@pages/cnf-zona/cnf-zona';
 const routes: Routes = [
     {
         path: '',
@@ -139,6 +140,7 @@ const routes: Routes = [
             {path: 'usuario-empresa',component: SegUsuarioEmpresaComponent},
             {path: 'tipo-mov',component: InvTipoMovComponent},
             {path: 'accion',component: SegAccionComponent},
+            {path: 'zona',component: CnfZonaComponent},
             // {path: 'new-accion/:id',component: SegAccionFormComponent},
             // {path: 'new-accion/:id',component: SegAccionFormComponent},
 

@@ -85,8 +85,8 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
             actContrato.setCnfFormaPago(null);
         }
         if (id == 0) {
-            List<CnfNumComprobante> numComprobante = cnfNumComprobanteRepository.findByCnfTipoComprobanteIdAndCnfLocalId(
-                    actContrato.getCnfTipoComprobante().getId(),
+            List<CnfNumComprobante> numComprobante = cnfNumComprobanteRepository.findByCnfTipoComprobanteCodigoAndCnfLocalId(
+                    "CNT",
                     actContrato.getCnfLocal().getId());
             if (numComprobante.isEmpty()) {
                 throw new Exception("No existe numeración para el tipo de comprobante y el local");
@@ -172,7 +172,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
         }
         if (actContrato.getFecha().lengthOfMonth() < actContrato.getCnfPlanContrato().getDiaVencimiento()) {
             actPayment.setFechaVencimiento(actContrato.getFecha()
-                    .withDayOfMonth(actPayment.getFechaVencimiento().lengthOfMonth()));
+                    .withDayOfMonth(actPayment.getFecha().lengthOfMonth()));
         } else {
             actPayment.setFechaVencimiento(
                     actContrato.getFecha()
@@ -374,7 +374,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                     //                            }
                     //                        }
                     //                    });
-                    //                    return mapper;
+                    //                    return mapper; 
                 })
                 .map(mapper -> {
                     if (paramBean.getFlagEstado() == 0 && mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 1) {

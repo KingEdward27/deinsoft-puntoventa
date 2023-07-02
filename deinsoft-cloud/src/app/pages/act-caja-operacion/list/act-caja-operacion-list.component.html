@@ -172,8 +172,7 @@
                                 
                                 <th class="text-nowrap">{{'webpagos.act_caja_operacion.fecha' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_caja_operacion.act_caja_turno' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.act_caja_operacion.act_comprobante' | translate}}
-                                </th>
+                                <th class="text-nowrap">Comprobante</th>
                                 <th class="text-nowrap">{{'webpagos.act_caja_operacion.act_pago' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_caja_operacion.monto_salida' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_caja_operacion.monto_ingreso' | translate}}</th>
@@ -195,7 +194,7 @@
                                 
                                 <td>{{item.fecha}}</td>
                                 <td>{{item.actCajaTurno?.actCaja.nombre +' - '+ item.actCajaTurno.fechaApertura}}</td>
-                                <td>{{item.actComprobante?(item.actComprobante.serie + '-' +item.actComprobante.numero):''}}</td>
+                                <td>{{item.actComprobante?(item.actComprobante.serie + '-' +item.actComprobante.numero):item.actPago? (item.actPago?.serie + '-' +item.actPago?.numero): ''}}</td>
                                 <td>{{item.detail}}</td>
                                 <td class="content-number">{{(item.flagIngreso == '1'?0:item.monto) | number:'1.2-2'}}</td>
                                 <td class="content-number">{{(item.flagIngreso != '1'?0:item.monto) | number:'1.2-2'}}</td>

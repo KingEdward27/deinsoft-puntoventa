@@ -23,6 +23,10 @@ public interface CnfNumComprobanteRepository extends JpaRepository<CnfNumComprob
     List<CnfNumComprobante> findByCnfTipoComprobanteIdAndCnfLocalId(long id, long idLocal);
 
     @Query(value = "select p from cnfNumComprobante p "
+            + "where p.cnfTipoComprobante.codigo =  ?1 and p.cnfLocal.id = ?2")
+    List<CnfNumComprobante> findByCnfTipoComprobanteCodigoAndCnfLocalId(String codigo, long idLocal);
+    
+    @Query(value = "select p from cnfNumComprobante p "
             + "where p.cnfLocal.id =  ?1 ")
     List<CnfNumComprobante> findByCnfLocalId(long id);
 

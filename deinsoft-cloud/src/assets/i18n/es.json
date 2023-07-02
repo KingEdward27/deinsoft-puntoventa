@@ -445,7 +445,8 @@
       "monto":"Monto",
       "estado":"Estado",
       "monto_salida":"Salida",
-      "monto_ingreso":"Ingreso"
+      "monto_ingreso":"Ingreso",
+      "detail":"Detalle"
     },
     "inv_tipo_mov_almacen": {
       "home": {
@@ -511,7 +512,7 @@
         "subTitleList": " Listado de Contrato de pagos mensuales"
       },
       "id": "ID",
-      "fecha": "Fecha",
+      "fecha": "Fecha Instalación",
       "fecha_registro": "Fecha Registro",
       "numero": "Número",
       "total": "Total",

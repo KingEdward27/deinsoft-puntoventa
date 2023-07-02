@@ -122,6 +122,7 @@ import { AllMapActContratoComponent } from '@pages/act-contrato/allmap-acto-cont
 import { ActPagoListComponent } from './pages/act-pago/list/act-pago-list.component';
 import { ActContratoReportComponent } from '@pages/reports/act-contrato/act-contrato-report.component';
 import { OpeGenericFormModalComponent } from './pages/modal/ope-generic-form-modal.component';
+import { CnfZonaComponent } from './pages/cnf-zona/cnf-zona';
 
 @NgModule({
     declarations: [
@@ -228,6 +229,7 @@ import { OpeGenericFormModalComponent } from './pages/modal/ope-generic-form-mod
         AllMapActContratoComponent,
         ActPagoListComponent,
         ActContratoReportComponent,
+        CnfZonaComponent,
         OpeGenericFormModalComponent
     ],
     imports: [

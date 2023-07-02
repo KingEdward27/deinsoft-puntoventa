@@ -13,7 +13,9 @@ import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
 import com.deinsoft.puntoventa.business.service.ActCajaOperacionService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.model.ActComprobante;
+import com.deinsoft.puntoventa.business.model.CnfLocal;
 import com.deinsoft.puntoventa.business.model.SegUsuario;
+import com.deinsoft.puntoventa.business.repository.CnfLocalRepository;
 import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,9 @@ public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperac
     @Autowired
     ActCajaOperacionRepository actCajaOperacionRepository;
 
+    @Autowired
+    CnfLocalRepository cnfLocalRepository;
+    
     public List<ActCajaOperacion> getAllActCajaOperacion(ActCajaOperacion actCajaOperacion) {
         List<ActCajaOperacion> actCajaOperacionList = (List<ActCajaOperacion>) actCajaOperacionRepository.getAllActCajaOperacion(actCajaOperacion.getEstado().toUpperCase());
         return actCajaOperacionList.stream()
@@ -80,9 +85,10 @@ public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperac
     @Override
     public List<ActCajaOperacion> getReportActCajaOperacion(ParamBean paramBean) {
         List<ActCajaOperacion> actCajaOperacionList = (List<ActCajaOperacion>) actCajaOperacionRepository.getReportActCajaOperacion(paramBean);
-
+        CnfLocal cnfLocal = cnfLocalRepository.getById(paramBean.getCnfLocal().getId());
         return actCajaOperacionList.stream()
                 .filter(predicate -> {
+                    System.out.println(predicate.toString());
                     if (paramBean.getCnfLocal().getId() == 0) {
                         return true;
                     } else {
@@ -98,6 +104,10 @@ public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperac
                                 }
                                 return false;
                             });
+                        } else if (predicate.getActComprobante()== null && predicate.getActPago() == null 
+                                && predicate.getActCajaTurno().getActCaja().getCnfEmpresa().getId() == cnfLocal.getCnfEmpresa().getId()) {
+                            System.out.println(predicate.toString());
+                            return true;
                         }
                         return false;
                     }
@@ -118,6 +128,9 @@ public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperac
                                 }
                                 return false;
                             });
+                        } else if (predicate.getActComprobante() == null && predicate.getActPago() == null 
+                                && predicate.getActCajaTurno().getActCaja().getCnfEmpresa().getId() == cnfLocal.getCnfEmpresa().getId()) {
+                            return true;
                         }
                         return false;
                     }

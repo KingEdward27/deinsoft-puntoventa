@@ -7,6 +7,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity(name = "cnfTipoComprobante")
 @Table(name = "cnf_tipo_comprobante")
@@ -35,6 +36,10 @@ public class CnfTipoComprobante implements Serializable {
     @Column(name = "flag_electronico", length = 1, nullable = true)
     private String flagElectronico;
 
+    @ColumnDefault("1")
+    @Column(name = "flag_editable", length = 1, nullable = true)
+    private int flagEditable;
+     
     public long getId() {
         return id;
     }
@@ -73,6 +78,14 @@ public class CnfTipoComprobante implements Serializable {
 
     public void setFlagElectronico(String flagElectronico) {
         this.flagElectronico = flagElectronico;
+    }
+
+    public int getFlagEditable() {
+        return flagEditable;
+    }
+
+    public void setFlagEditable(int flagEditable) {
+        this.flagEditable = flagEditable;
     }
 
     @Override

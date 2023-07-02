@@ -129,6 +129,7 @@ public class GenericController {
         if (jsonData.getId() == 0) {
             object = jdbcRepository.create(jsonData);
         } else {
+            jsonData.getFilters().remove("password");
             object = jdbcRepository.update(jsonData);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(object);

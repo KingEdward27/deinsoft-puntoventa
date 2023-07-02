@@ -356,7 +356,7 @@ export class ActContratoFormComponent implements OnInit {
     this.loadingCnfTipoComprobante = true;
     return this.cnfTipoComprobanteService.getAllDataCombo().subscribe(data => {
       this.listCnfTipoComprobante = data;
-      this.listCnfTipoComprobante = this.listCnfTipoComprobante.filter(data => data.nombre.toUpperCase().includes("CONTRATO"));
+      this.listCnfTipoComprobante = this.listCnfTipoComprobante.filter(data => data.codigo.toUpperCase().includes("CNT"));
       this.model.cnfTipoComprobante = this.listCnfTipoComprobante[0];
       console.log(this.model.cnfTipoComprobante);
       
@@ -641,7 +641,7 @@ export class ActContratoFormComponent implements OnInit {
     // let month = new Date().getMonth() + 1;
     let day = new Date(wa.year, wa.month, 0).getDate();
 
-    this.model.montoPrimerMes = (this.model.cnfPlanContrato.precio / day) * (day - wa.day);
+    this.model.montoPrimerMes = (this.model.cnfPlanContrato.precio / day) * (day - wa.day + 1);
 
     this.model.montoPrimerMes = Math.round((this.model.montoPrimerMes + Number.EPSILON) * 100) / 100;
   }

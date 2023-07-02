@@ -116,18 +116,17 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
     this.indexInputs = [8]
     this.model.fechaVencimiento = this.model.fechaVencimiento?this.model.fechaVencimiento:''
     return this.deps.actPagoProgramacionService
-    .getAllByCnfMaestroId(this.model.cnfMaestro.id,this.model.fechaVencimiento).subscribe(data => {
+    .getAllByCnfMaestroId(this.model.cnfMaestro.id,this.model.fechaVencimiento,this.model.cnfLocal.id).subscribe(data => {
       this.listData = data;
       this.loadingCnfMaestro = false;
-      setTimeout(() => {
-        this.dataTable = $('#dtDataListActPagoProgramacion').DataTable(this.datablesSettingsWithInputs);
-      }, 1);
-      this.dataTable?.destroy();
+      // setTimeout(() => {
+      //   this.dataTable = $('#dtDataListActPagoProgramacion').DataTable(this.datablesSettingsWithInputs);
+      // }, 1);
+      // this.dataTable?.destroy();
       this.listData.forEach(element => {
         this.totalMontos = this.totalMontos + element.monto
         this.totalPendiente = this.totalPendiente + element.montoPendiente
       });
-      console.log(data);
     })
   }
   print(item: any) {
@@ -207,7 +206,6 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
       return;
     }
     if(!error){
-      console.log(this.listData);
       this.modalRef = this.deps.modalService.open(ActPagoModalComponent, {
         size: 'lg',
         });
@@ -216,9 +214,10 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
           if (element.amtToPay > 0) {
              let actPagoDetalle = new ActPagoDetalle();
              actPagoDetalle.montoDeuda = element.monto;
-             actPagoDetalle.monto = element.amtToPay;
+             actPagoDetalle.monto = (element.amtToPay > actPagoDetalle.montoDeuda? actPagoDetalle.montoDeuda: element.amtToPay);
              actPagoDetalle.actPagoProgramacion = element;
              this.modalRef.componentInstance.model.cnfMaestro = element.actContrato?element.actContrato.cnfMaestro : element.actComprobante.cnfMaestro;
+             this.total = this.total + actPagoDetalle.monto;
              list.push(actPagoDetalle);
           }
         });

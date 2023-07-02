@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component,OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { UtilService } from '@services/util.service';
+import { AppService } from '../../services/app.service';
 
 @Component({
   selector: 'app-cnf-tipocomprobante',
@@ -26,13 +27,16 @@ export class CnfTipoComprobanteComponent extends GenericListComponent implements
            ],
     //filters sería para filtros adicionales
     "conditions":[],
-    "orders":["cnf_tipo_comprobante_id desc"]
+    "orders":["cnf_tipo_comprobante_id desc"],
+    "preSave" : []
   }
-  constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService) { 
+  constructor(private utilServices: UtilService,private httpClients:HttpClient,private routers: Router,public _commonService:CommonService,private appService:AppService) { 
     super(utilServices,httpClients,routers,_commonService);
   }
   ngOnInit(): void {
     super.baseEndpoint = this.baseEndpoint;
+    
+    this.prop.conditions.push({"columnName":"cnf_tipo_comprobante_id.flag_editable","value":1});
     super.properties = this.prop;
     console.log(this.prop);
     super.ngOnInit();
