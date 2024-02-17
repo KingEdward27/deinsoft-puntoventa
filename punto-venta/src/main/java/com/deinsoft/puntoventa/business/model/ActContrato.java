@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.validation.annotation.Validated;
 
 @Entity(name = "actContrato")
@@ -115,6 +116,9 @@ public class ActContrato implements Serializable {
     
     @Transient
     private String ultimoPago;
+    
+    @Transient
+    private int mesesDeuda;
     
     @Transient
     private BigDecimal montoPendiente;
@@ -325,6 +329,15 @@ public class ActContrato implements Serializable {
         this.estadoDescripcion = estadoDescripcion;
     }
 
+    public int getMesesDeuda() {
+        return mesesDeuda;
+    }
+
+    public void setMesesDeuda(int mesesDeuda) {
+        this.mesesDeuda = mesesDeuda;
+    }
+
+    
     
     public static Map<String, Object> toMap(ActContrato object, String[] visibles) {
         Map<String, Object> map = new HashMap<>();

@@ -43,7 +43,7 @@ import { CnfCategoriaService } from '@/business/service/cnf-categoria.service';
 import { InvMovAlmacenService } from '@/business/service/inv-mov-almacen.service';
 import { ActCajaOperacion } from '../../../business/model/act-caja-operacion.model';
 import { ActCajaOperacionService } from '../../../business/service/act-caja-operacion.service';
-import { CnfZonaService } from '../../../business/service/cnf-zona';
+import { CnfZonaService } from '../../../business/service/cnf-zona.service';
 
 @Injectable()
 export class MyBaseComponentDependences {
@@ -149,7 +149,6 @@ export class CommonReportFormComponent implements OnInit {
     this.model.fechaDesde = this.deps.dateAdapter.toModel(this.deps.ngbCalendar.getToday())!;
     this.model.fechaHasta = this.deps.dateAdapter.toModel(this.deps.ngbCalendar.getToday())!;
     let lang = localStorage.getItem('lang');
-    console.log(lang);
     this.datablesSettings = {
       deferRender: true,
       deferLoading: 7,
@@ -198,7 +197,8 @@ export class CommonReportFormComponent implements OnInit {
         //   next: 'Sig.',
         //   previous: 'Ant.'
         // }
-      }
+      },
+      responsive: true
     }
     this.datablesSettingsWithInputs = {
       deferRender: true,
@@ -209,6 +209,8 @@ export class CommonReportFormComponent implements OnInit {
       lengthMenu: [25, 50, 100],
       order: [[0, "asc"]],
       dom: 'lBftip',
+      
+      responsive: true,
       buttons: [{
         extend: 'excel',
         title: this.titleExport,

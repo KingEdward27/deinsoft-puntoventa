@@ -11,6 +11,8 @@ import com.deinsoft.puntoventa.business.model.CnfTipoComprobante;
 import com.deinsoft.puntoventa.business.repository.CnfTipoComprobanteRepository;
 import com.deinsoft.puntoventa.business.service.CnfTipoComprobanteService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -40,6 +42,33 @@ public class CnfTipoComprobanteServiceImpl extends CommonServiceImpl<CnfTipoComp
 
     public List<CnfTipoComprobante> getAllCnfTipoComprobante() {
         List<CnfTipoComprobante> cnfTipoComprobanteList = (List<CnfTipoComprobante>) cnfTipoComprobanteRepository.findAll();
+        return cnfTipoComprobanteList;
+    }
+    
+    public List<CnfTipoComprobante> getAllCnfTipoComprobanteVentas() {
+        final List<String> list = Arrays.asList("BOL","FAC","NOT");
+        List<CnfTipoComprobante> cnfTipoComprobanteList = (List<CnfTipoComprobante>) cnfTipoComprobanteRepository.findAll()
+                .stream().filter(predicate -> list.stream().anyMatch(data -> 
+                {
+                    return data.equals(predicate.getCodigo());
+                }))
+                .collect(Collectors.toList());
+        return cnfTipoComprobanteList;
+    }
+    
+    public List<CnfTipoComprobante> getAllCnfTipoComprobanteMovAlmacen() {
+        final List<String> list = Arrays.asList("NEA","NSA");
+        List<CnfTipoComprobante> cnfTipoComprobanteList = (List<CnfTipoComprobante>) cnfTipoComprobanteRepository.findAll()
+                .stream().filter(predicate -> list.stream().anyMatch(data -> data.equals(predicate.getCodigo())))
+                .collect(Collectors.toList());
+        return cnfTipoComprobanteList;
+    }
+    
+    public List<CnfTipoComprobante> getAllCnfTipoComprobanteContrato() {
+        final List<String> list = Arrays.asList("CNT");
+        List<CnfTipoComprobante> cnfTipoComprobanteList = (List<CnfTipoComprobante>) cnfTipoComprobanteRepository.findAll()
+                .stream().filter(predicate -> list.stream().anyMatch(data -> data.equals(predicate.getCodigo())))
+                .collect(Collectors.toList());
         return cnfTipoComprobanteList;
     }
 

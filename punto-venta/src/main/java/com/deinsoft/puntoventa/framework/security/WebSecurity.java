@@ -117,7 +117,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 	public CorsFilter corsFilter() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 		corsConfiguration.setAllowCredentials(true);
-		corsConfiguration.setAllowedOrigins(Arrays.asList("http://deinsoft-la.com/",
+		corsConfiguration.setAllowedOrigins(Arrays.asList("http://deinsoft-la.com/","http://66.29.149.124:8080/deinsoft-cloud/",
                         "http://localhost:4200/","http://localhost:57784/","http://127.0.0.1:5500/"));
 		corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
 				"Accept", "Authorization", "Origin, Accept", "X-Requested-With",

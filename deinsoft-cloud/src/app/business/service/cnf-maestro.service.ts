@@ -59,5 +59,12 @@ export class CnfMaestroService {
     .set("empresaId",empresaId);
     return this.http.get<CnfMaestro[]>(`${this.url}/get-all-cnf-maestro-typehead`, { params });
   }
+  public getApiNameByDoc(nrodoc: string): Observable<any> {
+    let params = new HttpParams()
+    .set("nroDoc",nrodoc)
+    return this.http.get<any>(`${this.url}/get-search-sunat`, { params });
+    
+    
+  }
 }
 

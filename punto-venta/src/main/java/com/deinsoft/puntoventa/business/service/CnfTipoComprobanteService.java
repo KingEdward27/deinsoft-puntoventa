@@ -9,11 +9,21 @@ import com.deinsoft.puntoventa.business.model.CnfTipoComprobante;
 
 @Service
 @Transactional
-public interface CnfTipoComprobanteService extends CommonService<CnfTipoComprobante>{
-	
-	public List<CnfTipoComprobante> getAllCnfTipoComprobante(CnfTipoComprobante cnfTipoComprobante);
-	public CnfTipoComprobante getCnfTipoComprobante(Long id);
-	public CnfTipoComprobante saveCnfTipoComprobante(CnfTipoComprobante cnfTipoComprobante);
-	public List<CnfTipoComprobante> getAllCnfTipoComprobante();
-	public void delete(long id);
+public interface CnfTipoComprobanteService extends CommonService<CnfTipoComprobante> {
+
+    public List<CnfTipoComprobante> getAllCnfTipoComprobante(CnfTipoComprobante cnfTipoComprobante);
+
+    public CnfTipoComprobante getCnfTipoComprobante(Long id);
+
+    public CnfTipoComprobante saveCnfTipoComprobante(CnfTipoComprobante cnfTipoComprobante);
+
+    public List<CnfTipoComprobante> getAllCnfTipoComprobante();
+
+    public List<CnfTipoComprobante> getAllCnfTipoComprobanteVentas();
+
+    public List<CnfTipoComprobante> getAllCnfTipoComprobanteMovAlmacen();
+
+    public List<CnfTipoComprobante> getAllCnfTipoComprobanteContrato();
+
+    public void delete(long id);
 }

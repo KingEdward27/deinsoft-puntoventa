@@ -73,7 +73,7 @@ export class MessageModalComponent implements OnInit {
     mp.map = convMapDetail;
     this.commonService.updateParam = mp;
     
-    this.commonService.genericPostRequest("/api/business/getpdflocal", mp, 'blob').subscribe(data => {
+    this.commonService.genericPostRequest("/api/business/act-comprobante/getpdflocal", mp, 'blob').subscribe(data => {
       console.log(data);
       if (data.type != 'application/json') {
         var contentType = 'application/pdf';

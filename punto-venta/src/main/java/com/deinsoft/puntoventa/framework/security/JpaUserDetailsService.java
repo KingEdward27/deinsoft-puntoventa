@@ -55,24 +55,29 @@ public class JpaUserDetailsService implements UserDetailsService {
         String locales = "";
         boolean totalAccess = false;
         if (usuario.getEmail().equalsIgnoreCase("edward21.sistemas@gmail.com")) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN" + "|1|*"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN" + "|1|*|*|*"));
         } else {
             for (SecRoleUser roleUser : usuario.getListSecRoleUser()) {
                 logger.info("Role: ".concat(roleUser.getSecRole().getName()));
                 if (roleUser.getEmpresa() == null) {
-                    authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() + "|*|*"));
+                    authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() + "|*|*|*|*"));
                     totalAccess = true;
                     break;
                 }
                 if (roleUser.getEmpresa() != null && roleUser.getLocal() == null) {
-                    authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() + "|" + String.valueOf(roleUser.getEmpresa().getId()) + "|*"));
+                    authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() 
+                            + "|" + String.valueOf(roleUser.getEmpresa().getId()) + "|*" 
+                            + "|" + String.valueOf(roleUser.getEmpresa().getNombre())
+                            + "|*"));
                     totalAccess = true;
                     break;
                 }
                 if (roleUser.getEmpresa() != null && roleUser.getLocal() != null) {
                     locales = locales + roleUser.getSecRole().getName()
                             + "|" + String.valueOf(roleUser.getEmpresa().getId())
-                            + "|" + String.valueOf(roleUser.getLocal().getId());
+                            + "|" + String.valueOf(roleUser.getLocal().getId())
+                            + "|" + String.valueOf(roleUser.getEmpresa().getNombre())
+                            + "|" + String.valueOf(roleUser.getLocal().getNombre());
                 }
             }
             if (!totalAccess) {

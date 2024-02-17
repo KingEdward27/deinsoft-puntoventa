@@ -97,5 +97,9 @@ export class ActContratoService {
   public getReport(form: any): Observable<ActContrato> {
     return this.http.post<ActContrato>(this.url + '/get-report-act-contrato', form);
   }
+  public getDashboard(arg1: any): Observable<any> {
+    let params = new HttpParams().set("id", arg1);
+    return this.http.get<any>(this.url + '/get-dashboard-act-contrato', { params });
+  }
 }
 

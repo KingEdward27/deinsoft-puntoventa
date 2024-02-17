@@ -83,7 +83,8 @@ export class UtilService {
         //   next: 'Sig.',
         //   previous: 'Ant.'
         // }
-      }
+      },
+      responsive: true
     }
     this.datablesSettingsNoOrderable = {
       deferRender: true,
@@ -309,6 +310,62 @@ export class UtilService {
     console.log(resultConfirm);
     return resultConfirm;
   }
+  async confirmProcessWithReturn(title: any, label: any) : Promise<string>{
+    const { value: value } = await Swal.fire({
+      title: title,
+      input: 'password',
+      inputLabel: label,
+      showCancelButton: true,
+      inputValue: "",
+      inputAttributes: {
+        maxlength: "10",
+        autocapitalize: 'off',
+        autocorrect: 'off',
+        autocomplete: "new-password",
+        "data-lpignore": "true"
+      },
+      inputValidator: (value) => {
+        if (!value) {
+          return 'You need to write something!'
+        }
+      }
+    })
+    return value;
+  }
+  async confirmProcessAjax(title: any, label: any){
+    Swal.fire({
+      title: 'Submit your Github username',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Look up',
+      showLoaderOnConfirm: true,
+      preConfirm: (login) => {
+        return fetch(`//api.github.com/users/${login}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(response.statusText)
+            }
+            return response.json()
+          })
+          .catch(error => {
+            Swal.showValidationMessage(
+              `Request failed: ${error}`
+            )
+          })
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: `${result.value.login}'s avatar`,
+          imageUrl: result.value.avatar_url
+        })
+      }
+    })
+  }
   msgOkSave() {
     Swal.fire('Registro', `Grabado con éxito`, 'success');
   }
@@ -496,4 +553,16 @@ export class UtilService {
   getTranslate(header: any) {
     return this.translate.instant(header);
   }
+  monthDiff(d1, d2) { 
+    var months; 
+    months = (d2.getFullYear() - d1.getFullYear()) * 12; 
+    months = months + d1.getMonth() - d2.getMonth();
+    return months <= 0 ? 0 : months;
+  }
+  dayDiff(date1, date2) { 
+    var diff = Math.abs(date1.getTime() - date2.getTime());
+    var diffDays = Math.ceil(diff / (1000 * 3600 * 24)); 
+    return diffDays;
+  }
+
 }

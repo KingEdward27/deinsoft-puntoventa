@@ -15,7 +15,7 @@ public interface CnfMaestroService extends CommonService<CnfMaestro> {
 
     public CnfMaestro getCnfMaestro(Long id);
 
-    public CnfMaestro saveCnfMaestro(CnfMaestro cnfMaestro);
+    public CnfMaestro saveCnfMaestro(CnfMaestro cnfMaestro)  throws Exception;
 
     public List<CnfMaestro> getAllCnfMaestro();
 

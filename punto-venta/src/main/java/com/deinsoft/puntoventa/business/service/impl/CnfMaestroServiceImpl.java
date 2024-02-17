@@ -11,6 +11,7 @@ import com.deinsoft.puntoventa.business.model.CnfMaestro;
 import com.deinsoft.puntoventa.business.repository.CnfMaestroRepository;
 import com.deinsoft.puntoventa.business.service.CnfMaestroService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.framework.util.Util;
 
 @Service
 @Transactional
@@ -34,8 +35,15 @@ public class CnfMaestroServiceImpl extends CommonServiceImpl<CnfMaestro, CnfMaes
         return cnfMaestro;
     }
 
-    public CnfMaestro saveCnfMaestro(CnfMaestro cnfMaestro) {
+    public CnfMaestro saveCnfMaestro(CnfMaestro cnfMaestro) throws Exception {
+        if (!Util.isNullOrEmpty(cnfMaestro.getNroDoc())) {
+            CnfMaestro item = cnfMaestroRepository.findByNroDoc(cnfMaestro.getNroDoc());
+            if (item == null || (item != null && item.getId() == null)) {
+                throw new Exception("Ya existe un  cloiente/trabajador con el mismo número de documento");
+            }
+        }
         CnfMaestro cnfMaestroResult = cnfMaestroRepository.save(cnfMaestro);
+        
         return cnfMaestroResult;
     }
 

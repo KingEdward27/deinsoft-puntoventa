@@ -25,7 +25,9 @@ public interface ActPagoProgramacionService extends CommonService<ActPagoProgram
 
     public void delete(long id);
     
-    public List<ActPagoProgramacion> getAllActPagoProgramacionByCnfMaestro(long id, LocalDate fechaVencimiento, long cnfLocalId);
+    public List<ActPagoProgramacion> getAllActPagoProgramacionByCnfMaestro(long id, LocalDate fechaVencimiento, long cnfLocalId, boolean onlyPendientes);
     
     public List<ActPagoProgramacion> getAllActPagoProgramacionCompraByCnfMaestro(long id, LocalDate fechaVencimiento);
+    
+    public void refreshProgramacionPagos ();
 }

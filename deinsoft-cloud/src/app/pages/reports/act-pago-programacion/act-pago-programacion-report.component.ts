@@ -109,13 +109,13 @@ export class ActPagoProgramacionReportComponent extends CommonReportFormComponen
     this.indexInputs = [8]
     this.model.fechaVencimiento = this.model.fechaVencimiento?this.model.fechaVencimiento:''
     return this.deps.actPagoProgramacionService
-    .getAllByCnfMaestroId(this.model.cnfMaestro.id,this.model.fechaVencimiento, this.model.cnfLocal.id).subscribe(data => {
+    .getAllByCnfMaestroId(this.model.cnfMaestro.id,this.model.fechaVencimiento, this.model.cnfLocal.id, false).subscribe(data => {
       this.listData = data;
       this.loadingCnfMaestro = false;
-      setTimeout(() => {
-        this.dataTable = $('#dtDataListActPagoProgramacion').DataTable(this.datablesSettingsWithInputs);
-      }, 1);
       this.dataTable?.destroy();
+      setTimeout(() => {
+        this.dataTable = $('#dtDataReportActPagoProgramacion').DataTable(this.datablesSettings);
+      }, 1);
       this.listData.forEach(element => {
         this.totalMontos = this.totalMontos + element.monto
         this.totalPendiente = this.totalPendiente + element.montoPendiente

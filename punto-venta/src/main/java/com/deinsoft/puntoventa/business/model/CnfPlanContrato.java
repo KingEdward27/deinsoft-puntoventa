@@ -2,11 +2,9 @@ package com.deinsoft.puntoventa.business.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.time.*;
 import java.io.Serializable;
-import com.fasterxml.jackson.annotation.*;
-import javax.validation.Valid;
 import java.math.BigDecimal;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity(name = "cnfPlanContrato")
 @Table(name = "cnf_plan_contrato")
@@ -26,13 +24,25 @@ public class CnfPlanContrato implements Serializable {
     private String nombre;
 
     @NotNull
+    @Column(name = "precio_instalacion", nullable = true)
+    private BigDecimal precioInstalacion;
+    
+    @NotNull
     @Column(name = "precio", nullable = true)
     private BigDecimal precio;
+    
+    @NotNull
+    @Column(name = "precio_reinstalacion", nullable = true)
+    private BigDecimal precioReinstalacion;
     
     @OneToOne
     @JoinColumn(name = "cnf_empresa_id")
     private CnfEmpresa cnfEmpresa;
 
+    @ColumnDefault("0")
+    @Column(name = "dia_proceso_corte", length = 2)
+    private Integer diaProcesoCorte;
+    
     @Column(name = "dia_vencimiento", length = 2, nullable = true)
     private Integer diaVencimiento;
     
@@ -74,6 +84,30 @@ public class CnfPlanContrato implements Serializable {
 
     public void setDiaVencimiento(Integer diaVencimiento) {
         this.diaVencimiento = diaVencimiento;
+    }
+
+    public BigDecimal getPrecioInstalacion() {
+        return precioInstalacion;
+    }
+
+    public void setPrecioInstalacion(BigDecimal precioInstalacion) {
+        this.precioInstalacion = precioInstalacion;
+    }
+
+    public Integer getDiaProcesoCorte() {
+        return diaProcesoCorte;
+    }
+
+    public void setDiaProcesoCorte(Integer diaProcesoCorte) {
+        this.diaProcesoCorte = diaProcesoCorte;
+    }
+
+    public BigDecimal getPrecioReinstalacion() {
+        return precioReinstalacion;
+    }
+
+    public void setPrecioReinstalacion(BigDecimal precioReinstalacion) {
+        this.precioReinstalacion = precioReinstalacion;
     }
 
 

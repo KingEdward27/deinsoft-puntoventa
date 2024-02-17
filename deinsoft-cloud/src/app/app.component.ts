@@ -28,12 +28,12 @@ export class AppComponent {
     console.log("asadfds");
     
     //60 = 1 minute
-    this.bnIdle.startWatching(60).subscribe((res) => {
-      if (res) {
-        console.log('session expired');
-        // this.router.navigateByUrl('logout');
-      }
-    });
+    // this.bnIdle.startWatching(60).subscribe((res) => {
+    //   if (res) {
+    //     console.log('session expired');
+    //     // this.router.navigateByUrl('logout');
+    //   }
+    // });
   }
   setAppLanguage() {
     this.translate.addLangs(['es', 'en']);

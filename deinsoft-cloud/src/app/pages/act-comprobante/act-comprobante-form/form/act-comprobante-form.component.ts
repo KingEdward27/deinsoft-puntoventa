@@ -88,7 +88,7 @@ export class ActComprobanteFormComponent implements OnInit {
   loadingInvAlmacen: boolean = false;
   listActComprobanteDetalle: any;
   selectedOptionActComprobanteDetalle: any;
-  protected redirect: string = "/act-comprobante";
+  protected redirect: string = "/list-ventas";
   selectedOption: any;
   passwordRepeat: any;
   isAdding: boolean = false;
@@ -105,6 +105,7 @@ export class ActComprobanteFormComponent implements OnInit {
   public modalRef!: NgbModalRef;
   option:string = "1";
 
+  empresaPrincipal: any
   constructor(private actComprobanteService: ActComprobanteService,
     private router: Router,
     private utilService: UtilService,
@@ -135,11 +136,18 @@ export class ActComprobanteFormComponent implements OnInit {
     //   this.a4();
     // });
     this.loadData();
-
+    let empresaPrincipal = this.appService.getUser().empresaPrincipal
+    this.empresaPrincipal = empresaPrincipal
+    
+    // $(document).on("keyup", function(event) {
+    //   if (event.enter) {
+    //     document.getElementById("myOptions").focus();
+    //   }
+    // });
   }
   getBack() {
-    this._location.back();
-    // this.router.navigate([this.redirect]);
+    //this._location.back();
+    this.router.navigate([this.redirect]);
   }
   loadData() {
     this.getListCnfMaestro();
@@ -212,8 +220,8 @@ export class ActComprobanteFormComponent implements OnInit {
   
   onchangeProduct(event: any, input: any) {
     event.preventDefault();
-    console.log(event.item);
-    console.log(input.value);
+    console.log(event);
+    
     let actComprobanteDetalle = new ActComprobanteDetalle();
     actComprobanteDetalle.cnfProducto = event.item
     actComprobanteDetalle.descripcion = event.item.nombre
@@ -420,12 +428,11 @@ export class ActComprobanteFormComponent implements OnInit {
   }
   getListCnfMoneda() {
     this.loadingCnfMoneda = true;
-    console.log(this.chargingsb);
     return this.cnfMonedaService.getAllDataCombo().subscribe(data => {
       console.log(data);
-
       this.listCnfMoneda = data;
       this.loadingCnfMoneda = false;
+      this.model.cnfMoneda = this.empresaPrincipal.cnfMoneda
     })
 
   }
@@ -439,9 +446,7 @@ export class ActComprobanteFormComponent implements OnInit {
   }
   getListCnfLocal() {
     this.loadingCnfLocal = true;
-    console.log(this.chargingsb);
     let user = this.appService.getProfile();
-    console.log(user);
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
     if(cnfEmpresa == '*') {
       return this.cnfLocalService.getAllDataCombo().subscribe(data => {
@@ -480,8 +485,7 @@ export class ActComprobanteFormComponent implements OnInit {
   }
   getListCnfTipoComprobante() {
     this.loadingCnfTipoComprobante = true;
-    console.log(this.chargingsb);
-    return this.cnfTipoComprobanteService.getAllDataCombo().subscribe(data => {
+    return this.cnfTipoComprobanteService.getAllDataComboVentas().subscribe(data => {
       this.listCnfTipoComprobante = data;
       this.loadingCnfTipoComprobante = false;
     })
@@ -698,7 +702,6 @@ export class ActComprobanteFormComponent implements OnInit {
       // this.model.cnfBpartner = 
     })
     this.modalRef.componentInstance.cnfMaestro.subscribe((receivedEntry:CnfMaestro) => {
-      console.log(receivedEntry);
       this.getListCnfMaestro()
       this.model.cnfMaestro = receivedEntry
     })
@@ -729,5 +732,17 @@ searchCnfMaestro = (text$: Observable<string>) =>
       return this.getListCnfMestroAsObservable(term);
     })
   )
+
+  // onEnter(){
+    
+    
+  //   console.log(this.model.cnfMaestro.nroDoc);
+  //   if (this.model.cnfMaestro.nroDoc?.length == 8 || this.model.cnfMaestro.nroDoc?.length == 11 && !this.model.cnfMaestro.apellidoPaterno) {
+  //     this.actComprobanteService.getApiNameByDoc(this.model.cnfMaestro.nroDoc).subscribe(data => {
+  //       this.addNewCnfMestro()
+  //     })
+  //   }
+    
+  // }
 }
 

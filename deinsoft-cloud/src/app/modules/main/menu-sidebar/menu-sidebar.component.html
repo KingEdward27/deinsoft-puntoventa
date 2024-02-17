@@ -1,5 +1,5 @@
 <!-- Brand Logo -->
-<a [routerLink]="['/']" class="brand-link">
+<a [routerLink]="['/']" class="brand-link" style="background-color: rgb(15, 41, 66)">
     <img
         src="assets/img/logo_deinsoft.png"
         alt="DEINSOFT Logo"
@@ -10,7 +10,7 @@
 </a>
 
 <!-- Sidebar -->
-<div class="sidebar">
+<div class="sidebar"  style="background-color: #0f2943">
     <!-- Sidebar user (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
@@ -26,7 +26,19 @@
             </a>
         </div>
     </div>
-
+    <div class="user-panel mt-1 pb-1 mb-1 d-flex" style="white-space: inherit !important;">
+        <div class="info" style="white-space: inherit !important;">
+            <a class="d-block">
+                Perfil: {{ perfil }}
+            </a>
+            <a class="d-block">
+                Empresa: {{ empresa }}
+            </a>
+            <a class="d-block">
+                Local: {{ local }}
+            </a>
+        </div>
+    </div>
     <!-- Sidebar Menu -->
     <nav class="mt-2" style="overflow-y: hidden">
         <ul

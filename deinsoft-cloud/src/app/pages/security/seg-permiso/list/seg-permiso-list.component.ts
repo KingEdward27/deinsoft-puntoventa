@@ -7,8 +7,7 @@ import { SegPermisoService } from '@/business/service/seg-permiso.service';
 import { SegPermiso } from '@/business/model/seg-permiso.model';
 @Component({
   selector: 'app-seg-permiso-list',
-  templateUrl: './seg-permiso-list.component.html',
-  styleUrls: ['./seg-permiso-list.component.css']
+  templateUrl: './seg-permiso-list.component.html'
 })
 export class SegPermisoListComponent implements OnInit {
   lista: any;

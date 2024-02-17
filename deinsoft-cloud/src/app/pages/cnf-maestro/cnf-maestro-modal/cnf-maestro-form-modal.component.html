@@ -19,7 +19,7 @@
                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                             <div class="col-sm-12 col-lg-8">
                                 <select name="model.cnfTipoDocumento" [compareWith]="compareCnfTipoDocumento"
-                                    [(ngModel)]="model.cnfTipoDocumento" class="form-control-sm col-sm-12 col-lg-12">
+                                    [(ngModel)]="model.cnfTipoDocumento" class="form-control col-sm-12 col-lg-12">
                                     <option *ngIf="loadingCnfTipoDocumento" [ngValue]="0" selected="selected">
                                         Cargando...</option>
                                     <option *ngIf="!loadingCnfTipoDocumento" [ngValue]="selectDefaultCnfTipoDocumento">
@@ -39,9 +39,20 @@
                                 translate}}<span
                                 style="color: red;font-size: 16px !important;font-weight: bold;"> *</span></label>
                             <div class="col-sm-12 col-lg-8">
-                                <input type="text" [(ngModel)]="model.nroDoc" maxlength="11" name="nroDoc" id="nroDoc"
-                                    name="nroDoc" class="form-control-sm col-sm-12 col-lg-12"
+                                <div class="input-group input-group">
+                                    <input type="text" [(ngModel)]="model.nroDoc" maxlength="11" name="nroDoc" id="nroDoc"
+                                    name="nroDoc" class="form-control col-sm-12 col-lg-12"
                                     placeholder="Ingrese nroDoc" />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary button-dp"
+                                         type="button" (click) = "searchSunat()">SUNAT
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+                                
+                                
                                 <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.nroDoc">{{ error.nroDoc
                                     }}</div>
                             </div>
@@ -53,7 +64,7 @@
                                 style="color: red;font-size: 16px !important;font-weight: bold;"> *</span></label>
                             <div class="col-sm-12 col-lg-8">
                                 <input type="text" [(ngModel)]="model.nombres" maxlength="100" name="nombres"
-                                    id="nombres" name="nombres" class="form-control-sm col-sm-12 col-lg-12"
+                                    id="nombres" name="nombres" class="form-control col-sm-12 col-lg-12"
                                     placeholder="Ingrese nombres" />
                                 <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.nombres">{{
                                     error.nombres }}</div>
@@ -66,7 +77,7 @@
                             <div class="col-sm-12 col-lg-8">
                                 <input type="text" [(ngModel)]="model.apellidoPaterno" maxlength="100"
                                     name="apellidoPaterno" id="apellidoPaterno" name="apellidoPaterno"
-                                    class="form-control-sm col-sm-12 col-lg-12" placeholder="Ingrese apellidoPaterno" />
+                                    class="form-control col-sm-12 col-lg-12" placeholder="Ingrese apellidoPaterno" />
                                 <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.apellidoPaterno">{{
                                     error.apellidoPaterno }}</div>
                             </div>
@@ -78,7 +89,7 @@
                             <div class="col-sm-12 col-lg-8">
                                 <input type="text" [(ngModel)]="model.apellidoMaterno" maxlength="100"
                                     name="apellidoMaterno" id="apellidoMaterno" name="apellidoMaterno"
-                                    class="form-control-sm col-sm-12 col-lg-12" placeholder="Ingrese apellidoMaterno" />
+                                    class="form-control col-sm-12 col-lg-12" placeholder="Ingrese apellidoMaterno" />
                                 <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.apellidoMaterno">{{
                                     error.apellidoMaterno }}</div>
                             </div>
@@ -90,7 +101,7 @@
                                 style="color: red;font-size: 16px !important;font-weight: bold;"> *</span></label>
                             <div class="col-sm-12 col-lg-8">
                                 <input type="text" [(ngModel)]="model.razonSocial" maxlength="100" name="razonSocial"
-                                    id="razonSocial" name="razonSocial" class="form-control-sm col-sm-12 col-lg-12"
+                                    id="razonSocial" name="razonSocial" class="form-control col-sm-12 col-lg-12"
                                     placeholder="Ingrese razonSocial" />
                                 <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.razonSocial">{{
                                     error.razonSocial }}</div>
@@ -102,7 +113,7 @@
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-8">
                                 <input type="text" [(ngModel)]="model.direccion" maxlength="200" name="direccion"
-                                    id="direccion" name="direccion" class="form-control-sm col-sm-12 col-lg-12"
+                                    id="direccion" name="direccion" class="form-control col-sm-12 col-lg-12"
                                     placeholder="Ingrese direccion" />
                                 <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.direccion">{{
                                     error.direccion }}</div>
@@ -114,7 +125,7 @@
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-8">
                                 <input type="text" [(ngModel)]="model.correo" maxlength="100" name="correo" id="correo"
-                                    name="correo" class="form-control-sm col-sm-12 col-lg-12"
+                                    name="correo" class="form-control col-sm-12 col-lg-12"
                                     placeholder="Ingrese correo" />
                                 <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.correo">{{ error.correo
                                     }}</div>
@@ -126,7 +137,7 @@
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-8">
                                 <input type="text" [(ngModel)]="model.telefono" maxlength="20" name="telefono"
-                                    id="telefono" name="telefono" class="form-control-sm col-sm-12 col-lg-12"
+                                    id="telefono" name="telefono" class="form-control col-sm-12 col-lg-12"
                                     placeholder="Ingrese telefono" />
                                 <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.telefono">{{
                                     error.telefono }}</div>
@@ -139,7 +150,7 @@
                             <div class="col-sm-12 col-lg-8">
                                 <select name="cnfRegion" [(ngModel)]="selectedCnfRegion"
                                 [compareWith]="compareCnfRegion" (change)="loadCnfProvincia(selectedCnfRegion)"
-                                    class="form-control-sm col-sm-12 col-lg-12">
+                                    class="form-control col-sm-12 col-lg-12">
                                     <option [ngValue]="selectDefaultCnfRegion">{{selectDefaultCnfRegion.name}}</option>
                                     <option *ngFor="let item of listCnfRegion; index as i;" [ngValue]="item">{{item.nombre}}
                                     </option>
@@ -154,7 +165,7 @@
                             <div class="col-sm-12 col-lg-8">
                                 <select name="cnfProvincia" [(ngModel)]="selectedCnfProvincia"
                                 [compareWith]="compareCnfProvincia" (change)="loadCnfDistrito(selectedCnfProvincia)"
-                                    class="form-control-sm col-sm-12 col-lg-12">
+                                    class="form-control col-sm-12 col-lg-12">
                                     <option [ngValue]="selectDefaultCnfProvincia">{{selectDefaultCnfProvincia.name}}</option>
                                     <option *ngFor="let item of listCnfProvincia; index as i;" [ngValue]="item">{{item.nombre}}
                                     </option>
@@ -170,7 +181,7 @@
                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                             <div class="col-sm-12 col-lg-8">
                                 <select name="model.cnfDistrito" [compareWith]="compareCnfDistrito"
-                                    [(ngModel)]="model.cnfDistrito" class="form-control-sm col-sm-12 col-lg-12">
+                                    [(ngModel)]="model.cnfDistrito" class="form-control col-sm-12 col-lg-12">
                                     <option *ngIf="loadingCnfDistrito" [ngValue]="0" selected="selected">Cargando...
                                     </option>
                                     <option *ngIf="!loadingCnfDistrito" [ngValue]="selectDefaultCnfDistrito">

@@ -1,21 +1,3 @@
-<!-- Content Header (Page header) -->
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>{{'webpagos.act_pago_programacion.home.title'| translate}}</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.adminModule"></a></li>
-                    <li class="breadcrumb-item active">{{'webpagos.act_pago_programacion.home.title'| translate}}</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-    <!-- /.container-fluid -->
-</section>
 
 <!-- Main content -->
 <section class="content">
@@ -25,16 +7,6 @@
             <div class="card-header">
                 <h3 class="card-title">{{'webpagos.act_pago_programacion.home.title'| translate}}</h3>
 
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip"
-                        title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip"
-                        title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -83,7 +55,8 @@
                                                     #input2 
                                                     [ngbTypeahead]="searchCnfMaestro"
                                                     [resultTemplate]="rt2" 
-                                                    [inputFormatter]="formatterCnfMaestro"/>
+                                                    [inputFormatter]="formatterCnfMaestro"
+                                                    placeholder="{{'webpagos.act_pago_programacion.cnf_maestro' | translate}}"/>
                                                     <ng-template #rt2 let-r="result" let-t="term">
                                                         {{ r.apellidoPaterno}}  {{ r.apellidoMaterno}}  {{ r.nombres}}  -  {{ r.nroDoc}}
                                                     </ng-template>
@@ -135,25 +108,30 @@
                         <div class="form-group-sm row tex">
                             <div class="col-sm-12 col-lg-12">
                                 <div>
-                                    <table id="dtDataListActPagoProgramacion"
+                                    <table id="dtDataReportActPagoProgramacion"
                                         class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
                                         <thead>
                                             <tr>
                                                 <th width="1%">Nro.</th>
                                                 <th class="text-nowrap">
                                                     {{'webpagos.act_comprobante.cnf_maestro' | translate}}</th>
+                                                <th class="text-nowrap">
+                                                        {{'webpagos.act_comprobante.cnf_tipo_comprobante' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.numero' |
                                                     translate}}</th>
                                                 <th class="text-nowrap">
-                                                    {{'webpagos.act_pago_programacion.fecha_vencimiento' | translate}}
+                                                        {{'webpagos.act_pago_programacion.mes' | translate}}
                                                 </th>
                                                 <th class="text-nowrap">
-                                                    {{'webpagos.cnf_moneda.nombre' | translate}}
+                                                    {{'webpagos.act_pago_programacion.fecha_vencimiento' | translate}}
                                                 </th>
                                                 <th class="text-nowrap">{{'webpagos.act_pago_programacion.monto' |
                                                     translate}}</th>
                                                 <th class="text-nowrap">
                                                     {{'webpagos.act_pago_programacion.monto_pendiente' | translate}}
+                                                </th>
+                                                <th class="text-nowrap">
+                                                    {{'webpagos.act_pago_programacion.ultimo_pago' | translate}}
                                                 </th>
                                                 <th class="text-nowrap">
                                                     {{'webpagos.act_pago_programacion.estado' | translate}}
@@ -171,24 +149,30 @@
                                                     item.actContrato.serie + '-' +item.actContrato.numero}}</td> -->
 
                                                 <td>{{item.actComprobante?
-                                                    item.actComprobante.cnfMaestro.apellidoPaterno + ' ' + item.actComprobante.cnfMaestro.apellidoMaterno + ' ' + item.actComprobante.cnfMaestro.nombres:
-                                                    item.actContrato.cnfMaestro.apellidoPaterno + ' ' + item.actContrato.cnfMaestro.apellidoMaterno + ' ' + item.actContrato.cnfMaestro.nombres}}</td>
-                                                <td>{{item.actComprobante?item.actComprobante.serie + '-' +item.actComprobante.numero : 
-                                                    item.actContrato.serie + '-' +item.actContrato.numero}}</td>
-                                                <td>{{item.fechaVencimiento}}</td>
-                                                <td class="content-number">{{item.actComprobante?item.actComprobante.cnfMoneda.nombre:item.actContrato?.cnfMoneda?.nombre}}</td>
-                                                <td class="content-number">{{item.monto | number:'1.2-2'}}</td>
-                                                <td class="content-number">{{item.montoPendiente | number:'1.2-2'}}</td>
+                                                    item.actComprobante.cnfMaestro.razonSocial:
+                                                    item.actContrato.cnfMaestro.razonSocial}}</td>
+                                                <td>{{item.actComprobante?item.actComprobante.cnfTipoComprobante.nombre : 
+                                                        item.actContrato.cnfTipoComprobante.nombre + ' ' + item.actContrato.cnfPlanContrato.nombre}}</td>
+                                                    <td>{{item.actComprobante?item.actComprobante.serie + '-' +item.actComprobante.numero : 
+                                                        item.actContrato.serie + '-' +item.actContrato.numero}}</td>
+                                                <td >{{item.mes}}</td>
+                                                <td *ngIf="item.montoPendiente == 0">{{item.fechaVencimiento}}</td>
+                                                <td *ngIf="item.montoPendiente != 0" [ngClass] = "'state' + item.color">{{item.fechaVencimiento}}</td>
+                                                <td class="content-number">{{item.monto | number:'1.2-2' | currency:'S/'}}</td>
+                                                <td class="content-number">{{item.montoPendiente | number:'1.2-2' | currency:'S/'}}</td>
+                                                <td>{{item.ultimoPago}}</td>
                                                 <td >{{item.montoPendiente == 0? 'CANCELADO':'PENDIENTE'}}</td> 
+                                                
+                                                
                                                     
                                             </tr>
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan = "5">Total:</td>
-                                                <td class="content-number">{{totalMontos| number:'1.2-2'}}</td>
-                                                <td class="content-number">{{totalPendiente| number:'1.2-2'}}</td>
-                                                <td colspan = "1"></td>
+                                                <td colspan = "6">Total:</td>
+                                                <td class="content-number">S/ {{totalMontos| number:'1.2-2'}}</td>
+                                                <td class="content-number">S/ {{totalPendiente| number:'1.2-2'}}</td>
+                                                <td colspan = "2"></td>
                                             </tr>
                                         </tfoot>
                                     </table>

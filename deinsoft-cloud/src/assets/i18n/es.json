@@ -21,6 +21,7 @@
     "btnPrint":"Imprimir",
     "btnAdd":"Añadir",
     "btnComplete":"Completar",
+    "btnGenerate":"Generar",
     "btnGenerateInvoice":"Generar Factura",
     "btnGenerateDocument":"Generar Guía",
     "btnAccept":"Aceptar",
@@ -141,7 +142,7 @@
       "apellido_materno": "Ap. Materno",
       "concat(nombres,' ',apellido_paterno,' ',apellido_materno)":"Cliente",
       "nro_doc": "Nro. Documento",
-      "razon_social": "Razón Social",
+      "razon_social": "Nombres/Razón Social",
       "direccion": "Dirección",
       "correo": "Correo",
       "telefono": "Teléfono",
@@ -355,7 +356,9 @@
       "monto": "Monto",
       "monto_pendiente": "Monto pendiente",
       "monto_pagar": "Monto a pagar",
-      "estado":"Estado"
+      "estado":"Estado",
+      "mes": "Mes",
+      "ultimo_pago": "Ultimo pago"
     },
     "act_pago_programacion_compra": {
       "home": {
@@ -514,7 +517,7 @@
       "id": "ID",
       "fecha": "Fecha Instalación",
       "fecha_registro": "Fecha Registro",
-      "numero": "Número",
+      "numero": "Número contrato",
       "total": "Total",
       "observacion": "Observación",
       "igv":"IGV",
@@ -542,7 +545,8 @@
       "cnf_zona":"Zona",
       "monto_primer_mes":"Monto primer mes",
       "ultimo_pago": "Ultimo pago",
-      "monto_deuda": "Monto deuda"
+      "monto_deuda": "Monto deuda",
+      "meses_deuda": "Meses en deuda"
     },
     "cnf_plan_contrato": {
       "home": {
@@ -553,7 +557,18 @@
       "id": "ID",
       "nombre": "Plan",
       "precio": "Precio",
-      "dia_vencimiento":"Día de vencimiento"
+      "dia_vencimiento":"Día de vencimiento (31 = fin de mes)",
+      "precio_instalacion": "Precio instalación",
+      "dia_proceso_corte":"Día de proceso de corte"
+    },
+    "cnf_zona": {
+      "home": {
+        "title": "Zonas",
+        "subTitleForm": " Mantenimiento Zonas",
+        "subTitleList": " Listado de Zonas"
+      },
+      "id": "ID",
+      "nombre": "Zona"
     },
     "act_pago": {
       "home": {
@@ -581,6 +596,16 @@
       "cnf_tipo_comprobante":"Tipo",
       "cnf_forma_pago":"Forma de pago",
       "cnf_local":"Local"
+    },
+    "act_contrato_corte": {
+      "home": {
+        "title": "Corte de Contrato",
+        "subTitleForm": " Mantenimiento Corte de Contrato",
+        "subTitleList": " Listado de Corte de Contrato"
+      },
+      "id": "ID",
+      "fecha": "Fecha",
+      "observacion": "Observacion"
     },
     "reportes": {
       "act_comprobante_listado":"Listado de Ventas",

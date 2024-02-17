@@ -37,4 +37,6 @@ public interface CnfMaestroRepository extends JpaRepository<CnfMaestro, Long> {
             + "or upper(p.nroDoc) like CONCAT('%',:nombre,'%')) "
     )
     List<CnfMaestro> getAllCnfMestroTypeHead(@Param("nombre") String nombre);
+    
+    CnfMaestro findByNroDoc(String nroDoc);
 }

@@ -1,5 +1,5 @@
 
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ActPagoService } from '../../../business/service/act-pago.service';
 import { ActPago } from '../../../business/model/act-pago.model';
@@ -15,18 +15,18 @@ import { CustomAdapter, CustomDateParserFormatter } from '../../../base/util/Cus
     MyBaseComponentDependences
   ]
 })
-export class ActPagoListComponent extends CommonReportFormComponent implements OnInit{
+export class ActPagoListComponent extends CommonReportFormComponent implements OnInit {
   lista: any;
   datatableElement!: DataTableDirective;
   dtOptions: DataTables.Settings = {};
-  nameSearch : string = "";
-  modelSearch : ActPago = new ActPago();
-  dataTable!:DataTables.Api;
-  
+  nameSearch: string = "";
+  modelSearch: ActPago = new ActPago();
+  dataTable!: DataTables.Api;
+
   totalIgv = 0;
   totalSubTotal = 0;
   totalTotal = 0;
-  constructor(private actPagoService: ActPagoService, public deps: MyBaseComponentDependences) { 
+  constructor(private actPagoService: ActPagoService, public deps: MyBaseComponentDependences) {
     super(deps);
   }
 
@@ -50,7 +50,7 @@ export class ActPagoListComponent extends CommonReportFormComponent implements O
   // }
   getListData() {
     this.model.flagIsventa = '1';
-    
+
     this.totalIgv = 0;
     this.totalSubTotal = 0;
     this.totalTotal = 0;
@@ -63,10 +63,11 @@ export class ActPagoListComponent extends CommonReportFormComponent implements O
       //     this.totalIngreso = this.totalIngreso + element.monto
       //   }
       // });
-      setTimeout(() => {
-        this.dataTable = $('#dtDataActPago').DataTable(this.deps.utilService.datablesSettingsNoOrderable);
-      }, 1);
+      
       this.dataTable?.destroy();
+      setTimeout(() => {
+        this.dataTable = $('#dtDataActPago').DataTable(this.deps.utilService.datablesSettings);
+      }, 1);
       this.listData.forEach(element => {
         this.totalIgv = this.totalIgv + element.igv
         this.totalSubTotal = this.totalSubTotal + element.subtotal
@@ -75,25 +76,30 @@ export class ActPagoListComponent extends CommonReportFormComponent implements O
       console.log(data);
     })
   }
-editar(e: ActPago) {
+  editar(e: ActPago) {
     if (this.deps.utilService.validateDeactivate(e)) {
       this.deps.router.navigate(["/new-act-pago", { id: e.id }]);
     }
 
-  }  
-  eliminar(e: ActPago){
-	 this.deps.utilService.confirmDelete(e).then((result) => { 
-      if(result){
-        this.actPagoService.delete(e.id.toString()).subscribe(() => {
-          this.deps.utilService.msgOkDelete();
-          this.getListData();
-        },err => {
-          if(err.status === 500 && err.error.trace.includes("DataIntegrityViolationException")){
-            this.deps.utilService.msgProblemDelete();
+  }
+  eliminar(e: ActPago) {
+    this.deps.utilService.confirmProcessWithReturn("Debe ingresar la clave de adminsitrador","clave administrador").then((result) => {
+      if (result) {
+        this.deps.utilService.confirmDelete(e).then((result) => {
+          if (result) {
+            this.actPagoService.delete(e.id.toString()).subscribe(() => {
+              this.deps.utilService.msgOkDelete();
+              this.getListData();
+            }, err => {
+              if (err.status === 500 && err.error.trace.includes("DataIntegrityViolationException")) {
+                this.deps.utilService.msgProblemDelete();
+              }
+            });
           }
+    
         });
       }
-      
     });
+    
   }
 }

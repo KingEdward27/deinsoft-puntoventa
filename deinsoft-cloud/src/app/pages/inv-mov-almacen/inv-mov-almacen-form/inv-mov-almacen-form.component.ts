@@ -365,7 +365,7 @@ export class InvMovAlmacenFormComponent implements OnInit {
   getListCnfTipoComprobante() {
     this.loadingCnfTipoComprobante = true;
     console.log(this.chargingsb);
-    return this.cnfTipoComprobanteService.getAllDataCombo().subscribe(data => {
+    return this.cnfTipoComprobanteService.getAllDataComboMovAlmacen().subscribe(data => {
       this.listCnfTipoComprobante = data;
       this.loadingCnfTipoComprobante = false;
     })

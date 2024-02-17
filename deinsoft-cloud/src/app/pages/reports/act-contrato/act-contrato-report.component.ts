@@ -65,10 +65,10 @@ export class ActContratoReportComponent extends CommonReportFormComponent implem
       console.log(data);
       this.listData = data;
       this.loadingCnfMaestro = false;
+      this.dataTable?.destroy()
       setTimeout(() => {
-        this.dataTable = $('#dtDataListActPagoProgramacion').DataTable(this.datablesSettingsWithInputs);
+        this.dataTable = $('#dtDataActContratoReport').DataTable(this.datablesSettings);
       }, 1);
-      this.dataTable?.destroy();
       console.log(data);
     })
   }

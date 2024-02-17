@@ -17,7 +17,7 @@ public class CnfMaestro implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cnf_maestro_id")
-    private long id;
+    private Long id;
 
     @Size(max = 11)
     @Column(name = "nro_doc", length = 11, nullable = true)
@@ -72,11 +72,11 @@ public class CnfMaestro implements Serializable {
     @JoinColumn(name = "cnf_distrito_id")
     private CnfDistrito cnfDistrito;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

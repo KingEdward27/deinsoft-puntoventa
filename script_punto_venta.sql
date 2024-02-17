@@ -1178,3 +1178,59 @@ UPDATE `punto_venta`.`cnf_producto` SET `cnf_categoria_id` = '1' WHERE (`cnf_pro
 UPDATE `punto_venta`.`cnf_producto` SET `cnf_categoria_id` = '2' WHERE (`cnf_producto_id` = '5');
 UPDATE `punto_venta`.`cnf_producto` SET `cnf_categoria_id` = null WHERE (`cnf_producto_id` = '6');
 UPDATE `punto_venta`.`cnf_producto` SET `cnf_categoria_id` = null WHERE (`cnf_producto_id` = '7');
+
+
+-- 2023-08-13
+ALTER TABLE `dbpuntoventa`.`cnf_maestro` 
+DROP FOREIGN KEY `FKn2m35srqroy4f918p30gip5m4`;
+ALTER TABLE `dbpuntoventa`.`cnf_maestro` 
+CHANGE COLUMN `cnf_tipo_documento_id` `cnf_tipo_documento_id` BIGINT(20) NOT NULL ;
+ALTER TABLE `dbpuntoventa`.`cnf_maestro` 
+ADD CONSTRAINT `FKn2m35srqroy4f918p30gip5m4`
+  FOREIGN KEY (`cnf_tipo_documento_id`)
+  REFERENCES `dbpuntoventa`.`cnf_tipo_documento` (`cnf_tipo_documento_id`);
+
+ALTER TABLE `dbpuntoventa`.`cnf_maestro` 
+CHANGE COLUMN `nombres` `nombres` VARCHAR(100) NULL ,
+CHANGE COLUMN `razon_social` `razon_social` VARCHAR(100) NOT NULL ;
+
+ALTER TABLE `dbpuntoventa`.`cnf_maestro` 
+CHANGE COLUMN `nombres` `nombres` VARCHAR(100) NOT NULL ;
+
+drop table  if exists act_contrato_corte ;
+create table act_contrato_corte(
+	act_contrato_corte_id int auto_increment primary key,
+    act_contrato_id bigint,
+    fecha date,
+    observacion varchar(300),
+    flag_estado char(1),
+    seg_ususario_id bigint
+) ENGINE=InnoDB;
+
+alter table act_contrato_corte
+add constraint fk_contrato_corte foreign key (act_contrato_id) references act_contrato (act_contrato_id);
+
+alter table cnf_plan_contrato
+add precio_instalacion decimal(19,2) default 0;
+
+alter table cnf_plan_contrato
+add dia_proceso_corte smallint default 0;
+
+create table cnf_tipo_sistema(
+	cnf_tipo_sistema_id bigint auto_increment primary key,
+    nombre varchar(200)
+) ENGINE=InnoDB;
+
+create table cnf_menu_tipo_sistema(
+	cnf_menu_tipo_sistema_id int auto_increment primary key,
+    cnf_tipo_sistema_id bigint,
+    seg_menu_id bigint
+) ENGINE=InnoDB;
+
+ALTER TABLE cnf_menu_tipo_sistema ADD CONSTRAINT fk_tipo_sistema
+FOREIGN KEY (cnf_tipo_sistema_id)
+REFERENCES cnf_tipo_sistema (cnf_tipo_sistema_id);
+
+ALTER TABLE cnf_menu_tipo_sistema ADD CONSTRAINT fk_menu_tipo_sistema
+FOREIGN KEY (seg_menu_id)
+REFERENCES seg_menu (seg_menu_id);

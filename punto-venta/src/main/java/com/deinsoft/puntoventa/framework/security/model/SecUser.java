@@ -1,6 +1,7 @@
 package com.deinsoft.puntoventa.framework.security.model;
 
 import com.deinsoft.puntoventa.business.model.ActCajaTurno;
+import com.deinsoft.puntoventa.business.model.CnfEmpresa;
 import com.deinsoft.puntoventa.business.model.SegPermiso;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -58,6 +59,9 @@ public class SecUser implements Serializable {
     @JsonIgnore
     private Set<SecRoleUser> listSecRoleUser;
 
+    @Transient
+    private CnfEmpresa empresaPrincipal;
+    
     @Column(name = "estado")
     private int state;
 
@@ -130,5 +134,16 @@ public class SecUser implements Serializable {
     public void setPermisos(List<SegPermiso> permisos) {
         this.permisos = permisos;
     }
+
+    public CnfEmpresa getEmpresaPrincipal() {
+        return empresaPrincipal;
+    }
+
+    public void setEmpresaPrincipal(CnfEmpresa empresaPrincipal) {
+        this.empresaPrincipal = empresaPrincipal;
+    }
+
+
+    
     
 }

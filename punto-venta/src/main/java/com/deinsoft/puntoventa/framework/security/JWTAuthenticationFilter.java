@@ -6,6 +6,7 @@ import com.deinsoft.puntoventa.business.model.SegPermiso;
 import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
 import com.deinsoft.puntoventa.business.repository.SegMenuRepository;
 import com.deinsoft.puntoventa.business.repository.SegPermisoRepository;
+import com.deinsoft.puntoventa.framework.security.model.SecRoleUser;
 import com.deinsoft.puntoventa.framework.security.model.SecUser;
 import com.deinsoft.puntoventa.framework.security.repository.SecUserRepository;
 import org.slf4j.Logger;
@@ -82,10 +83,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         LocalDateTime currentTime = LocalDateTime.now();
         final Date createdDate = new Date();
-        final Date expirationDate = new Date(createdDate.getTime() + Constant.TOKEN_REFRESH_EXPIRATION_TIME * 10000 * 2/* *10000 maximo tiempo posible*/);
+        final Date expirationDate = new Date(createdDate.getTime() 
+                + Constant.TOKEN_REFRESH_EXPIRATION_TIME * 120000 * 2/* *10000 maximo tiempo posible*/);
         LOGGER.info("expirationDate: " + expirationDate);
         String username = ((UserDetails) auth.getPrincipal()).getUsername();
         SecUser usuario = secUserRepository.findByName(username); 
+        usuario.setEmpresaPrincipal(usuario.getListSecRoleUser().stream().findFirst().orElse(new SecRoleUser()).getEmpresa());
         usuario.setPassword(null);
         
 //        ActCajaTurno caja = actCajaTurnoRepository.findBySegUsuarioId(usuario.getId())

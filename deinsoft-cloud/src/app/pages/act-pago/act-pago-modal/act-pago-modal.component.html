@@ -198,7 +198,7 @@
                                         |
                                         translate}}</label>
                                     <div class="col-sm-12 col-lg-6">
-                                        <label class="col-sm-12 col-lg-12 col-form-label text-right">{{model.subtotal | number : '1.2-2'}}</label>
+                                        <label class="col-sm-12 col-lg-12 col-form-label text-right  content-number">{{model.subtotal | number : '1.2-2' | currency:'S/ '}}</label>
                                         <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.subtotal">
                                             {{ error.subtotal }}
                                         </div>
@@ -210,7 +210,7 @@
                                         class="col-lg-6 col-sm-12 col-form-label">{{'webpagos.act_comprobante.igv' |
                                         translate}}</label>
                                     <div class="col-lg-6 col-sm-12">
-                                        <label class="col-sm-12 col-lg-12 col-form-label text-right">{{model.igv | number : '1.2-2'}}</label>
+                                        <label class="col-sm-12 col-lg-12 col-form-label text-right content-number">{{model.igv | number : '1.2-2' | currency:'S/ '}}</label>
                                     </div>
                                 </div>
                                 <div class="form-group-sm row">
@@ -220,7 +220,7 @@
                                         translate}} <span
                                             style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                                     <div class="col-sm-6 col-lg-6">
-                                        <label class="col-sm-12 col-lg-12 col-form-label text-right">{{model.total | number : '1.2-2'}}</label>
+                                        <label class="col-sm-12 col-lg-12 col-form-label text-right content-number">{{model.total | number : '1.2-2' | currency:'S/ '}}</label>
                                         <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.total">{{
                                             error.total }}</div>
                                     </div>
@@ -274,9 +274,9 @@
                                                 <td>{{item.actPagoProgramacion.actComprobante? 
                                                     item.actPagoProgramacion.actComprobante.serie+'-'+ item.actPagoProgramacion.actComprobante.numero:
                                                     item.actPagoProgramacion.actContrato.cnfPlanContrato.nombre}}</td>
-                                                <td>{{item.montoDeuda  | number : '1.2-2'}}</td>
+                                                <td class="content-number">{{item.montoDeuda  | number : '1.2-2'  | currency:'S/ '}}</td>
                                                 <td>{{item.actPagoProgramacion.fechaVencimiento}}</td>
-                                                <td>{{item.monto  | number : '1.2-2'}}</td>
+                                                <td class="content-number">{{item.monto  | number : '1.2-2' | currency:'S/ '}}</td>
                                             </tr>
                                         </tbody>
                                     </table>

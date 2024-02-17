@@ -36,7 +36,7 @@ import { ControlSidebarComponent } from './modules/main/control-sidebar/control-
 import { StoreModule } from '@ngrx/store';
 import { authReducer } from './store/auth/reducer';
 import { uiReducer } from './store/ui/reducer';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { SelectComponent } from './components/select/select.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { GenericListComponent } from './base/components/generic-list/generic-list.component';
@@ -123,6 +123,16 @@ import { ActPagoListComponent } from './pages/act-pago/list/act-pago-list.compon
 import { ActContratoReportComponent } from '@pages/reports/act-contrato/act-contrato-report.component';
 import { OpeGenericFormModalComponent } from './pages/modal/ope-generic-form-modal.component';
 import { CnfZonaComponent } from './pages/cnf-zona/cnf-zona';
+import { GenericList3Component } from './base/components/generic-list3/generic-list3.component';
+import { CnfMaestroList2Component } from '@pages/cnf-maestro/cnf-maestro-list';
+import { CnfMaestroForm2Component } from '@pages/cnf-maestro/cnf-maestro-form';
+import { GenericForm2Component } from './base/components/generic-form2/generic-form2.component';
+import { ActContratoCorte } from './business/model/act-contrato-corte.model';
+import { ActContratoCorteFormModalComponent } from '@pages/act-contrato-corte/modal/act-contrato-corte-form-modal.component';
+import { CnfEmpresaForm2Component } from '@pages/cnf-empresa/cnf-empresa-form';
+import { SegPermisoForm2Component } from '@pages/security/seg-permiso/form2/seg-permiso-form2.component';
+import { CnfTipoSistemaListComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-sistema.list';
+import { CnfTipoSistemaFormComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-sistema.form';
 
 @NgModule({
     declarations: [
@@ -230,7 +240,16 @@ import { CnfZonaComponent } from './pages/cnf-zona/cnf-zona';
         ActPagoListComponent,
         ActContratoReportComponent,
         CnfZonaComponent,
-        OpeGenericFormModalComponent
+        OpeGenericFormModalComponent,
+        GenericList3Component,
+        CnfMaestroList2Component,
+        CnfMaestroForm2Component,
+        GenericForm2Component,
+        ActContratoCorteFormModalComponent,
+        CnfEmpresaForm2Component,
+        SegPermisoForm2Component,
+        CnfTipoSistemaListComponent,
+        CnfTipoSistemaFormComponent
     ],
     imports: [
         BrowserModule,
@@ -240,6 +259,7 @@ import { CnfZonaComponent } from './pages/cnf-zona/cnf-zona';
         ReactiveFormsModule,
         FormsModule,
         NgSelectModule,
+        NgbPopoverModule,
         BrowserAnimationsModule,
         ToastrModule.forRoot({
             timeOut: 3000,

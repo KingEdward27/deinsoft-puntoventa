@@ -41,9 +41,24 @@ public class CnfTipoComprobanteController extends CommonController<CnfTipoCompro
 	public ResponseEntity<?> saveCnfTipoComprobante(@Valid @RequestBody CnfTipoComprobante cnfTipoComprobante, BindingResult result) {
 		return super.crear(cnfTipoComprobante, result);
 	}
-	@GetMapping(value="/get-all-cnf-tipo-comprobante-combo")
+        @GetMapping(value="/get-all-cnf-tipo-comprobante-combo")
 	public List<CnfTipoComprobante> getAllCnfTipoComprobante() {
 		List<CnfTipoComprobante> cnfTipoComprobanteList = cnfTipoComprobanteService.getAllCnfTipoComprobante();
+		return cnfTipoComprobanteList;
+	}
+	@GetMapping(value="/get-all-cnf-tipo-comprobante-combo-ventas")
+	public List<CnfTipoComprobante> getAllCnfTipoComprobanteVentas() {
+		List<CnfTipoComprobante> cnfTipoComprobanteList = cnfTipoComprobanteService.getAllCnfTipoComprobanteVentas();
+		return cnfTipoComprobanteList;
+	}
+        @GetMapping(value="/get-all-cnf-tipo-comprobante-combo-almacen")
+	public List<CnfTipoComprobante> getAllCnfTipoComprobanteAlmacen() {
+		List<CnfTipoComprobante> cnfTipoComprobanteList = cnfTipoComprobanteService.getAllCnfTipoComprobanteMovAlmacen();
+		return cnfTipoComprobanteList;
+	}
+        @GetMapping(value="/get-all-cnf-tipo-comprobante-combo-contrato")
+	public List<CnfTipoComprobante> getAllCnfTipoComprobanteContrato() {
+		List<CnfTipoComprobante> cnfTipoComprobanteList = cnfTipoComprobanteService.getAllCnfTipoComprobanteContrato();
 		return cnfTipoComprobanteList;
 	}
 	@DeleteMapping("/delete-cnf-tipo-comprobante")

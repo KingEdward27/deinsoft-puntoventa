@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service.impl;
 
+import com.deinsoft.puntoventa.business.bean.GeneratedFile;
 import com.deinsoft.puntoventa.business.service.BusinessService;
 import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
@@ -22,6 +23,7 @@ import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
 import com.deinsoft.puntoventa.business.model.InvAlmacenProducto;
 import com.deinsoft.puntoventa.business.model.InvMovAlmacen;
 import com.deinsoft.puntoventa.business.model.InvMovimientoProducto;
+import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
 import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
 import com.deinsoft.puntoventa.business.repository.ActComprobanteDetalleRepository;
@@ -33,6 +35,9 @@ import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoReposito
 import com.deinsoft.puntoventa.business.service.InvAlmacenProductoService;
 import com.deinsoft.puntoventa.config.AppConfig;
 import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
+import com.deinsoft.puntoventa.framework.util.Formatos;
+import com.deinsoft.puntoventa.util.Constantes;
+import com.deinsoft.puntoventa.util.Util;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -82,12 +87,11 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     @Autowired
     BusinessService businessService;
 
-    @Autowired
-    AuthenticationHelper auth;
 
     @Autowired
     AppConfig appConfig;
 
+    
     public List<ActComprobante> getAllActComprobante(ActComprobante actComprobante) {
         List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getAllActComprobante(
                 actComprobante.getSerie().toUpperCase(), actComprobante.getNumero().toUpperCase(),
@@ -116,6 +120,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     public ActComprobante saveActComprobante(ActComprobante actComprobante) throws Exception {
         ActComprobante actComprobanteResult = null;
 
+        actComprobante.setSegUsuario(auth.getLoggedUserdata());
         //tiene que obedecer un parametro de configuración caja turno, por ahora null
         List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actComprobante.getSegUsuario().getId());
         actCajaTurno = actCajaTurno.stream()
@@ -151,11 +156,10 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                 actComprobante.setNumero(String.valueOf(numComprobante.get(0).getUltimoNro() + 1));
             }
 
-            actComprobanteResult = actComprobanteRepository.save(actComprobante);
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
                 actComprobante.addActComprobanteDetalle(data);
             });
-
+            actComprobanteResult = actComprobanteRepository.save(actComprobante);
             if (actComprobante.getId() == 0) {
                 if (actComprobanteResult.getCnfLocal().getCnfEmpresa().getFlagVentaRapida() == 1) {
                     validate(actComprobante.getId());
@@ -179,6 +183,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     public ActComprobante saveActComprobanteCompra(ActComprobante actComprobante) throws Exception {
         ActComprobante actComprobanteResult = null;
 
+        actComprobante.setSegUsuario(auth.getLoggedUserdata());
         try {
             actComprobante.setFechaRegistro(LocalDateTime.now());
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
@@ -442,5 +447,78 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception {
         byte[] bytes = businessService.print2(appConfig.getStaticResourcesPath(), tipo, getActComprobante(id), false);
         return bytes;
+    }
+    
+    @Override
+    public GeneratedFile generateSireTxt(ParamBean paramBean) {
+        List<String> x = getReportActComprobante(paramBean)
+                .stream().map(mapper -> {
+            BigDecimal multiplicand = BigDecimal.ONE;
+            if (mapper.getCnfTipoComprobante().getCodigoSunat().equals(Constantes.TIPO_DOC_NOTA_CREDITO)) {
+                multiplicand = multiplicand.multiply(BigDecimal.valueOf(-1));
+            }
+    
+            String line = mapper.getCnfLocal().getCnfEmpresa().getNroDocumento().concat("|")
+                    .concat(mapper.getCnfLocal().getCnfEmpresa().getNombre()).concat("|")
+                    .concat(mapper.getFecha().format(Constantes.YYYYMM_FORMATER)).concat("|")
+                    .concat("|")
+                    .concat(mapper.getFecha().format(Constantes.DDMMYYYY_FORMATER)).concat("|")
+                    .concat("|")
+                    .concat(mapper.getCnfTipoComprobante().getCodigoSunat()).concat("|")
+                    .concat(mapper.getSerie()).concat("|")
+                    .concat("|")
+                    .concat(mapper.getNumero()).concat("|")
+                    .concat("|")
+                    .concat(mapper.getCnfMaestro().getCnfTipoDocumento().getCodigoSunat()).concat("|")
+                    .concat(mapper.getCnfMaestro().getNroDoc()).concat("|")
+                    .concat(mapper.getCnfMaestro().getRazonSocial()).concat("|");
+            if (!mapper.getCnfTipoComprobante().getCodigoSunat().equals(Constantes.TIPO_DOC_BOLETA)) {
+                line = line.concat(Formatos.df.format(mapper.getSubtotal().multiply(multiplicand))).concat("|")
+                    .concat(Formatos.df.format(mapper.getIgv().multiply(multiplicand))).concat("|");
+            }
+            line = line.concat("0.00").concat("|")
+                    .concat("0.00").concat("|")
+                    .concat("0.00").concat("|")
+                    .concat("0.00").concat("|");
+            
+            if (mapper.getCnfTipoComprobante().getCodigoSunat().equals(Constantes.TIPO_DOC_BOLETA)) {
+                line = line.concat(Formatos.df.format(mapper.getTotal().multiply(multiplicand))).concat("|");
+            }
+            line = line.concat("0.00").concat("|")
+                    .concat("0.00").concat("|")
+                    .concat("0.00").concat("|")
+                    .concat(Formatos.df.format(mapper.getTotal())).concat("|")
+                    .concat(mapper.getCnfMoneda().getCodigo())
+                    .concat("|")//tipo cambio
+                    .concat("|")
+                    .concat("0.00").concat("|")
+                    .concat("0.00").concat("|")
+                    .concat("0.00").concat("|")
+                    .concat("0.00").concat("|")
+                    .concat("0.00").concat("|")
+                    .concat("0.00").concat("|")
+                    .concat("0.00").concat("|")
+                    .concat("0.00").concat("|")
+                    ;
+            return line;
+        }).collect(Collectors.toList());
+        
+        String joined = x.stream()
+                       .map(Object::toString)
+                       .collect(Collectors.joining(""));
+        String fileName = "LE"
+                .concat(paramBean.getCnfEmpresa().getNroDocumento())
+                .concat(paramBean.getFechaDesde().format(Constantes.YYYYMM_FORMATER))
+                .concat("00")
+                .concat("080400")//codigo libro
+                .concat("03")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
+                .concat("1")//Indicador de operaciones -> 0 Cierre o baja de RUC  / 1 Empresa operativa  / 2 Cierre de libro
+                .concat("1")//Indicador del contenido del libro o registro -> 1 Con información / 0 Sin información
+                .concat("1")//Indicador de la moneda utilizada -> 1 Soles  / 2 Dólares
+                .concat("2")//Indicador de libro electrónico generado por el MIGE IGV/RVIE -> Generado por el SIRE ( Fijo) (2)
+                .concat("1")//Correlativo de los ajustes posteriores -> Puede ser 01, 02, 03, etc. Según el correlativo que corresponde.
+                ;
+        byte[] zippedData = Util.generateFile(fileName, joined);
+        return new GeneratedFile(fileName, zippedData);
     }
 }

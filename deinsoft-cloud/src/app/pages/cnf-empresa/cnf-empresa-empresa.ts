@@ -38,7 +38,13 @@ export class CnfEmpresaEmpresaComponent extends GenericListComponent implements 
                    {tableName: "cnf_empresa",columnName:"ruta_pse",type:"input"},
                    {tableName: "cnf_empresa",columnName:"token",type:"input"},
                    {tableName: "cnf_empresa",columnName:"perfil_empresa","type":"select",loadState : 1, relatedBy :"perfil_empresa",
-                   listData:[]}
+                   listData:[]},
+                   {tableName: "cnf_empresa",columnName:"flag_compra_rapida","type":"select",loadState : 1, relatedBy :"flag_compra_rapida",
+                   listData:[]},
+                   {tableName: "cnf_empresa",columnName:"flag_venta_rapida","type":"select",loadState : 1, relatedBy :"flag_venta_rapida",
+                   listData:[]},
+                   {tableName: "cnf_moneda", "columnName":"nombre","type":"select",
+                   loadState : 1,relatedBy:"cnf_moneda_id"},
            ],
     //filters sería para filtros adicionales
     "conditions":[],
@@ -53,14 +59,16 @@ export class CnfEmpresaEmpresaComponent extends GenericListComponent implements 
   }
   ngOnInit(): void {
     super.baseEndpoint = this.baseEndpoint;
-    this.prop.columnsForm[11].listData.push([0, "- Seleccione -"]);
-    this.prop.columnsForm[11].listData.push([1, "Venta de productos y servicios"]);
-    this.prop.columnsForm[11].listData.push([2, "Servicio de pago mensual"]); 
-    this.prop.columnsForm[11].listData.push([3, "Colegio"]); 
-    this.prop.columnsForm[11].listData.push([4, "Lavanderia"]); 
+    // this.prop.columnsForm[11].listData.push([0, "- Seleccione -"]);
+    // this.prop.columnsForm[11].listData.push([1, "Venta de productos y servicios"]);
+    // this.prop.columnsForm[11].listData.push([2, "Servicio de pago mensual"]); 
+    // this.prop.columnsForm[11].listData.push([3, "Colegio"]); 
+    // this.prop.columnsForm[11].listData.push([4, "Lavanderia"]); 
 
     let user = this.appService.getProfile();
     let cnfEmpresa = user.profile.split("|")[1];
+    console.log(cnfEmpresa);
+    
     this.prop.conditions.push({"columnName":"cnf_empresa.cnf_empresa_id","value":cnfEmpresa});
     super.properties = this.prop;
     console.log(this.prop);

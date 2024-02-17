@@ -13,10 +13,12 @@ import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.CnfMaestro;
 import com.deinsoft.puntoventa.business.service.CnfMaestroService;
+import com.deinsoft.puntoventa.framework.util.Util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
 @RestController
@@ -62,7 +64,7 @@ public class CnfMaestroController extends CommonController<CnfMaestro, CnfMaestr
         if(!errores.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errores);
         }
-        return super.crear(cnfMaestro, result);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cnfMaestroService.save(cnfMaestro));
     }
 
     @GetMapping(value = "/get-all-cnf-maestro-combo")
@@ -96,7 +98,7 @@ public class CnfMaestroController extends CommonController<CnfMaestro, CnfMaestr
     }
 
     @GetMapping(value = "/get-all-cnf-maestro-typehead")
-    public ResponseEntity<?> getAllCnfProductTypeHead(String nameOrCode,String empresaId,
+    public ResponseEntity<?> getAllCnfMaestroTypeHead(String nameOrCode,String empresaId,
             HttpServletRequest request) {
         List<CnfMaestro> cnfProductList = cnfMaestroService
                 .getAllCnfMaestroTypeHead(nameOrCode);
@@ -106,5 +108,17 @@ public class CnfMaestroController extends CommonController<CnfMaestro, CnfMaestr
                     .collect(Collectors.toList());
         }
         return ResponseEntity.status(HttpStatus.OK).body(cnfProductList);
+    }
+    
+    @GetMapping(value = "/get-search-sunat")
+    public ResponseEntity<?> searchSunat (@Param("nroDoc") String nroDoc) throws Exception{
+        Map<String,Object> result = null;
+        if (nroDoc.length() == 8) {
+            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/dni", "", Map.of("numero", nroDoc));
+        } else if (nroDoc.length() == 11) {
+            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/ruc", "", Map.of("numero", nroDoc));
+        }
+        
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

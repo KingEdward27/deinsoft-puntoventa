@@ -1,20 +1,4 @@
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>{{properties.title}}</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.adminModule"></a></li>
-                    <li class="breadcrumb-item active">{{properties.title}}</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-    <!-- /.container-fluid -->
-</section>
+
 <!-- Main content -->
 <section class="content">
     <!-- Default box -->
@@ -129,8 +113,9 @@
                         </div> -->
                         <ng-container *ngFor="let item of properties.columnsForm; index as i ">
                             <div class="form-group-sm row">
-                                <label class="col-lg-3 col-sm-12 col-form-label" translate="webpagos.{{item.tableName}}.{{item.columnName}}">...cargando<span
-                                        style="color: red;font-size: 16px !important;font-weight: bold;"> *</span></label>  
+                                <label class="col-lg-3 col-sm-12 col-form-label" translate="webpagos.{{item.tableName}}.{{item.columnName}}">...cargando 
+                                    <span *ngIf="item.required" style="color: red;font-size: 16px !important;font-weight: bold;"> *</span>
+                                </label>  
                                 
                                     <div class="col-sm-12 col-lg-9"> 
                                         <ng-container *ngIf="item.type != 'hidden' && (item.type == 'input' || item.type == 'password')" >

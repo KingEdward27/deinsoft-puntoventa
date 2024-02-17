@@ -31,7 +31,9 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,10 +60,10 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
 
     @Autowired
     BusinessService businessService;
-    
+
     @Autowired
     AppConfig appConfig;
-    
+
     public List<ActPago> getAllActPago(ActPago actPago) {
         List<ActPago> actPagoList = (List<ActPago>) actPagoRepository.getAllActPago(
                 actPago.getSerie().toUpperCase(), actPago.getNumero().toUpperCase());
@@ -104,6 +106,27 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
         BigDecimal total = BigDecimal.ZERO;
         String detail = "";
         CnfMaestro cnfMaestro = null;
+
+        for (ActPagoDetalle actPagoDetalle : actPago.getListActPagoDetalle()) {
+            List<ActPagoProgramacion> list = actPagoProgramacionRepository.findByCnfMaestroId(
+                    actPagoDetalle.getActPagoProgramacion().getActComprobante() != null
+                    ? actPagoDetalle.getActPagoProgramacion().getActComprobante().getCnfMaestro().getId() : actPagoDetalle.getActPagoProgramacion().getActContrato().getCnfMaestro().getId(),
+                    actPagoDetalle.getActPagoProgramacion().getFechaVencimiento())
+                    .stream().filter(predicate -> predicate.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0)
+                    .collect(Collectors.toList());
+
+            for (ActPagoProgramacion pendientesAnteriores : list) {
+                if (pendientesAnteriores.getFechaVencimiento().compareTo(actPagoDetalle.getActPagoProgramacion().getFechaVencimiento()) < 0
+                        && pendientesAnteriores.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0) {
+                    throw new Exception("Debe cancelar las cuotas anteriores. Mes pendiente: " + pendientesAnteriores.getFechaVencimiento().getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase());
+                }
+//                if (pendientesAnteriores.getFechaVencimiento().compareTo(actPagoDetalle.getActPagoProgramacion().getFechaVencimiento()) == 0
+//                        && pendientesAnteriores.getMontoPendiente().compareTo(actPagoDetalle.getMonto()) > 0) {
+//                    throw new Exception("Debe cancelar las cuotas anteriores. Mes pendiente: " + pendientesAnteriores.getFechaVencimiento().getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase());
+//                }
+            }
+
+        }
         for (ActPagoDetalle actPagoDetalle : actPago.getListActPagoDetalle()) {
             if (actPagoDetalle.getActPagoProgramacion().getAmtToPay().compareTo(BigDecimal.ZERO) == 1) {
 
@@ -224,6 +247,7 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
                 })
                 .collect(Collectors.toList());
     }
+
     @Override
     public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception {
         byte[] bytes = businessService.printPago(appConfig.getStaticResourcesPath(), tipo, getActPago(id), false);

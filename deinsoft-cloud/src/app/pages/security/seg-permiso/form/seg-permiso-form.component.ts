@@ -13,8 +13,7 @@ import { UtilService } from '@services/util.service';
 
 @Component({
   selector: 'app-seg-permiso-form',
-  templateUrl: './seg-permiso-form.component.html',
-  styleUrls: ['./seg-permiso-form.component.css']
+  templateUrl: './seg-permiso-form.component.html'
 })
 export class SegPermisoFormComponent implements OnInit {
 

@@ -224,5 +224,10 @@ public class ActPago implements Serializable {
         this.xmlhash = xmlhash;
     }
 
+    @Override
+    public String toString() {
+        return "ActPago{" + "id=" + id + ", fecha=" + fecha + ", serie=" + serie + ", numero=" + numero + ", fechaRegistro=" + fechaRegistro + ", subtotal=" + subtotal + ", igv=" + igv + ", total=" + total + ", billete=" + billete + ", vuelto=" + vuelto + '}';
+    }
+
 
 }

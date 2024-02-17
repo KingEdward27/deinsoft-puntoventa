@@ -18,7 +18,9 @@ export class MenuSidebarComponent implements OnInit {
     public ui: Observable<UiState>;
     public user;
     public menu;
-
+    public perfil;
+    public empresa;
+    public local;
     constructor(
         public appService: AppService,
         private store: Store<AppState>
@@ -31,6 +33,10 @@ export class MenuSidebarComponent implements OnInit {
             this.classes = `${BASE_CLASSES} ${state.sidebarSkin}`;
         });
         this.user = this.appService.user;
+        console.log(this.user);
+        this.perfil = this.user.profile.split("|")[0]
+        this.empresa = this.user.profile.split("|")[3] == "*" ? "TODOS" : this.user.profile.split("|")[3]
+        this.local = this.user.profile.split("|")[4] == "*" ? "TODOS" : this.user.profile.split("|")[4]
         this.menu = this.appService.getMenu();
         console.log(this.menu);
         this.menu.forEach(element => {

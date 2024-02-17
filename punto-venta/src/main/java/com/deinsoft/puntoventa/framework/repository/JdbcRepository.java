@@ -50,7 +50,7 @@ public class JdbcRepository implements IJdbcRepository {
 
     @PostConstruct
     private void init() {
-        listMetaData = findAllMysql("");
+        listMetaData = findAllMysql(""); 
         listReferenceTable = findAllReferencesMysql();
     }
     @Override
@@ -134,7 +134,7 @@ public class JdbcRepository implements IJdbcRepository {
         return list;
     }
 
-    private List<MetaData> findAllMysql(String tableName) {
+    private List<MetaData> findAllMysql(String tableName) { 
         if (listMetaData != null && !tableName.equals("")) {
             return listMetaData
                 .stream()
@@ -149,7 +149,7 @@ public class JdbcRepository implements IJdbcRepository {
         List<MetaData> list = new ArrayList<>();
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         
-        String sql = "select c.table_name, c.column_name, c.data_type,\n"
+        String sql = "select distinct c.table_name, c.column_name, c.data_type,\n"
                 + "case when (c.data_type = 'numeric' or c.data_type = 'bigint' or c.data_type = 'integer' or c.data_type = 'int') \n"
                 + "and (c.numeric_scale = 0 or c.numeric_scale is null) and c.numeric_precision > 10 then 'long'\n"
                 + "when (c.data_type = 'numeric' or c.data_type = 'bigint' or c.data_type = 'integer' or c.data_type = 'int') \n"
@@ -432,7 +432,7 @@ public class JdbcRepository implements IJdbcRepository {
             }
         }
 
-        sql = sql.concat(" where ");
+        sql = sql.concat(" where "); 
         sql = sql.concat("").concat(columnPk).concat(" = :").concat(columnPk);
         mapSqlParameterSource.addValue(columnPk, jsonData.getId());
 
@@ -440,7 +440,7 @@ public class JdbcRepository implements IJdbcRepository {
 
         List<Map<String, Object>> list = namedParameterJdbcTemplate.queryForList(sql, mapSqlParameterSource);
         if (list.size() > 0) {
-            objectResult = list.get(0);
+            objectResult = list.get(0); 
         }
         return objectResult;
     }
@@ -634,7 +634,7 @@ public class JdbcRepository implements IJdbcRepository {
                         && columnsForm.getColumnName().equalsIgnoreCase(metaData.getColumName())
                         || (!columnsForm.getTableName().equalsIgnoreCase(jsonData.getTableName())
                         && (columnsForm.getRelatedBy() != null && columnsForm.getRelatedBy().equalsIgnoreCase(metaData.getColumName())))) {
-                    if (!metaData.isNullable()
+                    if (!metaData.isNullable() 
                             && this.isEmpty(columnsForm.getValue(), (metaData.getConstraintType().equals("FOREIGN KEY") || !columnsForm.getTableName().equalsIgnoreCase(jsonData.getTableName())))) {
                         errores.put(metaData.getColumName(), " El campo " + metaData.getColumName() + " " + " tiene un valor incorrecto");
                         break;
@@ -866,14 +866,17 @@ public class JdbcRepository implements IJdbcRepository {
         String foreignValue = map.get(listFk.getIdValue()).toString();
         mapCab = findByIdSimple(listFk.getTableName(), Long.parseLong(foreignValue));
         while (foreignTable != null) {
+            
+            System.out.println("foreignTable.getTableName(): " + foreignTable.getTableName() +", idValue: " + foreignValue);
+            
             listFks = getListForeignKeys(foreignTable.getTableName());
             
             mapRef = findByIdSimple(foreignTable.getTableName(), Long.parseLong(foreignValue));
-            //                mapCab.put(foreignTable.getTableName(), mapRef);
+            
             foreignValue = mapRef.get(foreignTable.getIdValue()).toString();
-
-            System.out.println("foreignTable.getTableName(): " + foreignTable.getTableName() +", idValue: " + foreignValue);
+            
             foreignTable = null;
+            
             Map<String, Object>  mapRef2;
             for (ForeignTables fkTable : listFks) {
 
@@ -904,9 +907,9 @@ public class JdbcRepository implements IJdbcRepository {
         }
         switch (tipoDato) {
             case "String":
-                mapSqlParameterSource.addValue(key, String.valueOf(value));
+                mapSqlParameterSource.addValue(key, String.valueOf(value)); 
                 break;
-            case "long":
+            case "long": 
                 mapSqlParameterSource.addValue(key, Long.parseLong(String.valueOf(value)));
                 break;
             case "BigDecimal":
@@ -916,7 +919,7 @@ public class JdbcRepository implements IJdbcRepository {
                     mapSqlParameterSource.addValue(key, new BigDecimal(String.valueOf(value)));
                 }
                 
-                break;
+                break; 
             case "int":
                 if (String.valueOf(value).equalsIgnoreCase("")) {
                     mapSqlParameterSource.addValue(key, null);

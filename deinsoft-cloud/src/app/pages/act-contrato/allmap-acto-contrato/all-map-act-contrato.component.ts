@@ -345,7 +345,7 @@ export class AllMapActContratoComponent implements OnInit {
   }
   getListCnfTipoComprobante() {
     this.loadingCnfTipoComprobante = true;
-    return this.cnfTipoComprobanteService.getAllDataCombo().subscribe(data => {
+    return this.cnfTipoComprobanteService.getAllDataComboContrato().subscribe(data => {
       this.listCnfTipoComprobante = data;
       this.loadingCnfTipoComprobante = false;
     })

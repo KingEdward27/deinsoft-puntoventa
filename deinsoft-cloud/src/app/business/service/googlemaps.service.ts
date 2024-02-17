@@ -16,6 +16,7 @@ export type Maps = typeof google.maps;
 })
 export class GoogleMapsService {
   url:string  = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+  url2:string  = "https://maps.googleapis.com/maps/api/geocode/json";
   constructor(private http: HttpClient,
               private router: Router) { 
   }
@@ -58,6 +59,24 @@ export class GoogleMapsService {
   }
   public getAllDataComboTypeHead(direccion: string): Observable<any> {
     return this.http.get<any[]>(`${this.url}?input=`+direccion+`&inputtype=textquery&fields=formatted_address%2Cgeometry&key=AIzaSyDGEmmGhFeA2PwL-pJrrnwIIrtuY3v8lug`);
+  }
+  // getCurrentLocation(lat: any, lon: any) {
+  //   this.api.then(() => {
+  //     let geocoder = new google.maps.Geocoder;
+  //     let latlng = {lat, lng: lon};
+  //     let that = this;
+  //     geocoder.geocode({'location': latlng}, function(results) {
+  //         if (results[0]) {
+  //           that.zoom = 11;
+  //           that.currentLocation = results[0].formatted_address;
+  //           //console.log(that.currentLocation);
+  //         } else {
+  //           console.log('No results found');
+  //         }
+  //     });
+  //   });
+  public getDirectionFromLocation(lat: any, lon: any) {
+    return this.http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=-13.67798053709045,-76.15757021586914&key=AIzaSyDGEmmGhFeA2PwL-pJrrnwIIrtuY3v8lug&sensor=true", {headers:null});
   }
 }
 

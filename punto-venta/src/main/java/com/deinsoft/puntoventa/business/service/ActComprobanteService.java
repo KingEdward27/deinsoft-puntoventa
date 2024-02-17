@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.service;
 
+import com.deinsoft.puntoventa.business.bean.GeneratedFile;
 import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -44,4 +45,6 @@ public interface ActComprobanteService extends CommonService<ActComprobante> {
     void validate(long id) throws Exception;
     
     public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception;
+    
+    public GeneratedFile generateSireTxt(ParamBean paramBean);
 }

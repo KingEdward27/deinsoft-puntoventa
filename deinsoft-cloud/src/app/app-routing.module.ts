@@ -78,6 +78,12 @@ import { ActContratoListComponent } from './pages/act-contrato/list/act-contrato
 import { ActPagoListComponent } from './pages/act-pago/list/act-pago-list.component';
 import { ActContratoReportComponent } from './pages/reports/act-contrato/act-contrato-report.component';
 import { CnfZonaComponent } from '@pages/cnf-zona/cnf-zona';
+import { CnfMaestroList2Component } from '@pages/cnf-maestro/cnf-maestro-list';
+import { CnfMaestroForm2Component } from '@pages/cnf-maestro/cnf-maestro-form';
+import { CnfEmpresaForm2Component } from '@pages/cnf-empresa/cnf-empresa-form';
+import { SegPermisoForm2Component } from '@pages/security/seg-permiso/form2/seg-permiso-form2.component';
+import { CnfTipoSistemaFormComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-sistema.form';
+import { CnfTipoSistemaListComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-sistema.list';
 const routes: Routes = [
     {
         path: '',
@@ -122,7 +128,7 @@ const routes: Routes = [
             {path: 'unidadmedida',component: CnfUnidadMedidaComponent},
             {path: 'subcategoria',component: CnfSubCategoriaComponent},
             {path: 'numcomprobante',component: CnfNumComprobanteComponent},
-            {path: 'maestro',component: CnfMaestroComponent},
+            {path: 'maestro',component: CnfMaestroList2Component},
             {path: 'forma-pago',component: CnfFormaPagoComponent},
             {path: 'almacen',component: InvAlmacenComponent},
             {path: 'compra',component: ActComprobanteCompraFormComponent},
@@ -149,7 +155,7 @@ const routes: Routes = [
             {path: 'new-menu/:id',component: SegMenuFormComponent},
 
             {path: 'permiso',component: SegPermisoListComponent},
-            {path: 'new-permiso',component: SegPermisoFormComponent},
+            {path: 'new-permiso',component: SegPermisoForm2Component},
             {path: 'new-permiso/:id',component: SegPermisoFormComponent},
 
             {path: 'list-ventas',component: ActComprobanteListFormComponent},
@@ -175,9 +181,13 @@ const routes: Routes = [
             {path: 'plan-contrato',component: CnfPlanContratoComponent},
             {path: 'new-contrato',component: ActContratoFormComponent},
             {path: 'contrato',component: ActContratoListComponent},
-            {path: 'empresa-empresa',component: CnfEmpresaEmpresaComponent},
+            {path: 'empresa-empresa',component: CnfEmpresaForm2Component},
             {path: 'list-pagos',component: ActPagoListComponent},
             {path: 'rpt-contratos',component: ActContratoReportComponent},
+            {path: 'new-maestro',component: CnfMaestroForm2Component},
+            {path: 'tipo-sistema',component: CnfTipoSistemaListComponent},
+            {path: 'new-tipo-sistema',component: CnfTipoSistemaFormComponent},
+            
         ]
     },
     {

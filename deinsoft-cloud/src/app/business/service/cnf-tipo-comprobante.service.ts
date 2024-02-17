@@ -25,6 +25,15 @@ export class CnfTipoComprobanteService {
   public getAllDataCombo():Observable<any>{
     return this.http.get<CnfTipoComprobante[]>(`${this.url}/get-all-cnf-tipo-comprobante-combo`);
   }
+  public getAllDataComboVentas():Observable<any>{
+    return this.http.get<CnfTipoComprobante[]>(`${this.url}/get-all-cnf-tipo-comprobante-combo-ventas`);
+  }
+  public getAllDataComboMovAlmacen():Observable<any>{
+    return this.http.get<CnfTipoComprobante[]>(`${this.url}/get-all-cnf-tipo-comprobante-combo-almacen`);
+  }
+  public getAllDataComboContrato():Observable<any>{
+    return this.http.get<CnfTipoComprobante[]>(`${this.url}/get-all-cnf-tipo-comprobante-combo-contrato`);
+  }
   public getData(arg1:string):Observable<any>{
     let params = new HttpParams().set("id",arg1)
     return this.http.get<CnfTipoComprobante>(`${this.url}/get-cnf-tipo-comprobante`,{params});

@@ -1326,6 +1326,63 @@
                 typeDeleteVoid: "2",
                 regenerate: true,
                 generateFrontend: true
+        },
+        {
+                tableName: "act_contrato_corte",
+                title: "act_contrato_corte",
+                foreignTables: [
+                {tableName: "act_contrato",idValue: "act_contrato_id", descriptionColumn : "numero"
+                },
+                {tableName: "seg_usuario",idValue: "seg_usuario_id", descriptionColumn : "nombre"
+                }
+            ],
+                columnsForm: [
+                {columnName: "fecha",inputType: "text"},
+                {columnName: "flg_estado",inputType: "text"}
+            ],
+                columnsList: [
+                {columnName: "fecha",filterType: "text"
+                },
+                {columnName: "flg_estado",filterType: "text"
+            }
+            ],
+                typeDeleteVoid: "2",
+                regenerate: true,
+                generateFrontend: true
+        },
+        {
+                tableName: "cnf_menu_tipo_sistema",
+                title: "cnf_menu_tipo_sistema",
+                foreignTables: [
+                    {tableName: "seg_menu",idValue: "seg_menu_id",descriptionColumn : "nombre"
+                    },
+                ],
+                typeDeleteVoid: "2",
+                regenerate: true,
+                generateFrontend: true
+        },
+        {
+                tableName: "cnf_tipo_sistema",
+                title: "cnf_tipo_sistema",
+                  childTables: [
+                    {tableName: "cnf_menu_tipo_sistema",tableNameDetail: "cnf_menu_tipo_sistema",
+                            idValue: "cnf_menu_tipo_sistema_id",columnsForm: [
+                            {tableName: "seg_menu", columnName: "nombre",inputType: "select"
+                            }
+                        ]
+                    }
+                ],
+                columnsForm: [
+                {columnName: "nombre",inputType: "text"
+                }
+            ],
+                columnsList: [
+                {columnName: "nombre",filterType: "text"
+                }
+            ],
+                typeDeleteVoid: "2",
+                regenerate: true,
+                generateFrontend: true
         }
     ]
 }

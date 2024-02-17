@@ -38,7 +38,7 @@ import { GoogleMapsService, Maps } from '../../../business/service/googlemaps.se
 import * as turf from '@turf/turf'
 import * as geolib from 'geolib'
 import { ApiService } from '../../../services/api.service';
-import { CnfZonaService } from '../../../business/service/cnf-zona';
+import { CnfZonaService } from '../../../business/service/cnf-zona.service';
 import { OpeGenericFormModalComponent } from '../../modal/ope-generic-form-modal.component';
 const place = null as google.maps.places.PlaceResult;
 type Components = typeof place.address_components;
@@ -354,7 +354,7 @@ export class ActContratoFormComponent implements OnInit {
   }
   getListCnfTipoComprobante() {
     this.loadingCnfTipoComprobante = true;
-    return this.cnfTipoComprobanteService.getAllDataCombo().subscribe(data => {
+    return this.cnfTipoComprobanteService.getAllDataComboContrato().subscribe(data => {
       this.listCnfTipoComprobante = data;
       this.listCnfTipoComprobante = this.listCnfTipoComprobante.filter(data => data.codigo.toUpperCase().includes("CNT"));
       this.model.cnfTipoComprobante = this.listCnfTipoComprobante[0];
@@ -635,14 +635,38 @@ export class ActContratoFormComponent implements OnInit {
 
   loadPrecio() {
     
-    let wa = this.dateAdapter.fromModel(this.model.fecha);
-
+    let fechaInstalacion = this.dateAdapter.fromModel(this.model.fecha);
+    
     // let year = new Date().getFullYear();
     // let month = new Date().getMonth() + 1;
-    let day = new Date(wa.year, wa.month, 0).getDate();
+    let diasTotalMes = new Date(fechaInstalacion.year, fechaInstalacion.month, 0).getDate();
 
-    this.model.montoPrimerMes = (this.model.cnfPlanContrato.precio / day) * (day - wa.day + 1);
+    let fechaInstalacionDate = new Date(fechaInstalacion.year, fechaInstalacion.month -1, fechaInstalacion.day)
+    
+    let fechaPago = new Date(fechaInstalacion.year, fechaInstalacion.month  -1, this.model.cnfPlanContrato.diaVencimiento);
+    console.log(fechaPago);
+    if (fechaPago < fechaInstalacionDate) {
+      fechaPago = new Date(fechaInstalacion.year, fechaInstalacion.month , this.model.cnfPlanContrato.diaVencimiento);
+    } 
 
+    console.log(fechaPago);
+    
+    let diferenciaMeses = this.utilService.monthDiff(new Date(fechaInstalacion.year, fechaInstalacion.month - 1, fechaInstalacion.day), new Date());
+
+    if (diferenciaMeses < 0 || diferenciaMeses > 1 ) {
+      this.utilService.msgWarning("","Operación invalida");
+      return;
+    }
+    if (diferenciaMeses == 1 && fechaInstalacion.day > this.model.cnfPlanContrato.diaVencimiento) {
+      this.utilService.msgWarning("Operación invalida2","La instalación no debe ser despues de la próxima fecha de vencimiento");
+      return;
+    }
+    let diferenciaDias = this.utilService.dayDiff(fechaInstalacionDate,fechaPago);
+    
+    console.log(diferenciaDias);
+    
+    this.model.montoPrimerMes = this.model.cnfPlanContrato.precioInstalacion +  (this.model.cnfPlanContrato.precio / diasTotalMes) * (diferenciaDias + 1);
+    
     this.model.montoPrimerMes = Math.round((this.model.montoPrimerMes + Number.EPSILON) * 100) / 100;
   }
   getListCnfZonaAsObservable(term: any): Observable<any> {
@@ -723,8 +747,31 @@ searchCnfZona = (text$: Observable<string>) =>
     });
 
     this.marker.addListener('dragend', (event) => {
+      
       this.model.latitude = this.marker.getPosition().lat();
       this.model.longitude = this.marker.getPosition().lng();
+      console.log(this.model.latitude,this.model.longitude );
+      
+        this.apiService.api.then(() => {
+          let geocoder = new google.maps.Geocoder;
+          let latlng = {lat: this.model.latitude, lng: this.model.longitude};
+          let that = this;
+          geocoder.geocode({'location': latlng}, function(results) {
+              if (results[0]) {
+                //that.zoom = 11;
+                //console.log(results[0].formatted_address);
+                console.log(results[0]);
+                
+                that.model.direccion = results[0].formatted_address
+                //that.currentLocation = results[0].formatted_address;
+                //console.log(that.currentLocation);
+              } else {
+                console.log('No results found');
+              }
+          });
+        });
+      // return this.apiService.getDirectionFromLocation(this.model.latitude, this.model.longitude)
+      // .subscribe();
     });
 
     // const rectangle = new google.maps.Rectangle({

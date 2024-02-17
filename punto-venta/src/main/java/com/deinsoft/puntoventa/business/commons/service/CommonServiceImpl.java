@@ -19,7 +19,7 @@ public class CommonServiceImpl<E, R extends PagingAndSortingRepository<E, Long>>
     protected R repository;
 
     @Autowired
-    AuthenticationHelper auth;
+    public AuthenticationHelper auth;
     
     @Autowired
     SegRolUsuarioRepository segRolUsuarioRepository;

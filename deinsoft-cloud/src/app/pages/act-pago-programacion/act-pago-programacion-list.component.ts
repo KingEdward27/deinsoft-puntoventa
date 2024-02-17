@@ -116,7 +116,7 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
     this.indexInputs = [8]
     this.model.fechaVencimiento = this.model.fechaVencimiento?this.model.fechaVencimiento:''
     return this.deps.actPagoProgramacionService
-    .getAllByCnfMaestroId(this.model.cnfMaestro.id,this.model.fechaVencimiento,this.model.cnfLocal.id).subscribe(data => {
+    .getAllByCnfMaestroId(this.model.cnfMaestro.id,this.model.fechaVencimiento,this.model.cnfLocal.id, true).subscribe(data => {
       this.listData = data;
       this.loadingCnfMaestro = false;
       // setTimeout(() => {
@@ -124,6 +124,8 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
       // }, 1);
       // this.dataTable?.destroy();
       this.listData.forEach(element => {
+        console.log(element);
+        
         this.totalMontos = this.totalMontos + element.monto
         this.totalPendiente = this.totalPendiente + element.montoPendiente
       });
@@ -161,9 +163,10 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
     
   }
   calculateFromTotal(){
+    console.log(this.total);
+    
     let total = this.total;
     this.listData.forEach((element: any) => {
-      console.log(total);
       if(total >= element.montoPendiente){
         element.amtToPay = element.montoPendiente;
         total = total - element.montoPendiente;
@@ -176,7 +179,7 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
   onChangeTotal(event: any): void {  
     this.calculateFromTotal();
   }
-  async save() {
+  async preSave() {
     if(!this.listData || this.listData?.length == 0){
       this.deps.utilService.msgProblemNoItems();
       return;
@@ -211,13 +214,15 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
         });
         let list : any[] = [];
         await this.listData.forEach(element => {
+          let total = 0
           if (element.amtToPay > 0) {
              let actPagoDetalle = new ActPagoDetalle();
              actPagoDetalle.montoDeuda = element.monto;
              actPagoDetalle.monto = (element.amtToPay > actPagoDetalle.montoDeuda? actPagoDetalle.montoDeuda: element.amtToPay);
              actPagoDetalle.actPagoProgramacion = element;
              this.modalRef.componentInstance.model.cnfMaestro = element.actContrato?element.actContrato.cnfMaestro : element.actComprobante.cnfMaestro;
-             this.total = this.total + actPagoDetalle.monto;
+             total = total + actPagoDetalle.monto;
+             this.total = total;
              list.push(actPagoDetalle);
           }
         });
@@ -242,6 +247,24 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
     }
     
 
+  }
+  onKeyAmtToPay (event: any) {
+    if (event.key == "Enter") { 
+      this.preSave();
+    }
+  }
+  onSelectRow ($event:any, item: any) {
+    if ($event.srcElement.cellIndex) {
+      if (item.amtToPay == 0 || !item.amtToPay) {
+        item.amtToPay = item.montoPendiente;
+      } else {
+        item.amtToPay = 0;
+      }
+    } else {
+      $event.target.select();
+    }
+    
+     
   }
 }
 

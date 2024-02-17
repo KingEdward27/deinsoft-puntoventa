@@ -104,11 +104,10 @@ export class CnfMaestroFormModalComponent implements OnInit {
     })
   }
   public save(): void {
-    if (this.model.cnfTipoDocumento.codigoSunat == '6'){
-      this.model.nombres = this.model.razonSocial
+    if (this.model.cnfTipoDocumento.codigoSunat != '6'){
+      this.model.razonSocial = this.model.apellidoPaterno + " " +this.model.apellidoMaterno + " " + this.model.nombres
     }
     this.model.flagEstado = "1";
-    console.log(this.model);
     this.cnfEmpresaService.getData(this.appService.getProfile().profile.split("|")[1]).subscribe(data =>{
       this.model.cnfEmpresa = data
       this.cnfMaestroService.save(this.model).subscribe(m => {
@@ -217,6 +216,23 @@ export class CnfMaestroFormModalComponent implements OnInit {
 
     return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
       ? false : a1.id === a2.id;
+  }
+  searchSunat(){
+    console.log(this.model.nroDoc);
+    if (!this.model.cnfTipoDocumento) {
+      this.utilService.msgWarning("Valdación","Seleccione el tipo de documento");
+      return;
+    }
+    if (this.model.nroDoc?.length == 8 || this.model.nroDoc?.length == 11) {
+      this.cnfMaestroService.getApiNameByDoc(this.model.nroDoc).subscribe(data => {
+        console.log(data.nombre);
+        
+        this.model.razonSocial = data.nombre;
+        this.model.apellidoPaterno = data.apellidoPaterno;
+        this.model.apellidoMaterno = data.apellidoMaterno;
+        this.model.nombres = data.nombres;
+      })
+    }
   }
 }
 

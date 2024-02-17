@@ -23,6 +23,10 @@ public interface ActPagoProgramacionRepository extends JpaRepository<ActPagoProg
     List<ActPagoProgramacion> findByActComprobanteId(long id);
 
     @Query(value = "select p from actPagoProgramacion p "
+            + "where p.actContrato.id =  ?1 ")
+    List<ActPagoProgramacion> findByActContratoId(long id);
+    
+    @Query(value = "select p from actPagoProgramacion p "
             + "left join p.actComprobante left join p.actContrato "
             + "where (:id = 0l or (p.actComprobante != null and p.actComprobante.cnfMaestro.id = :id) "
             + "or (p.actContrato != null and p.actContrato.cnfMaestro.id = :id)) "
@@ -33,5 +37,6 @@ public interface ActPagoProgramacionRepository extends JpaRepository<ActPagoProg
 
     void deleteByActContrato(ActContrato actContrato);
 
-    
+    @Query("DELETE FROM actPagoProgramacion p WHERE monto = montoPendiente")
+    Integer deleteByCorte();
 }

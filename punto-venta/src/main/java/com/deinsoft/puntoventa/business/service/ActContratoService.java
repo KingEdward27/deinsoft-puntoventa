@@ -1,12 +1,13 @@
 package com.deinsoft.puntoventa.business.service;
 
 import com.deinsoft.puntoventa.business.bean.ParamBean;
-import com.deinsoft.puntoventa.business.commons.service.CommonService;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.deinsoft.puntoventa.business.commons.service.CommonService;
 import com.deinsoft.puntoventa.business.model.ActContrato;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -33,4 +34,6 @@ public interface ActContratoService extends CommonService<ActContrato> {
     public void delete(long id);
     
     public List<ActContrato> getReportActContratos(ParamBean paramBean);
+    
+    public Map<String,Object> getDashboardActContratos(long empresaId);
 }

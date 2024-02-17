@@ -36,7 +36,7 @@ export class CnfTipoComprobanteComponent extends GenericListComponent implements
   ngOnInit(): void {
     super.baseEndpoint = this.baseEndpoint;
     
-    this.prop.conditions.push({"columnName":"cnf_tipo_comprobante_id.flag_editable","value":1});
+    this.prop.conditions.push({"columnName":"cnf_tipo_comprobante.flag_editable","value":1});
     super.properties = this.prop;
     console.log(this.prop);
     super.ngOnInit();

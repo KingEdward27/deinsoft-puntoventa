@@ -99,6 +99,8 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   listImpuestoCondicion: any;
   public modalRef!: NgbModalRef;
   option:string = "1";
+  empresaPrincipal: any
+  
   constructor(private actComprobanteService: ActComprobanteService,
     private router: Router,
     private utilService: UtilService,
@@ -129,6 +131,8 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     //   this.a4();
     // });
     this.loadData();
+    let empresaPrincipal = this.appService.getUser().empresaPrincipal
+    this.empresaPrincipal = empresaPrincipal
 
   }
   getBack() {
@@ -371,12 +375,12 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   }
   getListCnfMoneda() {
     this.loadingCnfMoneda = true;
-    console.log(this.chargingsb);
     return this.cnfMonedaService.getAllDataCombo().subscribe(data => {
       console.log(data);
 
       this.listCnfMoneda = data;
       this.loadingCnfMoneda = false;
+      this.model.cnfMoneda = this.empresaPrincipal.cnfMoneda
     })
 
   }

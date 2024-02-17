@@ -6,4 +6,5 @@ export class CnfMoneda {
 	nombre: string = "";
 	flagEstado: string = "";
 	token?: string = "";
+	simbolo: string;
 };

@@ -173,7 +173,7 @@ export class ActPagoModalComponent implements OnInit {
   }
   getListCnfTipoComprobante() {
     this.loadingCnfTipoComprobante = true;
-    return this.cnfTipoComprobanteService.getAllDataCombo().subscribe(data => {
+    return this.cnfTipoComprobanteService.getAllDataComboVentas().subscribe(data => {
       this.listCnfTipoComprobante = data;
       this.loadingCnfTipoComprobante = false;
     })

@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import com.deinsoft.puntoventa.business.model.ActContrato;
 import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.service.ActContratoService;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 
 @RestController
@@ -96,5 +97,10 @@ public class ActContratoController extends CommonController<ActContrato, ActCont
         logger.info("getReportActContrato received: " + paramBean.toString());
         List<ActContrato> actCajaOperacionList = actContratoService.getReportActContratos(paramBean);
         return actCajaOperacionList; 
+    }
+    @GetMapping(value = "/get-dashboard-act-contrato")
+    public ResponseEntity<?> getDashboardActContrato(@Param("id") Long id) {
+        Map<String,Object> actDashboard = actContratoService.getDashboardActContratos(id);
+        return ResponseEntity.status(HttpStatus.OK).body(actDashboard);
     }
 }

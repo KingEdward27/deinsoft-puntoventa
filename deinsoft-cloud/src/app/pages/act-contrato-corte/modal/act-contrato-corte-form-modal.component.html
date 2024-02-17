@@ -1,0 +1,77 @@
+<!-- Main content -->
+<section class="content" style="padding-top: 10px;">
+    <!-- Default box -->
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{'webpagos.act_contrato_corte.home.title'| translate}}</h3>
+                <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <form class="col-sm-12" style="padding-top: 6px;">
+                        <div class="form-group-sm row">
+                            <label for="fecha"
+                                class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.act_contrato_corte.fecha'
+                                |
+                                translate}} <span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-8">
+                                <div class="input-group input-group-sm">
+                                    <input placeholder="dd/mm/yyyy"
+                                        class="form-control-sm-dp col-xs-10 col-sm-10 col-md-10 col-lg-8" id="fecha"
+                                        name="model.fecha" maxlength="200" [(ngModel)]="model.fecha" ngbDatepicker
+                                        #dfecha="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary calendar button-dp"
+                                            (click)="dfecha.toggle()" type="button">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label for="observacion"
+                                class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.act_contrato_corte.observacion' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-8">
+                                <textarea rows="3" [(ngModel)]="model.observacion" maxlength="20" name="observacion"
+                                    id="observacion" name="observacion" class="form-control-sm-ta col-sm-12 col-lg-12"
+                                    placeholder="Ingrese observacion" ></textarea>
+                                <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.observacion">{{
+                                    error.observacion }}</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+
+                            <div class="col-sm-12" style="padding-top: 20px;">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-5 col-sm-4 col-xs-5" style="margin-left: 50x;">
+                                        <button class="btn btn-default col-12"
+                                            (click)="activeModal.dismiss('cancel click')">
+                                            <i class="fa fa-arrow-circle-left"></i> {{'webpagos.btnBack' | translate
+                                            }}
+                                        </button>
+                                    </div>
+                                    <div class="col-lg-5 col-sm-4 col-xs-5" style="margin-left: 20x;">
+                                        <button class="btn btn-primary col-12" (click)="save()">
+                                            <i [ngClass]="model.id ? 'fa fa-pen' : 'fa fa-plus'"></i> {{ model.id ?
+                                            ('webpagos.btnEdit' | translate):('webpagos.btnSave' | translate) }}
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

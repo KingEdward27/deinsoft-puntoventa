@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgbActiveModal, NgbCalendar, NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { UtilService } from '../../services/util.service';
 import { CnfZona } from '../../business/model/cnf-zona';
-import { CnfZonaService } from '../../business/service/cnf-zona';
+import { CnfZonaService } from '../../business/service/cnf-zona.service';
 import { CnfEmpresa } from '../../business/model/cnf-empresa.model';
 import { AppService } from '../../services/app.service';
 

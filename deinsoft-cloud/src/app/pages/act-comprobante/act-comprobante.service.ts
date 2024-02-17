@@ -93,5 +93,6 @@ export class ActComprobanteService {
     let params = new HttpParams().set("id",arg1);
     return this.http.post(this.url+'/validate-act-comprobante', params); 
   }
+  
 }
 

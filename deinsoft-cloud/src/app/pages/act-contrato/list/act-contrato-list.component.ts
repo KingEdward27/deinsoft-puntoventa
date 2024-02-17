@@ -6,6 +6,8 @@ import { ActContratoService } from '../act-contrato.service';
 import { Router } from '@angular/router';
 import { UtilService } from '../../../services/util.service';
 import { AppService } from '../../../services/app.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ActContratoCorteFormModalComponent } from '@pages/act-contrato-corte/modal/act-contrato-corte-form-modal.component';
 @Component({
   selector: 'app-act-contrato-list',
   templateUrl: './act-contrato-list.component.html'
@@ -17,13 +19,16 @@ export class ActContratoListComponent implements OnInit {
   nameSearch: string = "";
   modelSearch: ActContrato = new ActContrato();
   dataTable!: DataTables.Api;
+  
+  public modalRef!: NgbModalRef;
   constructor(private actContratoService: ActContratoService,
     private utilService: UtilService,
     private router: Router,
-    private appService: AppService) { }
+    private appService: AppService,private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.getAllData();
+    
   }
   public getAllDataByFilters() {
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
@@ -64,5 +69,18 @@ export class ActContratoListComponent implements OnInit {
       }
 
     });
+  }
+  cortarLinea (item:any){
+    
+    this.modalRef = this.modalService.open(ActContratoCorteFormModalComponent);
+    
+    this.modalRef.componentInstance.model.actContrato = item;
+    // this.modalRef.closed.subscribe(result => {
+    //   this.getListCnfMaestro();
+    //   // this.model.cnfBpartner = 
+    // })
+    this.modalRef.componentInstance.cnfMaestro.subscribe((receivedEntry:any) => {
+      console.log(receivedEntry);
+    })
   }
 }

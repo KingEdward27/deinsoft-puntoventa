@@ -47,6 +47,15 @@ public class ActPagoProgramacion implements Serializable {
     @Transient
     BigDecimal amtToPay;
     
+    @Transient
+    String color;
+    
+    @Transient
+    String mes;
+    
+    @Transient
+    String ultimoPago;
+    
     public long getId() {
         return id;
     }
@@ -117,6 +126,30 @@ public class ActPagoProgramacion implements Serializable {
 
     public void setActContrato(ActContrato actContrato) {
         this.actContrato = actContrato;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getMes() {
+        return mes;
+    }
+
+    public void setMes(String mes) {
+        this.mes = mes;
+    }
+
+    public String getUltimoPago() {
+        return ultimoPago;
+    }
+
+    public void setUltimoPago(String ultimoPago) {
+        this.ultimoPago = ultimoPago;
     }
 
     @Override

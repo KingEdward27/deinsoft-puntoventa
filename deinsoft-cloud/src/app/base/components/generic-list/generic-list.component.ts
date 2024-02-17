@@ -108,7 +108,9 @@ export class GenericListComponent extends CommonService implements OnInit {
         //   next: 'Sig.',
         //   previous: 'Ant.'
         // }
-      }
+      },
+      
+      responsive: true
     }
     console.log(this.properties.title);
     
@@ -175,7 +177,7 @@ export class GenericListComponent extends CommonService implements OnInit {
     this.addParams(params)
     this.baseEndpoint = environment.apiUrl;
 
-    console.log(this.properties);
+    // console.log(this.properties);
     let myMap = new Map();
     this.properties.conditions?.forEach((element: any) => {
       myMap.set(element.columnName, element.value);
@@ -184,25 +186,25 @@ export class GenericListComponent extends CommonService implements OnInit {
     myMap.forEach((val: string, key: string) => {
       convMap[key] = val;
     });
-    console.log(convMap);
+    // console.log(convMap);
     this.properties.filters = convMap;
 
     super.getList(this.properties)
       .subscribe(data => {
         this.listDetail = data;
-        console.log(this.headers);
-        console.log(this.listDetail);
+        // console.log(this.headers);
+        // console.log(this.listDetail);
         setTimeout(() => {
           this.dataTable = $('#dtData' + this.properties.tableName).DataTable(
             this.datablesSettings);
-        }, 1);
+        }, 0);
         //this.dataTable?.destroy();
         // console.log(data);
       });
 
   }
   exportData() {
-    console.log(this.headers);
+    // console.log(this.headers);
 
     this.addParams(this.properties.columnsListParams);
 
@@ -216,7 +218,7 @@ export class GenericListComponent extends CommonService implements OnInit {
 
     super.export(this.properties).subscribe(data => {
 
-      console.log(data.body);
+      // console.log(data.body);
       if (data.body.type != 'application/json') {
         var contentType = 'application/pdf';
         var extension = "pdf";

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, Input } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Detail } from '../components/model/Detail';
 import { UpdateParam } from '../components/model/UpdateParam';
 
@@ -12,13 +12,24 @@ export  class CommonService {
   public baseEndpoint: string="";
   public updateParam:UpdateParam = new UpdateParam();
   protected cabeceras: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-
+  private currentUserSubject : BehaviorSubject<any>
+  onPreSave: () => boolean;
   constructor(protected http: HttpClient) { }
   
   public getProperties(){
     return this.properties;
   }
-
+  public setPreSave(varas:any) {
+    this.onPreSave= varas
+    console.log(varas);
+    
+  }
+  
+  public getPreSave() {
+    console.log(this.onPreSave);
+    return this.onPreSave
+    
+  }
   public getListWithFilters(jsonData:any): Observable<any[]> {
     return this.http.post<any[]>(this.baseEndpoint+"/api/framework/select-by-tablename-with-filters", jsonData);
   }

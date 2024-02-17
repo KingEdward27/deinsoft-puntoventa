@@ -105,6 +105,8 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
   }
   async loadForm() {
     this.properties = JSON.parse(localStorage.getItem("properties") || '{}');
+    console.log(this.properties);
+    
     for (let index = 0; index < this.properties.columnsForm.length; index++) {
       const element = this.properties.columnsForm[index];
       element.order = index + 1;

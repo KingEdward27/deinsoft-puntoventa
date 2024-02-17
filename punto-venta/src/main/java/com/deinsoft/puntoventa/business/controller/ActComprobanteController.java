@@ -1,5 +1,6 @@
 package com.deinsoft.puntoventa.business.controller;
 
+import com.deinsoft.puntoventa.business.bean.GeneratedFile;
 import com.deinsoft.puntoventa.business.service.BusinessService;
 import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
@@ -32,6 +33,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -258,5 +260,14 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
         }
         return ResponseEntity.status(HttpStatus.CREATED).headers(headers).contentType(mediaType).body("Ocurrió un error comunicandose con el api facturador");
         
+    }
+    @PostMapping(value = "/generateSireTxt")
+    public ResponseEntity<?> generateTxt(@RequestBody ParamBean paramBean){
+        GeneratedFile data = actComprobanteService.generateSireTxt(paramBean);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentDisposition(ContentDisposition.builder("attachment").filename(data.getFileName()).build());
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        httpHeaders.setContentLength(data.getData().length);
+        return ResponseEntity.ok().headers(httpHeaders).body(data);
     }
 }

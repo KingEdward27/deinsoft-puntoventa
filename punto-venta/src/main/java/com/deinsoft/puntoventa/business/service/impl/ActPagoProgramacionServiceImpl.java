@@ -13,9 +13,18 @@ import com.deinsoft.puntoventa.business.repository.ActPagoProgramacionRepository
 import com.deinsoft.puntoventa.business.service.ActPagoProgramacionService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
+import com.deinsoft.puntoventa.business.model.ActContrato;
+import com.deinsoft.puntoventa.business.model.ActPago;
+import com.deinsoft.puntoventa.business.model.ActPagoDetalle;
 import com.deinsoft.puntoventa.business.model.SegUsuario;
+import com.deinsoft.puntoventa.business.repository.ActContratoRepository;
+import com.deinsoft.puntoventa.business.repository.ActPagoRepository;
 import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Comparator;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +34,13 @@ public class ActPagoProgramacionServiceImpl
 
     @Autowired
     ActPagoProgramacionRepository actPagoProgramacionRepository;
+    
+    @Autowired
+    ActContratoRepository actContratoRepository;
+    
+
+    @Autowired
+    ActPagoRepository actPagoRepository;
 
     public List<ActPagoProgramacion> getAllActPagoProgramacion(ActPagoProgramacion actPagoProgramacion) {
 
@@ -70,9 +86,14 @@ public class ActPagoProgramacionServiceImpl
         }
     }
 
-    public List<ActPagoProgramacion> getAllActPagoProgramacionByCnfMaestro(long id, LocalDate fechaVencimiento, long cnfLocalId) {
+    public List<ActPagoProgramacion> getAllActPagoProgramacionByCnfMaestro(long id, LocalDate fechaVencimiento, long cnfLocalId, boolean onlyPendientes) {
+        List<ActPagoProgramacion> actPagoProgramacionList
+                = (List<ActPagoProgramacion>) actPagoProgramacionRepository.findByCnfMaestroId(id, fechaVencimiento);
+
+        List<ActPago> actPagoList = actPagoRepository.findAll();
+
         List<ActPagoProgramacion> ActPagoProgramacionList
-                = (List<ActPagoProgramacion>) actPagoProgramacionRepository.findByCnfMaestroId(id, fechaVencimiento)
+                = actPagoProgramacionList
                         .stream()
                         .filter(item -> {
                             System.out.println("getActComprobante " + item.toString());
@@ -80,13 +101,78 @@ public class ActPagoProgramacionServiceImpl
                                     && item.getActComprobante().getFlagIsventa().equals("1"))
                                     || item.getActComprobante() == null;
                         })
-                        .filter(item -> (item.getActContrato() != null ? 
-                                item.getActContrato().getCnfLocal().getId() : 
-                                item.getActComprobante().getCnfLocal().getId()) == cnfLocalId)
+                        .filter(item -> (item.getActContrato() != null
+                        ? item.getActContrato().getCnfLocal().getId()
+                        : item.getActComprobante().getCnfLocal().getId()) == cnfLocalId)
+                        .filter(predicate -> (onlyPendientes && predicate.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0) || !onlyPendientes)
+                        .map(data -> {
+                            if (data.getFechaVencimiento().compareTo(LocalDate.now()) >= 0) {
+                                data.setColor("green");
+                            } else {
+                                data.setColor("red");
+                            }
+                            data.setMes(data.getFechaVencimiento().getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase());
+
+                            ActPago actPago
+                                    = actPagoList.stream()
+                                            .filter(data2 -> data2.getListActPagoDetalle().stream()
+                                            .anyMatch(predicate -> predicate.getActPagoProgramacion() != null
+                                            && predicate.getActPagoProgramacion().getId() == data.getId()))
+                                            .findFirst().orElse(new ActPago());
+
+                            if (actPago.getId() != 0) {
+                                ActPagoDetalle actPagoDetalle
+                                        = actPago.getListActPagoDetalle().stream()
+                                                .filter(predicate -> predicate.getActPagoProgramacion().getId() == data.getId())
+                                                .findFirst().orElse(new ActPagoDetalle());
+
+                                //mapper.setUltimoPago(actPago.getSerie() + "-" + actPago.getNumero() + " (" + actPago.getFecha().format(DateTimeFormatter.ISO_DATE) + "): " + actPago.getTotal());
+                                data.setUltimoPago(actPago.getSerie() + "-" + actPago.getNumero() + ": S/ " + actPagoDetalle.getMonto());
+                            }
+
+                            return data;
+                        })
+                        .sorted(Comparator.comparing(a -> a.getActContrato().getId()))
                         .collect(Collectors.toList());
         return ActPagoProgramacionList;
     }
+    @Override
+    public void refreshProgramacionPagos (){
+       List<ActContrato> list =  actContratoRepository.findAll();
+        for (ActContrato actContrato : list) {
+            //cuando forma de pago es repetitivo se debe poner el detalle, en este caso se va a agregar programacion cada mes
+            if (actContrato.getCnfFormaPago() != null) {
+                continue;
+            }
+            if (!actContrato.getFlagEstado().equals("1")) {
+                continue;
+            }
+            ActPagoProgramacion programacionMesActual = actPagoProgramacionRepository.findByActContratoId(actContrato.getId()).stream()
+                    .filter(predicate -> predicate.getFechaVencimiento().withDayOfMonth(1)
+                            .compareTo(LocalDate.now().withDayOfMonth(1)) == 0)
+                    .findFirst().orElse(null);
+            
+            if (programacionMesActual == null) {
+                ActPagoProgramacion actPayment = new ActPagoProgramacion();
+                actPayment.setActContrato(actContrato);
+                actPayment.setFecha(actContrato.getFecha());
+                actPayment.setFechaVencimiento(LocalDate.now());
+                
+                if (actPayment.getFechaVencimiento().lengthOfMonth() < actContrato.getCnfPlanContrato().getDiaVencimiento()) {
+                    actPayment.setFechaVencimiento(actPayment.getFechaVencimiento()
+                            .withDayOfMonth(actPayment.getFechaVencimiento().lengthOfMonth()));
+                } else {
+                    actPayment.setFechaVencimiento(
+                            actPayment.getFechaVencimiento()
+                                    .withDayOfMonth(actContrato.getCnfPlanContrato().getDiaVencimiento()));
+                }
 
+                actPayment.setMonto(actContrato.getCnfPlanContrato().getPrecio());
+                actPayment.setMontoPendiente(actContrato.getCnfPlanContrato().getPrecio());
+                actPagoProgramacionRepository.save(actPayment);
+            }
+        }
+    }
     public List<ActPagoProgramacion> getAllActPagoProgramacionCompraByCnfMaestro(long id, LocalDate fechaVencimiento) {
 
         List<ActPagoProgramacion> ActPagoProgramacionList

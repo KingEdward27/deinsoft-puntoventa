@@ -27,8 +27,8 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>Compras</h3>
-                        <p>Formulario</p>
+                        <h3>{{cantidadContratos}}</h3>
+                        <p>Total Clientes</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-bag"></i>
@@ -43,8 +43,8 @@
                 <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>Ventas</h3>
-                        <p>Formulario</p>
+                        <h3>{{cantidadDeudores}}</h3>
+                        <p>Total Morosos</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-bag"></i>
@@ -59,8 +59,8 @@
                 <!-- small box -->
                 <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3>Compras</h3>
-                        <p>Reportes</p>
+                        <h3>{{ratioEndeudamiento}}</h3>
+                        <p>Ratio recuperación</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>
@@ -75,8 +75,8 @@
                 <!-- small box -->
                 <div class="small-box bg-danger">
                     <div class="inner">
-                        <h3>Ventas</h3>
-                    <p>Reportes</p>
+                        <h3>{{totalMontoPagos}}</h3>
+                        <p>Total recaudación</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>
@@ -89,6 +89,20 @@
             <!-- ./col -->
         </div>
         <!-- /.row -->
+        <div class="row">
+            <div class="col-6">
+                <div class="chart-container">
+                    <canvas  id="MyChart" >{{ chart }}</canvas>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="chart-container">
+                    <canvas  id="MyChart2" >{{ chart2 }}</canvas>
+                </div>
+            </div>
+        </div>
+       
+        
     </div>
     <!-- Main row -->
 </section>
