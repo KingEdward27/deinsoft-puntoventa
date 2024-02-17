@@ -84,6 +84,7 @@ import { CnfEmpresaForm2Component } from '@pages/cnf-empresa/cnf-empresa-form';
 import { SegPermisoForm2Component } from '@pages/security/seg-permiso/form2/seg-permiso-form2.component';
 import { CnfTipoSistemaFormComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-sistema.form';
 import { CnfTipoSistemaListComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-sistema.list';
+import { ActComprobanteReportContableFormComponent } from '@pages/reports/act-comprobante/act-comprobante-venta-contable/act-comprobante-report-contable.component';
 const routes: Routes = [
     {
         path: '',
@@ -155,7 +156,7 @@ const routes: Routes = [
             {path: 'new-menu/:id',component: SegMenuFormComponent},
 
             {path: 'permiso',component: SegPermisoListComponent},
-            {path: 'new-permiso',component: SegPermisoForm2Component},
+            {path: 'new-permiso',component: SegPermisoFormComponent},
             {path: 'new-permiso/:id',component: SegPermisoFormComponent},
 
             {path: 'list-ventas',component: ActComprobanteListFormComponent},
@@ -187,6 +188,7 @@ const routes: Routes = [
             {path: 'new-maestro',component: CnfMaestroForm2Component},
             {path: 'tipo-sistema',component: CnfTipoSistemaListComponent},
             {path: 'new-tipo-sistema',component: CnfTipoSistemaFormComponent},
+            {path: 'report-contable',component: ActComprobanteReportContableFormComponent},
             
         ]
     },

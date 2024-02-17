@@ -19,7 +19,7 @@ export class CnfSubCategoriaComponent extends GenericListComponent implements On
     "columnsList":[{tableName: "cnf_sub_categoria", columnName:"nombre",filterType:"text"}
                 ],
     "foreignTables":[{"tableName":"cnf_categoria","idValue":"cnf_categoria_id"}],       
-    "columnsForm":[{tableName: "cnf_categoria", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_categoria_id"},
+    "columnsForm":[{tableName: "cnf_categoria", "columnName":"nombre","type":"select",loadState : 1,relatedBy:"cnf_categoria_id",filters:[]},
                    {tableName: "cnf_sub_categoria", "columnName":"nombre","type":"input"}
                    
            ],
@@ -37,6 +37,7 @@ export class CnfSubCategoriaComponent extends GenericListComponent implements On
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
     this.prop.preSave.push({columnForm:"cnf_empresa_id",value:cnfEmpresa});
     this.prop.conditions.push({"columnName":"cnf_categoria.cnf_empresa_id","value":cnfEmpresa});
+    this.prop.columnsForm[0].filters.push({"columnName":"cnf_categoria.cnf_empresa_id","value":cnfEmpresa});
     super.properties = this.prop;
     console.log(this.prop);
     super.ngOnInit();

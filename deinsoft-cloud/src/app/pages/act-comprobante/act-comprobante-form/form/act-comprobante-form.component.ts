@@ -136,6 +136,8 @@ export class ActComprobanteFormComponent implements OnInit {
     //   this.a4();
     // });
     this.loadData();
+    console.log(this.appService.getUser());
+    
     let empresaPrincipal = this.appService.getUser().empresaPrincipal
     this.empresaPrincipal = empresaPrincipal
     
@@ -432,6 +434,8 @@ export class ActComprobanteFormComponent implements OnInit {
       console.log(data);
       this.listCnfMoneda = data;
       this.loadingCnfMoneda = false;
+      console.log(this.empresaPrincipal.cnfMoneda);
+      
       this.model.cnfMoneda = this.empresaPrincipal.cnfMoneda
     })
 

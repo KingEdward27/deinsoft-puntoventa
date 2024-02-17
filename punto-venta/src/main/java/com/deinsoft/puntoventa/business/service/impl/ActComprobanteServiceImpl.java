@@ -14,6 +14,7 @@ import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.business.repository.ActComprobanteRepository;
 import com.deinsoft.puntoventa.business.service.ActComprobanteService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.dto.ReporteContableDto;
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 import com.deinsoft.puntoventa.business.model.ActComprobanteDetalle;
@@ -42,6 +43,8 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -90,7 +93,8 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
 
     @Autowired
     AppConfig appConfig;
-
+    
+    static DateTimeFormatter YYYYMMDD_FORMATER = DateTimeFormatter.ofPattern("yyyyMM");
     
     public List<ActComprobante> getAllActComprobante(ActComprobante actComprobante) {
         List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getAllActComprobante(
@@ -520,5 +524,21 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                 ;
         byte[] zippedData = Util.generateFile(fileName, joined);
         return new GeneratedFile(fileName, zippedData);
+    }
+    
+    public List<ReporteContableDto> getListaReporteContable (Long cnfLocalId) {
+        List<ActComprobante> list = actComprobanteRepository.findByCnfLocalId(cnfLocalId);
+        List<ReporteContableDto> x = list.stream().collect(
+                Collectors.groupingBy(item -> grouping(item),
+                        Collectors.averagingDouble(mapper -> mapper.getTotal().floatValue())))
+                .entrySet().stream()
+                .map(mapper -> new ReporteContableDto(mapper.getKey(), mapper.getValue()))
+                .collect(Collectors.toList());
+        
+        return x;
+    }
+    
+    String grouping(ActComprobante item){
+        return item.getFecha().format(YYYYMMDD_FORMATER);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 import com.deinsoft.puntoventa.business.commons.controller.CommonController;
+import com.deinsoft.puntoventa.business.dto.ReporteContableDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import javax.validation.Valid;
@@ -269,5 +270,11 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         httpHeaders.setContentLength(data.getData().length);
         return ResponseEntity.ok().headers(httpHeaders).body(data);
+    }
+    
+    @GetMapping(value = "/get-list-contable")
+    public List<ReporteContableDto> getListaReporteContable(@Param("cnfLocalId") Long cnfLocalId) {
+        List<ReporteContableDto> listReporteContableDto = actComprobanteService.getListaReporteContable(cnfLocalId);
+        return listReporteContableDto;
     }
 }

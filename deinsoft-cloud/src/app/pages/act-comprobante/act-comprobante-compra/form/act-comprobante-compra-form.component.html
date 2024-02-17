@@ -31,7 +31,7 @@
                                     
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagCompraRapida === '1'">
+                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagCompraRapida === 0">
                                         <div class="form-group-sm row">
                                             <label
                                                 class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_local'
@@ -218,7 +218,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagCompraRapida === '1'">
+                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagCompraRapida === 0">
                                         <div class="form-group-sm row">
                                             <label
                                                 class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_moneda'
@@ -244,7 +244,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagCompraRapida === '1'">
+                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagCompraRapida === 0">
                                         <div class="form-group-sm row">
                                             <label
                                                 class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.inv_almacen'
@@ -269,7 +269,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagCompraRapida === '1'">
+                                    <div class="col-lg-12 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagCompraRapida === 0">
                                         <div class="form-group-sm row">
                                             <label for="observacion"
                                                 class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.observacion'
@@ -278,7 +278,7 @@
                                             <div class="col-sm-12 col-lg-12">
                                                 <input type="text" [(ngModel)]="model.observacion" maxlength="100"
                                                     name="observacion" id="observacion" name="observacion"
-                                                    class="form-control-sm col-sm-12 col-lg-12"
+                                                    class="form-control col-sm-12 col-lg-12"
                                                     placeholder="Ingrese observacion" />
                                             </div>
                                         </div>
@@ -296,7 +296,7 @@
                                         |
                                         translate}}</label>
                                     <div class="col-6">
-                                        <label class="col-sm-12 col-lg-12 col-form-label text-right">{{model.cnfMoneda.simbolo}} {{model.subtotal | number : '1.2-2'}}</label>
+                                        <label class="col-sm-12 col-lg-12 col-form-label text-right">{{model.cnfMoneda?.simbolo}} {{model.subtotal | number : '1.2-2'}}</label>
                                         <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.subtotal">
                                             {{ error.subtotal }}
                                         </div>
@@ -308,7 +308,7 @@
                                         class="col-6 col-form-label">{{'webpagos.act_comprobante.igv' |
                                         translate}}</label>
                                     <div class="col-6">
-                                        <label class="col-sm-12 col-lg-12 col-form-label text-right">{{model.cnfMoneda.simbolo}} {{model.igv | number : '1.2-2'}}</label>
+                                        <label class="col-sm-12 col-lg-12 col-form-label text-right">{{model.cnfMoneda?.simbolo}} {{model.igv | number : '1.2-2'}}</label>
                                     </div>
                                 </div>
                                 <hr/>    
@@ -319,7 +319,7 @@
                                         translate}} <span
                                             style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                                     <div class="col-6">
-                                        <label class="col-sm-12 col-lg-12 col-form-label text-right">{{model.cnfMoneda.simbolo}} {{ model.total | number : '1.2-2'}}</label>
+                                        <label class="col-sm-12 col-lg-12 col-form-label text-right">{{model.cnfMoneda?.simbolo}} {{ model.total | number : '1.2-2'}}</label>
                                         <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.total">{{
                                             error.total }}</div>
                                     </div>

@@ -93,6 +93,9 @@ export class ActComprobanteService {
     let params = new HttpParams().set("id",arg1);
     return this.http.post(this.url+'/validate-act-comprobante', params); 
   }
-  
+  public getReportContable(localId: number): Observable<any> {
+    let params = new HttpParams().set("cnfLocalId",localId);
+    return this.http.get<any>(this.url + '/get-list-contable', { params });
+  }
 }
 
