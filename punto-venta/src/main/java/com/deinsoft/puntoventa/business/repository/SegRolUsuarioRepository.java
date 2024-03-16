@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SegRolUsuarioRepository extends JpaRepository<SegRolUsuario, Long> {
 
     List<SegRolUsuario> findBySegUsuarioId(long id);
+    
+    List<SegRolUsuario> findBySegRolId(long id);
 }

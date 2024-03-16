@@ -131,12 +131,12 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
       });
     })
   }
-  print(item: any) {
-    this.modalRef = this.deps.modalService.open(MessageModalComponent);
-    this.modalRef.componentInstance.message = "Impresión de comprobante";
-    this.modalRef.componentInstance.id = item.id;
+  // print(item: any) {
+  //   this.modalRef = this.deps.modalService.open(MessageModalComponent);
+  //   this.modalRef.componentInstance.message = "Impresión de comprobante";
+  //   this.modalRef.componentInstance.id = item.id;
 
-  }
+  // }
   sendApi(item: any) {
     this.deps.utilService.confirmOperation(null).then((result) => {
       if (result) {
@@ -158,7 +158,7 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
         extension = "xlsx";
       }
       const blob = new Blob([data.body], { type: contentType });
-      this.generateAttachment(blob, extension);
+      this.generateAttachment("Cuentas por cobrar", blob, extension);
     })
     
   }
@@ -233,7 +233,7 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
       ;
       // this.modalRef.componentInstance.id = m.id;
       this.modalRef.closed.subscribe(result => {
-        this.deps.router.navigate(["/venta"]);
+        this.deps.router.navigate(["/cuentas-cobrar"]);
         // this.model.cnfBpartner = 
       })
       // this.deps.actPagoService.saveFromList(this.listData).subscribe(m => {
@@ -266,5 +266,6 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
     
      
   }
+  
 }
 

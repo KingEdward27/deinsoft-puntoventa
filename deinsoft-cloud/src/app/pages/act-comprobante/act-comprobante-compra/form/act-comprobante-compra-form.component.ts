@@ -92,7 +92,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   public modelOrig: ActComprobante = new ActComprobante();
   cnfProducto: any;
   formatter = (x: { nombre: string }) => x.nombre;
-  formatterCnfMaestro = (x: CnfMaestro ) => (x.apellidoPaterno + ' '+x.apellidoMaterno+ ' '+x.nombres).trim();
+  formatterCnfMaestro = (x: CnfMaestro ) => (x.razonSocial).trim();
 
   loadingCnfImpuestoCondicion: boolean = false;
   selectDefaultImpuestoCondicion: any = { id: 0, nombre: "- Seleccione -" };
@@ -219,8 +219,10 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     actComprobanteDetalle.cantidad = 1
     actComprobanteDetalle.cnfImpuestoCondicion.id = 1
     actComprobanteDetalle.precio = event.item.costo
+    actComprobanteDetalle.precioVenta = event.item.precio
     actComprobanteDetalle.importe = event.item.costo
     actComprobanteDetalle.cnfImpuestoCondicion.id = 1
+    actComprobanteDetalle.porcentajeGanancia = event.item.porcentajeGanancia
     actComprobanteDetalle.afectacionIgv
       = actComprobanteDetalle.importe - actComprobanteDetalle.importe / 1.18
 
@@ -228,6 +230,8 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     this.model.subtotal = Math.round((this.model.total / 1.18 + Number.EPSILON) * 100) / 100;
     this.model.descuento = 0
     this.model.igv = Math.round((this.model.total - this.model.subtotal + Number.EPSILON) * 100) / 100
+    console.log(actComprobanteDetalle);
+    
     this.model.listActComprobanteDetalle.push(actComprobanteDetalle);
     input.value = '';
   }
@@ -479,10 +483,12 @@ export class ActComprobanteCompraFormComponent implements OnInit {
       = item.importe - item.importe / 1.18
     this.updateTotals()
   }
-  onChangePrecio(item: any, value: any) {
+  onChangeCosto(item: any, value: any) {
     item.importe = item.cantidad * value;
-    item.afectacionIgv
-      = item.importe - item.importe / 1.18
+    console.log(item.porcentajeGanancia);
+    
+    item.precioVenta = (value*1) + (value * ((item.porcentajeGanancia)?(item.porcentajeGanancia/100):0));
+    item.afectacionIgv = item.importe - item.importe / 1.18
     this.updateTotals()
   }
   updateTotals() {

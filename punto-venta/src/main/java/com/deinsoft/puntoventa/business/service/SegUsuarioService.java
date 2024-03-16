@@ -9,11 +9,17 @@ import com.deinsoft.puntoventa.business.model.SegUsuario;
 
 @Service
 @Transactional
-public interface SegUsuarioService extends CommonService<SegUsuario>{
-	
-	public List<SegUsuario> getAllSegUsuario(SegUsuario segUsuario);
-	public SegUsuario getSegUsuario(Long id);
-	public SegUsuario saveSegUsuario(SegUsuario segUsuario);
-	public List<SegUsuario> getAllSegUsuario();
-	public void delete(long id);
+public interface SegUsuarioService extends CommonService<SegUsuario> {
+
+    public List<SegUsuario> getAllSegUsuario(SegUsuario segUsuario);
+
+    public SegUsuario getSegUsuario(Long id);
+
+    public SegUsuario saveSegUsuario(SegUsuario segUsuario);
+
+    public List<SegUsuario> getAllSegUsuario();
+
+    public void delete(long id);
+
+    SegUsuario registerNewUser(SegUsuario segUsuario) throws Exception;
 }

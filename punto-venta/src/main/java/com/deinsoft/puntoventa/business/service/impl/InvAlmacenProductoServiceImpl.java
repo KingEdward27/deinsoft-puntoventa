@@ -93,6 +93,8 @@ public class InvAlmacenProductoServiceImpl
             invMovimientoProductoRepository.deleteByActComprobante(actComprobante);
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
                 if (!data.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
+                    
+                    CnfProducto cnfProducto = cnfProductoRepository.getById(data.getCnfProducto().getId());
                     List<InvAlmacenProducto> list
                             = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
 
@@ -135,28 +137,37 @@ public class InvAlmacenProductoServiceImpl
                     mov.setFechaRegistro(LocalDateTime.now());
                     mov.setCantidad(data.getCantidad().multiply(
                             actComprobante.getFlagIsventa().equals("1") ? BigDecimal.valueOf(-1) : BigDecimal.ONE));
-                    mov.setValor(data.getPrecio());
+                    mov.setValor(actComprobante.getFlagIsventa().equals("1") ? cnfProducto.getCosto() : data.getPrecio());
                     invMovimientoProductoRepository.save(mov);
                     
-                    List<InvMovimientoProducto> listMovs = (List<InvMovimientoProducto>) 
-                            invMovimientoProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
-                    BigDecimal costo = BigDecimal.ZERO;
-                    BigDecimal costoTotal = BigDecimal.ZERO;
-                    BigDecimal cantidad = BigDecimal.ZERO;
-                    for (InvMovimientoProducto invMovimientoProducto : listMovs) {
-                        cantidad = cantidad.add(invMovimientoProducto.getCantidad());
-                        costoTotal = costoTotal.add(invMovimientoProducto.getCantidad().multiply(invMovimientoProducto.getValor()));
+                    if (!actComprobante.getFlagIsventa().equals("1")) {
+                        List<InvMovimientoProducto> listMovs = (List<InvMovimientoProducto>) 
+                            invMovimientoProductoRepository.findByCnfProductoId(data.getCnfProducto().getId(), actComprobante.getInvAlmacen().getId());
+                        BigDecimal costo = BigDecimal.ZERO;
+                        BigDecimal costoTotal = BigDecimal.ZERO;
+                        BigDecimal cantidad = BigDecimal.ZERO;
+                        for (InvMovimientoProducto invMovimientoProducto : listMovs) {
+                            //solo compras
+                            if (invMovimientoProducto.getCantidad().compareTo(BigDecimal.ZERO) > 0) {
+                                cantidad = cantidad.add(invMovimientoProducto.getCantidad());
+                                costoTotal = costoTotal.add(invMovimientoProducto.getCantidad().multiply(invMovimientoProducto.getValor()));
+                            }
+    //                        invMovimientoProducto.setCant(cantidad);
+    //                        invMovimientoProducto.setCostoTotal(costoTotal);
+    //                        invMovimientoProducto.setCosto(costo);
+                        }
                         
-
-//                        invMovimientoProducto.setCant(cantidad);
-//                        invMovimientoProducto.setCostoTotal(costoTotal);
-//                        invMovimientoProducto.setCosto(costo);
+                        costo = costoTotal.divide(cantidad, 2, RoundingMode.HALF_UP);
+                        //actualizar precio, metodo promedio ponerado, proxima configuracion de empresa
+                        cnfProducto.setCosto(costo);
+                        cnfProducto.setPrecio(data.getPrecioVenta());
+                        BigDecimal gananciaPorcentaje = 
+                                data.getPrecioVenta().divide(costo, 2, RoundingMode.HALF_UP)
+                                        .multiply(new BigDecimal("100.00")).subtract(new BigDecimal("100.00"));
+                        cnfProducto.setPorcentajeGanancia(gananciaPorcentaje.floatValue());
+                        cnfProductoRepository.save(cnfProducto);
                     }
-                    costo = costoTotal.divide(cantidad, 2, RoundingMode.HALF_UP);
-                    //actualizar costo
-                    CnfProducto cnfProducto = cnfProductoRepository.getById(data.getCnfProducto().getId());
-                    cnfProducto.setCosto(costo);
-                    cnfProductoRepository.save(cnfProducto);
+                    
                 }
 
             });

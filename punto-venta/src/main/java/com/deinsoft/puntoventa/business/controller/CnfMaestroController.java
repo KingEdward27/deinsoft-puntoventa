@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import com.deinsoft.puntoventa.business.model.CnfMaestro;
 import com.deinsoft.puntoventa.business.service.CnfMaestroService;
 import com.deinsoft.puntoventa.framework.util.Util;
+import com.google.common.collect.HashBiMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collector;
@@ -45,7 +46,7 @@ public class CnfMaestroController extends CommonController<CnfMaestro, CnfMaestr
     }
 
     @PostMapping(value = "/save-cnf-maestro")
-    public ResponseEntity<?> saveCnfMaestro(@Valid @RequestBody CnfMaestro cnfMaestro, BindingResult result) {
+    public ResponseEntity<?> saveCnfMaestro(@Valid @RequestBody CnfMaestro cnfMaestro, BindingResult result) throws Exception {
         Map<String, Object> errores = new HashMap<>();
         if(cnfMaestro.getCnfTipoDocumento().getId() == 0){
             errores.put("cnfTipoDocumento.nombre", " Debe seleccionar el tipo de documento");
@@ -57,6 +58,9 @@ public class CnfMaestroController extends CommonController<CnfMaestro, CnfMaestr
                 && cnfMaestro.getNombres().trim().equals("")){
             errores.put("nombres", " Debe ingresar los nombres del cliente o proveedor");
         }
+        if(cnfMaestro.getNroDoc().equals("")){
+            errores.put("nombres", " Debe ingresar el número de documento del cliente o proveedor");
+        }
         if(cnfMaestro.getCnfTipoDocumento().getCodigoSunat().equals("6") 
                 && cnfMaestro.getRazonSocial().trim().equals("")){
             errores.put("razonSocial", " Debe ingresar la Razón Social del cliente o proveedor");
@@ -64,7 +68,7 @@ public class CnfMaestroController extends CommonController<CnfMaestro, CnfMaestr
         if(!errores.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errores);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(cnfMaestroService.save(cnfMaestro));
+        return ResponseEntity.status(HttpStatus.CREATED).body(cnfMaestroService.saveCnfMaestro(cnfMaestro));
     }
 
     @GetMapping(value = "/get-all-cnf-maestro-combo")
@@ -113,10 +117,12 @@ public class CnfMaestroController extends CommonController<CnfMaestro, CnfMaestr
     @GetMapping(value = "/get-search-sunat")
     public ResponseEntity<?> searchSunat (@Param("nroDoc") String nroDoc) throws Exception{
         Map<String,Object> result = null;
+        Map<String,String> param = new HashMap<>();
+        param.put("numero", nroDoc);
         if (nroDoc.length() == 8) {
-            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/dni", "", Map.of("numero", nroDoc));
+            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/dni", "", param);
         } else if (nroDoc.length() == 11) {
-            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/ruc", "", Map.of("numero", nroDoc));
+            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/ruc", "", param);
         }
         
         return ResponseEntity.status(HttpStatus.OK).body(result);

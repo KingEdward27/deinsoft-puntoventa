@@ -11,7 +11,7 @@ export class ActCajaOperacion {
 	monto!: number;
 	fecha?: dayjs.Dayjs | null;
 	fechaRegistro!: dayjs.Dayjs | null;
-	flagIngreso: string = "";
+	flagIngreso!: string;
 	estado: string = "";
 	actCajaTurno: ActCajaTurno = new ActCajaTurno();
 	actComprobante: ActComprobante = new ActComprobante();

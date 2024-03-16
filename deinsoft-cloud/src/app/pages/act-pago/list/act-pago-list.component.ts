@@ -6,6 +6,7 @@ import { ActPago } from '../../../business/model/act-pago.model';
 import { CommonReportFormComponent, MyBaseComponentDependences } from '../../reports/base/common-report.component';
 import { NgbDateParserFormatter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { CustomAdapter, CustomDateParserFormatter } from '../../../base/util/CustomDate';
+import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
 @Component({
   selector: 'app-act-pago-list',
   templateUrl: './act-pago-list.component.html',
@@ -83,7 +84,7 @@ export class ActPagoListComponent extends CommonReportFormComponent implements O
 
   }
   eliminar(e: ActPago) {
-    this.deps.utilService.confirmProcessWithReturn("Debe ingresar la clave de adminsitrador","clave administrador").then((result) => {
+    this.deps.utilService.confirmProcessWithReturn("Debe ingresar la clave de administrador","clave administrador").then((result) => {
       if (result) {
         this.deps.utilService.confirmDelete(e).then((result) => {
           if (result) {
@@ -101,5 +102,15 @@ export class ActPagoListComponent extends CommonReportFormComponent implements O
       }
     });
     
+  }
+  print(item: any){
+    this.modalRef = this.deps.modalService.open(MessageModalComponent);
+    this.modalRef.componentInstance.message = "Documento " + item.serie + " - " + item.numero + " generado correctamente";
+    this.modalRef.componentInstance.id = item.id;
+    this.modalRef.componentInstance.business='act-pago'
+    this.modalRef.closed.subscribe(result => {
+      this.deps.router.navigate(["/list-pagos"]);
+      // this.model.cnfBpartner = 
+    })
   }
 }

@@ -96,7 +96,7 @@ export class ActComprobanteFormComponent implements OnInit {
   public modelOrig: ActComprobante = new ActComprobante();
   cnfProducto: any;
   formatter = (x: { nombre: string }) => x.nombre;
-  formatterCnfMaestro = (x: CnfMaestro ) => (x.apellidoPaterno + ' '+x.apellidoMaterno+ ' '+x.nombres).trim();
+  formatterCnfMaestro = (x: CnfMaestro ) => (x.razonSocial).trim();
 
   loadingCnfImpuestoCondicion: boolean = false;
   selectDefaultImpuestoCondicion: any = { id: 0, nombre: "- Seleccione -" };

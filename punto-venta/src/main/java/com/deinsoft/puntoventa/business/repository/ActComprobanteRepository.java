@@ -48,10 +48,11 @@ public interface ActComprobanteRepository extends JpaRepository<ActComprobante, 
 
     @Query(value = "select p from actComprobante p "
             + "where (:#{#paramBean.cnfLocal.id} = 0l or p.cnfLocal.id = :#{#paramBean.cnfLocal.id}) "
+            //+ "and p.cnfLocal.cnfEmpresa.id = :#{#paramBean.cnfEmpresa.id} "
             + "and (p.flagIsventa = :#{#paramBean.flagIsventa}) "
             + "and (:#{#paramBean.invAlmacen.id} = 0l or p.invAlmacen.id = :#{#paramBean.invAlmacen.id}) "
             + "and (:#{#paramBean.cnfMaestro.id} = 0l or p.cnfMaestro.id = :#{#paramBean.cnfMaestro.id}) "
-            + "and (p.fecha between :#{#paramBean.fechaDesde} and :#{#paramBean.fechaHasta})")
+            + "and (p.fecha between :#{#paramBean.fechaDesde} and :#{#paramBean.fechaHasta}) and p.flagEstado = '2'")
     List<ActComprobante> getReportActComprobante(@Param("paramBean") ParamBean paramBean);
 
 }

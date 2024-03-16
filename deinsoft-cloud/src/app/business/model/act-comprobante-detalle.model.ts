@@ -11,8 +11,10 @@ export class ActComprobanteDetalle {
 	descuento!: number;
 	importe!: number;
 	afectacionIgv!: number;
+	porcentajeGanancia!: number;
 	actComprobante: ActComprobante = new ActComprobante();
 	cnfProducto: CnfProducto = new CnfProducto();
 	cnfImpuestoCondicion: CnfImpuestoCondicion = new CnfImpuestoCondicion();
 	token?: string = "";
+	precioVenta!: number;
 };

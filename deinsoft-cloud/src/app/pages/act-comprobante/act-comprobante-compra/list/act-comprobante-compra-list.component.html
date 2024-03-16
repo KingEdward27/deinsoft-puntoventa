@@ -1,21 +1,4 @@
-<!-- Content Header (Page header) -->
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>{{'webpagos.reportes.act_comprobante_compra_listado'| translate}}</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.adminModule"></a></li>
-                    <li class="breadcrumb-item active">{{'webpagos.reportes.act_comprobante_compra_listado'| translate}}</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-    <!-- /.container-fluid -->
-</section>
+
 
 <!-- Main content -->
 <section class="content">
@@ -234,11 +217,9 @@
                                                 <td>{{item.cnfTipoComprobante.nombre}}</td>
                                                 <td>{{item.cnfFormaPago.nombre}}</td>
                                                 <td>{{item.serie + '-' +item.numero}}</td>
-                                                <td>{{item.cnfMaestro.apellidoPaterno + ' ' +
-                                                    item.cnfMaestro.apellidoMaterno + ' ' + item.cnfMaestro.nombres}}
-                                                </td>
+                                                <td>{{item.cnfMaestro.razonSocial}}</td>
                                                 <td class="content-number">{{item.cnfMoneda.simbolo + ' ' + (item.total | number:'1.2-2')}}</td>
-                                                <td><p [ngClass]="'state' + item.flagEstado">{{item.flagEstado == '1'? "Registrado":item.flagEstado == '2'? "Finalizado" :"Anulado"}}</p> </td>
+                                                <td><p [ngClass]="'state' + item.flagEstado">{{item.flagEstado == '1'? "Registrado":item.flagEstado == '2'? "Validado" :"Anulado"}}</p> </td>
                                                 <td>
                                                     <div class="row row2">
                                                         <div 
@@ -249,7 +230,7 @@
                                                             <a class="fas fa-edit"
                                                             (click)="editar(item)" style="cursor: pointer;"
                                                             title="{{'webpagos.btnEdit' | translate}}"></a></div>
-                                                        <div *ngIf="item.flagEstado == '1'" class="col-lg-3 col-sm-6 col-xs-6"><a 
+                                                        <div *ngIf="item.flagEstado == '1' || item.flagEstado == '2'" class="col-lg-3 col-sm-6 col-xs-6"><a 
                                                             class="fas fa-ban fa-md" 
                                                             style="cursor: pointer;"
                                                                 title="Anular" (click) = "anular(item)"><i

@@ -63,8 +63,11 @@ export class CnfMaestroService {
     let params = new HttpParams()
     .set("nroDoc",nrodoc)
     return this.http.get<any>(`${this.url}/get-search-sunat`, { params });
-    
-    
+  }
+  public getApiNameByDoc2(nrodoc: string): Observable<any> {
+    let params = new HttpParams()
+    .set("nroDoc",nrodoc)
+    return this.http.get<any>(`${environment.apiUrl}/api/business/get-data-sunat`, { params });
   }
 }
 

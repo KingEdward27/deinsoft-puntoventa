@@ -6,6 +6,7 @@ import java.time.*;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
 import java.math.BigDecimal;
+import javax.validation.Valid;
 
 @Entity(name = "actCajaOperacion")
 @Table(name = "act_caja_operacion")
@@ -18,9 +19,11 @@ public class ActCajaOperacion implements Serializable {
     @Column(name = "act_caja_operacion_id", nullable = false, unique = true)
     private long id;
 
+    @NotNull
     @Column(name = "monto", length = 18, nullable = true)
     private BigDecimal monto;
 
+    @NotNull
     @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "fecha", length = 0, nullable = true)
     private LocalDate fecha;
@@ -28,6 +31,8 @@ public class ActCajaOperacion implements Serializable {
     @Column(name = "fecha_registro", nullable = true)
     private LocalDateTime fechaRegistro;
 
+    @NotEmpty
+    @NotNull
     @Size(max = 1)
     @Column(name = "flag_ingreso", length = 1, nullable = true)
     private String flagIngreso;
@@ -36,6 +41,7 @@ public class ActCajaOperacion implements Serializable {
     @Column(name = "estado", length = 1, nullable = true)
     private String estado;
 
+    @Valid
     @OneToOne
     @JoinColumn(name = "act_caja_turno_id")
     private ActCajaTurno actCajaTurno;

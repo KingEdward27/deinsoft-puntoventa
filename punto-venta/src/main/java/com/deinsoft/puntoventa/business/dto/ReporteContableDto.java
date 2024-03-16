@@ -11,6 +11,7 @@ package com.deinsoft.puntoventa.business.dto;
 public class ReporteContableDto {
     String periodo;
     Double total;
+    String fileName;
 
     public String getPeriodo() {
         return periodo;
@@ -28,12 +29,21 @@ public class ReporteContableDto {
         this.total = total;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     public ReporteContableDto() {
     }
 
-    public ReporteContableDto(String periodo, Double total) {
+    public ReporteContableDto(String periodo, Double total, String fileName) {
         this.periodo = periodo;
         this.total = total;
+        this.fileName = fileName;
     }
     
     

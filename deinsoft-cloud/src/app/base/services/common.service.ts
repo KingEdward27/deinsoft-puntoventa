@@ -3,6 +3,7 @@ import { Injectable, Input } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Detail } from '../components/model/Detail';
 import { UpdateParam } from '../components/model/UpdateParam';
+import { environment } from 'environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,9 @@ export  class CommonService {
   protected cabeceras: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   private currentUserSubject : BehaviorSubject<any>
   onPreSave: () => boolean;
-  constructor(protected http: HttpClient) { }
+  constructor(protected http: HttpClient) { 
+    this.baseEndpoint = environment.apiUrl;
+  }
   
   public getProperties(){
     return this.properties;
@@ -125,6 +128,7 @@ export  class CommonService {
     }
     return this.http.post<any>(this.baseEndpoint +  url,param,{responseType: responseType} );
   }
+  
   public update(tableName:string, columns:any,condition: string):Observable<HttpResponse<{}>> {
     console.log("update");
     let param = new UpdateParam();
@@ -145,5 +149,11 @@ export  class CommonService {
   }
   public export(jsonData:any): Observable<any> {
     return this.http.post(this.baseEndpoint+"/api/framework/export/excel", jsonData,{observe: 'response', responseType: 'blob'});
+  }
+  public registerNewUser(jsonData:any): Observable<any> {
+    console.log(jsonData);
+    console.log(this.baseEndpoint+"/api/business/register-new-user");
+    
+    return this.http.post(this.baseEndpoint+"/api/business/register-new-user", jsonData);
   }
 }

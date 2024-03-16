@@ -176,17 +176,25 @@
                             <td>{{item.fecha}}</td>
                             <td>{{item.cnfTipoComprobante?.nombre}}</td>
                             <td>{{item.serie}} - {{item.numero}}</td>
-                            <td>{{item.listActPagoDetalle[0].actPagoProgramacion.actContrato.cnfMaestro.razonSocial}}</td>
-                            <td>{{item.listActPagoDetalle[0].actPagoProgramacion.actContrato.cnfPlanContrato.nombre}}</td>
-                            <td>{{item.listActPagoDetalle[0].actPagoProgramacion.actContrato.serie + '-' + item.listActPagoDetalle[0].actPagoProgramacion.actContrato.numero}}</td>
+                            <td>{{item.listActPagoDetalle[0].actPagoProgramacion.actContrato? 
+                                item.listActPagoDetalle[0].actPagoProgramacion.actContrato.cnfMaestro.razonSocial:
+                                item.listActPagoDetalle[0].actPagoProgramacion.actComprobante.cnfMaestro.razonSocial}}</td>
+                            <td>{{item.listActPagoDetalle[0].actPagoProgramacion.actContrato?
+                                item.listActPagoDetalle[0].actPagoProgramacion.actContrato.cnfPlanContrato.nombre:''}}</td>
+                            <td>{{item.listActPagoDetalle[0].actPagoProgramacion.actContrato?
+                                item.listActPagoDetalle[0].actPagoProgramacion.actContrato.serie + '-' + item.listActPagoDetalle[0].actPagoProgramacion.actContrato.numero:
+                                item.listActPagoDetalle[0].actPagoProgramacion.actComprobante.serie + '-' + item.listActPagoDetalle[0].actPagoProgramacion.actComprobante.numero}}</td>
                             <td class="content-number">S/ {{item.igv | number:'1.2-2'}}</td>
                             <td class="content-number">S/ {{item.subtotal | number:'1.2-2'}}</td>
                             <td class="content-number">S/ {{item.total | number:'1.2-2'}}</td>
                             <td>
                                 <div class="row2">
-                                    <div class="col-lg-12 col-sm-12 col-xs-12 text-center"><a (click)="eliminar(item)" style="cursor: pointer;"
-                                            title="{{'webpagos.btnDelete' | translate}}"><i
-                                                class="fa fa-trash fa-lg"></i></a></div>
+                                    <div class="col-6 text-center"><a (click)="eliminar(item)"  class="fa fa-trash fa-md" style="cursor: pointer;"
+                                            title="{{'webpagos.btnDelete' | translate}}"></a></div>
+                                
+                                    <div class="col-6 text-center"><a (click)="print(item)"
+                                            class="fa fa-print fa-md" style="cursor: pointer;"
+                                            title="Imprimir"></a></div>
                                 </div>
                             </td>
                         </tr>

@@ -12,6 +12,8 @@ import com.deinsoft.puntoventa.business.model.InvMovimientoProducto;
 import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoRepository;
 import com.deinsoft.puntoventa.business.service.InvMovimientoProductoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.model.ActComprobanteDetalle;
+import com.deinsoft.puntoventa.business.model.CnfProducto;
 import com.deinsoft.puntoventa.business.model.InvAlmacenProducto;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -54,8 +56,8 @@ public class InvMovimientoProductoServiceImpl
         return InvMovimientoProductoList;
     }
 
-    public List<InvMovimientoProducto> getAllInvMovimientoProductoByCnfProducto(long id) {
-        List<InvMovimientoProducto> InvMovimientoProductoList = (List<InvMovimientoProducto>) invMovimientoProductoRepository.findByCnfProductoId(id);
+    public List<InvMovimientoProducto> getAllInvMovimientoProductoByCnfProducto(long id,long idAlmacen) {
+        List<InvMovimientoProducto> InvMovimientoProductoList = (List<InvMovimientoProducto>) invMovimientoProductoRepository.findByCnfProductoId(id,idAlmacen);
         return InvMovimientoProductoList;
     }
 
@@ -84,10 +86,15 @@ public class InvMovimientoProductoServiceImpl
         BigDecimal costoTotal = BigDecimal.ZERO;
         BigDecimal cantidad = BigDecimal.ZERO;
         for (InvMovimientoProducto invMovimientoProducto : list) {
+            
             cantidad = cantidad.add(invMovimientoProducto.getCantidad());
             costoTotal = costoTotal.add(invMovimientoProducto.getCantidad().multiply(invMovimientoProducto.getValor()));
             costo = costoTotal.divide(cantidad, 2, RoundingMode.HALF_UP);
-            
+//            costo = invMovimientoProducto.getActComprobante()
+//                    .getListActComprobanteDetalle().stream()
+//                    .filter(predicate -> predicate.getCnfProducto().getId() == invMovimientoProducto.getCnfProducto().getId())
+//                    .findFirst().orElse(new ActComprobanteDetalle()).getCnfProducto().getCosto();
+//            costoTotal = costoTotal.add(invMovimientoProducto.getCantidad().multiply(costo));
             invMovimientoProducto.setCant(cantidad);
             invMovimientoProducto.setCostoTotal(costoTotal);
             invMovimientoProducto.setCosto(costo);

@@ -58,6 +58,13 @@ public class ActComprobanteDetalle implements Serializable {
     @OneToOne
     @JoinColumn(name = "cnf_impuesto_condicion_id")
     private CnfImpuestoCondicion cnfImpuestoCondicion;
+    
+    @Transient
+    private Float porcentajeGanancia;
+    
+    //al comprar
+    @Transient
+    private BigDecimal precioVenta;
 
     public long getId() {
         return id;
@@ -144,4 +151,23 @@ public class ActComprobanteDetalle implements Serializable {
         return "actComprobanteDetalle [id=" + id + ", actComprobante=" + (actComprobante != null ? actComprobante : "") + ", cnfProducto=" + (cnfProducto != null ? cnfProducto : "") + ", cnfImpuestoCondicion=" + (cnfImpuestoCondicion != null ? cnfImpuestoCondicion : "") + ", descripcion=" + descripcion + ", cantidad=" + cantidad + ", precio=" + precio + ", descuento=" + descuento + ", importe=" + importe + ", afectacionIgv=" + afectacionIgv + "]";
     }
 
+    public Float getPorcentajeGanancia() {
+        return porcentajeGanancia;
+    }
+
+    public void setPorcentajeGanancia(Float porcentajeGanancia) {
+        this.porcentajeGanancia = porcentajeGanancia;
+    }
+
+    
+
+    public BigDecimal getPrecioVenta() {
+        return precioVenta;
+    }
+
+    public void setPrecioVenta(BigDecimal precioVenta) {
+        this.precioVenta = precioVenta;
+    }
+
+    
 }

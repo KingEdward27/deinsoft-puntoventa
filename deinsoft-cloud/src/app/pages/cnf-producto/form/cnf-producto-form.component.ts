@@ -222,7 +222,8 @@ export class CnfProductoFormComponent implements OnInit {
   getListCnfMarca() {
     this.loadingCnfMarca = true;
     console.log(this.chargingsb);
-    return this.cnfMarcaService.getAllDataCombo().subscribe(data => {
+    let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+    return this.cnfMarcaService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
       this.listCnfMarca = data;
       this.loadingCnfMarca = false;
     })

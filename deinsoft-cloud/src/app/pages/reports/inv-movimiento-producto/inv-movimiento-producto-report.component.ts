@@ -193,7 +193,7 @@ export class InvMovimientoProductoReportFormComponent extends CommonReportFormCo
         extension = "xlsx";
       }
       const blob = new Blob([data.body], { type: contentType });
-      this.generateAttachment(blob, extension);
+      this.generateAttachment("Movimiento de productos", blob, extension);
     })
     
   }

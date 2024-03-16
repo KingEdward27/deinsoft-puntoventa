@@ -374,13 +374,15 @@
                                         <thead>
                                             <tr>
                                                 <th width="1%">Nro.</th>
-                                                <th class="text-nowrap">{{'webpagos.cnf_producto.nombre' | translate}}</th>
+                                                <th width="15%" class="text-nowrap">{{'webpagos.cnf_producto.nombre' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante_detalle.cnf_impuesto_condicion' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.cnf_producto.descripcion' | translate}}</th>
-                                                <th class="text-nowrap">{{'webpagos.act_comprobante_detalle.cantidad' | translate}}</th>
-                                                <th class="text-nowrap">{{'webpagos.act_comprobante_detalle.precio' | translate}}</th>
-                                                <th class="text-nowrap">{{'webpagos.act_comprobante_detalle.importe' | translate}}</th>
-                                                <th width="1%" class="text-nowrap">{{'webpagos.actionsText' |
+                                                <th width="1%" class="text-nowrap">{{'webpagos.act_comprobante_detalle.cantidad' | translate}}</th>
+                                                <th width="10%" class="text-nowrap">{{'webpagos.act_comprobante_detalle.costo' | translate}}</th>
+                                                <th width="1%" class="text-nowrap">{{'webpagos.act_comprobante_detalle.porcentaje_ganancia' | translate}}</th>
+                                                <th width="5%" class="text-nowrap">{{'webpagos.act_comprobante_detalle.precio' | translate}}</th>
+                                                <th width="5%" class="text-nowrap">{{'webpagos.act_comprobante_detalle.importe' | translate}}</th>
+                                                <th width="10%" class="text-nowrap">{{'webpagos.actionsText' |
                                                     translate}}
                                                 </th>
                                             </tr>
@@ -402,32 +404,38 @@
                                                 </select></td>
                                                 <td><input type="text" 
                                                     [(ngModel)]="item.descripcion" 
-                                                    maxlength="14" name="descripcion"
+                                                    maxlength="100" name="descripcion_{{i}}"
                                                     class="form-control-sm col-sm-12 col-lg-12"
                                                     placeholder="Ingrese descripción" /></td>
                                                 <td><input type="number" 
                                                     [(ngModel)]="item.cantidad" 
                                                     maxlength="14" name="cantidad_{{i}}"
-                                                    class="form-control-sm col-sm-12 col-lg-12"
+                                                    class="form-control-sm col-sm-12 col-lg-12 content-number"
                                                     placeholder="Ingrese descripción"
                                                     (input)="onChangeCantidad(item,$event.target.value)"/></td>
                                                 <td><input type="number" 
                                                     [(ngModel)]="item.precio" 
                                                     maxlength="14" name="precio_{{i}}"
-                                                    class="form-control-sm col-sm-12 col-lg-12"
-                                                    placeholder="Ingrese precio" 
-                                                    (input)="onChangePrecio(item,$event.target.value)"/></td>
+                                                    class="form-control-sm col-sm-12 col-lg-12 content-number"
+                                                    placeholder="Ingrese costo" 
+                                                    (input)="onChangeCosto(item,$event.target.value)"/></td>
+                                                <td>{{item.porcentajeGanancia?item.porcentajeGanancia:0 | number : '1.2-2'}}%</td>    
+                                                <td><input type="number" 
+                                                            [(ngModel)]="item.precioVenta" 
+                                                            maxlength="14" name="precioVenta_{{i}}"
+                                                            class="form-control-sm col-sm-12 col-lg-12 content-number"
+                                                            placeholder="Ingrese precio" />
+                                                </td>
                                                 <td><input type="number" 
                                                     [(ngModel)]="item.importe" 
                                                     maxlength="14" name="importe_{{i}}"
-                                                    class="form-control-sm col-sm-12 col-lg-12"
+                                                    class="form-control-sm col-sm-12 col-lg-12 content-number"
                                                     placeholder="Ingrese importe" disabled /></td>
                                                 <td>
-                                                    <div class="row">
-                                                        <div class="col-sm-6 col-xs-6"><a
+                                                    <div class="row text-center">
+                                                        <div class="col-sm-6 col-xs-6"><a  class="fa fa-trash fa-lg"
                                                                 (click)="removeItem(i)"
-                                                                style="cursor: pointer;" title="Cambiar estado"><i
-                                                                    class="fa fa-trash fa-lg"></i></a></div>
+                                                                style="cursor: pointer;" title="Cambiar estado"></a></div>
                                                     </div>
                                                 </td>
                                             </tr>

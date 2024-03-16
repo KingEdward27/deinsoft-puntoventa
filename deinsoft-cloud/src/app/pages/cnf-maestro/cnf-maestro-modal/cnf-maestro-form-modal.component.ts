@@ -35,7 +35,7 @@ export class CnfMaestroFormModalComponent implements OnInit {
   isDanger: boolean = false;
   message: any = "";
   id: string = "";
-
+  seeAll:boolean = false;
   //variables propias
   public model: CnfMaestro = new CnfMaestro();
   selectDefaultCnfTipoDocumento: any = { id: 0, name: "- Seleccione -" }; listCnfTipoDocumento: any;
@@ -233,6 +233,9 @@ export class CnfMaestroFormModalComponent implements OnInit {
         this.model.nombres = data.nombres;
       })
     }
+  }
+  changeView(event:any){
+    this.seeAll = !this.seeAll;
   }
 }
 

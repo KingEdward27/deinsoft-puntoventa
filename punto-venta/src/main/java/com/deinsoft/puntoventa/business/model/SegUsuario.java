@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity(name = "segUsuario")
 @Table(name = "seg_usuario")
@@ -35,9 +36,8 @@ public class SegUsuario implements Serializable {
     @Column(name = "password", length = 255, nullable = true)
     private String password;
 
-    @NotEmpty
-    @Size(max = 10)
-    @Column(name = "estado", length = 10, nullable = false)
+    @ColumnDefault("1")
+    @Column(name = "estado", nullable = false)
     private int estado;
 
     @OneToOne(fetch=FetchType.LAZY)
@@ -46,6 +46,12 @@ public class SegUsuario implements Serializable {
     
     @Transient
     private List<SegRolUsuario> listSegRolUsuario;
+    
+    @Transient
+    private String rucEmpresa;
+    
+    @Transient
+    private String nombreEmpresa;
     
     public long getId() {
         return id;
@@ -106,6 +112,22 @@ public class SegUsuario implements Serializable {
     @Override
     public String toString() {
         return "segUsuario [id=" + id + ", email=" + email + ", nombre=" + nombre + ", password=" + password + ", estado=" + estado + "]";
+    }
+
+    public String getRucEmpresa() {
+        return rucEmpresa;
+    }
+
+    public void setRucEmpresa(String rucEmpresa) {
+        this.rucEmpresa = rucEmpresa;
+    }
+
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
+    }
+
+    public void setNombreEmpresa(String nombreEmpresa) {
+        this.nombreEmpresa = nombreEmpresa;
     }
 
 }

@@ -178,7 +178,7 @@
                                 <td>{{item.ultimoPago}}</td>
                                 <td class="content-number">S/ {{item.montoPendiente | number:'1.2-2'}}</td>
                                 <td>{{item.nroPoste}}</td>
-                                <td>{{item.estadoDescripcion}}</td>
+                                <td><p [ngClass]="'stateContrato' + item.flagEstado">{{item.estadoDescripcion}}</p></td>
                             </tr>
                         </tbody>
                     </table>

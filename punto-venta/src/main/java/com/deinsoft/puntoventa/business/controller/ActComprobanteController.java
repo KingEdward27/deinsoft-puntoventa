@@ -263,13 +263,20 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
         
     }
     @PostMapping(value = "/generateSireTxt")
-    public ResponseEntity<?> generateTxt(@RequestBody ParamBean paramBean){
+    public ResponseEntity<?> generateTxt(@RequestBody ParamBean paramBean, HttpServletResponse response) throws Exception {
         GeneratedFile data = actComprobanteService.generateSireTxt(paramBean);
+        ByteArrayInputStream stream = new ByteArrayInputStream(data.getData());
         HttpHeaders httpHeaders = new HttpHeaders();
+        ContentDisposition contentDisposition = ContentDisposition.builder("inline")
+          .filename("Filename")
+          .build();
+        httpHeaders.setContentDisposition(contentDisposition);
+//        httpHeaders.add("Content-Type", "application/zip");
         httpHeaders.setContentDisposition(ContentDisposition.builder("attachment").filename(data.getFileName()).build());
-        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        httpHeaders.setContentLength(data.getData().length);
-        return ResponseEntity.ok().headers(httpHeaders).body(data);
+//        httpHeaders.setContentLength(data.getData().length);
+        MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
+//        httpHeaders.set("fileName", data.getFileName());
+        return ResponseEntity.status(HttpStatus.CREATED).headers(httpHeaders).body(new InputStreamResource(stream));
     }
     
     @GetMapping(value = "/get-list-contable")

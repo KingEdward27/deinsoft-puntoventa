@@ -93,6 +93,10 @@ public class CnfProducto implements Serializable {
     @JoinColumn(name = "cnf_categoria_id")
     private CnfCategoria cnfCategoria;
     
+    
+    @Column(name = "porcentaje_ganancia", length = 14, nullable = true)
+    private Float porcentajeGanancia;
+    
     @Transient
     private long cnfEmpresaId;
     
@@ -227,6 +231,14 @@ public class CnfProducto implements Serializable {
     @Override
     public String toString() {
         return "cnfProducto [id=" + id + ", codigo=" + codigo + ", cnfEmpresa=" + (cnfEmpresa != null ? cnfEmpresa : "") + ", cnfMarca=" + (cnfMarca != null ? cnfMarca : "") + ", cnfSubCategoria=" + (cnfSubCategoria != null ? cnfSubCategoria : "") + ", cnfUnidadMedida=" + (cnfUnidadMedida != null ? cnfUnidadMedida : "") + ", nombre=" + nombre + ", precio=" + precio + ", existencia=" + existencia + ", fechaRegistro=" + fechaRegistro + ", rutaImagen=" + rutaImagen + ", flagEstado=" + flagEstado + ", barcode=" + barcode + "]";
+    }
+
+    public Float getPorcentajeGanancia() {
+        return porcentajeGanancia;
+    }
+
+    public void setPorcentajeGanancia(Float porcentajeGanancia) {
+        this.porcentajeGanancia = porcentajeGanancia;
     }
 
 }

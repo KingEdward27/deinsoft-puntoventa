@@ -39,7 +39,7 @@ public class CnfMaestroServiceImpl extends CommonServiceImpl<CnfMaestro, CnfMaes
         if (!Util.isNullOrEmpty(cnfMaestro.getNroDoc())) {
             CnfMaestro item = cnfMaestroRepository.findByNroDoc(cnfMaestro.getNroDoc());
             if (item == null || (item != null && item.getId() == null)) {
-                throw new Exception("Ya existe un  cloiente/trabajador con el mismo número de documento");
+                throw new Exception("Ya existe un  cliente/trabajador con el mismo número de documento");
             }
         }
         CnfMaestro cnfMaestroResult = cnfMaestroRepository.save(cnfMaestro);

@@ -3,7 +3,7 @@ import { CommonService } from '@/base/services/common.service';
 import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 // import { CustomAdapter, CustomDateParserFormatter } from 'src/app/util/CustomDate';
-import { NgbActiveModal, NgbCalendar, NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbCalendar, NgbDateAdapter, NgbDateParserFormatter, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'environments/environment';
 import { CnfImpuestoCondicionService } from '../../../business/service/cnf-impuesto-condicion.service';
 import { CnfImpuestoCondicion } from '../../../business/model/cnf-impuesto-condicion.model';
@@ -19,6 +19,7 @@ import { ActPagoService } from '../../../business/service/act-pago.service';
 import { UtilService } from '../../../services/util.service';
 import { CustomAdapter, CustomDateParserFormatter } from '@/base/util/CustomDate';
 import * as dayjs from 'dayjs';
+import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
 
 
 
@@ -58,6 +59,8 @@ export class ActPagoModalComponent implements OnInit {
   option: string = "1";
   @Output() result: EventEmitter<any> = new EventEmitter();
   public id = 0;
+  public modalRef!: NgbModalRef;
+
   constructor(public activeModal: NgbActiveModal,
     private cnfImpuestoCondicionService: CnfImpuestoCondicionService,
     private commonService: CommonService,
@@ -67,7 +70,9 @@ export class ActPagoModalComponent implements OnInit {
     private appService:AppService, 
     private dateAdapter: NgbDateAdapter<dayjs.Dayjs>,
     private ngbCalendar: NgbCalendar,
-    private actPagoService: ActPagoService, 
+    private actPagoService: ActPagoService,
+    private modalService: NgbModal, 
+    private router: Router,
     private utilService:UtilService) {
     this.commonService.baseEndpoint = environment.apiUrl;
   }
@@ -109,9 +114,17 @@ export class ActPagoModalComponent implements OnInit {
     // this.activeModal.close();
     this.model.numero = "1"
     this.actPagoService.save(this.model).subscribe(m => {
-        console.log(m);
-        this.utilService.msgOkSave();
-        window.location.reload();
+        this.modalRef = this.modalService.open(MessageModalComponent);
+        this.modalRef.componentInstance.message = "Documento " + m.serie + " - " + m.numero + " generado correctamente";
+        this.modalRef.componentInstance.id = m.id;
+        this.modalRef.componentInstance.business='act-pago'
+        this.modalRef.closed.subscribe(result => {
+          this.activeModal.close();
+          this.router.navigate(["/cuentas-cobrar"]);
+          // this.model.cnfBpartner = 
+        })
+        // this.utilService.msgOkSave();
+        // window.location.reload();
       }, err => {
         console.log(err);
       });

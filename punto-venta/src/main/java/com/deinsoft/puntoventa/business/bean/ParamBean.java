@@ -64,6 +64,8 @@ public class ParamBean {
     
     private int flagEstado;
     
+    private String periodo;
+    
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate fechaVencimiento;
     
@@ -197,6 +199,14 @@ public class ParamBean {
 
     public void setFlagEstado(int flagEstado) {
         this.flagEstado = flagEstado;
+    }
+
+    public String getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(String periodo) {
+        this.periodo = periodo;
     }
     
     

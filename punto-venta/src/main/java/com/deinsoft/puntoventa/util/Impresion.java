@@ -262,7 +262,8 @@ public class Impresion {
 
     }
 
-    public static ByteArrayInputStream Imprimir2(String staticResourcesFolder, int tipo, ActComprobante datosVenta, boolean isTicket) {
+    public static ByteArrayInputStream Imprimir2(String staticResourcesFolder, int tipo, 
+            ActComprobante datosVenta, boolean isTicket) {
         try {
             DateTimeFormatter YYYYMMDD_FORMATER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             JasperReport reporte = null;
@@ -564,7 +565,10 @@ public class Impresion {
                 beanMap.put("nro", count.toString());
                 beanMap.put("cantidad", Formatos.df.format(1));
                 beanMap.put("codigo", "ZZ");
-                beanMap.put("descripcion", detalleVenta.getActPagoProgramacion().getActContrato().getCnfPlanContrato().getNombre());
+                beanMap.put("descripcion", detalleVenta.getActPagoProgramacion().getActContrato() != null? 
+                        detalleVenta.getActPagoProgramacion().getActContrato().getCnfPlanContrato().getNombre(): 
+                        "Pago a cuenta: " + detalleVenta.getActPagoProgramacion().getActComprobante().getSerie() 
+                                + "-"+ detalleVenta.getActPagoProgramacion().getActComprobante().getNumero());
                 beanMap.put("vu", Formatos.df.format(subtotalDet));
                 beanMap.put("pu", Formatos.df.format(detalleVenta.getMonto()));
                 beanMap.put("igv", Formatos.df.format(0));

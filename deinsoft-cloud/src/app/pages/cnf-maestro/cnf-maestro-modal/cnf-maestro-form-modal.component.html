@@ -131,71 +131,78 @@
                                     }}</div>
                             </div>
                         </div>
-                        <div class="form-group-sm row">
-                            <label for="telefono"
-                                class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.telefono' |
-                                translate}}</label>
-                            <div class="col-sm-12 col-lg-8">
-                                <input type="text" [(ngModel)]="model.telefono" maxlength="20" name="telefono"
-                                    id="telefono" name="telefono" class="form-control col-sm-12 col-lg-12"
-                                    placeholder="Ingrese telefono" />
-                                <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.telefono">{{
-                                    error.telefono }}</div>
-                            </div>
+                        <div>
+                            <app-checkbox (valueChange)="changeView($event)">
+                                Más datos
+                            </app-checkbox>
                         </div>
-                        
-                        <div class="form-group-sm row">
-                            <label class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.cnf_region' |
-                                translate}} </label>
-                            <div class="col-sm-12 col-lg-8">
-                                <select name="cnfRegion" [(ngModel)]="selectedCnfRegion"
-                                [compareWith]="compareCnfRegion" (change)="loadCnfProvincia(selectedCnfRegion)"
-                                    class="form-control col-sm-12 col-lg-12">
-                                    <option [ngValue]="selectDefaultCnfRegion">{{selectDefaultCnfRegion.name}}</option>
-                                    <option *ngFor="let item of listCnfRegion; index as i;" [ngValue]="item">{{item.nombre}}
-                                    </option>
+                            <ng-container *ngIf="seeAll">
+                                <div class="form-group-sm row">
+                                    <label for="telefono"
+                                        class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.telefono' |
+                                        translate}}</label>
+                                    <div class="col-sm-12 col-lg-8">
+                                        <input type="text" [(ngModel)]="model.telefono" maxlength="20" name="telefono"
+                                            id="telefono" name="telefono" class="form-control col-sm-12 col-lg-12"
+                                            placeholder="Ingrese telefono" />
+                                        <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.telefono">{{
+                                            error.telefono }}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group-sm row">
+                                    <label class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.cnf_region' |
+                                        translate}} </label>
+                                    <div class="col-sm-12 col-lg-8">
+                                        <select name="cnfRegion" [(ngModel)]="selectedCnfRegion"
+                                        [compareWith]="compareCnfRegion" (change)="loadCnfProvincia(selectedCnfRegion)"
+                                            class="form-control col-sm-12 col-lg-12">
+                                            <option [ngValue]="selectDefaultCnfRegion">{{selectDefaultCnfRegion.name}}</option>
+                                            <option *ngFor="let item of listCnfRegion; index as i;" [ngValue]="item">{{item.nombre}}
+                                            </option>
+                
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+                                <div class="form-group-sm row">
+                                    <label class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.cnf_provincia' |
+                                        translate}} </label>
+                                    <div class="col-sm-12 col-lg-8">
+                                        <select name="cnfProvincia" [(ngModel)]="selectedCnfProvincia"
+                                        [compareWith]="compareCnfProvincia" (change)="loadCnfDistrito(selectedCnfProvincia)"
+                                            class="form-control col-sm-12 col-lg-12">
+                                            <option [ngValue]="selectDefaultCnfProvincia">{{selectDefaultCnfProvincia.name}}</option>
+                                            <option *ngFor="let item of listCnfProvincia; index as i;" [ngValue]="item">{{item.nombre}}
+                                            </option>
+                
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+                                <div class="form-group-sm row">
+                                    <label class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.cnf_distrito' |
+                                        translate}} <span *ngIf="loadingCnfDistrito"
+                                            class="spinner-border spinner-border-sm mr-1"></span></label>
+                                    <div class="col-sm-12 col-lg-8">
+                                        <select name="model.cnfDistrito" [compareWith]="compareCnfDistrito"
+                                            [(ngModel)]="model.cnfDistrito" class="form-control col-sm-12 col-lg-12">
+                                            <option *ngIf="loadingCnfDistrito" [ngValue]="0" selected="selected">Cargando...
+                                            </option>
+                                            <option *ngIf="!loadingCnfDistrito" [ngValue]="selectDefaultCnfDistrito">
+                                                {{selectDefaultCnfDistrito.name}}</option>
+                                            <option *ngFor="let item of listCnfDistrito; index as i;" [ngValue]="item">
+                                                {{item.nombre}}</option>
         
-                                </select>
-                            </div>
-                            
-                        </div>
-                        <div class="form-group-sm row">
-                            <label class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.cnf_provincia' |
-                                translate}} </label>
-                            <div class="col-sm-12 col-lg-8">
-                                <select name="cnfProvincia" [(ngModel)]="selectedCnfProvincia"
-                                [compareWith]="compareCnfProvincia" (change)="loadCnfDistrito(selectedCnfProvincia)"
-                                    class="form-control col-sm-12 col-lg-12">
-                                    <option [ngValue]="selectDefaultCnfProvincia">{{selectDefaultCnfProvincia.name}}</option>
-                                    <option *ngFor="let item of listCnfProvincia; index as i;" [ngValue]="item">{{item.nombre}}
-                                    </option>
-        
-                                </select>
-                            </div>
-                            
-                        </div>
-                        <div class="form-group-sm row">
-                            <label class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.cnf_maestro.cnf_distrito' |
-                                translate}} <span *ngIf="loadingCnfDistrito"
-                                    class="spinner-border spinner-border-sm mr-1"></span><span
-                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
-                            <div class="col-sm-12 col-lg-8">
-                                <select name="model.cnfDistrito" [compareWith]="compareCnfDistrito"
-                                    [(ngModel)]="model.cnfDistrito" class="form-control col-sm-12 col-lg-12">
-                                    <option *ngIf="loadingCnfDistrito" [ngValue]="0" selected="selected">Cargando...
-                                    </option>
-                                    <option *ngIf="!loadingCnfDistrito" [ngValue]="selectDefaultCnfDistrito">
-                                        {{selectDefaultCnfDistrito.name}}</option>
-                                    <option *ngFor="let item of listCnfDistrito; index as i;" [ngValue]="item">
-                                        {{item.nombre}}</option>
-
-                                </select>
-                                <div class="alert alert-danger col-sm-12 col-lg-12"
-                                    *ngIf="error?['cnfDistrito.nombre']:false">{{error["cnfDistrito.nombre"] }}</div>
-                            </div>
-                        </div>
+                                        </select>
+                                        <div class="alert alert-danger col-sm-12 col-lg-12"
+                                            *ngIf="error?['cnfDistrito.nombre']:false">{{error["cnfDistrito.nombre"] }}</div>
+                                    </div>
+                                </div>
+                                
+                        </ng-container>
                         <div class="form-group row">
-
+        
                             <div class="col-sm-12" style="padding-top: 20px;">
                                 <div class="row justify-content-center">
                                     <div class="col-lg-5 col-sm-4 col-xs-5" style="margin-left: 50x;">

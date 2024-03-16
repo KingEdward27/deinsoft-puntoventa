@@ -154,7 +154,7 @@ export class InvAlmacenReportFormComponent extends CommonReportFormComponent imp
         extension = "xlsx";
       }
       const blob = new Blob([data.body], { type: contentType });
-      this.generateAttachment(blob, extension);
+      this.generateAttachment("Almacen", blob, extension);
     })
     
   }

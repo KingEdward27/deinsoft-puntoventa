@@ -24,7 +24,7 @@ public interface InvMovimientoProductoService extends CommonService<InvMovimient
 
     public List<InvMovimientoProducto> getAllInvMovimientoProductoByInvAlmacen(long id);
 
-    public List<InvMovimientoProducto> getAllInvMovimientoProductoByCnfProducto(long id);
+    public List<InvMovimientoProducto> getAllInvMovimientoProductoByCnfProducto(long id,long idAlmacen);
 
     public List<InvMovimientoProducto> getAllInvMovimientoProductoByActComprobante(long id);
 

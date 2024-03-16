@@ -32,7 +32,7 @@ public interface CnfMaestroRepository extends JpaRepository<CnfMaestro, Long> {
     List<CnfMaestro> findByCnfDistritoId(long id);
 
     @Query(value = "select p from cnfMaestro p "
-            + "where (CONCAT(upper(p.apellidoPaterno),' ',upper(p.apellidoMaterno),' ',upper(p.nombres)) "
+            + "where (upper(p.razonSocial) "
             + "like CONCAT('%',:nombre,'%') "
             + "or upper(p.nroDoc) like CONCAT('%',:nombre,'%')) "
     )

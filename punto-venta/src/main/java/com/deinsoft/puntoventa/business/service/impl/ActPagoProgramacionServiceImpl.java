@@ -107,7 +107,7 @@ public class ActPagoProgramacionServiceImpl
                         .filter(predicate -> (onlyPendientes && predicate.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0) || !onlyPendientes)
                         .map(data -> {
                             if (data.getFechaVencimiento().compareTo(LocalDate.now()) >= 0) {
-                                data.setColor("green");
+                                data.setColor("yellow");
                             } else {
                                 data.setColor("red");
                             }
@@ -132,7 +132,7 @@ public class ActPagoProgramacionServiceImpl
 
                             return data;
                         })
-                        .sorted(Comparator.comparing(a -> a.getActContrato().getId()))
+                        .sorted(Comparator.comparing(a -> a.getActContrato() != null? a.getActContrato().getId(): a.getActComprobante().getId()))
                         .collect(Collectors.toList());
         return ActPagoProgramacionList;
     }
@@ -152,11 +152,12 @@ public class ActPagoProgramacionServiceImpl
                             .compareTo(LocalDate.now().withDayOfMonth(1)) == 0)
                     .findFirst().orElse(null);
             
-            if (programacionMesActual == null) {
+            if (programacionMesActual.getFechaVencimiento().withDayOfMonth(1)
+                            .compareTo(LocalDate.now().withDayOfMonth(1)) < 0) {
                 ActPagoProgramacion actPayment = new ActPagoProgramacion();
                 actPayment.setActContrato(actContrato);
                 actPayment.setFecha(actContrato.getFecha());
-                actPayment.setFechaVencimiento(LocalDate.now());
+                actPayment.setFechaVencimiento(programacionMesActual.getFechaVencimiento().plusMonths(1));
                 
                 if (actPayment.getFechaVencimiento().lengthOfMonth() < actContrato.getCnfPlanContrato().getDiaVencimiento()) {
                     actPayment.setFechaVencimiento(actPayment.getFechaVencimiento()

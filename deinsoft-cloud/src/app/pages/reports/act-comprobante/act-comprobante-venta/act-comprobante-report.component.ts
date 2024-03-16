@@ -154,7 +154,7 @@ export class ActComprobanteReportFormComponent extends CommonReportFormComponent
         extension = "xlsx";
       }
       const blob = new Blob([data.body], { type: contentType });
-      this.generateAttachment(blob, extension);
+      this.generateAttachment("Reporte de ventas", blob, extension);
     })
     
   }

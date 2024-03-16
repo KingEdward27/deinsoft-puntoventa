@@ -53,6 +53,7 @@ export class ActCajaOperacionFormComponent implements OnInit {
 
   option1: any = { id: 1, name: "Si" }
   option2: any = { id: 2, name: "No" }
+  listOptions = [this.option1,this.option2]
   constructor(private actCajaOperacionService: ActCajaOperacionService,
     private router: Router,
     private utilService: UtilService,
@@ -92,6 +93,18 @@ export class ActCajaOperacionFormComponent implements OnInit {
 
   }
   public save(): void {
+    // if (!this.model.flagIngreso) {
+    //   this.utilService.msgWarning("","Debe seleccionar el tipo de operación");
+    //   return;
+    // }
+    // if (!this.model.fecha) {
+    //   this.utilService.msgWarning("","Debe ingresar la fecha");
+    //   return;
+    // }
+    // if (!this.model.monto) {
+    //   this.utilService.msgWarning("","Debe ingresar el monto");
+    //   return;
+    // }
     this.actCajaOperacionService.save(this.model).subscribe(m => {
       console.log(m);
       this.isOk = true;
@@ -128,13 +141,13 @@ export class ActCajaOperacionFormComponent implements OnInit {
     if (a1 === undefined && a2 === undefined) {
       return true;
     }
-
+    console.log(a1,a2);
+    
     return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
       ? false : a1 === a2;
   }
   getListActComprobante() {
     this.loadingActComprobante = true;
-    console.log(this.chargingsb);
     return this.actComprobanteService.getAllDataCombo().subscribe(data => {
       this.listActComprobante = data;
       this.loadingActComprobante = false;

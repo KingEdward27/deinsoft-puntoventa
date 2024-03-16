@@ -97,5 +97,8 @@ export class ActComprobanteService {
     let params = new HttpParams().set("cnfLocalId",localId);
     return this.http.get<any>(this.url + '/get-list-contable', { params });
   }
+  public getTxtSire(form: any, responseType:any): Observable<any> {
+    return this.http.post<any>(this.url + '/generateSireTxt', form, {observe: 'response', responseType: responseType});
+  }
 }
 

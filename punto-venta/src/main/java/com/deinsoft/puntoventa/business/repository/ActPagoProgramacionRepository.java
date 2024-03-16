@@ -23,7 +23,7 @@ public interface ActPagoProgramacionRepository extends JpaRepository<ActPagoProg
     List<ActPagoProgramacion> findByActComprobanteId(long id);
 
     @Query(value = "select p from actPagoProgramacion p "
-            + "where p.actContrato.id =  ?1 ")
+            + "where p.actContrato.id =  ?1 order by p.id desc")
     List<ActPagoProgramacion> findByActContratoId(long id);
     
     @Query(value = "select p from actPagoProgramacion p "

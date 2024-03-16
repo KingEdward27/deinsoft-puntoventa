@@ -13,6 +13,7 @@ export class CnfProducto {
 	fechaRegistro!: dayjs.Dayjs;
 	rutaImagen: string = "";
 	flagEstado: string = "";
+	porcentajeGanancia: number = 0;
 	barcode: string = "";
 	cnfUnidadMedida: CnfUnidadMedida = new CnfUnidadMedida();
 	cnfEmpresa: CnfEmpresa = new CnfEmpresa();

@@ -35,4 +35,5 @@ export class ParamBean {
 	
 	cnfZona:CnfZona = new CnfZona();
 	flagEstado: number = 0;
+	periodo:string;
 };

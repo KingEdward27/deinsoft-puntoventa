@@ -1,3 +1,4 @@
+import { CnfEmpresa } from './cnf-empresa.model';
 
 export class SegUsuario {
 	id: number = 0;
@@ -6,4 +7,6 @@ export class SegUsuario {
 	password: string = "";
 	estado!: number;
 	token?: string = "";
+	rucEmpresa: string;
+	nombreEmpresa:string;
 };

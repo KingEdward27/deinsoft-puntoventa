@@ -64,8 +64,8 @@ public class InvMovimientoProductoController extends CommonController<InvMovimie
     }
 
     @GetMapping(value = "/get-all-inv-movimiento-producto-by-cnf-producto")
-    public List<InvMovimientoProducto> getAllInvMovimientoProductoByCnfProducto(@Param("id") Long id) {
-        List<InvMovimientoProducto> invMovimientoProductoList = invMovimientoProductoService.getAllInvMovimientoProductoByCnfProducto(id);
+    public List<InvMovimientoProducto> getAllInvMovimientoProductoByCnfProducto(@Param("id") Long id, @Param("idAlmacen") Long idAlmacen) {
+        List<InvMovimientoProducto> invMovimientoProductoList = invMovimientoProductoService.getAllInvMovimientoProductoByCnfProducto(id,idAlmacen);
         return invMovimientoProductoList;
     }
 

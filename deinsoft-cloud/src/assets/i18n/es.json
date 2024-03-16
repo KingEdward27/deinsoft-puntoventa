@@ -192,7 +192,8 @@
       "fechaDesde":"Fecha inicio",
       "fechaHasta":"Fecha fin",
       "envio_pse_flag":"Envío SUNAT",
-      "fecha_vencimiento":"Fecha vencimiento"
+      "fecha_vencimiento":"Fecha vencimiento",
+      "periodo":"Periodo"
     },
     "act_comprobante_detalle": {
       "home": {
@@ -203,11 +204,13 @@
       "id": "ID",
       "descripcion": "Descripción",
       "cantidad": "Cantidad",
+      "costo": "Costo",
       "precio": "Precio",
       "importe":"Importe",
       "afectacion_igv":"Afectación IGV",
       "cnf_producto":"Producto",
-      "cnf_impuesto_condicion":"Impuesto"
+      "cnf_impuesto_condicion":"Impuesto",
+      "porcentaje_ganancia":"% Ganancia"
     },
     "cnf_impuesto_condicion": {
       "home": {
@@ -613,7 +616,8 @@
       "act_comprobante":"Reporte de Ventas",
       "act_comprobante_compra":"Reporte de Compra",
       "inv_almacen_producto":"Reporte de Stock Valorizado",
-      "inv_movimiento_producto":"Reporte de Kardex Valorizado"
+      "inv_movimiento_producto":"Reporte de Kardex Valorizado",
+      "act_comprobante_contable":"Reportes Contables"
     }
   }
 }

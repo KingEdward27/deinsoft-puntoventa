@@ -93,7 +93,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 			.csrf().disable()
 			//.antMatcher("/api/**")
                         .authorizeRequests()
-				.antMatchers(HttpMethod.POST,"/login").permitAll()
+				.antMatchers(HttpMethod.POST,"/login","/api/business/register-new-user").permitAll()
+				.antMatchers(HttpMethod.GET,"/api/business/get-data-sunat").permitAll()
                                 .antMatchers("/swagger-ui/**","/v3/**", "/resources/**").permitAll()
 //                                .antMatchers(HttpMethod.GET,"/login").permitAll()
 //                                .antMatchers("/ventas-backend/login").permitAll() 
@@ -121,9 +122,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
                         "http://localhost:4200/","http://localhost:57784/","http://127.0.0.1:5500/"));
 		corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
 				"Accept", "Authorization", "Origin, Accept", "X-Requested-With",
-				"Access-Control-Request-Method", "Access-Control-Request-Headers"));
+				"Access-Control-Request-Method", "Access-Control-Request-Headers","Content-Disposition"));
 		corsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization",
-				"Access-Control-Allow-Origin", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
+				"Access-Control-Allow-Origin", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials","Content-Disposition"));
 		corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
 		urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);

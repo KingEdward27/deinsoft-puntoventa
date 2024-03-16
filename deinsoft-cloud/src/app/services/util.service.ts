@@ -84,7 +84,7 @@ export class UtilService {
         //   previous: 'Ant.'
         // }
       },
-      responsive: true
+      responsive: false
     }
     this.datablesSettingsNoOrderable = {
       deferRender: true,

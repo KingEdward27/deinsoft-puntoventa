@@ -125,7 +125,7 @@ export class CommonReportFormComponent implements OnInit {
   cnfProducto: any;
   formatter = (x: { nombre: string }) => x.nombre;
 
-  formatterCnfMaestro = (x: CnfMaestro ) => (x.apellidoPaterno + ' '+x.apellidoMaterno+ ' '+x.nombres).trim();
+  formatterCnfMaestro = (x: CnfMaestro ) => (x.razonSocial).trim();
   loadingCnfImpuestoCondicion: boolean = false;
   selectDefaultImpuestoCondicion: any = { id: 0, nombre: "- Seleccione -" };
   listImpuestoCondicion: any;
@@ -198,7 +198,7 @@ export class CommonReportFormComponent implements OnInit {
         //   previous: 'Ant.'
         // }
       },
-      responsive: true
+      responsive: false
     }
     this.datablesSettingsWithInputs = {
       deferRender: true,
@@ -509,7 +509,7 @@ export class CommonReportFormComponent implements OnInit {
           extension = "xlsx";
         }
         const blob = new Blob([data], { type: contentType });
-        this.generateAttachment(blob, extension);
+        this.generateAttachment("report",blob, extension);
       }
 
     });
@@ -538,7 +538,7 @@ export class CommonReportFormComponent implements OnInit {
           extension = "xlsx";
         }
         const blob = new Blob([data], { type: contentType });
-        this.generateAttachment(blob, extension);
+        this.generateAttachment("report",blob, extension);
       }
 
     });
@@ -602,11 +602,25 @@ export class CommonReportFormComponent implements OnInit {
     })
 
   }
-  generateAttachment(blob: Blob, extension: string) {
+  generateAttachment2(fileName:string, blob: Blob) {
     const data = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = data;
-    link.download = "report." + extension;
+    link.download = fileName;
+    link.dispatchEvent(new MouseEvent('click', {
+      bubbles: true, cancelable: true, view: window
+    }));
+    setTimeout(() => {
+      window.URL.revokeObjectURL(data);
+      link.remove
+    }, 100);
+  }
+
+  generateAttachment(fileName:string, blob: Blob, extension: string) {
+    const data = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = data;
+    link.download = fileName + "." + extension;
     link.dispatchEvent(new MouseEvent('click', {
       bubbles: true, cancelable: true, view: window
     }));

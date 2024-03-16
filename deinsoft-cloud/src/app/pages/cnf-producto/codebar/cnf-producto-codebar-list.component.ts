@@ -151,7 +151,7 @@ export class CnfProductoCodeBarListComponent extends CommonReportFormComponent i
         var extension = "pdf";
 
         const blob = new Blob([data.body], { type: contentType });
-        this.generateAttachment(blob, extension);
+        this.generateAttachment("Codigos de barra", blob, extension);
       }
 
     });

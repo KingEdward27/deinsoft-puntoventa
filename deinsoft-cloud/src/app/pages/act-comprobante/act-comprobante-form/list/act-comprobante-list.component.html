@@ -207,16 +207,15 @@
                                                 <td>{{item.cnfTipoComprobante.nombre}}</td>
                                                 <td>{{item.cnfFormaPago.nombre}}</td>
                                                 <td>{{item.serie + '-' +item.numero}}</td>
-                                                <td>{{item.cnfMaestro.apellidoPaterno + ' ' +
-                                                    item.cnfMaestro.apellidoMaterno + ' ' + item.cnfMaestro.nombres}}
+                                                <td>{{item.cnfMaestro.razonSocial}}
                                                 </td>
                                                 <td class="content-number">{{ item.cnfMoneda.simbolo + ' ' + (item.total | number:'1.2-2')}}</td>
                                                 <td>
                                                     <p [ngClass]="'state' + item.flagEstado">{{item.flagEstado == '1'?
-                                                        "Registrado":item.flagEstado == '2'? "Finalizado" :"Anulado"}}
+                                                        "Registrado":item.flagEstado == '2'? "Validado" :"Anulado"}}
                                                     </p>
                                                 </td>
-                                                <td>{{item.envio_pse_flag == '1'?"ENVIADO":"RECHAZADO"}}</td>
+                                                <td class="text-center">{{item.envio_pse_flag == '1'?"ENVIADO":"RECHAZADO"}}</td>
                                                 <td>
                                                     <div class="row row2">
                                                         <div class="col-sm-3 col-xs-3 text-right"><a class="fas fa-eye"

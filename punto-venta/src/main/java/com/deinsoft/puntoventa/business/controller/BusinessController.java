@@ -4,15 +4,22 @@
  */
 package com.deinsoft.puntoventa.business.controller;
 
+import com.deinsoft.puntoventa.business.model.CnfEmpresa;
+import com.deinsoft.puntoventa.business.model.SegRolUsuario;
+import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.business.service.BusinessService;
+import com.deinsoft.puntoventa.business.service.CnfEmpresaService;
+import com.deinsoft.puntoventa.business.service.SegUsuarioService;
 import com.deinsoft.puntoventa.framework.model.JsonData;
 import com.deinsoft.puntoventa.framework.model.UpdateParam;
 import com.deinsoft.puntoventa.framework.repository.JdbcRepository;
 import com.deinsoft.puntoventa.framework.util.Util;
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.repository.query.Param;
@@ -22,6 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +52,9 @@ public class BusinessController {
     
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+    
+    @Autowired
+    SegUsuarioService segUsuarioService;
     
     @GetMapping(value = "/sendapi")
     public ResponseEntity<?> sendApi(String tableName, long id) throws ParseException {
@@ -109,6 +120,22 @@ public class BusinessController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(businessService.saveSale(jsonData));
     }
-    
+    @GetMapping(value = "/get-data-sunat")
+    public ResponseEntity<?> searchSunat (@Param("nroDoc") String nroDoc) throws Exception{
+        Map<String,Object> result = null;
+        Map<String,String> param = new HashMap<>();
+        param.put("numero", nroDoc);
+        if (nroDoc.length() == 8) {
+            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/dni", "", param);
+        } else if (nroDoc.length() == 11) {
+            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/ruc", "", param);
+        }
+        
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+    @PostMapping(value = "/register-new-user")
+    public ResponseEntity<?> registerNewUser(@Valid @RequestBody SegUsuario segUsuario, BindingResult result) throws Exception {
+        return ResponseEntity.status(HttpStatus.OK).body(segUsuarioService.registerNewUser(segUsuario));
+    }
     
 }

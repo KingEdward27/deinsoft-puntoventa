@@ -1,21 +1,3 @@
-<!-- Content Header (Page header) -->
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>{{'webpagos.reportes.inv_movimiento_producto'| translate}}</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.reportModule"></a></li>
-                    <li class="breadcrumb-item active">{{'webpagos.reportes.inv_movimiento_producto'| translate}}</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-    <!-- /.container-fluid -->
-</section>
 
 <!-- Main content -->
 <section class="content">
@@ -225,16 +207,16 @@
                                                 <td>{{item.invAlmacen.nombre}}</td>
                                                 <td>{{item.cnfProducto.nombre}}</td>
                                                 <td class="content-number">{{item.actComprobante.flagIsventa == '2'? item.cantidad : ''}}</td>
-                                                <td class="content-number">{{(item.actComprobante.flagIsventa == '2'? (item.valor?item.valor:0) : '') | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{(item.actComprobante.flagIsventa == '2'? item.actComprobante.cnfMoneda.simbolo +' '+ ((item.valor?item.valor:0) | number:'1.2-2') : '') }}</td>
                                                 <td class="content-number">{{(item.actComprobante.flagIsventa == '2'? (item.cantidad * (item.valor?item.valor:0)) : '') | number:'1.2-2'}}</td>
                                                 
                                                 <td class="content-number">{{item.actComprobante.flagIsventa == '1'? item.cantidad : ''}}</td>
-                                                <td class="content-number">{{(item.actComprobante.flagIsventa == '1'? (item.valor?item.valor:0) : '') | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{(item.actComprobante.flagIsventa == '1'? item.actComprobante.cnfMoneda.simbolo +' '+ ((item.valor?item.valor:0) | number:'1.2-2') : '') }}</td>
                                                 <td class="content-number">{{(item.actComprobante.flagIsventa == '1'? (item.cantidad * (item.valor?item.valor:0)) : '') | number:'1.2-2'}}</td>
                                                 
                                                 <td class="content-number">{{item.cant}}</td>
-                                                <td class="content-number">{{(item.costo) | number:'1.2-2'}}</td>
-                                                <td class="content-number">{{(item.costoTotal) | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{item.actComprobante.cnfMoneda.simbolo}} {{(item.costo) | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{item.actComprobante.cnfMoneda.simbolo}} {{(item.costoTotal) | number:'1.2-2'}}</td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
@@ -242,7 +224,7 @@
                                                 <td colspan = "10">Total:</td>
                                                 <td class="content-number">{{totalCantidad| number:'1.2-2'}}</td>
                                                 <td class="content-number"></td>
-                                                <td class="content-number">{{total| number:'1.2-2'}}</td>
+                                                <td class="content-number">{{(listData?listData[0]:null)?.actComprobante.cnfMoneda.simbolo}} {{(total| number:'1.2-2')}}</td>
                                             </tr>
                                         </tfoot>
                                     </table>

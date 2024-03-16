@@ -367,15 +367,16 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                                     + action.getFechaVencimiento().getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES")) + "): " + actPago.getTotal());
                             if (action.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0) {
                                 mapper.setMesesDeuda(mapper.getMesesDeuda() + 1);
+                                mapper.setMontoPendiente(mapper.getMontoPendiente().add(action.getMontoPendiente()));
                             }
                         } else {
                             if (action.getFechaVencimiento().compareTo(paramBean.getFechaVencimiento()) <= 0) {
 
                                 mapper.setMesesDeuda(mapper.getMesesDeuda() + 1);
+                                mapper.setMontoPendiente(mapper.getMontoPendiente().add(action.getMontoPendiente()));
 
                             }
                         }
-                        mapper.setMontoPendiente(mapper.getMontoPendiente().add(action.getMontoPendiente()));
 
                     });
                     return mapper;

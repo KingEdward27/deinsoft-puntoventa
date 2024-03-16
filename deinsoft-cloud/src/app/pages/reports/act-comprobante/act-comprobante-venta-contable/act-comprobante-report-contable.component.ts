@@ -1,8 +1,4 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import Swal from 'sweetalert2';
-import { Observable, of } from 'rxjs';
-
 import { NgbCalendar, NgbDateAdapter, NgbDateParserFormatter, NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { CnfLocal } from '@/business/model/cnf-local.model';
@@ -93,10 +89,10 @@ export class ActComprobanteReportContableFormComponent extends CommonReportFormC
   getListData() {
     this.model.flagIsventa = '1';
     this.total = 0
-    return this.deps.actComprobanteService.getReportContable(1).subscribe(data => {
+    return this.deps.actComprobanteService.getReportContable(this.model.cnfLocal.id).subscribe(data => {
       console.log(data);
       
-      // this.listData = data;
+      this.listData = data;
       // this.loadingCnfMaestro = false;
       // setTimeout(() => {
       //   this.dataTable = $('#dtData').DataTable(this.datablesSettings);
@@ -126,19 +122,16 @@ export class ActComprobanteReportContableFormComponent extends CommonReportFormC
 
     });
   }
-  export() {
-    var contentType = 'application/pdf';
-    var extension = "pdf";
-    this.deps.actComprobanteService.genReportExcel(this.model).subscribe(data => {
-      if (data.body.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-        data.body.type == "application/octet-stream") {
-        contentType = data.body.type;
-        extension = "xlsx";
-      }
+  generateTxt(item : any, isVenta: string){
+    this.model.periodo = item.periodo;
+    this.model.flagIsventa = isVenta;
+    this.deps.actComprobanteService.getTxtSire(this.model, 'blob').subscribe(data => {
+      console.log(data);
+      console.log(data.headers);
+      let contentType = data.body.type;
       const blob = new Blob([data.body], { type: contentType });
-      this.generateAttachment(blob, extension);
+      this.generateAttachment2(item.fileName, blob);
     })
-    
   }
 }
 

@@ -47,7 +47,7 @@ public interface ActComprobanteService extends CommonService<ActComprobante> {
     
     public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception;
     
-    public GeneratedFile generateSireTxt(ParamBean paramBean);
+    public GeneratedFile generateSireTxt(ParamBean paramBean) throws Exception ;
     
     List<ReporteContableDto> getListaReporteContable (Long cnfLocalId);
 }

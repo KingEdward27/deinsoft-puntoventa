@@ -4,11 +4,19 @@
  */
 package com.deinsoft.puntoventa.framework.util;
 
+import static com.deinsoft.puntoventa.util.Util.toByteArray;
+import com.google.common.io.Files;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -17,6 +25,8 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import javax.net.ssl.SSLContext;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -55,16 +65,21 @@ public class Util {
         return map.get(key).toString();
     }
 
-    public static boolean isNullOrEmpty(Object o){
+    public static boolean isNullOrEmpty(Object o) {
         try {
-            if (o == null) return true;
-            if (String.valueOf(o).equals("")) return true;
+            if (o == null) {
+                return true;
+            }
+            if (String.valueOf(o).equals("")) {
+                return true;
+            }
             return false;
         } catch (NullPointerException e) {
             return true;
         }
-        
+
     }
+
     public static Map<String, Object> toMap(Object object, String[] visibles) {
         Map<String, Object> map = new HashMap<>();
         try {
@@ -100,30 +115,31 @@ public class Util {
         bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
         return bd.floatValue();
     }
+
     public static byte[] OutputStreamToByteArray(OutputStream myOutputStream) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
-        baos.writeTo(myOutputStream); 
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        baos.writeTo(myOutputStream);
         byte[] x = baos.toByteArray();
         return x;
     }
-    
-    public Map<String,Object> simpleGet(HttpMethod httpMethod, String url, String token, Map<String, String> params) throws Exception  {
-        Map<String,Object> respuesta = null;
+
+    public Map<String, Object> simpleGet(HttpMethod httpMethod, String url, String token, Map<String, String> params) throws Exception {
+        Map<String, Object> respuesta = null;
         HttpHeaders headers = new HttpHeaders();
         //headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.add("Authorization", token);
         headers.add("Content-Type", "application/json");
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        
+
         String urlTemplate = UriComponentsBuilder.fromHttpUrl(url)
-        .queryParam("numero", "{numero}")
-        .encode()
-        .toUriString();
-        
+                .queryParam("numero", "{numero}")
+                .encode()
+                .toUriString();
+
         HttpEntity<MultiValueMap<String, String>> entityReq = new HttpEntity<>(body, headers);
-        ResponseEntity<Map> response = getRestTemplate().exchange(urlTemplate, 
+        ResponseEntity<Map> response = getRestTemplate().exchange(urlTemplate,
                 httpMethod, entityReq,
-                Map.class,params);
+                Map.class, params);
         if (response.hasBody() && (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.CREATED)) {
             respuesta = response.getBody();
             if (respuesta != null) {
@@ -138,6 +154,7 @@ public class Util {
             throw new Exception(msg);
         }
     }
+
     private RestTemplate getRestTemplate() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         TrustStrategy acceptingTrustStrategy = new TrustStrategy() {
 
@@ -158,5 +175,39 @@ public class Util {
         requestFactory.setHttpClient(httpClient);
 
         return new RestTemplate(requestFactory);
+    }
+
+    public static byte[] comprimirArchivo(InputStream entrada, String nombre) throws Exception {
+        byte[] buffer = new byte[1024];
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ZipOutputStream zos = new ZipOutputStream(bos);
+        ZipEntry ze = new ZipEntry(nombre);
+        zos.putNextEntry(ze);
+
+        int len;
+        while ((len = entrada.read(buffer)) > 0) {
+            zos.write(buffer, 0, len);
+        }
+
+        entrada.close();
+        zos.closeEntry();
+
+        zos.close();
+        return bos.toByteArray();
+    }
+    public static byte[] generateFile(String fileName, String content) {
+        try {
+            File tempDir = Files.createTempDir();
+            File file = Paths.get(tempDir.getAbsolutePath(), fileName).toFile();
+            try ( FileWriter fileWriter = new FileWriter(file)) {
+                fileWriter.append(content).flush();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return toByteArray(new FileInputStream(file));
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return null;
+        }
     }
 }

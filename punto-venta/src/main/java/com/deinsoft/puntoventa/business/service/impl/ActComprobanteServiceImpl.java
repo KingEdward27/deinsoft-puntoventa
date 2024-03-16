@@ -35,21 +35,20 @@ import com.deinsoft.puntoventa.business.repository.InvAlmacenProductoRepository;
 import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoRepository;
 import com.deinsoft.puntoventa.business.service.InvAlmacenProductoService;
 import com.deinsoft.puntoventa.config.AppConfig;
-import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import com.deinsoft.puntoventa.framework.util.Formatos;
+import com.deinsoft.puntoventa.framework.util.Util;
 import com.deinsoft.puntoventa.util.Constantes;
-import com.deinsoft.puntoventa.util.Util;
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.stream.Collectors;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
@@ -90,12 +89,12 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     @Autowired
     BusinessService businessService;
 
-
     @Autowired
     AppConfig appConfig;
-    
-    static DateTimeFormatter YYYYMMDD_FORMATER = DateTimeFormatter.ofPattern("yyyyMM");
-    
+
+    static DateTimeFormatter YYYYMM_FORMATER = DateTimeFormatter.ofPattern("yyyyMM");
+    static DateTimeFormatter YYYYMMDD_FORMATER = DateTimeFormatter.ofPattern("yyyyMMdd");
+
     public List<ActComprobante> getAllActComprobante(ActComprobante actComprobante) {
         List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getAllActComprobante(
                 actComprobante.getSerie().toUpperCase(), actComprobante.getNumero().toUpperCase(),
@@ -164,7 +163,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                 actComprobante.addActComprobanteDetalle(data);
             });
             actComprobanteResult = actComprobanteRepository.save(actComprobante);
-            if (actComprobante.getId() == 0) {
+            if (actComprobante.getId() != 0) {
                 if (actComprobanteResult.getCnfLocal().getCnfEmpresa().getFlagVentaRapida() == 1) {
                     validate(actComprobante.getId());
 
@@ -291,10 +290,18 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         String result = "";
         try {
             ActComprobante actInvoice = getActComprobante(id);
-            if (!"1".equals(actInvoice.getFlagEstado())) {
-                result = "El documento no se encuentra en estado Registrado";
-                throw new Exception(result);
+            if (actInvoice.getCnfLocal().getCnfEmpresa().getFlagVentaRapida() == 1) {
+                if (!"2".equals(actInvoice.getFlagEstado())) {
+                    result = "El documento no se encuentra en estado Validado";
+                    throw new Exception(result);
+                }
+            } else {
+                if (!"1".equals(actInvoice.getFlagEstado())) {
+                    result = "El documento no se encuentra en estado Registrado";
+                    throw new Exception(result);
+                }
             }
+            
             // clean in actOrder
             for (ActComprobanteDetalle item : actInvoice.getListActComprobanteDetalle()) {
 //                List<ActOrderLine> listActOrderline = actOrderLineService.findByActInvoiceId(item.getId());
@@ -307,13 +314,16 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                     InvAlmacenProducto invBalance
                             = invAlmacenProductoRepository.findByCnfProductoIdAndInvAlmacenId(
                                     item.getCnfProducto().getId(), actInvoice.getInvAlmacen().getId());
-                    BigDecimal currentQty = invBalance.getCantidad();
-                    if (actInvoice.getFlagIsventa().equals("1")) {
-                        invBalance.setCantidad(currentQty.add(item.getCantidad()));
-                    } else {
-                        invBalance.setCantidad(currentQty.subtract(item.getCantidad()));
+                    if (invBalance != null) {
+                        BigDecimal currentQty = invBalance.getCantidad();
+                        if (actInvoice.getFlagIsventa().equals("1")) {
+                            invBalance.setCantidad(currentQty.add(item.getCantidad()));
+                        } else {
+                            invBalance.setCantidad(currentQty.subtract(item.getCantidad()));
+                        }
+                        invAlmacenProductoRepository.save(invBalance);
                     }
-                    invAlmacenProductoRepository.save(invBalance);
+                    
 
                     invMovimientoProductoRepository.deleteByActComprobante(actInvoice);
                 }
@@ -452,93 +462,116 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         byte[] bytes = businessService.print2(appConfig.getStaticResourcesPath(), tipo, getActComprobante(id), false);
         return bytes;
     }
-    
+
     @Override
-    public GeneratedFile generateSireTxt(ParamBean paramBean) {
-        List<String> x = getReportActComprobante(paramBean)
+    public GeneratedFile generateSireTxt(ParamBean paramBean) throws Exception {
+
+        ParamBean paramWorked = paramBean;
+        int lastDay = LocalDate.parse(paramWorked.getPeriodo() + "01", YYYYMMDD_FORMATER).lengthOfMonth();
+        paramWorked.setFechaDesde(LocalDate.parse(paramWorked.getPeriodo() + "01", YYYYMMDD_FORMATER));
+        paramWorked.setFechaHasta(LocalDate.parse(paramWorked.getPeriodo() + String.valueOf(lastDay), YYYYMMDD_FORMATER));
+        List<String> x = getReportActComprobante(paramWorked)
                 .stream().map(mapper -> {
-            BigDecimal multiplicand = BigDecimal.ONE;
-            if (mapper.getCnfTipoComprobante().getCodigoSunat().equals(Constantes.TIPO_DOC_NOTA_CREDITO)) {
-                multiplicand = multiplicand.multiply(BigDecimal.valueOf(-1));
-            }
-    
-            String line = mapper.getCnfLocal().getCnfEmpresa().getNroDocumento().concat("|")
-                    .concat(mapper.getCnfLocal().getCnfEmpresa().getNombre()).concat("|")
-                    .concat(mapper.getFecha().format(Constantes.YYYYMM_FORMATER)).concat("|")
-                    .concat("|")
-                    .concat(mapper.getFecha().format(Constantes.DDMMYYYY_FORMATER)).concat("|")
-                    .concat("|")
-                    .concat(mapper.getCnfTipoComprobante().getCodigoSunat()).concat("|")
-                    .concat(mapper.getSerie()).concat("|")
-                    .concat("|")
-                    .concat(mapper.getNumero()).concat("|")
-                    .concat("|")
-                    .concat(mapper.getCnfMaestro().getCnfTipoDocumento().getCodigoSunat()).concat("|")
-                    .concat(mapper.getCnfMaestro().getNroDoc()).concat("|")
-                    .concat(mapper.getCnfMaestro().getRazonSocial()).concat("|");
-            if (!mapper.getCnfTipoComprobante().getCodigoSunat().equals(Constantes.TIPO_DOC_BOLETA)) {
-                line = line.concat(Formatos.df.format(mapper.getSubtotal().multiply(multiplicand))).concat("|")
-                    .concat(Formatos.df.format(mapper.getIgv().multiply(multiplicand))).concat("|");
-            }
-            line = line.concat("0.00").concat("|")
-                    .concat("0.00").concat("|")
-                    .concat("0.00").concat("|")
-                    .concat("0.00").concat("|");
-            
-            if (mapper.getCnfTipoComprobante().getCodigoSunat().equals(Constantes.TIPO_DOC_BOLETA)) {
-                line = line.concat(Formatos.df.format(mapper.getTotal().multiply(multiplicand))).concat("|");
-            }
-            line = line.concat("0.00").concat("|")
-                    .concat("0.00").concat("|")
-                    .concat("0.00").concat("|")
-                    .concat(Formatos.df.format(mapper.getTotal())).concat("|")
-                    .concat(mapper.getCnfMoneda().getCodigo())
-                    .concat("|")//tipo cambio
-                    .concat("|")
-                    .concat("0.00").concat("|")
-                    .concat("0.00").concat("|")
-                    .concat("0.00").concat("|")
-                    .concat("0.00").concat("|")
-                    .concat("0.00").concat("|")
-                    .concat("0.00").concat("|")
-                    .concat("0.00").concat("|")
-                    .concat("0.00").concat("|")
-                    ;
-            return line;
-        }).collect(Collectors.toList());
-        
+                    BigDecimal multiplicand = BigDecimal.ONE;
+                    if (mapper.getCnfTipoComprobante().getCodigoSunat().equals(Constantes.TIPO_DOC_NOTA_CREDITO)) {
+                        multiplicand = multiplicand.multiply(BigDecimal.valueOf(-1));
+                    }
+
+                    String line = mapper.getCnfLocal().getCnfEmpresa().getNroDocumento().concat("|")
+                            .concat(mapper.getCnfLocal().getCnfEmpresa().getNombre()).concat("|")
+                            .concat(mapper.getFecha().format(Constantes.YYYYMM_FORMATER)).concat("|")
+                            .concat("|")
+                            .concat(mapper.getFecha().format(Constantes.DDMMYYYY_FORMATER)).concat("|")
+                            .concat("|")
+                            .concat(mapper.getCnfTipoComprobante().getCodigoSunat()).concat("|")
+                            .concat(mapper.getSerie())
+                            .concat("|")
+                            .concat(mapper.getNumero()).concat("|")
+                            .concat("|")
+                            .concat(mapper.getCnfMaestro().getCnfTipoDocumento().getCodigoSunat()).concat("|")
+                            .concat(mapper.getCnfMaestro().getNroDoc()).concat("|")
+                            .concat(mapper.getCnfMaestro().getRazonSocial()).concat("|")
+                            .concat("|");
+                    line = line.concat(Formatos.df.format(mapper.getSubtotal().multiply(multiplicand))).concat("|")
+                            .concat("0.00").concat("|")//DESCUENTO
+                            .concat(Formatos.df.format(mapper.getIgv().multiply(multiplicand))).concat("|")
+                            .concat("0.00").concat("|");//DESCUENTO
+                    line = line.concat("0.00").concat("|")//exonerada
+                            .concat("0.00").concat("|")//inafecta
+                            .concat("0.00").concat("|")
+                            .concat("0.00").concat("|")
+                            .concat("0.00").concat("|")
+                            .concat("0.00").concat("|")
+                            .concat("0.00").concat("|");
+                    line = line.concat(Formatos.df.format(mapper.getTotal().multiply(multiplicand))).concat("|")
+                            .concat(mapper.getCnfMoneda().getCodigo()).concat("|")
+                            .concat("|")//tipo cambio
+                            
+                            .concat("|")//fecha emision comprobante modificado
+                            .concat("|")//tipo comprobante modificado
+                            .concat("|")//serie comprobante modificado
+                            .concat("|")//numero comprobante modificado
+                            .concat("|")
+                            .concat("|").concat("\n");
+                    return line;
+                }).collect(Collectors.toList());
+        if (x.isEmpty()) {
+            throw new Exception("No hay datos para el periodo");
+        }
         String joined = x.stream()
-                       .map(Object::toString)
-                       .collect(Collectors.joining(""));
+                .map(Object::toString)
+                .collect(Collectors.joining(""));
         String fileName = "LE"
-                .concat(paramBean.getCnfEmpresa().getNroDocumento())
+                .concat(paramBean.getCnfLocal().getCnfEmpresa().getNroDocumento())
                 .concat(paramBean.getFechaDesde().format(Constantes.YYYYMM_FORMATER))
                 .concat("00")
                 .concat("080400")//codigo libro
-                .concat("03")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
+                .concat("02")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
                 .concat("1")//Indicador de operaciones -> 0 Cierre o baja de RUC  / 1 Empresa operativa  / 2 Cierre de libro
                 .concat("1")//Indicador del contenido del libro o registro -> 1 Con información / 0 Sin información
                 .concat("1")//Indicador de la moneda utilizada -> 1 Soles  / 2 Dólares
                 .concat("2")//Indicador de libro electrónico generado por el MIGE IGV/RVIE -> Generado por el SIRE ( Fijo) (2)
-                .concat("1")//Correlativo de los ajustes posteriores -> Puede ser 01, 02, 03, etc. Según el correlativo que corresponde.
-                ;
-        byte[] zippedData = Util.generateFile(fileName, joined);
+                //.concat("1")//Correlativo de los ajustes posteriores -> Puede ser 01, 02, 03, etc. Según el correlativo que corresponde.
+                .concat(".txt");
+        byte[] txtData = Util.generateFile(fileName, joined);
+        byte[] zippedData = Util.comprimirArchivo(new ByteArrayInputStream(txtData), fileName);
+//        try (FileOutputStream fos = new FileOutputStream("C:\\Users\\user\\Documents\\test.zip")) {
+//            fos.write(zippedData);
+//        }
+        ByteArrayInputStream stream = new ByteArrayInputStream(zippedData);
+        InputStreamResource inputStreamResource = new InputStreamResource(stream);
         return new GeneratedFile(fileName, zippedData);
     }
-    
-    public List<ReporteContableDto> getListaReporteContable (Long cnfLocalId) {
+
+    public List<ReporteContableDto> getListaReporteContable(Long cnfLocalId) {
         List<ActComprobante> list = actComprobanteRepository.findByCnfLocalId(cnfLocalId);
         List<ReporteContableDto> x = list.stream().collect(
                 Collectors.groupingBy(item -> grouping(item),
-                        Collectors.averagingDouble(mapper -> mapper.getTotal().floatValue())))
+                        Collectors.summingDouble(mapper -> mapper.getTotal().floatValue())))
                 .entrySet().stream()
-                .map(mapper -> new ReporteContableDto(mapper.getKey(), mapper.getValue()))
+                .map(mapper -> {
+                    return new ReporteContableDto(mapper.getKey().split("-")[0], 
+                            mapper.getValue(),mapper.getKey().split("-")[1]);
+                            })
+                .sorted(Comparator.comparing(ReporteContableDto::getPeriodo, Collections.reverseOrder()))
                 .collect(Collectors.toList());
-        
+
         return x;
     }
-    
-    String grouping(ActComprobante item){
-        return item.getFecha().format(YYYYMMDD_FORMATER);
+
+    String grouping(ActComprobante item) {
+        String fileName = "LE"
+                    .concat(item.getCnfLocal().getCnfEmpresa().getNroDocumento())
+                    .concat(item.getFecha().format(Constantes.YYYYMM_FORMATER))
+                    .concat("00")
+                    .concat("080400")//codigo libro
+                    .concat("02")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
+                    .concat("1")//Indicador de operaciones -> 0 Cierre o baja de RUC  / 1 Empresa operativa  / 2 Cierre de libro
+                    .concat("1")//Indicador del contenido del libro o registro -> 1 Con información / 0 Sin información
+                    .concat("1")//Indicador de la moneda utilizada -> 1 Soles  / 2 Dólares
+                    .concat("2")//Indicador de libro electrónico generado por el MIGE IGV/RVIE -> Generado por el SIRE ( Fijo) (2)
+                    //.concat("1")//Correlativo de los ajustes posteriores -> Puede ser 01, 02, 03, etc. Según el correlativo que corresponde.
+                    .concat(".zip");
+        return item.getFecha().format(YYYYMM_FORMATER) + "-" +fileName;
     }
 }

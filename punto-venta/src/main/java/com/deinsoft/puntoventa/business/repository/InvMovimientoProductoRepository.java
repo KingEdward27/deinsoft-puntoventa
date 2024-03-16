@@ -22,8 +22,8 @@ public interface InvMovimientoProductoRepository extends JpaRepository<InvMovimi
     List<InvMovimientoProducto> findByInvAlmacenId(long id);
 
     @Query(value = "select p from invMovimientoProducto p "
-            + "where p.cnfProducto.id =  ?1 ")
-    List<InvMovimientoProducto> findByCnfProductoId(long id);
+            + "where p.cnfProducto.id =  ?1 and p.invAlmacen.id = ?2")
+    List<InvMovimientoProducto> findByCnfProductoId(long id, long idAlmacen);
 
     @Query(value = "select p from invMovimientoProducto p "
             + "where p.actComprobante.id =  ?1 ")

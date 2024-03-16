@@ -24,6 +24,7 @@ export class MessageModalComponent implements OnInit {
   message:any;
   @Output() result: EventEmitter<any> = new EventEmitter();
   public id = 0;
+  business:string = 'act-comprobante'
   constructor(public activeModal: NgbActiveModal,private commonService: CommonService) {
     this.commonService.baseEndpoint = environment.apiUrl;
   }
@@ -73,7 +74,7 @@ export class MessageModalComponent implements OnInit {
     mp.map = convMapDetail;
     this.commonService.updateParam = mp;
     
-    this.commonService.genericPostRequest("/api/business/act-comprobante/getpdflocal", mp, 'blob').subscribe(data => {
+    this.commonService.genericPostRequest("/api/business/"+this.business+"/getpdflocal", mp, 'blob').subscribe(data => {
       console.log(data);
       if (data.type != 'application/json') {
         var contentType = 'application/pdf';
@@ -102,7 +103,7 @@ export class MessageModalComponent implements OnInit {
     console.log(convMapDetail);
 
     mp.map = convMapDetail;
-    this.commonService.genericPostRequest("/api/business/act-comprobante/getpdflocal", mp, 'blob').subscribe(data => {
+    this.commonService.genericPostRequest("/api/business/"+this.business+"/getpdflocal", mp, 'blob').subscribe(data => {
       console.log(data);
       if (data.type != 'application/json') {
         var contentType = 'application/pdf';

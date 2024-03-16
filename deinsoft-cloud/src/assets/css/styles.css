@@ -256,35 +256,39 @@ table>thead {
   color: #fff;
 }
 
-.state0 {
-  background: rgb(124, 37, 37);
-  border: 2px solid #535353;
-  color: #fff;
-  border-radius: .25rem;
-}
 
 .state1,
+.stateyellow {
+  background: rgb(218, 208, 73);
+  border: 2px solid #535353;
+  color: #080404;
+  border-radius: .25rem;
+  text-align: center;
+}
+.state2,
 .stategreen {
-  background: rgb(38, 107, 36);
+  background: rgb(59, 139, 63);
   border: 2px solid #535353;
   color: #fff;
   border-radius: .25rem;
+  text-align: center;
 }
 
-.state2,
 .stateblue {
   background: rgb(21, 47, 105);
   border: 2px solid #535353;
   color: #fff;
   border-radius: .25rem;
+  text-align: center;
 }
 
-.state2,
+.state0,
 .statered {
   background: rgb(126, 26, 43);
   border: 2px solid #535353;
   color: #fff;
   border-radius: .25rem;
+  text-align: center;
 }
 
 .map {
@@ -334,4 +338,36 @@ hr {
   .hr-space{
     margin-top: 2rem;
   }
+}
+@media screen and (max-width: 600px) {
+  th {
+    display: none;
+  }
+
+  td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: right; /* Ajusta según tus preferencias */
+  }
+  tbody {
+    
+    display: contents;
+  }
+  tr {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 0.5em;
+    display: block;
+  }
+}
+.stateContrato1 {
+  background: rgb(243, 209, 58);
+  border: 2px solid #535353;
+  color: #030101;
+  border-radius: .25rem;
+}
+
+.link {
+  color: #007bff;
+  cursor: pointer;
 }

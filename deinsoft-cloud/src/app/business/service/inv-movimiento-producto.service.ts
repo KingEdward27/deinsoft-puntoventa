@@ -26,6 +26,7 @@ export class InvMovimientoProductoService {
     return this.http.get<InvMovimientoProducto[]>(`${this.url}/get-all-inv-movimiento-producto-by-inv-almacen`,{params});
   } 
   public getAllByCnfProductoId(id:number):Observable<any>{
+    //falta idAlmacen
     let params = new HttpParams().set("id",id.toString());
     return this.http.get<InvMovimientoProducto[]>(`${this.url}/get-all-inv-movimiento-producto-by-cnf-producto`,{params});
   } 

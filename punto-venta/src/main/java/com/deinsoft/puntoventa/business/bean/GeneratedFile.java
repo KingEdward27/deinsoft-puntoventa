@@ -4,6 +4,8 @@
  */
 package com.deinsoft.puntoventa.business.bean;
 
+import org.springframework.core.io.InputStreamResource;
+
 /**
  *
  * @author user
