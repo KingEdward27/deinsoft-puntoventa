@@ -215,7 +215,7 @@
                                                         "Registrado":item.flagEstado == '2'? "Validado" :"Anulado"}}
                                                     </p>
                                                 </td>
-                                                <td class="text-center">{{item.envio_pse_flag == '1'?"ENVIADO":"RECHAZADO"}}</td>
+                                                <td ><p [ngClass]="'state' + item.envioPseFlag"> {{item.envioPseFlag == '2'?"ENVIADO":"RECHAZADO"}}</p></td>
                                                 <td>
                                                     <div class="row row2">
                                                         <div class="col-sm-3 col-xs-3 text-right"><a class="fas fa-eye"
@@ -224,7 +224,7 @@
                                                         <div class="col-lg-3 col-sm-6 col-xs-6"><a (click)="print(item)"
                                                                 class="fa fa-print fa-md" style="cursor: pointer;"
                                                                 title="Imprimir"></a></div>
-                                                        <div *ngIf="item.flagEstado != '0'"
+                                                        <div *ngIf="item.flagEstado != '0' && item.envioPseFlag != '2'"
                                                             class="col-lg-3 col-sm-6 col-xs-6">
                                                             <a (click)="sendApi(item)"
                                                                 class="fa fa-cloud-upload-alt fa-md"

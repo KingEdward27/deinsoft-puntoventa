@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.business.service.ActComprobanteService;
+import com.deinsoft.puntoventa.facturador.client.RespuestaPSE;
 import com.deinsoft.puntoventa.framework.model.JsonData;
 import com.deinsoft.puntoventa.framework.model.UpdateParam;
 import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
@@ -94,13 +95,13 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
         actComprobante.setSegUsuario(segUsuario);
         ActComprobante actComprobanteResult = actComprobanteService.saveActComprobante(actComprobante);
         //send fe
-        if (actComprobanteResult != null) {
-            try {
-                businessService.sendApi("act_comprobante", actComprobanteResult.getId());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+//        if (actComprobanteResult != null) {
+//            try {
+//                businessService.sendApi("act_comprobante", actComprobanteResult.getId());
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//        }
         
         return ResponseEntity.status(HttpStatus.CREATED).body(actComprobanteResult);
     }
@@ -188,9 +189,16 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
         return actComprobanteList;
     }
     @GetMapping(value = "/sendapi")
-    public ResponseEntity<?> sendApi(String tableName, long id) throws ParseException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(businessService.sendApi(tableName, id));
+    public ResponseEntity<?> sendApi(long id) throws ParseException {
+        RespuestaPSE resp = actComprobanteService.sendApi(id);
+        if (resp.isResult()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(resp.getErrMessage());
+        }
+        
     }
+    
     @PostMapping(value = "/export/excel")
     //@RequestMapping(value = {"/factura/export/excel"}, method = RequestMethod.GET)
     public String exportToExcel(@RequestBody ParamBean paramBean, HttpServletResponse response) throws IOException, IllegalArgumentException, IllegalAccessException {
@@ -284,4 +292,5 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
         List<ReporteContableDto> listReporteContableDto = actComprobanteService.getListaReporteContable(cnfLocalId);
         return listReporteContableDto;
     }
+    
 }

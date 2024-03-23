@@ -112,7 +112,7 @@ export class ActComprobanteListFormComponent extends CommonReportFormComponent i
       if (result) {
         this.deps.actComprobanteService.sendApi("act_comprobante", item.id.toString()).subscribe(() => {
           this.deps.utilService.msgOkOperation();
-          this.loadData();
+          this.getListData();
         });
       }
 

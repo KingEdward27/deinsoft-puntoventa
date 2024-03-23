@@ -75,7 +75,6 @@ export class ActComprobanteService {
   }
   public sendApi(tableName:string,id: any): Observable<any> {
     let params = new HttpParams()
-    .set("tableName", tableName)
     .set("id", id.toString());
     return this.http.get<any>(this.url + '/sendapi', { params });
   }

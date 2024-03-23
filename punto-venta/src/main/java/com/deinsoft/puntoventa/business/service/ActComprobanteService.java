@@ -9,6 +9,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonService;
 import com.deinsoft.puntoventa.business.dto.ReporteContableDto;
 
 import com.deinsoft.puntoventa.business.model.ActComprobante;
+import com.deinsoft.puntoventa.facturador.client.RespuestaPSE;
 import java.text.ParseException;
 
 @Service
@@ -50,4 +51,6 @@ public interface ActComprobanteService extends CommonService<ActComprobante> {
     public GeneratedFile generateSireTxt(ParamBean paramBean) throws Exception ;
     
     List<ReporteContableDto> getListaReporteContable (Long cnfLocalId);
+    
+    RespuestaPSE sendApi(long id);
 }

@@ -33,8 +33,13 @@ import com.deinsoft.puntoventa.business.repository.CnfFormaPagoDetalleRepository
 import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
 import com.deinsoft.puntoventa.business.repository.InvAlmacenProductoRepository;
 import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoRepository;
+import com.deinsoft.puntoventa.business.service.CnfImpuestoCondicionService;
 import com.deinsoft.puntoventa.business.service.InvAlmacenProductoService;
 import com.deinsoft.puntoventa.config.AppConfig;
+import com.deinsoft.puntoventa.facturador.client.EnvioPSE;
+import com.deinsoft.puntoventa.facturador.client.EnvioPSE2;
+import com.deinsoft.puntoventa.facturador.client.RespuestaPSE;
+import com.deinsoft.puntoventa.framework.model.JsonData;
 import com.deinsoft.puntoventa.framework.util.Formatos;
 import com.deinsoft.puntoventa.framework.util.Util;
 import com.deinsoft.puntoventa.util.Constantes;
@@ -47,6 +52,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -88,6 +96,9 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
 
     @Autowired
     BusinessService businessService;
+    
+    @Autowired
+    CnfImpuestoCondicionService cnfImpuestoCondicionService;
 
     @Autowired
     AppConfig appConfig;
@@ -112,8 +123,16 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     public ActComprobante getActComprobante(Long id) {
         ActComprobante actComprobante = null;
         Optional<ActComprobante> actComprobanteOptional = actComprobanteRepository.findById(id);
+        Set<ActComprobanteDetalle> list;
         if (actComprobanteOptional.isPresent()) {
             actComprobante = actComprobanteOptional.get();
+            list = actComprobante.getListActComprobanteDetalle().stream().map(mapper -> {
+                mapper.setCnfImpuestoCondicion(
+                cnfImpuestoCondicionService.getCnfImpuestoCondicion(mapper.getCnfImpuestoCondicion().getId()));
+                return mapper;
+            }).collect(Collectors.toSet());
+            
+            actComprobante.setListActComprobanteDetalle(list);
         }
         return actComprobante;
     }
@@ -229,9 +248,56 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno, actComprobante.getFlagIsventa().equals("1") ? false : true);
 
         actComprobante.setFlagEstado("2");
-        actComprobanteRepository.save(actComprobante);
+        ActComprobante actComprobanteDb = actComprobanteRepository.save(actComprobante);
+        
+        //send to sunat
+        RespuestaPSE respuestaPSE = sendApi(actComprobanteDb.getId());
+        
     }
 
+    @Override
+    public RespuestaPSE sendApi(long id) {
+        RespuestaPSE result = null;
+        
+        ActComprobante actComprobante = getActComprobante(id);
+//        Map<String,Object> local = (Map<String,Object>)mapVenta.get("cnf_local");
+//        Map<String,Object> empresa = (Map<String,Object>)local.get("cnf_empresa");
+        String ruta = actComprobante.getCnfLocal().getCnfEmpresa().getRutaPse();
+        String token = actComprobante.getCnfLocal().getCnfEmpresa().getToken();
+//        if (ruta == null) throw new RuntimeException ("Ruta PSE no configurado");
+//        if (token == null) throw new RuntimeException ("token PSE no configurado");
+        EnvioPSE2 envioPSE = new EnvioPSE2(ruta,token);
+        String jsonBody = envioPSE.paramToJson(actComprobante);
+        RespuestaPSE resultEnvioPSE = envioPSE.envioJsonPSE(jsonBody);
+
+//        if (resultEnvioPSE.isResult()) {
+        result = resultEnvioPSE;
+//        }
+        if (resultEnvioPSE.isResult()) {
+            actComprobante.setEnvioPseFlag("2");
+            actComprobante.setEnvioPseMensaje("Enviado a PSE");
+            actComprobante.setNumTicket(resultEnvioPSE.getId());
+            actComprobante.setCodigoqr(resultEnvioPSE.getCodigoQR());
+            actComprobante.setXmlhash(resultEnvioPSE.getXmlHash());
+//            map.put("envio_pse_flag", "1");
+//            map.put("envio_pse_mensaje", "Recibido correctamente");
+//            map.put("num_ticket", resultEnvioPSE.getId());
+//            map.put("codigoqr", resultEnvioPSE.getCodigoQR());
+//            map.put("xmlhash", resultEnvioPSE.getXmlHash());
+        } else {
+            actComprobante.setEnvioPseFlag("0");
+            actComprobante.setEnvioPseMensaje(resultEnvioPSE.getErrCode() + "-" + resultEnvioPSE.getErrMessage());
+//            map.put("envio_pse_flag", "0");
+//            map.put("envio_pse_mensaje", resultEnvioPSE.getErrCode() + "-" + resultEnvioPSE.getErrMessage());
+        }
+//        JsonData json = new JsonData();
+//        json.setTableName(tableName);
+//        json.setFilters(map);
+//        json.setId(id);
+        save(actComprobante);
+        return result;
+    }
+    
     public List<ActComprobante> getAllActComprobante() {
         List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.findAll();
         return actComprobanteList;
@@ -564,7 +630,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                     .concat(item.getCnfLocal().getCnfEmpresa().getNroDocumento())
                     .concat(item.getFecha().format(Constantes.YYYYMM_FORMATER))
                     .concat("00")
-                    .concat("080400")//codigo libro
+                    .concat(item.getFlagIsventa().equals("1")? "140100": "080100")//codigo libro
                     .concat("02")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
                     .concat("1")//Indicador de operaciones -> 0 Cierre o baja de RUC  / 1 Empresa operativa  / 2 Cierre de libro
                     .concat("1")//Indicador del contenido del libro o registro -> 1 Con información / 0 Sin información
