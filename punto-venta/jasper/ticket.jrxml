@@ -422,16 +422,16 @@
 					<textFieldExpression><![CDATA[$P{presumen}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="3" y="143" width="196" height="14" uuid="20345d27-b8bf-4996-abc2-bf94e0323c29"/>
+					<reportElement x="1" y="140" width="199" height="14" uuid="20345d27-b8bf-4996-abc2-bf94e0323c29"/>
 					<textElement textAlignment="Center">
-						<font fontName="SansSerif" size="9"/>
+						<font fontName="SansSerif" size="7"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{ppagina}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="3" y="115" width="196" height="14" uuid="59eaacb7-aa99-42a7-9b3e-91cb9291bd0b"/>
+					<reportElement x="1" y="112" width="199" height="14" uuid="59eaacb7-aa99-42a7-9b3e-91cb9291bd0b"/>
 					<textElement textAlignment="Center">
-						<font fontName="SansSerif" size="9"/>
+						<font fontName="SansSerif" size="7"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{presolucion}]]></textFieldExpression>
 				</textField>
@@ -442,9 +442,9 @@
 					<imageExpression><![CDATA[$P{rutaimagen}]]></imageExpression>
 				</image>
 				<textField>
-					<reportElement x="3" y="129" width="196" height="14" uuid="4699bfa3-729b-4c0d-bc9f-b0ccbfae6fbd"/>
+					<reportElement x="1" y="126" width="199" height="14" uuid="4699bfa3-729b-4c0d-bc9f-b0ccbfae6fbd"/>
 					<textElement textAlignment="Center">
-						<font fontName="SansSerif" size="9"/>
+						<font fontName="SansSerif" size="7"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$P{tipoDocFooter}]]></textFieldExpression>
 				</textField>

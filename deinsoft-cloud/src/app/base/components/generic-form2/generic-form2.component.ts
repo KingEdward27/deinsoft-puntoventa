@@ -278,7 +278,10 @@ export class GenericForm2Component extends CommonService implements OnInit {
     console.log(this.properties);
   }
   loadData() {
-    //this.properties.id = JSON.parse(localStorage.getItem("propertiesId") || '{}');
+    if (!this.properties.id) {
+      this.properties.id = JSON.parse(localStorage.getItem("propertiesId") || '{}');
+    }
+    
     console.log(this.properties.id);
     
     if (this.properties.id) {
@@ -385,7 +388,10 @@ export class GenericForm2Component extends CommonService implements OnInit {
               column = element?.tableName + "." + element?.relatedBy;
               let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
               console.log(column, selectValue);
-              
+              if (!selectValue){
+                selectValue = "0";
+
+              }
               if((selectValue != "0" && element?.columnName != element?.relatedBy )
               || element?.columnName == element?.relatedBy){
                 element.value = selectValue;
@@ -407,11 +413,11 @@ export class GenericForm2Component extends CommonService implements OnInit {
         convMap[key] = val;
       });
       this.properties.filters = convMap;
-      //console.log(this.properties);
+      console.log(this.properties);
       super.create(this.properties).subscribe(data => {
         //console.log(data);
         this.utilService.msgOkSave();
-        //this.back();
+        this.back();
       }, err => {
 
         //error en validaciones, los demas errores en JwtInterceptor

@@ -14,20 +14,33 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.nio.file.Paths;
+import java.security.InvalidKeyException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.SSLContext;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContexts;
@@ -51,6 +64,9 @@ import org.springframework.web.util.UriComponentsBuilder;
  */
 public class Util {
 
+    private static final String ALGORITHM = "AES";
+    private static final String TRANSFORMATION = "AES/ECB/PKCS5Padding";
+    
     public static BigDecimal getBigDecimalValue(Map<String, Object> map, String key) {
         if (map.get(key) == null) {
             return BigDecimal.ZERO;
@@ -209,5 +225,40 @@ public class Util {
             System.out.println(e.toString());
             return null;
         }
+    }
+    public static boolean validaCorreo(String email) {
+        // Patrón para validar el email
+        Pattern pattern = Pattern
+                .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+        Matcher mather = pattern.matcher(email);
+        return mather.find();
+    }
+    public static String encryptMessage(byte[] message, String encKeyString) throws InvalidKeyException, NoSuchPaddingException,
+            NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+        Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+        byte[] decodedKey = Base64.getDecoder().decode(encKeyString);
+//        SecretKey secretKey = new SecretKeySpec(decodedKey, ALGORITHM);
+        SecretKey secretKey = new SecretKeySpec(Arrays.copyOf(decodedKey, 16), ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] encryptedMessage = cipher.doFinal(message);
+        return Base64.getEncoder().encodeToString(encryptedMessage);
+    }
+
+    public static String decryptMessage(byte[] encryptedMessage, String encKeyString) throws NoSuchPaddingException,
+            NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+        Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+        byte[] decodedKey = Base64.getDecoder().decode(encKeyString);
+//        SecretKey secretKey = new SecretKeySpec(decodedKey, ALGORITHM);
+        SecretKey secretKey = new SecretKeySpec(Arrays.copyOf(decodedKey, 16), ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] clearMessage = cipher.doFinal(Base64.getDecoder().decode(encryptedMessage));
+        return new String(clearMessage);
+    }
+    
+    public static String readFile(InputStream is, Charset encoding) throws IOException {
+//        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        byte[] encoded = IOUtils.toByteArray(is);
+        return new String(encoded, encoding);
     }
 }

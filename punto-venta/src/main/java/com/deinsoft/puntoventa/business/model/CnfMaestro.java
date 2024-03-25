@@ -7,6 +7,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity(name = "cnfMaestro")
 @Table(name = "cnf_maestro")
@@ -20,6 +21,7 @@ public class CnfMaestro implements Serializable {
     private Long id;
 
     @Size(max = 11)
+    @ColumnDefault("00000000")
     @Column(name = "nro_doc", length = 11, nullable = true)
     private String nroDoc;
 

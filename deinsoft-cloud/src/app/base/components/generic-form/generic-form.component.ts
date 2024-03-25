@@ -319,6 +319,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
           } else {
             column = element?.tableName + "." + element?.relatedBy;
             let selectValue = (<HTMLInputElement>document.getElementById(column)).value;
+            console.log(column, selectValue);
             if ((selectValue != "0" && element?.columnName != element?.relatedBy)
               || element?.columnName == element?.relatedBy) {
               element.value = selectValue;

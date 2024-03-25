@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Detail } from '../components/model/Detail';
 import { UpdateParam } from '../components/model/UpdateParam';
 import { environment } from 'environments/environment';
+import { UniqueKey } from '../components/model/UniqueKey';
 
 @Injectable({
   providedIn: 'root'
@@ -155,5 +156,10 @@ export  class CommonService {
     console.log(this.baseEndpoint+"/api/business/register-new-user");
     
     return this.http.post(this.baseEndpoint+"/api/business/register-new-user", jsonData);
+  }
+
+  public validateUnique(url:string, uniqueObject:UniqueKey) : Promise<any> {
+    
+    return this.http.post<any>(this.baseEndpoint + url, uniqueObject).toPromise();
   }
 }

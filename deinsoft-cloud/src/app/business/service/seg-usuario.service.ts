@@ -35,5 +35,15 @@ export class SegUsuarioService {
     let params = new HttpParams().set("id",arg1);
     return this.http.delete(this.url+'/delete-seg-usuario', { observe: 'response' ,params}); 
   }
+
+  public changePassword(form:any): Observable<SegUsuario>{
+    return this.http.post<SegUsuario>(this.url+'/change-password-seg-usuario',form); 
+  }
+  public getRecoverPassword(form:any): Observable<SegUsuario>{
+    return this.http.post<SegUsuario>(this.url+'/get-recover-password',form); 
+  }
+  public recoverPassword(form:any): Observable<SegUsuario>{
+    return this.http.post<SegUsuario>(this.url+'/recover-password',form); 
+  }
 }
 

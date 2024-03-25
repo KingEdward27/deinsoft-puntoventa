@@ -95,7 +95,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
                         .authorizeRequests()
 				.antMatchers(HttpMethod.POST,"/login","/api/business/register-new-user").permitAll()
 				.antMatchers(HttpMethod.GET,"/api/business/get-data-sunat").permitAll()
-                                .antMatchers("/swagger-ui/**","/v3/**", "/resources/**").permitAll()
+                                .antMatchers("/swagger-ui/**","/v3/**", "/resources/**"
+                                        ,"/public/**", "/resources/**", "/resources/temp/**","/resources/public/**"
+                                        ,"/api/business/seg-usuario/get-recover-password","/api/business/seg-usuario/recover-password").permitAll()
 //                                .antMatchers(HttpMethod.GET,"/login").permitAll()
 //                                .antMatchers("/ventas-backend/login").permitAll() 
 			.anyRequest().authenticated()

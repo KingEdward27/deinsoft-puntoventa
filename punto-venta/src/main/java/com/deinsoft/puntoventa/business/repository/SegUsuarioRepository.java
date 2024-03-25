@@ -15,4 +15,6 @@ public interface SegUsuarioRepository extends JpaRepository<SegUsuario, Long> {
     List<SegUsuario> getAllSegUsuario(String nombre, String email, String password);
 
     List<SegUsuario> findByNombre(String nombre);
+    
+    List<SegUsuario> findByEmail(String email);
 }

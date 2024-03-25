@@ -14,7 +14,9 @@ import { CnfSubCategoriaService } from '../../../business/service/cnf-sub-catego
 import { CnfMarcaService } from '../../../business/service/cnf-marca.service';
 import { AppService } from '../../../services/app.service';
 import { filter } from 'rxjs/operators';
-
+import { MediaService } from '../media.service';
+import { HttpEventType } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cnf-producto-form',
@@ -52,6 +54,14 @@ export class CnfProductoFormComponent implements OnInit {
   selectedOption: any;
   passwordRepeat: any;
   fileToUpload: File | null = null;
+
+  barWidth: number = 0;
+  fileSizeUnit: number = 1024;
+  fileSize: any;
+  fileProgessSize: any;
+  uploadedMedia: Array<any> = [];
+  loadingFile: boolean;
+
   constructor(private cnfProductoService: CnfProductoService,
     private router: Router,
     private utilService: UtilService,
@@ -59,7 +69,8 @@ export class CnfProductoFormComponent implements OnInit {
     private cnfEmpresaService: CnfEmpresaService,
     private cnfSubCategoriaService: CnfSubCategoriaService,
     private cnfMarcaService: CnfMarcaService,
-    private route: ActivatedRoute,private appService:AppService) {
+    private route: ActivatedRoute,private appService:AppService,
+    private mediaService: MediaService) {
   }
   ngOnInit(): void {
     this.isDataLoaded = false;
@@ -102,40 +113,52 @@ export class CnfProductoFormComponent implements OnInit {
     // var tmppath = URL.createObjectURL($event.target.files.item(0));
     // console.log(tmppath);
     if (this.fileToUpload) {
-      console.log(this.fileToUpload.name);
+      //console.log(this.fileToUpload.name);
       this.model.file = this.fileToUpload;
 
-      // let fileSize0 = this.mediaService.getFileSize(this.fileToUpload.size);
-      // this.fileSize = this.mediaService.getFileSize(this.fileToUpload.size) +
-      //   ' ' +
-      //   this.mediaService.getFileSizeUnit(this.fileToUpload.size);
-      // let fileSizeInWords = this.mediaService.getFileSizeUnit(this.fileToUpload.size);
-      // this.opeVideoService.getVideoPathFromResources(this.fileToUpload.name,this.fileToUpload.size.toString()).subscribe(pathToServedFile => {
-      //   this.opeVideoService.postFile(this.fileToUpload)
-      //     .pipe(map(event => {
-      //       if (event.type == HttpEventType.UploadProgress) {
-      //         var eventTotal = event.total ? event.total : 0;
-      //         this.barWidth = Math.round(event.loaded / eventTotal * 100);
-      //         this.fileProgessSize = `${(
-      //           (fileSize0 * this.barWidth) /
-      //           100
-      //         ).toFixed(2)} ${fileSizeInWords}`;
-      //       } else if (event.type == HttpEventType.Response) {
-      //         this.barWidth = 0;
-      //         this.loadingFile = false;
-      //       }
-      //     })
-      //     )
-      //     .subscribe(data => {
-      //       // console.log(data);
-
-      //     });
-      //   try {
-      //     this.videoSource = pathToServedFile;
-      //   } catch (err) {
-      //     this.errorVideo = 'El video a seleccionar debe estar dentro del servidor establecido en la configuración del sistema';
-      //   }
-      // })
+      let fileSize0 = this.mediaService.getFileSize(this.fileToUpload.size);
+      this.fileSize = this.mediaService.getFileSize(this.fileToUpload.size) +
+        ' ' +
+        this.mediaService.getFileSizeUnit(this.fileToUpload.size);
+      let fileSizeInWords = this.mediaService.getFileSizeUnit(this.fileToUpload.size);
+      this.cnfProductoService.getVideoPathFromResources(this.fileToUpload.name,this.fileToUpload.size.toString()).subscribe(pathToServedFile => {
+        setTimeout(() => {
+          
+        }, 1000);
+        this.cnfProductoService.postFile(this.fileToUpload)
+          .pipe(map(event => {
+            if (event.type == HttpEventType.UploadProgress) {
+              var eventTotal = event.total ? event.total : 0;
+              this.barWidth = Math.round(event.loaded / eventTotal * 100);
+              this.fileProgessSize = `${(
+                (fileSize0 * this.barWidth) /
+                100
+              ).toFixed(2)} ${fileSizeInWords}`;
+            } else if (event.type == HttpEventType.Response) {
+              this.barWidth = 0;
+              this.loadingFile = false;
+              //console.log();
+              try {
+                ///console.log(pathToServedFile);
+                
+                this.model.rutaImagen = pathToServedFile + "/temp/" + this.fileToUpload.name;
+              } catch (err) {
+                console.log(err);
+                
+                //this.utilService.msgWarning("Error",err);
+                //this.errorVideo = 'El video a seleccionar debe estar dentro del servidor establecido en la configuración del sistema';
+              }
+            }
+          })
+          )
+          .subscribe(data => {
+            
+            
+          });
+          
+          
+        
+      })
     }
     
 

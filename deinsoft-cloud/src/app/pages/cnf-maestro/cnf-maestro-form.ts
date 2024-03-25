@@ -1,4 +1,5 @@
 import { GenericListComponent } from '@/base/components/generic-list/generic-list.component';
+import { UniqueKey } from '@/base/components/model/UniqueKey';
 import { CommonService } from '@/base/services/common.service';
 import { HttpClient } from '@angular/common/http';
 import { Component,OnInit} from '@angular/core';
@@ -68,26 +69,46 @@ export class CnfMaestroForm2Component implements OnInit{
     if (selectValue != "3") {
       
       let fullName = ""
-      if (this.prop.columnsForm[2].value) {
-        fullName = fullName + " " + this.prop.columnsForm[2].value
+      let apellidoPaterno = (<HTMLInputElement>document.getElementById("cnf_maestro.apellido_paterno")).value;
+      let apellidoMaterno = (<HTMLInputElement>document.getElementById("cnf_maestro.apellido_materno")).value;
+      let nombres = (<HTMLInputElement>document.getElementById("cnf_maestro.nombres")).value;
+      let nroDoc = (<HTMLInputElement>document.getElementById("cnf_maestro.nro_doc")).value;
+
+      if (!nroDoc) {
+        (<HTMLInputElement>document.getElementById("cnf_maestro.nro_doc")).value = "00000000"
+        this.prop.columnsForm[1].value = "00000000";
       }
-      if (this.prop.columnsForm[3].value) {
-        fullName = fullName + " " + this.prop.columnsForm[3].value
+      if (apellidoPaterno) {
+        fullName = fullName + " " + apellidoPaterno
       }
-      if (this.prop.columnsForm[4].value) {
-        fullName = fullName + " " + this.prop.columnsForm[4].value
+      if (apellidoMaterno) {
+        fullName = fullName + " " + apellidoMaterno
+      }
+      if (nombres) {
+        fullName = fullName + " " + nombres
       }
       console.log(fullName);
       
       this.prop.columnsForm[5].value = fullName.trim();
-      (<HTMLInputElement>document.getElementById("cnf_maestro.razon_social")).value = fullName.trim()
+      //(<HTMLInputElement>document.getElementById("cnf_maestro.razon_social")).value = fullName.trim()
     } else {
-      this.prop.columnsForm[4].value = this.prop.columnsForm[5].value
+      //this.prop.columnsForm[4].value = this.prop.columnsForm[5].value
     }
     if (!this.prop.columnsForm[5].value) {
       this.prop.columnsForm[5].required = true;
     }
-    
+    // let uk = new UniqueKey();
+    // uk.tableName = "cnf_maestro"
+    // uk.columns = ["nro_doc"]
+    // this._commonService.validateUnique(uk);
+    // let wa = await this._commonService.validateUnique(uk)
+    // .catch(err => {
+    //     if (err.status === 422) {
+    //       console.log("error..");
+          
+    //       this.error = err.error;
+    //     }
+    // });
     return true;
   }
   onChangeTipoDoc = () => {
@@ -118,12 +139,13 @@ export class CnfMaestroForm2Component implements OnInit{
     this.prop.functions.push({func : this.wa});
     
     console.log(this.prop);
-    $('#cnf_tipo_documento.cnf_tipo_documento_id').change(function(){
-        alert($(this).val());
-    })
+    
     
     this.changes = []
     this.changes.push({columnName: "cnf_tipo_documento.cnf_tipo_documento_id", function:this.onChangeTipoDoc})
+    $('#cnf_tipo_documento.cnf_tipo_documento_id').change(function(){
+      alert($(this).val());
+    })
     //super.ngOnInit();
   }
   otroLog () {

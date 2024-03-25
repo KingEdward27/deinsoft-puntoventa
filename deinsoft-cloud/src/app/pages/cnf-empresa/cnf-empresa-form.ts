@@ -28,10 +28,7 @@ export class CnfEmpresaForm2Component implements OnInit{
                 {tableName: "cnf_region", "columnName":"nombre","type":"select",loadState : 1,loadFor:"cnf_distrito_id",load:{tableName:"cnf_provincia",loadBy:"cnf_region_id"}},
                 {tableName: "cnf_provincia", "columnName":"nombre","type":"select",loadState : 0,loadFor:"cnf_distrito_id",load:{tableName:"cnf_distrito",loadBy:"cnf_provincia_id"}},
                 {tableName: "cnf_distrito", "columnName":"nombre","type":"select",loadState : 0,loadFor:"cnf_distrito_id",relatedBy:"cnf_distrito_id"},
-                {tableName: "cnf_empresa",columnName:"ruta_pse",type:"input"},
-                {tableName: "cnf_empresa",columnName:"token",type:"input"},
-                {tableName: "cnf_empresa",columnName:"perfil_empresa","type":"select",loadState : 1, relatedBy :"perfil_empresa",
-                listData:[]},
+                
                 {tableName: "cnf_empresa",columnName:"flag_compra_rapida","type":"select",loadState : 1, relatedBy :"flag_compra_rapida",
                 listData:[]},
                 {tableName: "cnf_empresa",columnName:"flag_venta_rapida","type":"select",loadState : 1, relatedBy :"flag_venta_rapida",
@@ -75,17 +72,17 @@ export class CnfEmpresaForm2Component implements OnInit{
     this.prop.id = cnfEmpresa;
     console.log(cnfEmpresa);
     
-    this.prop.columnsForm[11].listData.push([0, "- Seleccione -"]);
-    this.prop.columnsForm[11].listData.push([1, "Venta de productos y servicios"]);
-    this.prop.columnsForm[11].listData.push([2, "Servicio de pago mensual"]); 
-    this.prop.columnsForm[11].listData.push([3, "Colegio"]); 
-    this.prop.columnsForm[11].listData.push([4, "Lavanderia"]); 
+    // this.prop.columnsForm[11].listData.push([0, "- Seleccione -"]);
+    // this.prop.columnsForm[11].listData.push([1, "Venta de productos y servicios"]);
+    // this.prop.columnsForm[11].listData.push([2, "Servicio de pago mensual"]); 
+    // this.prop.columnsForm[11].listData.push([3, "Colegio"]); 
+    // this.prop.columnsForm[11].listData.push([4, "Lavanderia"]); 
 
-    this.prop.columnsForm[12].listData.push([0, "NO"]);
-    this.prop.columnsForm[12].listData.push([1, "SI"]);
+    this.prop.columnsForm[9].listData.push([0, "NO"]);
+    this.prop.columnsForm[9].listData.push([1, "SI"]);
 
-    this.prop.columnsForm[13].listData.push([0, "NO"]);
-    this.prop.columnsForm[13].listData.push([1, "SI"]);
+    this.prop.columnsForm[10].listData.push([0, "NO"]);
+    this.prop.columnsForm[10].listData.push([1, "SI"]);
 
     this.prop.conditions.push({"columnName":"cnf_empresa.cnf_empresa_id","value":cnfEmpresa});
     this.prop.preSave.push({columnForm:"cnf_empresa.cnf_empresa_id",value:cnfEmpresa});

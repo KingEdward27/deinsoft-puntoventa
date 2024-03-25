@@ -39,4 +39,6 @@ public interface CnfProductoService extends CommonService<CnfProducto> {
     public byte[] getPdfcodeBars(ParamBean param) throws ParseException, Exception;
     
     public List<CnfProducto> getAllCnfProductTypeHeadNoServicios(String nameOrValue, long cnfEmpresaId);
+    
+    public void storeTemp(MultipartFile file);
 }

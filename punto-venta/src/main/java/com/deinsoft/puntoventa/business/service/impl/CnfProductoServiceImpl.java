@@ -33,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
-public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfProductoRepository> 
+public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfProductoRepository>
         implements CnfProductoService {
 
     @Autowired
@@ -41,22 +41,22 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
 
     @Autowired
     StorageService storageService;
-    
+
     @Autowired
     AppConfig appConfig;
-    
+
     @Autowired
     AuthenticationHelper auth;
-    
+
     static DateTimeFormatter YYYYMMDDHHMMSS_FORMATER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-    
+
     public List<CnfProducto> getAllCnfProducto(CnfProducto cnfProducto) {
         List<CnfProducto> cnfProductoList = (List<CnfProducto>) cnfProductoRepository.getAllCnfProducto(
                 cnfProducto.getCnfEmpresaId(),
-                cnfProducto.getCodigo().toUpperCase(), 
-                cnfProducto.getNombre().toUpperCase(), 
-                cnfProducto.getRutaImagen().toUpperCase(), 
-                cnfProducto.getFlagEstado().toUpperCase(), 
+                cnfProducto.getCodigo().toUpperCase(),
+                cnfProducto.getNombre().toUpperCase(),
+                cnfProducto.getRutaImagen().toUpperCase(),
+                cnfProducto.getFlagEstado().toUpperCase(),
                 cnfProducto.getBarcode().toUpperCase());
         return cnfProductoList;
     }
@@ -69,25 +69,29 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
         }
         return cnfProducto;
     }
+
     @Transactional
-    public CnfProducto saveCnfProducto(CnfProducto cnfProducto,MultipartFile file) {
-        if(cnfProducto.getCnfSubCategoria().getId() == 0){
+    public CnfProducto saveCnfProducto(CnfProducto cnfProducto, MultipartFile file) {
+        if (cnfProducto.getCnfSubCategoria().getId() == 0) {
             cnfProducto.setCnfSubCategoria(null);
         }
-        if(cnfProducto.getCnfMarca() != null && cnfProducto.getCnfMarca().getId() == 0){
+        if (cnfProducto.getCnfMarca() != null && cnfProducto.getCnfMarca().getId() == 0) {
             cnfProducto.setCnfMarca(null);
         }
-        if(cnfProducto.getCnfUnidadMedida().getId() == 0){
+        if (cnfProducto.getCnfUnidadMedida().getId() == 0) {
             cnfProducto.setCnfUnidadMedida(null);
         }
         cnfProducto.setFechaRegistro(LocalDateTime.now());
-        if (file != null) {
-            String formattedString = cnfProducto.getFechaRegistro().format(YYYYMMDDHHMMSS_FORMATER);
-            cnfProducto.setRutaImagen(appConfig.getUrlBackend() + "/" + appConfig.getFolderResources() + "/" + formattedString + "." + "jpg");
-            storageService.store(file, formattedString + "." + "jpg");
-        }
         
+
         CnfProducto cnfProductoResult = cnfProductoRepository.save(cnfProducto);
+        if (file != null) {
+            //String formattedString = cnfProducto.getFechaRegistro().format(YYYYMMDDHHMMSS_FORMATER);
+            cnfProducto.setRutaImagen(appConfig.getUrlBackend()  
+                    + appConfig.getFolderResources() + "/" + cnfProductoResult.getId() + "." +  "jpg");
+            storageService.store(file, cnfProductoResult.getId() + "." + "jpg");
+        }
+        cnfProductoRepository.save(cnfProductoResult);
         return cnfProductoResult;
     }
 
@@ -129,33 +133,33 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
 
     @Override
     public List<CnfProducto> getAllCnfProductTypeHead(String nameOrValue, long cnfEmpresaId) {
-        List<CnfProducto> cnfProductList = (List<CnfProducto>) cnfProductoRepository.getAllCnfProductTypeHead
-        (nameOrValue.toUpperCase(),cnfEmpresaId);
-        
+        List<CnfProducto> cnfProductList = (List<CnfProducto>) cnfProductoRepository.getAllCnfProductTypeHead(nameOrValue.toUpperCase(), cnfEmpresaId);
+
         return cnfProductList;
     }
+
     @Override
     public List<CnfProducto> getAllCnfProductTypeHeadNoServicios(String nameOrValue, long cnfEmpresaId) {
-        List<CnfProducto> cnfProductList = (List<CnfProducto>) cnfProductoRepository.getAllCnfProductTypeHead
-        (nameOrValue.toUpperCase(),cnfEmpresaId).stream()
+        List<CnfProducto> cnfProductList = (List<CnfProducto>) cnfProductoRepository.getAllCnfProductTypeHead(nameOrValue.toUpperCase(), cnfEmpresaId).stream()
                 .filter(predicate -> !predicate.getCnfUnidadMedida().getCodigoSunat().equals("ZZ"))
                 .collect(Collectors.toList());
-        
+
         return cnfProductList;
     }
+
     @Override
     public List<CnfProducto> getAllCnfProductoCodeBarsPre(ParamBean param) {
-        List<CnfProducto> cnfProductoList 
+        List<CnfProducto> cnfProductoList
                 = (List<CnfProducto>) cnfProductoRepository
                         .findByCnfEmpresaId(param.getCnfEmpresa().getId())
                         .stream()
-                .filter(predicate -> !predicate.getCnfUnidadMedida().getCodigoSunat().equals("ZZ"))
-                .filter(predicate -> param.getCnfCategoria().getId() == 0 || 
-                        predicate.getCnfSubCategoria().getCnfCategoria().getId() == param.getCnfCategoria().getId())
-                .collect(Collectors.toList());
+                        .filter(predicate -> !predicate.getCnfUnidadMedida().getCodigoSunat().equals("ZZ"))
+                        .filter(predicate -> param.getCnfCategoria().getId() == 0
+                        || predicate.getCnfSubCategoria().getCnfCategoria().getId() == param.getCnfCategoria().getId())
+                        .collect(Collectors.toList());
         return cnfProductoList;
     }
-    
+
     @Override
     public byte[] getPdfcodeBars(ParamBean param) throws ParseException, Exception {
         GenerateItextPdf generateItextPdf = new GenerateItextPdf();
@@ -168,12 +172,12 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
         List<byte[]> list = new ArrayList<>();
         List<String> listCodes = new ArrayList<>();
         for (CnfProducto cnfProducto : cnfProductoList) {
-            String code = StringUtils.leftPad(String.valueOf(cnfProducto.getCnfEmpresa().getId()),3,"0")
-                + StringUtils.leftPad(String.valueOf(cnfProducto.getCnfMarca().getId()),3,"0")
-                + StringUtils.leftPad(String.valueOf(cnfProducto.getCnfSubCategoria().getCnfCategoria().getId()),3,"0")
-                + StringUtils.leftPad(String.valueOf(cnfProducto.getId()),3,"0");
-            
-            int[] i = {1,3,1,3,1,3,1,3,1,3,1,3};
+            String code = StringUtils.leftPad(String.valueOf(cnfProducto.getCnfEmpresa().getId()), 3, "0")
+                    + StringUtils.leftPad(String.valueOf(cnfProducto.getCnfMarca().getId()), 3, "0")
+                    + StringUtils.leftPad(String.valueOf(cnfProducto.getCnfSubCategoria().getCnfCategoria().getId()), 3, "0")
+                    + StringUtils.leftPad(String.valueOf(cnfProducto.getId()), 3, "0");
+
+            int[] i = {1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3};
             int sum = 0;
             for (int j = 0; j < code.length(); j++) {
                 sum = sum + Integer.valueOf(String.valueOf(code.charAt(j))) * i[j];
@@ -181,16 +185,23 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
             int checkSum = Math.round(Util.round((sum + 9) / 10, 0)) * 10 - sum;
 
             listCodes.add(code + checkSum);
-            list.add(CodigoQR.generateEAN13BarcodeImage(code + checkSum)); 
+            list.add(CodigoQR.generateEAN13BarcodeImage(code + checkSum));
         }
-        int[] anchoColumnas = {100,100,100,100,100};
+        int[] anchoColumnas = {100, 100, 100, 100, 100};
         generateItextPdf.setTitle("Códigos de Barras");
         generateItextPdf.setSubTitle(" ");
         generateItextPdf.setAnchoColumnas(anchoColumnas);
-        byte[] array = generateItextPdf.generateFromLinearDataImages(list,listCodes);
+        byte[] array = generateItextPdf.generateFromLinearDataImages(list, listCodes);
 //        byte[] array = new byte[ius.available()];
 //        ius.read(array);
 
         return array;
-    }    
+    }
+
+    @Override
+    public void storeTemp(MultipartFile file) {
+//        String formattedString = LocalDateTime.now().format(YYYYMMDDHHMMSS_FORMATER);
+//        String pathToImage = "/temp/" + formattedString + "." + "jpg";
+        storageService.storeTemp(file);
+    }
 }

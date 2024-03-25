@@ -22,4 +22,10 @@ public interface SegUsuarioService extends CommonService<SegUsuario> {
     public void delete(long id);
 
     SegUsuario registerNewUser(SegUsuario segUsuario) throws Exception;
+    
+    public SegUsuario changePassword(SegUsuario segUsuario) throws Exception;
+    
+    public SegUsuario getRecoverPassword(SegUsuario segUsuario) throws Exception ;
+    
+    public SegUsuario recoverPassword(SegUsuario segUsuario) throws Exception ;
 }

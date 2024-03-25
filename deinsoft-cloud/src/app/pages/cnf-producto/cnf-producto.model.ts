@@ -19,6 +19,7 @@ export class CnfProducto {
 	cnfEmpresa: CnfEmpresa = new CnfEmpresa();
 	cnfSubCategoria: CnfSubCategoria = new CnfSubCategoria();
 	cnfMarca: CnfMarca = new CnfMarca();
+	porcentajeGanancia!: number;
 	token?: string = "";
 	file:any;
 };

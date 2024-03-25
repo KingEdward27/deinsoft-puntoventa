@@ -61,5 +61,16 @@ export class CnfProductoService {
     let params = new HttpParams().set("id", arg1);
     return this.http.delete(this.url + '/delete-cnf-producto', { observe: 'response', params });
   }
+
+  public postFile(fileToUpload: File): Observable<any> {
+    const endpoint = this.url + '/upload';
+    const formData: FormData = new FormData();
+    formData.append('file', fileToUpload, fileToUpload.name);
+    return this.http.post(endpoint, formData, { headers: {}, reportProgress: true, observe: 'events' })
+
+  }
+  public getVideoPathFromResources(nameVideo: string,sizeVideo: string): Observable<string> {
+    return this.http.get(`${this.url}/get-ope-video-path?fileName=${nameVideo}&fileSize=${sizeVideo}`, {responseType: 'text'});
+  }
 }
 

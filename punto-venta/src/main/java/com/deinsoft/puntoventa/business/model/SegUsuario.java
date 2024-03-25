@@ -53,6 +53,12 @@ public class SegUsuario implements Serializable {
     @Transient
     private String nombreEmpresa;
     
+    @Column(name = "flag_recover_password", nullable = true)
+    private byte flagRecoverPassword;
+
+    @Transient
+    private String tokenRecoverPassword;
+    
     public long getId() {
         return id;
     }
@@ -128,6 +134,22 @@ public class SegUsuario implements Serializable {
 
     public void setNombreEmpresa(String nombreEmpresa) {
         this.nombreEmpresa = nombreEmpresa;
+    }
+
+    public byte getFlagRecoverPassword() {
+        return flagRecoverPassword;
+    }
+
+    public void setFlagRecoverPassword(byte flagRecoverPassword) {
+        this.flagRecoverPassword = flagRecoverPassword;
+    }
+
+    public String getTokenRecoverPassword() {
+        return tokenRecoverPassword;
+    }
+
+    public void setTokenRecoverPassword(String tokenRecoverPassword) {
+        this.tokenRecoverPassword = tokenRecoverPassword;
     }
 
 }

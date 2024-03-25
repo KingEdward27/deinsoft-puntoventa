@@ -73,6 +73,31 @@ public class FileSystemStorageService implements StorageService {
      * file Description: save in temp folder
      */
     @Override
+    public void storeTemp(MultipartFile file) {
+        try {
+            if (file.isEmpty()) {
+                throw new StorageException("Failed to store empty file.");
+            }
+            Path destinationFile = this.rootLocation.resolve(
+                    Paths.get("/temp/" + file.getOriginalFilename()))
+                    .normalize().toAbsolutePath();
+//            if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
+//                // This is a security check
+//                throw new StorageException(
+//                        "Cannot store file outside current directory.");
+//            }
+            try ( InputStream inputStream = file.getInputStream()) {
+                Files.copy(inputStream, destinationFile,
+                        StandardCopyOption.REPLACE_EXISTING);
+                
+            }
+            
+        } catch (IOException e) {
+            throw new StorageException("Failed to store file.", e);
+        }
+    }
+    
+    @Override
     public void store(MultipartFile file, String name) {
         try {
             if (file.isEmpty()) {
@@ -81,11 +106,12 @@ public class FileSystemStorageService implements StorageService {
             Path destinationFile = this.rootLocation.resolve(
                     Paths.get(name))
                     .normalize().toAbsolutePath();
-            if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
-                // This is a security check
-                throw new StorageException(
-                        "Cannot store file outside current directory.");
-            }
+//            if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath()) 
+//                    && !destinationFile.getParent().equals(Paths.get(this.rootLocation + "\temp"))) {
+//                // This is a security check
+//                throw new StorageException(
+//                        "Cannot store file outside current directory.");
+//            }
             try ( InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile,
                         StandardCopyOption.REPLACE_EXISTING);
@@ -138,33 +164,35 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public String getPath(Path location, Path resourcesFolder, String fileName, long fileSize) {
-        try {
-            return loadAll(location)
-                    .filter(predicate -> {
-                        try {
-                            if (predicate.getFileName().endsWith(fileName)) {
-                                Resource file = loadAsResource(location, resourcesFolder, predicate.toString());
-                                return predicate.getFileName().endsWith(fileName)
-                                        && file.getInputStream().available() == fileSize;
-                            } else {
-                                return false;
-                            }
-
-                        } catch (IOException ex) {
-
-                            java.util.logging.Logger.getLogger(FileSystemStorageService.class.getName()).log(Level.SEVERE, null, ex);
-                            return false;
-                        }
-                    })
-                    .map(path -> {
-                        System.out.println("path " + path);
-                        return appConfig.getUrlBackend() + resourcesFolder.toString() + "/" + path.toString();
-                    })
-                    .findFirst().orElse("");
-        } catch (RuntimeException ex) {
-            java.util.logging.Logger.getLogger(FileSystemStorageService.class.getName()).log(Level.SEVERE, null, ex);
-            return "";
-        }
+        return appConfig.getUrlBackend() + resourcesFolder.toString() ;
+//        try {
+//            return loadAll(location)
+//                    .filter(predicate -> {
+//                        try {
+//                            if (predicate.getFileName().endsWith(fileName)) {
+//                                Resource file = loadAsResource(location, resourcesFolder, predicate.toString());
+//                                
+//                                return predicate.getFileName().endsWith(fileName)
+//                                        && file.getInputStream().available() == fileSize;
+//                            } else {
+//                                return false;
+//                            }
+//
+//                        } catch (IOException ex) {
+//
+//                            java.util.logging.Logger.getLogger(FileSystemStorageService.class.getName()).log(Level.SEVERE, null, ex);
+//                            return false;
+//                        }
+//                    })
+//                    .map(path -> {
+//                        System.out.println("path " + path);
+//                        return appConfig.getUrlBackend() + resourcesFolder.toString() + "/" + path.toString();
+//                    })
+//                    .findFirst().orElse("");
+//        } catch (RuntimeException ex) {
+//            java.util.logging.Logger.getLogger(FileSystemStorageService.class.getName()).log(Level.SEVERE, null, ex);
+//            return "";
+//        }
     }
 
     @Override

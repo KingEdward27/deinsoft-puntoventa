@@ -48,7 +48,7 @@ public class CnfMaestroController extends CommonController<CnfMaestro, CnfMaestr
     @PostMapping(value = "/save-cnf-maestro")
     public ResponseEntity<?> saveCnfMaestro(@Valid @RequestBody CnfMaestro cnfMaestro, BindingResult result) throws Exception {
         Map<String, Object> errores = new HashMap<>();
-        if(cnfMaestro.getCnfTipoDocumento().getId() == 0){
+        if(cnfMaestro.getCnfTipoDocumento().getId() == 0) {
             errores.put("cnfTipoDocumento.nombre", " Debe seleccionar el tipo de documento");
         }
         if(cnfMaestro.getCnfDistrito().getId() == 0){
@@ -58,7 +58,8 @@ public class CnfMaestroController extends CommonController<CnfMaestro, CnfMaestr
                 && cnfMaestro.getNombres().trim().equals("")){
             errores.put("nombres", " Debe ingresar los nombres del cliente o proveedor");
         }
-        if(cnfMaestro.getNroDoc().equals("")){
+        if(cnfMaestro.getCnfTipoDocumento().getCodigoSunat().equals("6") 
+                && cnfMaestro.getNroDoc().equals("")){
             errores.put("nombres", " Debe ingresar el número de documento del cliente o proveedor");
         }
         if(cnfMaestro.getCnfTipoDocumento().getCodigoSunat().equals("6") 

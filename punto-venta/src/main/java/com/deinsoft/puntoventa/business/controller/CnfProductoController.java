@@ -8,13 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 import com.deinsoft.puntoventa.business.commons.controller.CommonController;
-import com.deinsoft.puntoventa.business.model.ActComprobante;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import javax.validation.Valid;
-
-import com.deinsoft.puntoventa.business.model.CnfProducto;
-import com.deinsoft.puntoventa.business.service.CnfProductoService;
 import com.deinsoft.puntoventa.framework.model.UpdateParam;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -25,6 +18,16 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import com.deinsoft.puntoventa.business.model.ActComprobante;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import javax.validation.Valid;
+
+import com.deinsoft.puntoventa.business.model.CnfProducto;
+import com.deinsoft.puntoventa.business.service.CnfProductoService;
+import com.deinsoft.puntoventa.business.service.StorageService;
+import com.deinsoft.puntoventa.config.AppConfig;
+import java.nio.file.Paths;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +41,12 @@ public class CnfProductoController extends CommonController<CnfProducto, CnfProd
     @Autowired
     CnfProductoService cnfProductoService;
 
+    @Autowired
+    StorageService storageService;
+    
+    @Autowired
+    AppConfig appConfig;
+    
     @GetMapping(value = "/get-all-cnf-producto")
     public List<CnfProducto> getAllCnfProducto(CnfProducto cnfProducto) {
         logger.info("getAllCnfProducto received: " + cnfProducto.toString());
@@ -160,5 +169,18 @@ public class CnfProductoController extends CommonController<CnfProducto, CnfProd
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).headers(headers).contentType(mediaType).body("Ocurrió un error en el servidor");
 
+    }
+    
+    @PostMapping("/upload")
+    public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
+        cnfProductoService.storeTemp(file);
+        return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping(value = "/get-ope-video-path")
+    public String getPathPreResources(@Param("fileName") String fileName, @Param("fileName") long fileSize) {
+        String path = storageService.getPath(Paths.get(appConfig.getFileSystemBasePath()+"/temp"), 
+                Paths.get(appConfig.getFolderResources()), fileName, fileSize);
+        return path;
     }
 }

@@ -9,4 +9,6 @@ export class SegUsuario {
 	token?: string = "";
 	rucEmpresa: string;
 	nombreEmpresa:string;
+	
+	tokenRecoverPassword?: string = "";
 };

@@ -42,7 +42,7 @@
                                             <div class="col-sm-12 col-lg-12">
                                                 <select name="model.cnfLocal" [compareWith]="compareCnfLocal"
                                                     [(ngModel)]="model.cnfLocal"
-                                                    class="form-control-sm col-sm-12 col-lg-12"
+                                                    class="form-control col-sm-12 col-lg-12"
                                                     (change)="getListInvAlmacen()">
                                                     <option *ngIf="loadingCnfLocal" [ngValue]="0" selected="selected">
                                                         Cargando...</option>

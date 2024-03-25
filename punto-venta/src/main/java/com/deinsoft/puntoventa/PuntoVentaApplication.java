@@ -48,7 +48,8 @@ public class PuntoVentaApplication extends WebMvcConfigurerAdapter implements Co
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/" + appConfig.getFolderResources() + "/**")
-                .addResourceLocations("file:///" + appConfig.getFileSystemBasePath() + "/");
+                .addResourceLocations("file:///" + appConfig.getFileSystemBasePath() + "/",
+                        "file:///" + appConfig.getFileSystemBasePath() + "/temp/");
 
     }
 

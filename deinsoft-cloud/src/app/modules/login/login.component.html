@@ -1,9 +1,9 @@
-<div class="card card-outline card-primary">
-    <div class="card-header text-center">
-        <a [routerLink]="['/']" class="h1">
+<div class="card card-primary">
+    <div class="text-center mt-4">
+        <a href="https://deinsoft-la.com/" target="_blank" class="text-logo">
             <img src="assets/img/logo_deinsoft.png"
                 alt="Deinsoft Logo"
-                style="opacity: 0.8" width="40%" />
+                style="opacity: 0.8" width="30%" /> DEINSOFT
         </a>
     </div>
     <div class="card-body">
@@ -37,35 +37,40 @@
                 </div>
             </div>
             <div class="row text-center">
-                <!-- <div class="col-7">
+                <!-- <div class="col-12">
                     <div class="icheck-primary">
                         <input type="checkbox" id="remember" />
-                        <label for="remember"> Remember Me </label>
+                        <label for="remember"> Confiar en este dispositivo </label>
                     </div>
                 </div> -->
                 <!-- /.col -->
-                <div class="col-5 m-auto">
+                <div class="col-5 m-auto pt-2">
                     <app-button
                         [type]="'submit'"
                         [block]="true"
                         [loading]="isAuthLoading"
                         [disabled]="isFacebookLoading || isGoogleLoading"
                     >
-                        ingresar
+                        Ingresar
                     </app-button>
                 </div>
                 <!-- /.col -->
             </div>
         </form>
-
-        <!-- <p class="mb-1">
-            <a [routerLink]="['/forgot-password']">Olvidé mi contraseña</a>
-        </p> -->
-        <p class="mb-0">
-            <a [routerLink]="['/register']" class="text-center">
-                Registrese
-            </a>
-        </p>
+        <div class="text-center mt-4">
+            <p class="mb-1">
+                <a [routerLink]="['/forgot-password']">Olvidé mi contraseña</a>
+            </p>
+    
+            
+            <p class="mb-0">
+                ¿No tienes cuenta? <a [routerLink]="['/register']" class="text-center">
+                    Regístrate
+                </a>
+            </p>
+            <img class="text-center mt-4" width="50%" src="assets/img/verificacion.png" alt="">
+        </div>
+       
     </div>
     <!-- /.login-card-body -->
 </div>

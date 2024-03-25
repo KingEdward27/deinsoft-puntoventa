@@ -12,6 +12,7 @@ import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.business.service.SegUsuarioService;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/seg-usuario")
@@ -51,5 +52,21 @@ public class SegUsuarioController extends CommonController<SegUsuario, SegUsuari
     public ResponseEntity<?> delete(@Param("id") Long id) {
         segUsuarioService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    
+    @PostMapping(value = "/change-password-seg-usuario")
+    public ResponseEntity<?> changePasswordUsuario(@RequestBody SegUsuario segUsuario, BindingResult result) throws Exception {
+        return ResponseEntity.status(HttpStatus.CREATED).body(segUsuarioService.changePassword(segUsuario));
+    }
+    
+    @PostMapping(value = "/get-recover-password")
+    public ResponseEntity<?> getRecoverPasswordUsuario(@RequestBody SegUsuario segUsuario) throws Exception {
+        return ResponseEntity.status(HttpStatus.CREATED).body(segUsuarioService.getRecoverPassword(segUsuario));
+    }
+    
+    @PostMapping(value = "/recover-password")
+    public ResponseEntity<?> recoverPasswordUsuario(@RequestBody SegUsuario segUsuario) throws Exception {
+        return ResponseEntity.status(HttpStatus.CREATED).body(segUsuarioService.recoverPassword(segUsuario));
     }
 }

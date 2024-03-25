@@ -279,7 +279,7 @@
       "precio": "precio",
       "codigo": "Código",
       "descripcion": "Descripción",
-      "cnf_producto.cnf_producto_id, cnf_producto.nombre":"Producto",
+      "cnf_producto.cnf_producto_id, cnf_producto.nombre":"Producto/Servicio",
       "barcode":"Código de barras",
       "costo":"Costo",
       "flag_servicio":"Es servicio",
@@ -289,7 +289,8 @@
       "cnf_empresa":"Empresa",
       "cnf_categoria":"Categoria",
       "cnf_sub_categoria":"Sub categoria",
-      "flag_estado":"Estado"
+      "flag_estado":"Estado",
+      "porcentaje_ganancia":"Porcentaje ganancia"
     },
     "inv_almacen": {
       "home": {

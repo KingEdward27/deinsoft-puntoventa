@@ -175,11 +175,11 @@ export class GenericList3Component extends CommonService implements OnInit {
     super.getList(this.properties)
       .subscribe(data => {
         this.listDetail = data;
+        this.dataTable?.destroy();
         setTimeout(() => {
           this.dataTable = $('#dtData' + this.properties.tableName).DataTable(
             this.datablesSettings);
         }, 1);
-        this.dataTable?.destroy();
       });
 
   }

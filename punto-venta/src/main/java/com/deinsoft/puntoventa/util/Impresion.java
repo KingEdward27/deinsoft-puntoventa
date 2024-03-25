@@ -85,7 +85,9 @@ public class Impresion {
             List<Map<String, Object>> listDetail = (List<Map<String, Object>>) datosVenta.get("list_act_comprobante_detalle");
             Map<String, Object> local = (Map<String, Object>) datosVenta.get("cnf_local");
             Map<String, Object> empresa = (Map<String, Object>) local.get("cnf_empresa");
-            parametros.put("razon_social", empresa.get("nombre").toString());
+            Map<String, Object> usuario = (Map<String, Object>) local.get("seg_usuario");
+            
+            parametros.put("razon_social", empresa.get("descripcion").toString());
             parametros.put("direccion", empresa.get("direccion").toString());
             parametros.put("ruc", empresa.get("nro_documento").toString());
             parametros.put("ptelefono", empresa.get("telefono").toString());
@@ -97,9 +99,7 @@ public class Impresion {
                     : datosVenta.get("serie").toString() + "-" + String.format("%08d", Integer.parseInt(String.valueOf(datosVenta.get("numero")))));
 
             parametros.put("ruc_dniCliente", cliente.get("nro_doc").toString());
-            parametros.put("nombreCliente", cliente.get("apellido_paterno").toString() + " "
-                    + cliente.get("apellido_materno").toString() + " "
-                    + cliente.get("nombres").toString());
+            parametros.put("nombreCliente", cliente.get("razon_social").toString());
             parametros.put("direccionCliente", cliente.get("direccion").toString());
 
             parametros.put("pFechaEmision", Formatos.sdfFecha.format(datosVenta.get("fecha")));
@@ -114,7 +114,7 @@ public class Impresion {
             parametros.put("ptotal_letras", "SON " + NumberToLetterConverter.convertNumberToLetter(
                     datosVenta.get("total").toString(), moneda.get("nombre").toString()));
 
-            parametros.put("pusuario_fecha", "admin el " + Formatos.sdfFecha.format(datosVenta.get("fecha")));
+            parametros.put("pusuario_fecha", usuario.get("nombre") + " el " + Formatos.sdfFecha.format(datosVenta.get("fecha")));
             parametros.put("presolucion", "Autorizado mediantes resolución N° " + Constantes.RESOLUCION);
             parametros.put("tipoDocFooter", "Representación impresa de el/la " + tipoDoc.get("nombre").toString() + " ELECTRÓNICA");
             parametros.put("ppagina", "Para consultar el comprobante visita " + Constantes.PAGINA_WEB);
@@ -290,10 +290,10 @@ public class Impresion {
 //            List<Map<String,Object>> listDetail = (List<Map<String,Object>>)datosVenta.get("list_act_comprobante_detalle");
 //            Map<String,Object> local = (Map<String,Object>)datosVenta.get("cnf_local");
 //            Map<String,Object> empresa = (Map<String,Object>)local.get("cnf_empresa");
-            parametros.put("razon_social", datosVenta.getCnfLocal().getCnfEmpresa().getNombre());
+            parametros.put("razon_social", datosVenta.getCnfLocal().getCnfEmpresa().getDescripcion());
             parametros.put("direccion", datosVenta.getCnfLocal().getCnfEmpresa().getDireccion());
             parametros.put("ruc", datosVenta.getCnfLocal().getCnfEmpresa().getNroDocumento());
-            parametros.put("ptelefono", datosVenta.getCnfLocal().getCnfEmpresa().getTelefono());
+            parametros.put("ptelefono", "Celular: " +  datosVenta.getCnfLocal().getCnfEmpresa().getTelefono());
 
             String tipoDocSunat = datosVenta.getCnfTipoComprobante().getCodigoSunat();
             parametros.put("tipodoc", isTicket ? "TICKET DE ATENCIÓN" : (tipoDocSunat.equals("00")
@@ -302,9 +302,7 @@ public class Impresion {
                     : datosVenta.getSerie() + "-" + String.format("%08d", Integer.parseInt(String.valueOf(datosVenta.getNumero()))));
 
             parametros.put("ruc_dniCliente", datosVenta.getCnfMaestro().getNroDoc());
-            parametros.put("nombreCliente", datosVenta.getCnfMaestro().getApellidoPaterno() + " "
-                    + datosVenta.getCnfMaestro().getApellidoMaterno() + " "
-                    + datosVenta.getCnfMaestro().getNombres());
+            parametros.put("nombreCliente", datosVenta.getCnfMaestro().getRazonSocial());
             parametros.put("direccionCliente", datosVenta.getCnfMaestro().getDireccion());
 
             parametros.put("pFechaEmision", datosVenta.getFecha().format(YYYYMMDD_FORMATER));
@@ -318,7 +316,7 @@ public class Impresion {
             parametros.put("ptotal_letras", "SON " + NumberToLetterConverter.convertNumberToLetter(
                     datosVenta.getTotal().toString(), datosVenta.getCnfMoneda().getNombre()));
 
-            parametros.put("pusuario_fecha", "admin el " + datosVenta.getFecha().format(YYYYMMDD_FORMATER));
+            parametros.put("pusuario_fecha", datosVenta.getSegUsuario().getNombre() + " el " + datosVenta.getFecha().format(YYYYMMDD_FORMATER));
             parametros.put("presolucion", "Autorizado mediantes resolución N° " + Constantes.RESOLUCION);
             parametros.put("tipoDocFooter", "Representación impresa de el/la " + datosVenta.getCnfTipoComprobante().getNombre() + " ELECTRÓNICA");
             parametros.put("ppagina", "Para consultar el comprobante visita " + Constantes.PAGINA_WEB);

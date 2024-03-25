@@ -249,7 +249,7 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
     }
     @PostMapping(value = "/getpdflocal")
     public ResponseEntity<?> getPdfLocal(@RequestBody UpdateParam param) throws ParseException, Exception {
-        HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders(); 
         MediaType mediaType = MediaType.APPLICATION_PDF;
         Map<String, Object> map = param.getMap();
         String id = map.get("id").toString();

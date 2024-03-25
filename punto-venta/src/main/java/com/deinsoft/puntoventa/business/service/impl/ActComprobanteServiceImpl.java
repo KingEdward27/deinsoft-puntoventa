@@ -175,7 +175,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                 cnfNumComprobanteRepository.save(cnfNumComprobante);
 
                 actComprobante.setFechaRegistro(LocalDateTime.now());
-                actComprobante.setNumero(String.valueOf(numComprobante.get(0).getUltimoNro() + 1));
+                actComprobante.setNumero(String.valueOf(numComprobante.get(0).getUltimoNro()));
             }
 
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
