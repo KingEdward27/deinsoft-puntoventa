@@ -82,6 +82,13 @@ public class CnfEmpresa implements Serializable {
     @JoinColumn(name = "cnf_moneda_id")
     private CnfMoneda cnfMoneda;
     
+    @ColumnDefault("1")
+    @Column(name = "plan", length = 1, nullable = false)
+    private int plan;
+    
+    @Column(name = "fecha_cambio_plan")
+    private LocalDateTime fechaCambioPlan;
+    
     public long getId() {
         return id;
     }
@@ -210,9 +217,25 @@ public class CnfEmpresa implements Serializable {
         this.cnfMoneda = cnfMoneda;
     }
 
+    public int getPlan() {
+        return plan;
+    }
+
+    public void setPlan(int plan) {
+        this.plan = plan;
+    }
+
     @Override
     public String toString() {
         return "cnfEmpresa [id=" + id + ", cnfDistrito=" + (cnfDistrito != null ? cnfDistrito : "") + ", cnfTipoDocumento=" + (cnfTipoDocumento != null ? cnfTipoDocumento : "") + ", nombre=" + nombre + ", descripcion=" + descripcion + ", nroDocumento=" + nroDocumento + ", direccion=" + direccion + ", telefono=" + telefono + ", empresacol=" + empresacol + ", estado=" + estado + ", token=" + token + "]";
+    }
+
+    public LocalDateTime getFechaCambioPlan() {
+        return fechaCambioPlan;
+    }
+
+    public void setFechaCambioPlan(LocalDateTime fechaCambioPlan) {
+        this.fechaCambioPlan = fechaCambioPlan;
     }
 
 }

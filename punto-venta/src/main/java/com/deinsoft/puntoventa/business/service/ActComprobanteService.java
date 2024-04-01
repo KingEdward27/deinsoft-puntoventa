@@ -11,6 +11,7 @@ import com.deinsoft.puntoventa.business.dto.ReporteContableDto;
 import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.facturador.client.RespuestaPSE;
 import java.text.ParseException;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -53,4 +54,6 @@ public interface ActComprobanteService extends CommonService<ActComprobante> {
     List<ReporteContableDto> getListaReporteContable (Long cnfLocalId);
     
     RespuestaPSE sendApi(long id);
+    
+    public Map<String, Object> getDashboardActComprobantes(ParamBean param);
 }

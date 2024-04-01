@@ -15,12 +15,16 @@ import com.deinsoft.puntoventa.business.repository.ActComprobanteRepository;
 import com.deinsoft.puntoventa.business.service.ActComprobanteService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.dto.ReporteContableDto;
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
+import com.deinsoft.puntoventa.business.dto.TopProductosDto;
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 import com.deinsoft.puntoventa.business.model.ActComprobanteDetalle;
+import com.deinsoft.puntoventa.business.model.ActContrato;
 import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.model.CnfFormaPagoDetalle;
 import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
+import com.deinsoft.puntoventa.business.model.CnfProducto;
 import com.deinsoft.puntoventa.business.model.InvAlmacenProducto;
 import com.deinsoft.puntoventa.business.model.InvMovAlmacen;
 import com.deinsoft.puntoventa.business.model.InvMovimientoProducto;
@@ -29,12 +33,15 @@ import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
 import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
 import com.deinsoft.puntoventa.business.repository.ActComprobanteDetalleRepository;
 import com.deinsoft.puntoventa.business.repository.ActPagoProgramacionRepository;
+import com.deinsoft.puntoventa.business.repository.ActPagoRepository;
 import com.deinsoft.puntoventa.business.repository.CnfFormaPagoDetalleRepository;
 import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
 import com.deinsoft.puntoventa.business.repository.InvAlmacenProductoRepository;
 import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoRepository;
+import com.deinsoft.puntoventa.business.service.ActPagoProgramacionService;
 import com.deinsoft.puntoventa.business.service.CnfImpuestoCondicionService;
 import com.deinsoft.puntoventa.business.service.InvAlmacenProductoService;
+import static com.deinsoft.puntoventa.business.service.impl.ActContratoServiceImpl.YYYYMM_FORMATER;
 import com.deinsoft.puntoventa.config.AppConfig;
 import com.deinsoft.puntoventa.facturador.client.EnvioPSE;
 import com.deinsoft.puntoventa.facturador.client.EnvioPSE2;
@@ -50,6 +57,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -101,12 +109,16 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     CnfImpuestoCondicionService cnfImpuestoCondicionService;
 
     @Autowired
+    ActPagoRepository actPagoRepository;
+    
+    @Autowired
     AppConfig appConfig;
 
     static DateTimeFormatter YYYYMM_FORMATER = DateTimeFormatter.ofPattern("yyyyMM");
     static DateTimeFormatter YYYYMMDD_FORMATER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     public List<ActComprobante> getAllActComprobante(ActComprobante actComprobante) {
+        SecurityFilterDto securityFilterDto = listRoles();
         List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getAllActComprobante(
                 actComprobante.getSerie().toUpperCase(), actComprobante.getNumero().toUpperCase(),
                 actComprobante.getObservacion().toUpperCase(),
@@ -116,7 +128,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                 actComprobante.getEnvioPseMensaje().toUpperCase(),
                 actComprobante.getXmlhash().toUpperCase(),
                 actComprobante.getCodigoqr().toUpperCase(),
-                actComprobante.getNumTicket().toUpperCase());
+                actComprobante.getNumTicket().toUpperCase(),securityFilterDto);
         return actComprobanteList;
     }
 
@@ -140,14 +152,19 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     @Transactional
     @Override
     public ActComprobante saveActComprobante(ActComprobante actComprobante) throws Exception {
+        
+        verifyPlan(actComprobante);
+        
         ActComprobante actComprobanteResult = null;
 
         actComprobante.setSegUsuario(auth.getLoggedUserdata());
         //tiene que obedecer un parametro de configuración caja turno, por ahora null
-        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actComprobante.getSegUsuario().getId());
+        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actComprobante.getSegUsuario().getId(),listRoles());
         actCajaTurno = actCajaTurno.stream()
                 .filter(item -> item.getEstado().equals("1"))
                 .collect(Collectors.toList());
+        
+        
         if (actCajaTurno.isEmpty()) {
             throw new Exception("El usuario no tiene caja aperturada");
         }
@@ -237,7 +254,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         invAlmacenProductoService.registerProductMovementAndUpdateStock(actComprobante, null);
 
         //save pagos programacion
-        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(auth.getLoggedUserdata().getId());
+        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(auth.getLoggedUserdata().getId(),listRoles());
         actCajaTurno = actCajaTurno.stream()
                 .filter(item -> item.getEstado().equals("1"))
                 .collect(Collectors.toList());
@@ -245,13 +262,17 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             throw new Exception("El usuario no tiene caja aperturada");
         }
 
-        saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno, actComprobante.getFlagIsventa().equals("1") ? false : true);
+        saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno, 
+                actComprobante.getFlagIsventa().equals("1") ? true : false);
 
         actComprobante.setFlagEstado("2");
         ActComprobante actComprobanteDb = actComprobanteRepository.save(actComprobante);
         
         //send to sunat
-        RespuestaPSE respuestaPSE = sendApi(actComprobanteDb.getId());
+        if (actComprobanteDb.getCnfTipoComprobante().getFlagElectronico().equals("1") 
+                && actComprobanteDb.getFlagIsventa().equals("1")) {
+            RespuestaPSE respuestaPSE = sendApi(actComprobanteDb.getId());
+        }
         
     }
 
@@ -346,7 +367,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
 
     @Override
     public List<ActComprobante> getReportActComprobante(ParamBean paramBean) {
-        List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getReportActComprobante(paramBean);
+        List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getReportActComprobante(paramBean,listRoles());
         return actComprobanteList;
     }
 
@@ -367,7 +388,9 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                     throw new Exception(result);
                 }
             }
-            
+            if (actInvoice.getEnvioPseFlag().equals("2")) {
+                throw new Exception("El documento ya se encuentra enviado");
+            }
             // clean in actOrder
             for (ActComprobanteDetalle item : actInvoice.getListActComprobanteDetalle()) {
 //                List<ActOrderLine> listActOrderline = actOrderLineService.findByActInvoiceId(item.getId());
@@ -514,7 +537,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             actCajaOperacion.setActCajaTurno(actCajaTurno == null ? null : actCajaTurno.get(0));
             actCajaOperacion.setActPago(null);
             actCajaOperacion.setActComprobante(actComprobante);
-            actCajaOperacion.setFecha(LocalDate.now());
+            actCajaOperacion.setFecha(actComprobante.getFecha());
             actCajaOperacion.setFechaRegistro(LocalDateTime.now());
             actCajaOperacion.setMonto(actComprobante.getTotal());
             actCajaOperacion.setFlagIngreso(flagIngreso ? "1" : "2");
@@ -536,6 +559,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         int lastDay = LocalDate.parse(paramWorked.getPeriodo() + "01", YYYYMMDD_FORMATER).lengthOfMonth();
         paramWorked.setFechaDesde(LocalDate.parse(paramWorked.getPeriodo() + "01", YYYYMMDD_FORMATER));
         paramWorked.setFechaHasta(LocalDate.parse(paramWorked.getPeriodo() + String.valueOf(lastDay), YYYYMMDD_FORMATER));
+        paramWorked.setFlagEstado("2");
         List<String> x = getReportActComprobante(paramWorked)
                 .stream().map(mapper -> {
                     BigDecimal multiplicand = BigDecimal.ONE;
@@ -610,14 +634,19 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     }
 
     public List<ReporteContableDto> getListaReporteContable(Long cnfLocalId) {
+        if (cnfLocalId == 0) {
+            throw new RuntimeException("Dbe ingresar el local");
+        }
         List<ActComprobante> list = actComprobanteRepository.findByCnfLocalId(cnfLocalId);
-        List<ReporteContableDto> x = list.stream().collect(
+        List<ReporteContableDto> x = list.stream()
+                .filter(predicate -> predicate.getCnfTipoComprobante().getFlagElectronico().equals("1"))
+                .collect(
                 Collectors.groupingBy(item -> grouping(item),
                         Collectors.summingDouble(mapper -> mapper.getTotal().floatValue())))
                 .entrySet().stream()
                 .map(mapper -> {
                     return new ReporteContableDto(mapper.getKey().split("-")[0], 
-                            mapper.getValue(),mapper.getKey().split("-")[1]);
+                            mapper.getValue(),mapper.getKey().split("-")[1],mapper.getKey().split("-")[2]);
                             })
                 .sorted(Comparator.comparing(ReporteContableDto::getPeriodo, Collections.reverseOrder()))
                 .collect(Collectors.toList());
@@ -625,12 +654,84 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         return x;
     }
 
+    @Override
+    public Map<String, Object> getDashboardActComprobantes(ParamBean param) {
+        
+        param.setFlagIsventa("1");
+        param.setFlagEstado("2");
+        List<ActComprobante> listVentas = getReportActComprobante(param);
+        Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
+        
+        List<Long> listClientes = listVentas.stream().map(action -> {
+            return action.getCnfMaestro().getId();
+        }).distinct().collect(Collectors.toList());
+        
+        String moneda = "";
+        if (!listVentas.isEmpty()) {
+            moneda = listVentas.get(0).getCnfLocal().getCnfEmpresa().getCnfMoneda().getSimbolo();
+        }
+        
+        List<ActComprobanteDetalle> listActComprobanteDetalle = new ArrayList<>();
+        for (ActComprobante listVenta : listVentas) {
+            listActComprobanteDetalle.addAll(listVenta.getListActComprobanteDetalle());
+        }
+        List<TopProductosDto> listTopProducts = listActComprobanteDetalle.stream()
+                .collect(
+                Collectors.groupingBy(item -> grouping(item),
+                        Collectors.summingDouble(mapper -> mapper.getImporte().floatValue())))
+                .entrySet().stream()
+                .map(mapper -> {
+                    return new TopProductosDto(mapper.getKey(), 
+                            mapper.getValue());
+                            })
+                .sorted(Comparator.comparing(TopProductosDto::getPrecio, Collections.reverseOrder()))
+                .limit(5)
+                .collect(Collectors.toList());
+        
+        List<TopProductosDto> listTopClients = listVentas.stream()
+                .collect(
+                Collectors.groupingBy(item -> item.getCnfMaestro().getRazonSocial(),
+                        Collectors.summingDouble(mapper -> mapper.getTotal().floatValue())))
+                .entrySet().stream()
+                .map(mapper -> {
+                    return new TopProductosDto(mapper.getKey(), 
+                            mapper.getValue());
+                            })
+                .sorted(Comparator.comparing(TopProductosDto::getPrecio, Collections.reverseOrder()))
+                .limit(5)
+                .collect(Collectors.toList());
+        
+        
+        param.setFlagIsventa("2");
+        List<ActComprobante> listCompras = getReportActComprobante(param);
+        Double sumCompras = listCompras.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
+        
+        
+        
+        Double totalGanancia = listVentas.stream().map(mapper -> {
+            return mapper.getListActComprobanteDetalle().stream()
+                    .mapToDouble(o -> (o.getCnfProducto().getPrecio().subtract(o.getCnfProducto().getCosto())).doubleValue())
+                    .sum();
+        }).mapToDouble(o -> o).sum();
+        Map<String, Object> map = new HashMap<>();
+        map.put("totalClientes", listClientes.size());
+        map.put("totalVentas", listVentas.size());
+        map.put("totalMontoVentas", sumVentas);
+        map.put("totalCompras", listCompras.size());
+        map.put("totalMontoCompras", sumCompras);
+        map.put("totalCaja", totalGanancia);
+        map.put("moneda", moneda);
+        map.put("listTopProducts", listTopProducts);
+        map.put("listTopClients", listTopClients);
+        return map;
+    }
+    
     String grouping(ActComprobante item) {
-        String fileName = "LE"
+        String fileNameCompras = "LE"
                     .concat(item.getCnfLocal().getCnfEmpresa().getNroDocumento())
                     .concat(item.getFecha().format(Constantes.YYYYMM_FORMATER))
                     .concat("00")
-                    .concat(item.getFlagIsventa().equals("1")? "140100": "080100")//codigo libro
+                    .concat("080100")//codigo libro
                     .concat("02")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
                     .concat("1")//Indicador de operaciones -> 0 Cierre o baja de RUC  / 1 Empresa operativa  / 2 Cierre de libro
                     .concat("1")//Indicador del contenido del libro o registro -> 1 Con información / 0 Sin información
@@ -638,6 +739,43 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                     .concat("2")//Indicador de libro electrónico generado por el MIGE IGV/RVIE -> Generado por el SIRE ( Fijo) (2)
                     //.concat("1")//Correlativo de los ajustes posteriores -> Puede ser 01, 02, 03, etc. Según el correlativo que corresponde.
                     .concat(".zip");
-        return item.getFecha().format(YYYYMM_FORMATER) + "-" +fileName;
+        String fileNameVentas = "LE"
+                    .concat(item.getCnfLocal().getCnfEmpresa().getNroDocumento())
+                    .concat(item.getFecha().format(Constantes.YYYYMM_FORMATER))
+                    .concat("00")
+                    .concat("140100")//codigo libro
+                    .concat("02")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
+                    .concat("1")//Indicador de operaciones -> 0 Cierre o baja de RUC  / 1 Empresa operativa  / 2 Cierre de libro
+                    .concat("1")//Indicador del contenido del libro o registro -> 1 Con información / 0 Sin información
+                    .concat("1")//Indicador de la moneda utilizada -> 1 Soles  / 2 Dólares
+                    .concat("2")//Indicador de libro electrónico generado por el MIGE IGV/RVIE -> Generado por el SIRE ( Fijo) (2)
+                    //.concat("1")//Correlativo de los ajustes posteriores -> Puede ser 01, 02, 03, etc. Según el correlativo que corresponde.
+                    .concat(".zip");
+        return item.getFecha().format(YYYYMM_FORMATER) + "-" +fileNameCompras + "-" +fileNameVentas;
+    }
+    
+    String grouping(ActComprobanteDetalle item) {
+        return item.getCnfProducto().getNombre();
+    }
+    
+    void verifyPlan(ActComprobante actComprobante) throws Exception {
+        int month = actComprobante.getFecha().getMonthValue();
+        List<ActComprobante> listVentas = actComprobanteRepository.findByCnfEmpresaIdAndMonth(
+                actComprobante.getCnfLocal().getCnfEmpresa().getId(),month);
+        Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
+        if (actComprobante.getCnfLocal().getCnfEmpresa().getPlan() == 1 
+                && (listVentas.size() >= 10 || sumVentas.compareTo(10000d) >= 0)) {
+            throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+        }
+        
+        if (actComprobante.getCnfLocal().getCnfEmpresa().getPlan() == 2
+                && (listVentas.size() >= 25 || sumVentas.compareTo(20000d) >= 0)) {
+            throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+        }
+        
+        if (actComprobante.getCnfLocal().getCnfEmpresa().getPlan() == 3
+                && (listVentas.size() >= 50 || sumVentas.compareTo(100000d) >= 0)) {
+            throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+        }
     }
 }

@@ -5,10 +5,11 @@ export class SegUsuario {
 	email: string = "";
 	nombre: string = "";
 	password: string = "";
+	repassword: string = "";
 	estado!: number;
 	token?: string = "";
 	rucEmpresa: string;
 	nombreEmpresa:string;
-	
+	perfilEmpresa: number = 0;
 	tokenRecoverPassword?: string = "";
 };

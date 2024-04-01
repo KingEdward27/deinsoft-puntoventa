@@ -1,40 +1,18 @@
 package com.deinsoft.puntoventa.business.commons.controller;
 
 import com.deinsoft.puntoventa.business.commons.service.CommonService;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.Date;
+import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import java.util.HashMap;
-
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.google.gson.Gson;
 
 
 
@@ -46,8 +24,8 @@ public class CommonController<E, S extends CommonService<E>> {
 //    @Autowired
 //    private Util util;
 
-//    @Autowired
-//    AuthenticationHelper auth;
+    @Autowired
+    AuthenticationHelper auth;
 
 //    @Autowired
 //    private SecAuditlogService secAuditLogService;

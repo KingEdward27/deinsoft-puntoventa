@@ -14,4 +14,5 @@ export interface UiState {
     navbarVariant: string;
     sidebarSkin: string;
     screenSize: any;
+    selectedPerfil:string;
 }

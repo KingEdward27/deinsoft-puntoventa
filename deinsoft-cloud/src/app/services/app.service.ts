@@ -106,6 +106,7 @@ export class AppService {
         })
         let menu = await this.segPermisoService.getAllBySegRolNombre(rolName)
         let menu2 = []
+        
         menu.forEach(element => {
             
             
@@ -130,6 +131,7 @@ export class AppService {
                 //             ]
                 //         }
         });
+        
         localStorage.setItem('menu', JSON.stringify(menu2));
         // .subscribe(data => {
         //     this.user.menu = data

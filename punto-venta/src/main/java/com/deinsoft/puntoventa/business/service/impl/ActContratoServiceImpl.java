@@ -73,7 +73,8 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                 actContrato.getFlagEstado().toUpperCase(),
                 actContrato.getNroPoste().toUpperCase(),
                 actContrato.getUrlMap().toUpperCase(),
-                actContrato.getDireccion().toUpperCase());
+                actContrato.getDireccion().toUpperCase(),
+                listRoles());
         return actContratoList;
     }
 
@@ -321,7 +322,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 
     @Override
     public List<ActContrato> getReportActContratos(ParamBean paramBean) {
-        List<ActContrato> actContratoList = (List<ActContrato>) actContratoRepository.getReportActContrato(paramBean);
+        List<ActContrato> actContratoList = (List<ActContrato>) actContratoRepository.getReportActContrato(paramBean,listRoles());
 
         List<ActPagoProgramacion> actPagoProgramacionList = actPagoProgramacionRepository.findAll();
 
@@ -443,9 +444,9 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 
                     return mapper;
                 })
-                .filter(predicate -> (paramBean.getFlagEstado() == 0 && predicate.getEstadoDescripcion().equals("Afecto a Corte"))
-                || (paramBean.getFlagEstado() == 1 && predicate.getEstadoDescripcion().equals("Vigente"))
-                || paramBean.getFlagEstado() == 2)
+                .filter(predicate -> (paramBean.getFlagEstado().equals("0") && predicate.getEstadoDescripcion().equals("Afecto a Corte"))
+                || (paramBean.getFlagEstado().equals("1") && predicate.getEstadoDescripcion().equals("Vigente"))
+                || paramBean.getFlagEstado().equals("2"))
                 .collect(Collectors.toList());
 
     }
@@ -453,7 +454,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
     @Override
     public Map<String, Object> getDashboardActContratos(long empresaId) {
 
-        actPagoProgramacionService.refreshProgramacionPagos();
+//        actPagoProgramacionService.refreshProgramacionPagos();
 
         List<ActPagoProgramacion> actPagoProgramacionList = actPagoProgramacionRepository.findAll().stream()
                 .filter(predicate -> predicate.getActContrato() != null)

@@ -103,7 +103,48 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+                                    <div class="col-lg-3 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label for="serie"
+                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.serie'
+                                                |
+                                                translate}} <span
+                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                            <div class="col-sm-12 col-lg-12">
+                                                <input type="text" 
+                                                    [(ngModel)]="model.serie" maxlength="4" 
+                                                    name="serie" disabled
+                                                    id="serie" name="serie" class="form-control col-sm-12 col-lg-12"
+                                                    placeholder="Ingrese serie" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label
+                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_forma_pago'
+                                                |
+                                                translate}} <span *ngIf="loadingCnfFormaPago"
+                                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                            <div class="col-sm-12 col-lg-12">
+                                                <select name="model.cnfFormaPago" [compareWith]="compareCnfFormaPago" tabindex="6"
+                                                    [(ngModel)]="model.cnfFormaPago"
+                                                    class="form-control col-sm-12 col-lg-12">
+                                                    <option *ngIf="loadingCnfFormaPago" [ngValue]="0"
+                                                        selected="selected">
+                                                        Cargando...</option>
+                                                    <option *ngIf="!loadingCnfFormaPago"
+                                                        [ngValue]="selectDefaultCnfFormaPago">
+                                                        {{selectDefaultCnfFormaPago.nombre}}</option>
+                                                    <option *ngFor="let item of listCnfFormaPago; index as i;"
+                                                        [ngValue]="item">{{item.nombre}}
+                                                    </option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-6 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label
@@ -153,32 +194,7 @@
                                             </div>-->
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                                        <div class="form-group-sm row">
-                                            <label
-                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_forma_pago'
-                                                |
-                                                translate}} <span *ngIf="loadingCnfFormaPago"
-                                                    class="spinner-border spinner-border-sm mr-1"></span><span
-                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
-                                            <div class="col-sm-12 col-lg-12">
-                                                <select name="model.cnfFormaPago" [compareWith]="compareCnfFormaPago" tabindex="6"
-                                                    [(ngModel)]="model.cnfFormaPago"
-                                                    class="form-control col-sm-12 col-lg-12">
-                                                    <option *ngIf="loadingCnfFormaPago" [ngValue]="0"
-                                                        selected="selected">
-                                                        Cargando...</option>
-                                                    <option *ngIf="!loadingCnfFormaPago"
-                                                        [ngValue]="selectDefaultCnfFormaPago">
-                                                        {{selectDefaultCnfFormaPago.nombre}}</option>
-                                                    <option *ngFor="let item of listCnfFormaPago; index as i;"
-                                                        [ngValue]="item">{{item.nombre}}
-                                                    </option>
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
 
                                     <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagVentaRapida === 0">
                                         <div class="form-group-sm row">

@@ -1,110 +1,289 @@
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Bienvenido a DEINSOFT - cloud (punto de venta)</h1>
-            </div>
-            <!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Dashboard v1</li>
-                </ol>
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
-    </div>
-    <!-- /.container-fluid -->
-</div>
 <!-- /.content-header -->
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
-        <div class="row" *ngIf="empresaPrincipal.perfilEmpresa === 2">
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-info">
-                    <div class="inner">
-                        <h3>{{cantidadContratos}}</h3>
-                        <p>Total Clientes</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
-                    </div>
-                    <a routerLink="/compra" class="small-box-footer"
-                        >Ir <i class="fas fa-arrow-circle-right"></i
-                    ></a>
+        <div class="card" *ngIf="listData">
+            <div class="card-header">
+                <h3 class="card-title">Dashboard</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip"
+                        title="Collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip"
+                        title="Remove">
+                        <i class="fa fa-times"></i>
+                    </button>
                 </div>
             </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        <h3>{{cantidadDeudores}}</h3>
-                        <p>Total Morosos</p>
+            <div class="card-body">
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+                    <div class="col-lg-4 col-sm-12">
+                        <div class="form-group row">
+                            <label for="numero"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.fechaDesde'
+                                | translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <div class="input-group input-group">
+                                    <input placeholder="dd/mm/yyyy" class="form-control-sm-dp" id="fechaDesde"
+                                        name="model.fechaDesde" maxlength="200" [(ngModel)]="model.fechaDesde"
+                                        ngbDatepicker #dfechaDesde="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary calendar button-dp"
+                                            (click)="dfechaDesde.toggle()" type="button">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
+                    <div class="col-lg-4 col-sm-12">
+                        <div class="form-group row">
+                            <label for="numero"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.fechaHasta'
+                                | translate}} </label>
+                            <div class="col-sm-12 col-lg-9">
+                                <div class="input-group input-group">
+                                    <input placeholder="dd/mm/yyyy" class="form-control-sm-dp" id="fechaHasta"
+                                        name="model.fechaHasta" maxlength="200" [(ngModel)]="model.fechaHasta"
+                                        ngbDatepicker #dfechaHasta="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary calendar button-dp"
+                                            (click)="dfechaHasta.toggle()" type="button">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <a routerLink="/venta" class="small-box-footer"
-                        >Ir <i class="fas fa-arrow-circle-right"></i
-                    ></a>
+                    <div class="col-lg-2 col-sm-12">
+                        <div class="row justify-content-center">
+                            <div style="margin-left: 20px;">
+                                <button class="btn btn-primary col-12" (click)="getListData()">
+                                    <i class="fa fa-search"></i> {{'webpagos.btnSearch' | translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3>{{ratioEndeudamiento}}</h3>
-                        <p>Ratio recuperación</p>
+                <hr>
+                <div class="row" *ngIf="empresaPrincipal.perfilEmpresa === 1">
+                    <div class="col-lg-3 col-sm-12">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>{{listData.totalClientes}}</h3>
+                                <p>Total Clientes</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person"></i>
+                            </div>
+                            <a routerLink="/compra" class="small-box-footer">Ir <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-sm-12">
+                        <!-- small box -->
+                        <div class="small-box bg-secondary">
+                            <div class="inner">
+                                <h3>{{listData.moneda}} {{listData.totalMontoCompras | number:'1.2-2'}}</h3>
+                                <p>Total Compras ({{listData.totalCompras}})</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a routerLink="/venta" class="small-box-footer">Ir <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
                     </div>
-                    <a routerLink="/rpt-compras" class="small-box-footer"
-                        >Ir <i class="fas fa-arrow-circle-right"></i
-                    ></a>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-sm-12">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>{{listData.moneda}} {{listData.totalMontoVentas | number:'1.2-2'}}</h3>
+                                <p>Total Ventas ({{listData.totalVentas}})</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a routerLink="/venta" class="small-box-footer">Ir <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-sm-12">
+                        <!-- small box -->
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3>{{listData.moneda}} {{listData.totalCaja | number:'1.2-2'}}</h3>
+                                <p>Total ganancia por ventas (incl. IVA)</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <a routerLink="/rpt-ventas" class="small-box-footer">Ir <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="row" *ngIf="chart">
+                        <div class="col-6">
+                            <div class="chart-container">
+                                <canvas id="MyChart">{{ chart }}</canvas>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="chart-container">
+                                <canvas id="MyChart2">{{ chart2 }}</canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-danger">
-                    <div class="inner">
-                        <h3>{{totalMontoPagos}}</h3>
-                        <p>Total recaudación</p>
+                <!-- /.row -->
+                
+                <div class="row" *ngIf="empresaPrincipal.perfilEmpresa === 2">
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>{{cantidadContratos}}</h3>
+                                <p>Total Clientes</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a routerLink="/compra" class="small-box-footer">Ir <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>{{cantidadDeudores}}</h3>
+                                <p>Total Morosos</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a routerLink="/venta" class="small-box-footer">Ir <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
                     </div>
-                    <a routerLink="/rpt-ventas" class="small-box-footer"
-                        >Ir <i class="fas fa-arrow-circle-right"></i
-                    ></a>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>{{ratioEndeudamiento}}</h3>
+                                <p>Ratio recuperación</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <a routerLink="/rpt-compras" class="small-box-footer">Ir <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3>{{totalMontoPagos}}</h3>
+                                <p>Total recaudación</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <a routerLink="/rpt-ventas" class="small-box-footer">Ir <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="row" *ngIf="chart">
+                        <div class="col-6">
+                            <div class="chart-container">
+                                <canvas id="MyChart">{{ chart }}</canvas>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="chart-container">
+                                <canvas id="MyChart2">{{ chart2 }}</canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <!-- /.row -->
+                
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Productos más vendidos</h3>
+                
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip"
+                                        title="Collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip"
+                                        title="Remove">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div *ngFor="let item of listData.listTopProducts" class="col-12">
+                                    <div style="font-size: 18px;font-weight: bold;padding-top: 6px;">{{item.nombre}}</div>
+                                    <div style="font-size: 16px;;padding-top: 4px;">{{listData.moneda}} {{item.precio | number:'1.2-2'}}</div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Top clientes</h3>
+                
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip"
+                                        title="Collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip"
+                                        title="Remove">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div *ngFor="let item of listData.listTopClients" class="col-12">
+                                    <div style="font-size: 18px;font-weight: bold;padding-top: 6px;">{{item.nombre}}</div>
+                                    <div style="font-size: 16px;;padding-top: 4px;">{{listData.moneda}} {{item.precio | number:'1.2-2'}}</div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
-            <!-- ./col -->
         </div>
-        <!-- /.row -->
-        <div class="row">
-            <div class="col-6">
-                <div class="chart-container">
-                    <canvas  id="MyChart" >{{ chart }}</canvas>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="chart-container">
-                    <canvas  id="MyChart2" >{{ chart2 }}</canvas>
-                </div>
-            </div>
-        </div>
-       
-        
+
+
+
     </div>
     <!-- Main row -->
 </section>
 <!-- /.content -->
-

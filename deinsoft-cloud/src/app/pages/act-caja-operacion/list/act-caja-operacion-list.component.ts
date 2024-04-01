@@ -54,7 +54,8 @@ export class ActCajaOperacionListComponent extends CommonReportFormComponent imp
   getListData() {
     this.model.flagIsventa = '1';
     console.log(this.model);
-    
+    this.totalSalida = 0;
+    this.totalIngreso = 0;
     return this.deps.actCajaOperacionService.getReport(this.model).subscribe(data => {
       this.listData = data;
       this.listData.forEach(element => {

@@ -125,14 +125,14 @@
                                                 <td>{{item.invAlmacen.nombre}}</td>
                                                 <td>{{item.cnfProducto.nombre}}</td>
                                                 <td class="content-number">{{item.cantidad}}</td>
-                                                <td class="content-number">{{item.cnfProducto.costo?item.cnfProducto.costo:0}}</td>
-                                                <td class="content-number">{{(item.cantidad * (item.cnfProducto.costo?item.cnfProducto.costo:0)) | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{item.cnfProducto.cnfEmpresa.cnfMoneda.simbolo + ' ' + (item.cnfProducto.costo?item.cnfProducto.costo:0)}}</td>
+                                                <td class="content-number">{{item.cnfProducto.cnfEmpresa.cnfMoneda.simbolo + ' ' + ((item.cantidad * (item.cnfProducto.costo?item.cnfProducto.costo:0)) | number:'1.2-2')}}</td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
                                             <tr>
                                                 <td colspan = "6">Total:</td>
-                                                <td class="content-number">{{total| number:'1.2-2'}}</td>
+                                                <td class="content-number">{{(listData?listData[0]:null)?.cnfProducto.cnfEmpresa.cnfMoneda.simbolo}} {{total| number:'1.2-2'}}</td>
                                             </tr>
                                         </tfoot>
                                     </table>

@@ -269,7 +269,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
   }
   addChild(tableName: any) {
     console.log(tableName);
-    this.properties.preSave = []
+    //this.properties.preSave = []
     this.properties.preSave.push({ columnForm: this.properties.tableName + "_id", value: this.properties.id })
     this.properties.childTables.forEach(element => {
       if (element.tableName == tableName) {

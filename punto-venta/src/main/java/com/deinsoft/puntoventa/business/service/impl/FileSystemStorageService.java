@@ -5,6 +5,7 @@ import com.deinsoft.puntoventa.business.service.StorageService;
 import com.deinsoft.puntoventa.business.exception.StorageException;
 import com.deinsoft.puntoventa.business.exception.StorageFileNotFoundException;
 import com.deinsoft.puntoventa.config.AppConfig;
+import com.deinsoft.puntoventa.framework.security.JWTAuthenticationEntryPoint;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
@@ -35,6 +38,9 @@ public class FileSystemStorageService implements StorageService {
     private final Path rootLocation;
 
     AppConfig appConfig;
+    
+    
+    private static final Logger logger = LoggerFactory.getLogger(FileSystemStorageService.class);
 
     @Autowired
     public FileSystemStorageService(AppConfig appConfig) {
@@ -79,8 +85,10 @@ public class FileSystemStorageService implements StorageService {
                 throw new StorageException("Failed to store empty file.");
             }
             Path destinationFile = this.rootLocation.resolve(
-                    Paths.get("/temp/" + file.getOriginalFilename()))
+                    Paths.get("temp/" + file.getOriginalFilename()))
                     .normalize().toAbsolutePath();
+            logger.info(this.rootLocation.toString());
+            logger.info(destinationFile.toAbsolutePath().toString());
 //            if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
 //                // This is a security check
 //                throw new StorageException(

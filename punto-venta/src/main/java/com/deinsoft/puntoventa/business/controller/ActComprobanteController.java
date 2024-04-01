@@ -293,4 +293,10 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
         return listReporteContableDto;
     }
     
+    @PostMapping(value = "/get-dashboard-act-comprobante")
+    public ResponseEntity<?> getDashboardActContrato(@RequestBody ParamBean paramBean) {
+        Map<String,Object> actDashboard = actComprobanteService.getDashboardActComprobantes(paramBean);
+        return ResponseEntity.status(HttpStatus.OK).body(actDashboard);
+    }
+    
 }

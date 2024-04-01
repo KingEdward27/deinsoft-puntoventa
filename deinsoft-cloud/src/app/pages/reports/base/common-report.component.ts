@@ -44,10 +44,12 @@ import { InvMovAlmacenService } from '@/business/service/inv-mov-almacen.service
 import { ActCajaOperacion } from '../../../business/model/act-caja-operacion.model';
 import { ActCajaOperacionService } from '../../../business/service/act-caja-operacion.service';
 import { CnfZonaService } from '../../../business/service/cnf-zona.service';
+import { ActContratoService } from '@pages/act-contrato/act-contrato.service';
 
 @Injectable()
 export class MyBaseComponentDependences {
   constructor(public actComprobanteService: ActComprobanteService,
+    public actContratoService: ActContratoService,
     public router: Router,
     public utilService: UtilService,
     public cnfMaestroService: CnfMaestroService,
@@ -153,7 +155,7 @@ export class CommonReportFormComponent implements OnInit {
       deferRender: true,
       deferLoading: 7,
       pagingType: 'full_numbers',
-      searching: false,
+      searching: true,
       processing: true,
       lengthMenu: [25, 50, 100],
       order: [[0, "asc"]],
@@ -381,7 +383,6 @@ export class CommonReportFormComponent implements OnInit {
     if (a1 === undefined && a2 === undefined) {
       return true;
     }
-
     return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
       ? false : a1.id === a2.id;
   }

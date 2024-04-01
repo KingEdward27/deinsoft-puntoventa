@@ -64,3 +64,7 @@ export const SIDEBAR_LIGHT_SKINS: Array<Option> = [
     {value: 'sidebar-light-teal', label: 'Teal'},
     {value: 'sidebar-light-olive', label: 'Olive'}
 ];
+export const PERFILES: Array<Option> = [
+    {value: '1', label: 'Ventas y Almacen'},
+    {value: '2', label: 'Pagos mensuales'}
+];

@@ -27,11 +27,12 @@ public class ActCajaTurnoServiceImpl extends CommonServiceImpl<ActCajaTurno, Act
     ActCajaTurnoRepository actCajaTurnoRepository;
     
     public List<ActCajaTurno> getAllActCajaTurno(ActCajaTurno actCajaTurno) {
-        List<ActCajaTurno> actCajaTurnoList = (List<ActCajaTurno>) actCajaTurnoRepository.getAllActCajaTurno(actCajaTurno.getEstado().toUpperCase());
-        return actCajaTurnoList.stream()
-                .filter(item -> listRoles().stream()
-                        .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActCaja().getCnfEmpresa().getId()))
-                .collect(Collectors.toList());
+        List<ActCajaTurno> actCajaTurnoList 
+                = (List<ActCajaTurno>) actCajaTurnoRepository.getAllActCajaTurno(actCajaTurno.getEstado().toUpperCase(),listRoles());
+        return actCajaTurnoList;//.stream()
+//                .filter(item -> listRoles().stream()
+//                        .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActCaja().getCnfEmpresa().getId()))
+//                .collect(Collectors.toList());
     }
 
     public ActCajaTurno getActCajaTurno(Long id) {
@@ -45,7 +46,7 @@ public class ActCajaTurnoServiceImpl extends CommonServiceImpl<ActCajaTurno, Act
 
     public ActCajaTurno saveActCajaTurno(ActCajaTurno actCajaTurno) throws Exception {
         
-        List<ActCajaTurno> actCajaTurnoList = (List<ActCajaTurno>) actCajaTurnoRepository.getAllActCajaTurno("1");
+        List<ActCajaTurno> actCajaTurnoList = (List<ActCajaTurno>) actCajaTurnoRepository.getAllActCajaTurno("1",listRoles());
         
         actCajaTurnoList = actCajaTurnoList.stream()
                 .filter(item -> item.getActCaja().getId() == actCajaTurno.getActCaja().getId())
@@ -64,11 +65,11 @@ public class ActCajaTurnoServiceImpl extends CommonServiceImpl<ActCajaTurno, Act
     }
 
     public List<ActCajaTurno> getAllActCajaTurnoBySegUsuario(long id) {
-        List<ActCajaTurno> actCajaTurnoList = (List<ActCajaTurno>) actCajaTurnoRepository.findBySegUsuarioId(id);
-        return actCajaTurnoList.stream()
-                .filter(item -> listRoles().stream()
-                        .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActCaja().getCnfEmpresa().getId()))
-                .collect(Collectors.toList());
+        List<ActCajaTurno> actCajaTurnoList = (List<ActCajaTurno>) actCajaTurnoRepository.findBySegUsuarioId(id,listRoles());
+        return actCajaTurnoList;//.stream()
+//                .filter(item -> listRoles().stream()
+//                        .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActCaja().getCnfEmpresa().getId()))
+//                .collect(Collectors.toList());
     }
 
     @Override

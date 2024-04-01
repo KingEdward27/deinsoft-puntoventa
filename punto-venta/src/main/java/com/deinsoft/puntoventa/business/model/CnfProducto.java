@@ -97,6 +97,9 @@ public class CnfProducto implements Serializable {
     @Column(name = "porcentaje_ganancia", length = 14, nullable = true)
     private Float porcentajeGanancia;
     
+    @Column(name = "stock_minimo")
+    private Float stockMinimo;
+    
     @Transient
     private long cnfEmpresaId;
     
@@ -239,6 +242,14 @@ public class CnfProducto implements Serializable {
 
     public void setPorcentajeGanancia(Float porcentajeGanancia) {
         this.porcentajeGanancia = porcentajeGanancia;
+    }
+
+    public Float getStockMinimo() {
+        return stockMinimo;
+    }
+
+    public void setStockMinimo(Float stockMinimo) {
+        this.stockMinimo = stockMinimo;
     }
 
 }

@@ -37,7 +37,7 @@ public class InvAlmacenProductoServiceImpl
     CnfProductoRepository cnfProductoRepository;
     
     public List<InvAlmacenProducto> getAllInvAlmacenProducto(InvAlmacenProducto invAlmacenProducto) {
-        List<InvAlmacenProducto> invAlmacenProductoList = (List<InvAlmacenProducto>) invAlmacenProductoRepository.getAllInvAlmacenProducto();
+        List<InvAlmacenProducto> invAlmacenProductoList = (List<InvAlmacenProducto>) invAlmacenProductoRepository.getAllInvAlmacenProducto(listRoles());
         return invAlmacenProductoList;
     }
 
@@ -83,7 +83,7 @@ public class InvAlmacenProductoServiceImpl
 
     @Override
     public List<InvAlmacenProducto> getReportInvAlmacen(ParamBean paramBean) {
-        List<InvAlmacenProducto> list = (List<InvAlmacenProducto>) invAlmacenProductoRepository.getReportInvAlmacen(paramBean);
+        List<InvAlmacenProducto> list = (List<InvAlmacenProducto>) invAlmacenProductoRepository.getReportInvAlmacen(paramBean,listRoles());
         return list;
     }
 

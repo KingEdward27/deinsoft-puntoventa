@@ -13,6 +13,9 @@ import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.SegPermiso;
 import com.deinsoft.puntoventa.business.service.SegPermisoService;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/seg-permiso")
@@ -39,6 +42,17 @@ public class SegPermisoController extends CommonController<SegPermiso, SegPermis
 
     @PostMapping(value = "/save-seg-permiso")
     public ResponseEntity<?> saveSegPermiso(@Valid @RequestBody SegPermiso segPermiso, BindingResult result) {
+        
+        Map<String, Object> errores = new HashMap<>();
+        if(segPermiso.getPerfilEmpresa() == 0){
+            errores.put("perfilEmpresa", "Debe seleccionar el perfil de la empresa");
+        }
+        if(segPermiso.getSegMenu().getId() == 0){
+            errores.put("segMenu.nombre", "Debe seleccionar la opción");
+        }
+        if(!errores.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errores);
+        }
         return super.crear(segPermiso, result);
     }
 
@@ -74,6 +88,7 @@ public class SegPermisoController extends CommonController<SegPermiso, SegPermis
     
     @GetMapping(value = "/get-all-seg-permiso-by-seg-rol-name")
     public List<SegPermiso> getAllSegPermisoBySegRol(@Param("nombre") String nombre) {
+        
         List<SegPermiso> segPermisoList = segPermisoService.getAllSegPermisoBySegRolNombre(nombre);
         return segPermisoList;
     }

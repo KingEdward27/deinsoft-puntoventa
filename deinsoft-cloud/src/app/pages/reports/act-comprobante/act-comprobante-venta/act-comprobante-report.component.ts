@@ -111,6 +111,7 @@ export class ActComprobanteReportFormComponent extends CommonReportFormComponent
   }
   getListData() {
     this.model.flagIsventa = '1';
+    this.model.flagEstado = '2';
     this.total = 0
     return this.deps.actComprobanteService.getReport(this.model).subscribe(data => {
       

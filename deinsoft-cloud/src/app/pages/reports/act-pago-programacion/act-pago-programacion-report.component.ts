@@ -101,7 +101,7 @@ export class ActPagoProgramacionReportComponent extends CommonReportFormComponen
     
     this.model.fechaVencimiento  = this.deps.dateAdapter
     .toModel({year: year, month: month, day: day}).toString();
-}
+  }
   getListData() {
     this.model.flagIsventa = '1';
     this.totalMontos = 0

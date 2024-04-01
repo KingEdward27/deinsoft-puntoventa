@@ -81,7 +81,7 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
 
     public ActPago saveActPago(ActPago actPago) throws Exception {
         //tiene que obedecer un parametro de configuración caja turno, por ahora null
-        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actPago.getSegUsuario().getId());
+        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actPago.getSegUsuario().getId(),listRoles());
         actCajaTurno = actCajaTurno.stream()
                 .filter(item -> item.getEstado().equals("1"))
                 .collect(Collectors.toList());
@@ -110,8 +110,9 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
         for (ActPagoDetalle actPagoDetalle : actPago.getListActPagoDetalle()) {
             List<ActPagoProgramacion> list = actPagoProgramacionRepository.findByCnfMaestroId(
                     actPagoDetalle.getActPagoProgramacion().getActComprobante() != null
-                    ? actPagoDetalle.getActPagoProgramacion().getActComprobante().getCnfMaestro().getId() : actPagoDetalle.getActPagoProgramacion().getActContrato().getCnfMaestro().getId(),
-                    actPagoDetalle.getActPagoProgramacion().getFechaVencimiento())
+                    ? actPagoDetalle.getActPagoProgramacion().getActComprobante().getCnfMaestro().getId() : 
+                            actPagoDetalle.getActPagoProgramacion().getActContrato().getCnfMaestro().getId(),
+                    actPagoDetalle.getActPagoProgramacion().getFechaVencimiento(),listRoles())
                     .stream().filter(predicate -> predicate.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0)
                     .collect(Collectors.toList());
 

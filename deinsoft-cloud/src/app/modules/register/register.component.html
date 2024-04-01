@@ -2,24 +2,16 @@
 <div class="card card-outline card-primary">
     <div class="text-center mt-4">
         <a href="https://deinsoft-la.com/" target="_blank" class="text-logo">
-            <img src="assets/img/logo_deinsoft.png"
-                alt="Deinsoft Logo"
-                style="opacity: 0.8" width="30%" /> DEINSOFT
+            <img src="assets/img/logo_deinsoft.png" alt="Deinsoft Logo" style="opacity: 1.0" width="100%" />
         </a>
     </div>
     <div class="card-body">
         <p class="login-box-msg">Registre su empresa</p>
 
-        <form [formGroup]="registerForm" (ngSubmit)="registerByAuth()">
+        <form>
             <div class="input-group mb-3">
-                <input
-                    formControlName="ruc"
-                    type="number"
-                    maxlength="11"
-                    class="form-control"
-                    (focusout)="searchSunat()"
-                    placeholder="Ingrese el RUC de su empresa"
-                />
+                <input type="number" name="segUsuario.rucEmpresa" maxlength="11" class="form-control" [(ngModel)]="segUsuario.rucEmpresa"
+                    (focusout)="searchSunat()" placeholder="Ingrese el RUC de su empresa" />
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-id-card"></span>
@@ -27,12 +19,7 @@
                 </div>
             </div>
             <div class="input-group mb-3">
-                <input
-                    formControlName="nombreEmpresa"
-                    type="text"
-                    class="form-control"
-                    disabled
-                />
+                <input type="text" name="segUsuario.nombreEmpresa" class="form-control" disabled [(ngModel)]="segUsuario.nombreEmpresa" />
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-industry"></span>
@@ -40,12 +27,7 @@
                 </div>
             </div>
             <div class="input-group mb-3">
-                <input
-                    formControlName="email"
-                    type="email"
-                    class="form-control"
-                    placeholder="Email"
-                />
+                <input type="email" name="segUsuario.email" class="form-control" placeholder="Email" [(ngModel)]="segUsuario.email" />
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-envelope"></span>
@@ -53,12 +35,7 @@
                 </div>
             </div>
             <div class="input-group mb-3">
-                <input
-                    formControlName="password"
-                    type="password"
-                    class="form-control"
-                    placeholder="Contraseña"
-                />
+                <input type="password" name="segUsuario.password" class="form-control" placeholder="Contraseña" [(ngModel)]="segUsuario.password" />
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-lock"></span>
@@ -66,18 +43,25 @@
                 </div>
             </div>
             <div class="input-group mb-3">
-                <input
-                    formControlName="retypePassword"
-                    type="password"
-                    class="form-control"
-                    placeholder="Repita su contraseña"
-                />
+                <input type="password" name="segUsuario.repassword" class="form-control" [(ngModel)]="segUsuario.repassword"
+                    placeholder="Repita su contraseña" />
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-lock"></span>
                     </div>
                 </div>
             </div>
+            <label style="font-weight: normal;">Perfil de empresa:
+            </label>
+            <select name="selectedPerfil" [compareWith]="comparePerfil" id = "selectedPerfil" [(ngModel)]="segUsuario.perfilEmpresa"
+                class="form-control col-sm-12 col-lg-12">
+                <option *ngFor="let item of listPerfiles; index as i;" [ngValue]="item.id">
+                    {{item.nombre}}
+                </option>
+
+            </select>
+
+            <hr>
             <div class="row">
                 <!-- <div class="col-7">
                     <div class="icheck-primary">
@@ -94,12 +78,8 @@
                 </div> -->
                 <!-- /.col -->
                 <div class="col-12">
-                    <app-button
-                        [type]="'submit'"
-                        [block]="true"
-                        [loading]="isAuthLoading"
-                        [disabled]="isFacebookLoading || isGoogleLoading"
-                    >
+                    <app-button [type]="'submit'" [block]="true" [loading]="isAuthLoading"
+                        [disabled]="isFacebookLoading || isGoogleLoading" (click) = "registerByAuth()">
                         Registro
                     </app-button>
                 </div>
@@ -110,8 +90,8 @@
             <a [routerLink]="['/login']" class="text-center">
                 Ya tengo una cuenta</a>
         </div>
-        
 
-        
+
+
     </div>
 </div>

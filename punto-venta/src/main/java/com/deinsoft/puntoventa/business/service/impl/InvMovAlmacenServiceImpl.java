@@ -12,25 +12,41 @@ import com.deinsoft.puntoventa.business.repository.InvMovAlmacenRepository;
 import com.deinsoft.puntoventa.business.service.InvMovAlmacenService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
+import com.deinsoft.puntoventa.business.model.InvAlmacenProducto;
+import com.deinsoft.puntoventa.business.model.InvMovAlmacenDet;
+import com.deinsoft.puntoventa.business.model.InvMovimientoProducto;
 import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
+import com.deinsoft.puntoventa.business.repository.InvAlmacenProductoRepository;
+import com.deinsoft.puntoventa.business.repository.InvMovAlmacenDetRepository;
+import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoRepository;
 import com.deinsoft.puntoventa.business.service.InvAlmacenProductoService;
 import java.time.LocalDateTime;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
 @Transactional
-public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen, InvMovAlmacenRepository> 
+public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen, InvMovAlmacenRepository>
         implements InvMovAlmacenService {
 
     @Autowired
     InvMovAlmacenRepository invMovAlmacenRepository;
 
     @Autowired
+    InvMovAlmacenDetRepository invMovAlmacenDetRepository;
+
+    @Autowired
     InvAlmacenProductoService invAlmacenProductoService;
+
+    @Autowired
+    InvMovimientoProductoRepository invMovimientoProductoRepository;
 
     @Autowired
     CnfNumComprobanteRepository cnfNumComprobanteRepository;
     
+    @Autowired
+    InvAlmacenProductoRepository invAlmacenProductoRepository;
+    
+
     public List<InvMovAlmacen> getAllInvMovAlmacen(InvMovAlmacen invMovAlmacen) {
         List<InvMovAlmacen> invMovAlmacenList = (List<InvMovAlmacen>) invMovAlmacenRepository
                 .getAllInvMovAlmacen(invMovAlmacen.getSerie(),
@@ -59,23 +75,23 @@ public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen, I
             if (numComprobante.isEmpty()) {
                 throw new Exception("No existe numeración para el tipo de comprobante y el local");
             }
-            
+
             invMovAlmacen.setFechareg(LocalDateTime.now());
             invMovAlmacen.setNumero(String.valueOf(numComprobante.get(0).getUltimoNro() + 1));
             invMovAlmacen.getListInvMovAlmacenDet().forEach(data -> {
                 invMovAlmacen.addInvMovAlmacenDet(data);
             });
-            
+
             invMovAlmacenResult = invMovAlmacenRepository.save(invMovAlmacen);
-            
+
             //update num comprobante
             CnfNumComprobante cnfNumComprobante = numComprobante.get(0);
             cnfNumComprobante.setUltimoNro(numComprobante.get(0).getUltimoNro() + 1);
             cnfNumComprobanteRepository.save(cnfNumComprobante);
-            
+
             //update stock and register product movement
-//            invAlmacenProductoService.registerProductMovementAndUpdateStock(null, invMovAlmacen);
-            
+            invAlmacenProductoService.registerProductMovementAndUpdateStock(null, invMovAlmacen);
+
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //            e.printStackTrace();
@@ -85,13 +101,13 @@ public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen, I
     }
 
     @Override
-    public void validate (InvMovAlmacen invMovAlmacen) {
+    public void validate(InvMovAlmacen invMovAlmacen) {
         invAlmacenProductoService.registerProductMovementAndUpdateStock(null, invMovAlmacen);
-        
+
         invMovAlmacen.setFlagEstado("2");
         invMovAlmacenRepository.save(invMovAlmacen);
     }
-    
+
     public List<InvMovAlmacen> getAllInvMovAlmacen() {
         List<InvMovAlmacen> invMovAlmacenList = (List<InvMovAlmacen>) invMovAlmacenRepository.findAll();
         return invMovAlmacenList;
@@ -128,7 +144,27 @@ public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen, I
         Optional<InvMovAlmacen> invMovAlmacenOptional = invMovAlmacenRepository.findById(id);
 
         if (invMovAlmacenOptional.isPresent()) {
+
             invMovAlmacen = invMovAlmacenOptional.get();
+
+            for (InvMovAlmacenDet data : invMovAlmacen.getListInvMovAlmacenDet()) {
+                List<InvAlmacenProducto> list
+                    = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
+
+                if (list.size() > 1) {
+                    throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
+                }
+                if (list.size() > 0) {
+                    InvAlmacenProducto stock = list.get(0);
+                    stock.setCnfProducto(data.getCnfProducto());
+                    stock.setInvAlmacen(invMovAlmacen.getInvAlmacen());
+                    stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
+                    invAlmacenProductoRepository.save(stock);
+                }
+                
+            }
+            invMovimientoProductoRepository.deleteByInvMovAlmacen(invMovAlmacen);
+            invMovAlmacenDetRepository.deleteByInvMovAlmacen(invMovAlmacen);
             invMovAlmacenRepository.delete(invMovAlmacen);
         }
     }

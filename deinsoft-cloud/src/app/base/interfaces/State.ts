@@ -17,3 +17,6 @@ export class Generic {
   id:number = 0;
   description!:string;
 }
+export enum PerfilEmpresas {
+  "VENTAS" = 1,"PAGOS MENSUALES"= 2
+}  

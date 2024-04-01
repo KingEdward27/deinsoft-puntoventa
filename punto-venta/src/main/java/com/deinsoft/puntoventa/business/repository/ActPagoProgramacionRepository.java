@@ -1,6 +1,7 @@
 package com.deinsoft.puntoventa.business.repository;
 
 import com.deinsoft.puntoventa.business.bean.ParamBean;
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.business.model.ActContrato;
@@ -15,8 +16,9 @@ import java.time.LocalDate;
 
 public interface ActPagoProgramacionRepository extends JpaRepository<ActPagoProgramacion, Long> {
 
-    @Query(value = "select p from actPagoProgramacion p ")
-    List<ActPagoProgramacion> getAllActPagoProgramacion();
+    @Query(value = "select p from actPagoProgramacion p "
+            + "where p.actComprobante.cnfLocal.id in :#{#securityFilterDto.localIds}")
+    List<ActPagoProgramacion> getAllActPagoProgramacion(@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 
     @Query(value = "select p from actPagoProgramacion p "
             + "where p.actComprobante.id =  ?1 ")
@@ -30,8 +32,10 @@ public interface ActPagoProgramacionRepository extends JpaRepository<ActPagoProg
             + "left join p.actComprobante left join p.actContrato "
             + "where (:id = 0l or (p.actComprobante != null and p.actComprobante.cnfMaestro.id = :id) "
             + "or (p.actContrato != null and p.actContrato.cnfMaestro.id = :id)) "
+            + "and p.actComprobante.cnfLocal.id in :#{#securityFilterDto.localIds} "
             + "and (:fechaVencimiento = null or p.fechaVencimiento <= :fechaVencimiento) order by p.id")
-    List<ActPagoProgramacion> findByCnfMaestroId(@Param("id") long id, @Param("fechaVencimiento") LocalDate fechaVencimiento);
+    List<ActPagoProgramacion> findByCnfMaestroId(@Param("id") long id, @Param("fechaVencimiento") LocalDate fechaVencimiento
+            ,@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 
     void deleteByActComprobante(ActComprobante actComprobante);
 

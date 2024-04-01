@@ -89,7 +89,12 @@ public class InvMovimientoProductoServiceImpl
             
             cantidad = cantidad.add(invMovimientoProducto.getCantidad());
             costoTotal = costoTotal.add(invMovimientoProducto.getCantidad().multiply(invMovimientoProducto.getValor()));
-            costo = costoTotal.divide(cantidad, 2, RoundingMode.HALF_UP);
+            if (cantidad.compareTo(BigDecimal.ZERO) == 0) {
+                costoTotal = BigDecimal.ZERO;
+            } else {
+                costo = costoTotal.divide(cantidad, 2, RoundingMode.HALF_UP);
+            }
+            
 //            costo = invMovimientoProducto.getActComprobante()
 //                    .getListActComprobanteDetalle().stream()
 //                    .filter(predicate -> predicate.getCnfProducto().getId() == invMovimientoProducto.getCnfProducto().getId())

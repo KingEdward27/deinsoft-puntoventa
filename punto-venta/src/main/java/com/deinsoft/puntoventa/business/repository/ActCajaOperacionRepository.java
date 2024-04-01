@@ -1,6 +1,7 @@
 package com.deinsoft.puntoventa.business.repository;
 
 import com.deinsoft.puntoventa.business.bean.ParamBean;
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,8 +13,9 @@ import org.springframework.data.repository.query.Param;
 public interface ActCajaOperacionRepository extends JpaRepository<ActCajaOperacion, Long> {
 
     @Query(value = "select p from actCajaOperacion p "
-            + "where upper(p.estado) like %?1% ")
-    List<ActCajaOperacion> getAllActCajaOperacion(String estado);
+            + "where upper(p.estado) like %?1% "
+            + "and p.actCajaTurno.actCaja.cnfEmpresa.id = :#{#securityFilterDto.empresaId}")
+    List<ActCajaOperacion> getAllActCajaOperacion(String estado,@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 
     @Query(value = "select p from actCajaOperacion p "
             + "where p.actCajaTurno.id =  ?1 ")

@@ -1,6 +1,7 @@
 package com.deinsoft.puntoventa.business.repository;
 
 import com.deinsoft.puntoventa.business.bean.ParamBean;
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
 import com.deinsoft.puntoventa.business.model.ActComprobante;
 import java.util.List;
 
@@ -12,9 +13,9 @@ import com.deinsoft.puntoventa.business.model.InvAlmacenProducto;
 
 public interface InvAlmacenProductoRepository extends JpaRepository<InvAlmacenProducto, Long> {
 
-    @Query(value = "select p from invAlmacenProducto p ")
-
-    List<InvAlmacenProducto> getAllInvAlmacenProducto();
+    @Query(value = "select p from invAlmacenProducto p "
+    + "where p.invAlmacen.cnfLocal.id in :#{#securityFilterDto.localIds}")
+    List<InvAlmacenProducto> getAllInvAlmacenProducto(@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 
     @Query(value = "select p from invAlmacenProducto p "
             + "where p.invAlmacen.id =  ?1 ")
@@ -30,6 +31,7 @@ public interface InvAlmacenProductoRepository extends JpaRepository<InvAlmacenPr
     
     @Query(value = "select p from invAlmacenProducto p "
             + "where (:#{#paramBean.cnfLocal.id} = 0l or p.invAlmacen.cnfLocal.id = :#{#paramBean.cnfLocal.id}) "
-            + "and (:#{#paramBean.invAlmacen.id} = 0l or p.invAlmacen.id = :#{#paramBean.invAlmacen.id}) ")
-    List<InvAlmacenProducto> getReportInvAlmacen(@Param("paramBean") ParamBean paramBean);
+            + "and (:#{#paramBean.invAlmacen.id} = 0l or p.invAlmacen.id = :#{#paramBean.invAlmacen.id}) "
+            + "and p.invAlmacen.cnfLocal.id in :#{#securityFilterDto.localIds}")
+    List<InvAlmacenProducto> getReportInvAlmacen(@Param("paramBean") ParamBean paramBean,@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 }

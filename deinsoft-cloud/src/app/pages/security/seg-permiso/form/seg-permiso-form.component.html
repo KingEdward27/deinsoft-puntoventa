@@ -1,22 +1,3 @@
-<!-- Content Header (Page header) -->
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>{{'webpagos.seg_permiso.home.title'| translate}}</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.adminModule"></a></li>
-                    <li class="breadcrumb-item active">{{'webpagos.seg_permiso.home.title'| translate}}
-                    </li>
-                </ol>
-            </div>
-        </div>
-    </div>
-    <!-- /.container-fluid -->
-</section>
 
 <!-- Main content -->
 <section class="content">
@@ -42,7 +23,20 @@
                     <h4 style="border-bottom: solid 1px;padding-bottom: 6px;">{{'webpagos.register' | translate}} -
                         {{'webpagos.seg_permiso.home.title' | translate}}</h4>
                     <form class="col-sm-12" style="padding-top: 6px;">
-
+                        <div class="form-group-sm row">
+                            <label for="perfilEmpresa" class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.seg_permiso.perfil_empresa' | translate}} <span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            
+                            <div class="col-sm-12 col-lg-9">
+                                <select name="model.perfilEmpresa" [compareWith]="comparePerfilEmpresa"
+                                    [(ngModel)]="model.perfilEmpresa" class="form-control-sm col-sm-12 col-lg-6">
+                                    <option [ngValue]="0" selected>- Seleccione -</option>
+                                    <option *ngFor="let key of listPerfilEmpresa; index as i;" [ngValue]="key">{{perfilEmpresa[key]}}</option> 
+                                </select>
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.perfilEmpresa">
+                                    {{ error.perfilEmpresa }}</div>
+                            </div>
+                        </div>
                         <div class="form-group-sm row">
                             <label class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.seg_permiso.seg_rol' |
                                 translate}}

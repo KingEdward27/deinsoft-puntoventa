@@ -102,6 +102,8 @@ export class ActCajaTurnoFormComponent implements OnInit {
 
           let total = this.model.montoApertura
           this.actCajaOperacionService.getAllByActCajaTurnoId(this.id).subscribe(data =>{
+            console.log(data);
+            
             data.forEach(element => {
               if(element.flagIngreso == '1') {
                 total = total + element.monto
@@ -109,7 +111,7 @@ export class ActCajaTurnoFormComponent implements OnInit {
                 total = total - element.monto
               }
             });
-            this.model.montoCierre = total;
+            this.model.montoCierre = Math.round((total + Number.EPSILON) * 100) / 100;
           })
         });
         

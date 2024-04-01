@@ -59,6 +59,9 @@ public class SegUsuario implements Serializable {
     @Transient
     private String tokenRecoverPassword;
     
+    @Transient
+    private int perfilEmpresa;
+     
     public long getId() {
         return id;
     }
@@ -150,6 +153,14 @@ public class SegUsuario implements Serializable {
 
     public void setTokenRecoverPassword(String tokenRecoverPassword) {
         this.tokenRecoverPassword = tokenRecoverPassword;
+    }
+
+    public int getPerfilEmpresa() {
+        return perfilEmpresa;
+    }
+
+    public void setPerfilEmpresa(int perfilEmpresa) {
+        this.perfilEmpresa = perfilEmpresa;
     }
 
 }

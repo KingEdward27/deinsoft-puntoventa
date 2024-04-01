@@ -129,6 +129,10 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
             throw  new Exception("La empresa ya se encuentra registrada");
         }
         
+        if (Util.validaCorreo(segUsuario.getEmail())) {
+            throw  new Exception("El correo tiene un formato inválido");
+        }
+        
         //validar email existente
         SegUsuario segUsuarioFromDb = getAllSegUsuario().stream()
                 .filter(predicate -> predicate.getEmail().equals(segUsuario.getEmail()))
@@ -145,6 +149,8 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         empresa.setCnfTipoDocumento(tipoDoc);
         empresa.setNroDocumento(segUsuario.getRucEmpresa());
         empresa.setNombre(segUsuario.getNombreEmpresa());
+        empresa.setDescripcion(segUsuario.getNombreEmpresa());
+        empresa.setPerfilEmpresa(segUsuario.getPerfilEmpresa());
         CnfEmpresa empresaResult = cnfEmpresaService.save(empresa);
         
         CnfLocal local = new CnfLocal();
@@ -167,7 +173,7 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         
         //grabar rousuario
         SegRol rolUser = segRolService.getAllSegRol().stream()
-                .filter(predicate -> predicate.getNombre().equals("ROLE_USER"))
+                .filter(predicate -> predicate.getNombre().equals("ROLE_ADMIN"))
                 .findFirst().orElse(null);
         
         SegRolUsuario segRolUsuario= new SegRolUsuario();

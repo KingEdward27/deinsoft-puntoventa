@@ -15,8 +15,8 @@ public interface SegPermisoRepository extends JpaRepository<SegPermiso, Long> {
     List<SegPermiso> getAllSegPermiso();
 
     
-    @Query(value = "select p from segPermiso p where p.segRol.nombre = ?1 order by p.segMenu.seqorder")
-    List<SegPermiso> getAllSegPermisoByRolName(String nombreRol);
+    @Query(value = "select p from segPermiso p where p.segRol.nombre = ?1 and p.perfilEmpresa = ?2 order by p.segMenu.seqorder")
+    List<SegPermiso> getAllSegPermisoByRolNameAndPerfil(String nombreRol, int perfilEmpresa);
     
     @Query(value = "select p from segPermiso p "
             + "where p.segRol.id =  ?1 ")

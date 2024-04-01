@@ -1,3 +1,4 @@
+import { PerfilEmpresas } from '@/base/interfaces/State';
 import { SegAccion } from '@/business/model/seg-accion.model';
 import { SegMenu } from '@/business/model/seg-menu.model';
 import { SegPermiso } from '@/business/model/seg-permiso.model';
@@ -43,7 +44,8 @@ export class SegPermisoFormComponent implements OnInit {
   protected redirect: string = "/permiso";
   selectedOption: any;
   passwordRepeat: any;
-
+  listPerfilEmpresa: any;
+  perfilEmpresa = PerfilEmpresas;
   constructor(private segPermisoService: SegPermisoService,
     private router: Router,
     private utilService: UtilService,
@@ -59,7 +61,11 @@ export class SegPermisoFormComponent implements OnInit {
   getBack() {
     this.router.navigate([this.redirect]);
   }
+  getPerfilEmpresa() {
+    this.listPerfilEmpresa = Object.keys(this.perfilEmpresa).filter(k => !isNaN(Number(k)));
+  }
   loadData() {
+    this.getPerfilEmpresa();
     this.getListSegRol();
     this.getListSegMenu();
     this.getListSegAccion();
@@ -82,13 +88,15 @@ export class SegPermisoFormComponent implements OnInit {
 
   }
   public save(): void {
+    console.log(this.model);
+    
     this.segPermisoService.save(this.model).subscribe(m => {
       console.log(m);
       this.isOk = true;
       this.utilService.msgOkSave()
       this.router.navigate([this.redirect]);
     }, err => {
-      if (err.status === 400) {
+      if (err.status === 422) {
         this.error = err.error;
         console.log(this.error);
       }
@@ -144,6 +152,14 @@ export class SegPermisoFormComponent implements OnInit {
 
     return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
       ? false : a1.id === a2.id;
+  }
+  comparePerfilEmpresa(a1: number, a2: number): boolean{
+    console.log(a1 == a2);
+    if(a1===undefined && a2===undefined){
+      return true;
+    }
+    return (a1 == null || a2 == null || a1 == undefined || a2 == undefined)
+    ? false : a1 == a2;
   }
 }
 

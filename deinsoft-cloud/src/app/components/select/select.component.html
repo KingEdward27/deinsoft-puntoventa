@@ -11,7 +11,7 @@
     [disabled]="disabled"
     (change)="onValueChange($event)"
 >
-    <option [selected]="isNoneSelected()">None</option>
+    <option [selected]="isNoneSelected()">-Seleccione-</option>
     <option
         *ngFor="let option of options"
         [value]="option.value"

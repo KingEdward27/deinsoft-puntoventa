@@ -7,5 +7,6 @@ export class SegPermiso {
 	segRol: SegRol = new SegRol();
 	segMenu: SegMenu = new SegMenu();
 	segAccion: SegAccion = new SegAccion();
+	perfilEmpresa: number = 0;
 	token?: string = "";
 };

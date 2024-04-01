@@ -44,10 +44,10 @@ public class ActPagoProgramacionServiceImpl
 
     public List<ActPagoProgramacion> getAllActPagoProgramacion(ActPagoProgramacion actPagoProgramacion) {
 
-        List<ActPagoProgramacion> actPagoProgramacionList = (List<ActPagoProgramacion>) actPagoProgramacionRepository.getAllActPagoProgramacion();
+        List<ActPagoProgramacion> actPagoProgramacionList = (List<ActPagoProgramacion>) actPagoProgramacionRepository.getAllActPagoProgramacion(listRoles());
         return actPagoProgramacionList.stream().filter(item -> !item.getActComprobante().getFlagIsventa().equals("1"))
-                .filter(item -> listRoles().stream()
-                .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActComprobante().getCnfLocal().getCnfEmpresa().getId()))
+//                .filter(item -> listRoles().stream()
+//                .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActComprobante().getCnfLocal().getCnfEmpresa().getId()))
                 .collect(Collectors.toList());
     }
 
@@ -88,7 +88,7 @@ public class ActPagoProgramacionServiceImpl
 
     public List<ActPagoProgramacion> getAllActPagoProgramacionByCnfMaestro(long id, LocalDate fechaVencimiento, long cnfLocalId, boolean onlyPendientes) {
         List<ActPagoProgramacion> actPagoProgramacionList
-                = (List<ActPagoProgramacion>) actPagoProgramacionRepository.findByCnfMaestroId(id, fechaVencimiento);
+                = (List<ActPagoProgramacion>) actPagoProgramacionRepository.findByCnfMaestroId(id, fechaVencimiento,listRoles());
 
         List<ActPago> actPagoList = actPagoRepository.findAll();
 
@@ -151,38 +151,40 @@ public class ActPagoProgramacionServiceImpl
                     .filter(predicate -> predicate.getFechaVencimiento().withDayOfMonth(1)
                             .compareTo(LocalDate.now().withDayOfMonth(1)) == 0)
                     .findFirst().orElse(null);
-            
-            if (programacionMesActual.getFechaVencimiento().withDayOfMonth(1)
+            if (programacionMesActual != null) {
+                if (programacionMesActual.getFechaVencimiento().withDayOfMonth(1)
                             .compareTo(LocalDate.now().withDayOfMonth(1)) < 0) {
-                ActPagoProgramacion actPayment = new ActPagoProgramacion();
-                actPayment.setActContrato(actContrato);
-                actPayment.setFecha(actContrato.getFecha());
-                actPayment.setFechaVencimiento(programacionMesActual.getFechaVencimiento().plusMonths(1));
-                
-                if (actPayment.getFechaVencimiento().lengthOfMonth() < actContrato.getCnfPlanContrato().getDiaVencimiento()) {
-                    actPayment.setFechaVencimiento(actPayment.getFechaVencimiento()
-                            .withDayOfMonth(actPayment.getFechaVencimiento().lengthOfMonth()));
-                } else {
-                    actPayment.setFechaVencimiento(
-                            actPayment.getFechaVencimiento()
-                                    .withDayOfMonth(actContrato.getCnfPlanContrato().getDiaVencimiento()));
-                }
+                    ActPagoProgramacion actPayment = new ActPagoProgramacion();
+                    actPayment.setActContrato(actContrato);
+                    actPayment.setFecha(actContrato.getFecha());
+                    actPayment.setFechaVencimiento(programacionMesActual.getFechaVencimiento().plusMonths(1));
 
-                actPayment.setMonto(actContrato.getCnfPlanContrato().getPrecio());
-                actPayment.setMontoPendiente(actContrato.getCnfPlanContrato().getPrecio());
-                actPagoProgramacionRepository.save(actPayment);
+                    if (actPayment.getFechaVencimiento().lengthOfMonth() < actContrato.getCnfPlanContrato().getDiaVencimiento()) {
+                        actPayment.setFechaVencimiento(actPayment.getFechaVencimiento()
+                                .withDayOfMonth(actPayment.getFechaVencimiento().lengthOfMonth()));
+                    } else {
+                        actPayment.setFechaVencimiento(
+                                actPayment.getFechaVencimiento()
+                                        .withDayOfMonth(actContrato.getCnfPlanContrato().getDiaVencimiento()));
+                    }
+
+                    actPayment.setMonto(actContrato.getCnfPlanContrato().getPrecio());
+                    actPayment.setMontoPendiente(actContrato.getCnfPlanContrato().getPrecio());
+                    actPagoProgramacionRepository.save(actPayment);
+                }
             }
+            
         }
     }
     public List<ActPagoProgramacion> getAllActPagoProgramacionCompraByCnfMaestro(long id, LocalDate fechaVencimiento) {
 
         List<ActPagoProgramacion> ActPagoProgramacionList
-                = (List<ActPagoProgramacion>) actPagoProgramacionRepository.findByCnfMaestroId(id, fechaVencimiento)
+                = (List<ActPagoProgramacion>) actPagoProgramacionRepository.findByCnfMaestroId(id, fechaVencimiento,listRoles())
                         .stream().filter(item -> item.getActComprobante() != null
                         && !item.getActComprobante().getFlagIsventa().equals("1"))
-                        .filter(item -> listRoles().stream()
-                        .anyMatch(predicate
-                                -> predicate.getEmpresa().getId() == item.getActComprobante().getCnfLocal().getCnfEmpresa().getId()))
+//                        .filter(item -> listRoles().stream()
+//                        .anyMatch(predicate
+//                                -> predicate.getEmpresa().getId() == item.getActComprobante().getCnfLocal().getCnfEmpresa().getId()))
                         .collect(Collectors.toList());
         return ActPagoProgramacionList;
     }

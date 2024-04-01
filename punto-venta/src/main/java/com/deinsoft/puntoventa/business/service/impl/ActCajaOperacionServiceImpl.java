@@ -12,11 +12,8 @@ import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
 import com.deinsoft.puntoventa.business.service.ActCajaOperacionService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
-import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.business.model.CnfLocal;
-import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.business.repository.CnfLocalRepository;
-import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,11 +27,12 @@ public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperac
     CnfLocalRepository cnfLocalRepository;
     
     public List<ActCajaOperacion> getAllActCajaOperacion(ActCajaOperacion actCajaOperacion) {
-        List<ActCajaOperacion> actCajaOperacionList = (List<ActCajaOperacion>) actCajaOperacionRepository.getAllActCajaOperacion(actCajaOperacion.getEstado().toUpperCase());
-        return actCajaOperacionList.stream()
-                .filter(item -> listRoles().stream()
-                .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActCajaTurno().getActCaja().getCnfEmpresa().getId()))
-                .collect(Collectors.toList());
+        List<ActCajaOperacion> actCajaOperacionList 
+                = (List<ActCajaOperacion>) actCajaOperacionRepository.getAllActCajaOperacion(actCajaOperacion.getEstado().toUpperCase(),listRoles());
+        return actCajaOperacionList;//.stream()
+//                .filter(item -> listRoles().stream()
+//                .anyMatch(predicate -> predicate.getEmpresa().getId() == item.getActCajaTurno().getActCaja().getCnfEmpresa().getId()))
+//                .collect(Collectors.toList());
     }
 
     public ActCajaOperacion getActCajaOperacion(Long id) {

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { UtilService } from '@services/util.service';
 import { SegPermisoService } from '@/business/service/seg-permiso.service';
 import { SegPermiso } from '@/business/model/seg-permiso.model';
+import { PerfilEmpresas } from '@/base/interfaces/State';
 @Component({
   selector: 'app-seg-permiso-list',
   templateUrl: './seg-permiso-list.component.html'
@@ -16,6 +17,8 @@ export class SegPermisoListComponent implements OnInit {
   nameSearch: string = "";
   modelSearch: SegPermiso = new SegPermiso();
   dataTable!: DataTables.Api;
+  
+  perfilEmpresa = PerfilEmpresas;
   constructor(private segPermisoService: SegPermisoService, private utilService: UtilService, private router: Router) { }
 
   ngOnInit(): void {

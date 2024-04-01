@@ -14,15 +14,15 @@ import java.util.Map;
 import java.util.Set;
 import org.springframework.validation.annotation.Validated;
 
-@Entity(name = "actComprobante")
-@Table(name = "act_comprobante")
-public class ActComprobante implements Serializable {
+@Entity(name = "actOrden")
+@Table(name = "act_orden")
+public class ActOrden implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "act_comprobante_id", nullable = false, unique = true)
+    @Column(name = "act_orden_id", nullable = false, unique = true)
     private long id;
 
     @NotNull
@@ -76,26 +76,6 @@ public class ActComprobante implements Serializable {
     @Column(name = "flag_isventa", length = 1, nullable = false)
     private String flagIsventa;
 
-    @Size(max = 1)
-    @Column(name = "envio_pse_flag", length = 1, nullable = true)
-    private String envioPseFlag;
-
-    @Size(max = 1000)
-    @Column(name = "envio_pse_mensaje", length = 1000, nullable = true)
-    private String envioPseMensaje;
-
-    @Size(max = 300)
-    @Column(name = "xmlhash", length = 300, nullable = true)
-    private String xmlhash;
-
-    @Size(max = 300)
-    @Column(name = "codigoqr", length = 300, nullable = true)
-    private String codigoqr;
-
-    @Size(max = 300)
-    @Column(name = "num_ticket", length = 300, nullable = true)
-    private String numTicket;
-
     @NotNull
     @Valid
     @OneToOne
@@ -140,9 +120,8 @@ public class ActComprobante implements Serializable {
     private SegUsuario segUsuario;
     
     
-    
-    public void addActComprobanteDetalle(ActComprobanteDetalle item) {
-        item.setActComprobante(this);
+    public void addActComprobanteDetalle(ActOrdenDetalle item) {
+        item.setActOrden(this);
     }
 
     public long getId() {
@@ -257,46 +236,6 @@ public class ActComprobante implements Serializable {
         this.flagIsventa = flagIsventa;
     }
 
-    public String getEnvioPseFlag() {
-        return envioPseFlag;
-    }
-
-    public void setEnvioPseFlag(String envioPseFlag) {
-        this.envioPseFlag = envioPseFlag;
-    }
-
-    public String getEnvioPseMensaje() {
-        return envioPseMensaje;
-    }
-
-    public void setEnvioPseMensaje(String envioPseMensaje) {
-        this.envioPseMensaje = envioPseMensaje;
-    }
-
-    public String getXmlhash() {
-        return xmlhash;
-    }
-
-    public void setXmlhash(String xmlhash) {
-        this.xmlhash = xmlhash;
-    }
-
-    public String getCodigoqr() {
-        return codigoqr;
-    }
-
-    public void setCodigoqr(String codigoqr) {
-        this.codigoqr = codigoqr;
-    }
-
-    public String getNumTicket() {
-        return numTicket;
-    }
-
-    public void setNumTicket(String numTicket) {
-        this.numTicket = numTicket;
-    }
-
     public CnfMaestro getCnfMaestro() {
         return cnfMaestro;
     }
@@ -363,9 +302,15 @@ public class ActComprobante implements Serializable {
 
     @Override
     public String toString() {
-        return "actComprobante [id=" + id  + ", cnfLocal=" + (cnfLocal != null ? cnfLocal : "") + ", invAlmacen=" + (invAlmacen != null ? invAlmacen : "") + ", cnfMaestro=" + (cnfMaestro != null ? cnfMaestro : "") + ", cnfTipoComprobante=" + (cnfTipoComprobante != null ? cnfTipoComprobante : "") + ", cnfFormaPago=" + (cnfFormaPago != null ? cnfFormaPago : "") + ", cnfMoneda=" + (cnfMoneda != null ? cnfMoneda : "") + ", fecha=" + fecha + ", serie=" + serie + ", numero=" + numero + ", fechaRegistro=" + fechaRegistro + ", billete=" + billete + ", total=" + total + ", vuelto=" + vuelto + ", descuento=" + descuento + ", subtotal=" + subtotal + ", igv=" + igv + ", observacion=" + observacion + ", flagEstado=" + flagEstado + ", flagIsventa=" + flagIsventa + ", envioPseFlag=" + envioPseFlag + ", envioPseMensaje=" + envioPseMensaje + ", xmlhash=" + xmlhash + ", codigoqr=" + codigoqr + ", numTicket=" + numTicket + "]";
+        return "actComprobante [id=" + id  + ", cnfLocal=" + (cnfLocal != null ? cnfLocal : "") + ", invAlmacen=" 
+                + (invAlmacen != null ? invAlmacen : "") + ", cnfMaestro=" + (cnfMaestro != null ? cnfMaestro : "") 
+                + ", cnfTipoComprobante=" + (cnfTipoComprobante != null ? cnfTipoComprobante : "") + ", cnfFormaPago=" 
+                + (cnfFormaPago != null ? cnfFormaPago : "") + ", cnfMoneda=" + (cnfMoneda != null ? cnfMoneda : "") + ", fecha=" 
+                + fecha + ", serie=" + serie + ", numero=" + numero + ", fechaRegistro=" + fechaRegistro + ", billete=" + billete 
+                + ", total=" + total + ", vuelto=" + vuelto + ", descuento=" + descuento + ", subtotal=" + subtotal + ", igv=" 
+                + igv + ", observacion=" + observacion + ", flagEstado=" + flagEstado + ", flagIsventa=" + flagIsventa + "]";
     }
-    public static Map<String, Object> toMap(ActComprobante object, String[] visibles) {
+    public static Map<String, Object> toMap(ActOrden object, String[] visibles) {
         Map<String, Object> map = new HashMap<>();
         try {
 
@@ -394,5 +339,4 @@ public class ActComprobante implements Serializable {
 
         return map;
     }
-    
 }

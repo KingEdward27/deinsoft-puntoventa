@@ -84,7 +84,6 @@ export class ActComprobanteReportContableFormComponent extends CommonReportFormC
     this.isDataLoaded = false;
     this.titleExport = "Reporte de Ventas"
     super.ngOnInit();
-    this.getListData();
   }
   getListData() {
     this.model.flagIsventa = '1';
@@ -130,7 +129,7 @@ export class ActComprobanteReportContableFormComponent extends CommonReportFormC
       console.log(data.headers);
       let contentType = data.body.type;
       const blob = new Blob([data.body], { type: contentType });
-      this.generateAttachment2(item.fileName, blob);
+      this.generateAttachment2(isVenta=="1"?item.fileNameVentas:item.fileNameCompras, blob);
     })
   }
 }

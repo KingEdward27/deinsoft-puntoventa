@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Objects;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity(name = "segPermiso")
 @Table(name = "seg_permiso")
@@ -26,7 +27,9 @@ public class SegPermiso implements Serializable {
     @JoinColumn(name = "seg_rol_id")
     private SegRol segRol;
 
+    @NotNull
     @OneToOne
+    @Valid
     @JoinColumn(name = "seg_menu_id")
     private SegMenu segMenu;
 
@@ -36,6 +39,11 @@ public class SegPermiso implements Serializable {
     @JoinColumn(name = "seg_accion_id")
     private SegAccion segAccion;
 
+    @ColumnDefault("1")
+    @Valid
+    @Column(name = "perfil_empresa", length = 255, nullable = false)
+    private int perfilEmpresa;
+    
     public long getId() {
         return id;
     }
@@ -96,6 +104,14 @@ public class SegPermiso implements Serializable {
     @Override
     public String toString() {
         return "segPermiso [id=" + id + ", segAccion=" + (segAccion != null ? segAccion : "") + ", segMenu=" + (segMenu != null ? segMenu : "") + ", segRol=" + (segRol != null ? segRol : "") + "]";
+    }
+
+    public int getPerfilEmpresa() {
+        return perfilEmpresa;
+    }
+
+    public void setPerfilEmpresa(int perfilEmpresa) {
+        this.perfilEmpresa = perfilEmpresa;
     }
 
 }

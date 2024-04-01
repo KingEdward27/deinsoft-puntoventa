@@ -16,15 +16,11 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.BaseFont;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.List;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.BarcodeEAN;
 import com.itextpdf.text.pdf.PdfPCell;
-import java.awt.Color;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 

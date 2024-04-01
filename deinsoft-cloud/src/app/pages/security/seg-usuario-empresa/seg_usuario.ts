@@ -27,16 +27,15 @@ export class SegUsuarioEmpresaComponent extends GenericListComponent implements 
                                     type:"select",loadState:1,relatedBy:"seg_rol_id"},
                                     {tableName:"cnf_local", columnName:"nombre",type:"select",loadState:1,
                                     relatedBy:"cnf_local_id",filters:[]}
-                                  ]
+                                  ],
+                                  "preSave" : []
                   }
     ],
     "columnsForm":[{tableName: "seg_usuario", "columnName":"nombre","type":"input"},
                    {tableName: "seg_usuario", columnName:"email",type:"input"},
                    {tableName: "seg_usuario", columnName:"password",type:"password"}
            ],
-    "preSave" : [
-            {columnForm:"estado",value:"1"}
-          ],
+    "preSave" : [],
     //filters sería para filtros adicionales
     "conditions":[],
     "orders":["nombre"]
@@ -52,6 +51,7 @@ export class SegUsuarioEmpresaComponent extends GenericListComponent implements 
     
     let cnfEmpresa = user.profile.split("|")[1];
     this.prop.conditions.push({"columnName":"seg_usuario.cnf_empresa_id","value":cnfEmpresa});
+    this.prop.childTables[0].preSave.push({columnForm:"cnf_empresa.cnf_empresa_id",value:cnfEmpresa});
     this.prop.childTables[0].columnsForm[1].filters.push({"columnName":"cnf_local.cnf_empresa_id","value":cnfEmpresa});
     this.prop.preSave.push({columnForm:"cnf_empresa_id", "value":cnfEmpresa})
     super.properties = this.prop;

@@ -34,6 +34,6 @@ export class ParamBean {
 	direccion: string;;
 	
 	cnfZona:CnfZona = new CnfZona();
-	flagEstado: number = 0;
+	flagEstado: string = '-1';
 	periodo:string;
 };

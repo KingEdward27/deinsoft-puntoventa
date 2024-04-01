@@ -1,18 +1,16 @@
 package com.deinsoft.puntoventa;
 
+import com.deinsoft.puntoventa.business.service.ActPagoProgramacionService;
 import com.deinsoft.puntoventa.config.AppConfig;
 import com.deinsoft.puntoventa.framework.repository.JdbcRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
@@ -24,6 +22,9 @@ public class PuntoVentaApplication extends WebMvcConfigurerAdapter implements Co
     
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+    
+    @Autowired
+    ActPagoProgramacionService actPagoProgramacionService;
     
     @Autowired
     AppConfig appConfig;
@@ -60,6 +61,13 @@ public class PuntoVentaApplication extends WebMvcConfigurerAdapter implements Co
 //            storageService.init();
 //        };
 //    }
+    
+    @Scheduled(cron = "0 30 4 * * *")
+    void refreshProgramacionPagos() {
+        System.out.println("init refreshProgramacionPagos()");
+        actPagoProgramacionService.refreshProgramacionPagos();
+    }
+    
     @Override
     public void run(String... args) throws Exception {
         String password = "123456";

@@ -123,7 +123,7 @@
                                     <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label
-                                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_maestro'
+                                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.proveedor'
                                                 |
                                                 translate}} <span *ngIf="loadingCnfMaestro"
                                                     class="spinner-border spinner-border-sm mr-1"></span></label>
@@ -137,7 +137,7 @@
                                                         [ngValue]="selectDefaultCnfMaestro">
                                                         {{selectDefaultCnfMaestro.nombre}}</option>
                                                     <option *ngFor="let item of listCnfMaestro; index as i;"
-                                                        [ngValue]="item">{{item.apellidoPaterno + ' ' +item.nombres}}
+                                                        [ngValue]="item">{{item.razonSocial}}
                                                     </option>
 
                                                 </select>

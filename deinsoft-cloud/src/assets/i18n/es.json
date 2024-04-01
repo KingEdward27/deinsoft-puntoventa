@@ -290,7 +290,8 @@
       "cnf_categoria":"Categoria",
       "cnf_sub_categoria":"Sub categoria",
       "flag_estado":"Estado",
-      "porcentaje_ganancia":"Porcentaje ganancia"
+      "porcentaje_ganancia":"Porcentaje ganancia (%)",
+      "stock_minimo": "Stock mínimo"
     },
     "inv_almacen": {
       "home": {
@@ -433,7 +434,8 @@
       "id": "ID",
       "seg_rol":"Perfil",
       "seg_menu":"Opción",
-      "seg_accion":"Acción"
+      "seg_accion":"Acción",
+      "perfil_empresa":"Perfil empresa"
     },
     "act_caja_operacion": {
       "home": {

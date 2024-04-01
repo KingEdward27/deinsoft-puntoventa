@@ -31,8 +31,10 @@ export class SegUsuarioComponent extends GenericListComponent implements OnInit{
                                     {tableName: "cnf_empresa", "columnName":"nombre","type":"select",loadState : 1,loadFor:"cnf_local_id"
                                     ,load:{tableName:"cnf_local",loadBy:"cnf_empresa_id"},relatedBy:"cnf_empresa_id"},
                                     {tableName: "cnf_local", "columnName":"nombre","type":"select",loadState : 0,loadFor:"cnf_local_id",relatedBy:"cnf_local_id"}
-                                  ]
-                  }
+                                  ],
+                                  "preSave" : []
+                  },
+                  
     ],
     "columnsForm":[{tableName: "cnf_empresa", "columnName":"nombre","type":"select",
                     loadState : 1,relatedBy:"cnf_empresa_id"},
@@ -40,9 +42,7 @@ export class SegUsuarioComponent extends GenericListComponent implements OnInit{
                    {tableName: "seg_usuario", columnName:"email",type:"input"},
                    {tableName: "seg_usuario", columnName:"password",type:"password", toUpdate:false, toEncrypt:true}
            ],
-    "preSave" : [
-            {columnForm:"estado",value:"1"}
-          ],
+    "preSave" : [],
     //filters sería para filtros adicionales
     "conditions":[],
     "orders":["seg_usuario.seg_usuario_id desc"]
@@ -57,7 +57,11 @@ export class SegUsuarioComponent extends GenericListComponent implements OnInit{
     console.log(user);
     let cnfEmpresa = user.profile.split("|")[1];
     // this.prop.conditions.push({"columnName":"seg_usuario.cnf_empresa_id","value":cnfEmpresa});
-    // this.prop.childTables[0].columnsForm[1].filters.push({"columnName":"cnf_empresa.cnf_empresa_id","value":cnfEmpresa});
+    
+    this.prop.childTables[0].preSave.push({columnForm:"cnf_empresa.cnf_empresa_id",value:cnfEmpresa});
+
+    //this.prop.childTables[0].conditions.push({"columnName":"cnf_empresa.cnf_empresa_id","value":cnfEmpresa});
+    //this.prop.childTables[0].columnsForm[1].filters.push({"columnName":"cnf_empresa.cnf_empresa_id","value":cnfEmpresa});
     // this.prop.childTables[0].columnsForm[2].filters.push({"columnName":"cnf_local.cnf_empresa_id","value":cnfEmpresa});
     //this.prop.preSave.push({columnForm:"cnf_empresa_id", "value":cnfEmpresa})
     super.properties = this.prop;

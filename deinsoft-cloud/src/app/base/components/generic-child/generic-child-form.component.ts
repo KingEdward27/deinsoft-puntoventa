@@ -209,6 +209,8 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
 
   }
   save() {
+    console.log(this.properties.preSave);
+    
     if (this.properties.preSave) {
       this.properties.preSave.forEach((element: any) => {
         console.log(element);
@@ -270,5 +272,6 @@ export class GenericChildFormComponent extends CommonService implements OnInit {
       console.log(this.error[0]);
     });
   }
+
 }
 

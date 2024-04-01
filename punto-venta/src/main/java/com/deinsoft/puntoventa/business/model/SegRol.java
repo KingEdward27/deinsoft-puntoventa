@@ -7,6 +7,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity(name = "segRol")
 @Table(name = "seg_rol")
@@ -28,6 +29,8 @@ public class SegRol implements Serializable {
     @Column(name = "descripcion", length = 255, nullable = true)
     private String descripcion;
 
+    
+    
     public long getId() {
         return id;
     }

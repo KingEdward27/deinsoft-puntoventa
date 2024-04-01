@@ -37,6 +37,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         let optionValid = []
         // return this.getProfile();
         let wa = this.appService.getMenu();
+        console.log(wa);
+        
         let url = state.url.split(";").length>0?state.url.split(";")[0].replace("/new-","/"):state.url.replace("/new-","/");
         wa?.forEach(element => {
             if (!element.children) {

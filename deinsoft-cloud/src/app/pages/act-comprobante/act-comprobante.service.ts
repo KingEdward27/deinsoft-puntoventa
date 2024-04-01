@@ -99,5 +99,10 @@ export class ActComprobanteService {
   public getTxtSire(form: any, responseType:any): Observable<any> {
     return this.http.post<any>(this.url + '/generateSireTxt', form, {observe: 'response', responseType: responseType});
   }
+
+  public getDashboard(form: any): Observable<any> {
+    return this.http.post<any>(this.url + '/get-dashboard-act-comprobante', form);
+  }
+
 }
 

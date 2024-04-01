@@ -1,6 +1,7 @@
 package com.deinsoft.puntoventa.business.repository;
 
 import com.deinsoft.puntoventa.business.bean.ParamBean;
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,11 +17,12 @@ public interface ActComprobanteRepository extends JpaRepository<ActComprobante, 
             + "where upper(p.serie) like %?1% and upper(p.numero) like %?2% and upper(p.observacion) like %?3% "
             + "and upper(p.flagEstado) like %?4% and upper(p.flagIsventa) "
             + "like %?5% and upper(p.envioPseFlag) like %?6% and upper(p.envioPseMensaje) like %?7% "
-            + "and upper(p.xmlhash) like %?8% and upper(p.codigoqr) like %?9% and upper(p.numTicket) like %?10% ")
+            + "and upper(p.xmlhash) like %?8% and upper(p.codigoqr) like %?9% and upper(p.numTicket) like %?10% "
+            + "and p.cnfLocal.id in :#{#securityFilterDto.localIds}")
     List<ActComprobante> getAllActComprobante(String serie, String numero, 
                                                 String observacion, String flagEstado, 
                                                 String flagIsventa, String envioPseFlag, String envioPseMensaje, 
-                                                String xmlhash, String codigoqr, String numTicket);
+                                                String xmlhash, String codigoqr, String numTicket,@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 
     @Query(value = "select p from actComprobante p "
             + "where p.cnfMaestro.id =  ?1 ")
@@ -52,7 +54,14 @@ public interface ActComprobanteRepository extends JpaRepository<ActComprobante, 
             + "and (p.flagIsventa = :#{#paramBean.flagIsventa}) "
             + "and (:#{#paramBean.invAlmacen.id} = 0l or p.invAlmacen.id = :#{#paramBean.invAlmacen.id}) "
             + "and (:#{#paramBean.cnfMaestro.id} = 0l or p.cnfMaestro.id = :#{#paramBean.cnfMaestro.id}) "
-            + "and (p.fecha between :#{#paramBean.fechaDesde} and :#{#paramBean.fechaHasta}) and p.flagEstado = '2'")
-    List<ActComprobante> getReportActComprobante(@Param("paramBean") ParamBean paramBean);
-
+            + "and (p.fecha between :#{#paramBean.fechaDesde} and :#{#paramBean.fechaHasta}) "
+            + "and (:#{#paramBean.flagEstado} = '-1' or p.flagEstado = :#{#paramBean.flagEstado}) "
+            + "and p.cnfLocal.id in :#{#securityFilterDto.localIds}")
+    List<ActComprobante> getReportActComprobante(@Param("paramBean") ParamBean paramBean, 
+            @Param("securityFilterDto") SecurityFilterDto securityFilterDto);
+    
+    @Query(value = "select p from actComprobante p "
+            + "where p.cnfLocal.cnfEmpresa.id =  ?1 and month(fecha) = ?2 and flagEstado = '2' and flagIsventa = '1'")
+    List<ActComprobante> findByCnfEmpresaIdAndMonth(long id, int month);
+    
 }

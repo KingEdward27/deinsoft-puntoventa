@@ -260,5 +260,13 @@ export class CnfProductoFormComponent implements OnInit {
     return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
       ? false : a1.id === a2.id;
   }
+  onChangePorcentaje(value: any) {
+    this.model.porcentajeGanancia = value;
+    this.model.precio = this.model.costo  + this.model.costo * this.model.porcentajeGanancia / 100
+  }
+  onChangePrecio(value: any) {
+    this.model.precio = value;
+    this.model.porcentajeGanancia = this.model.precio * 100 / this.model.costo 
+  }
 }
 

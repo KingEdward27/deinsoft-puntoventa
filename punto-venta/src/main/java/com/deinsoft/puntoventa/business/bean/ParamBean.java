@@ -62,7 +62,7 @@ public class ParamBean {
     
     private String direccion;
     
-    private int flagEstado;
+    private String flagEstado;
     
     private String periodo;
     
@@ -193,11 +193,11 @@ public class ParamBean {
         this.fechaVencimiento = fechaVencimiento;
     }
 
-    public int getFlagEstado() {
+    public String getFlagEstado() {
         return flagEstado;
     }
 
-    public void setFlagEstado(int flagEstado) {
+    public void setFlagEstado(String flagEstado) {
         this.flagEstado = flagEstado;
     }
 
