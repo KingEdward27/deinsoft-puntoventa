@@ -17,7 +17,8 @@ import java.time.LocalDate;
 public interface ActPagoProgramacionRepository extends JpaRepository<ActPagoProgramacion, Long> {
 
     @Query(value = "select p from actPagoProgramacion p "
-            + "where p.actComprobante.cnfLocal.id in :#{#securityFilterDto.localIds}")
+            + "where ((p.actComprobante != null and p.actComprobante.cnfLocal.id in :#{#securityFilterDto.localIds}) "
+            + "     or (p.actContrato.cnfLocal.id in :#{#securityFilterDto.localIds}))")
     List<ActPagoProgramacion> getAllActPagoProgramacion(@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 
     @Query(value = "select p from actPagoProgramacion p "
@@ -32,7 +33,8 @@ public interface ActPagoProgramacionRepository extends JpaRepository<ActPagoProg
             + "left join p.actComprobante left join p.actContrato "
             + "where (:id = 0l or (p.actComprobante != null and p.actComprobante.cnfMaestro.id = :id) "
             + "or (p.actContrato != null and p.actContrato.cnfMaestro.id = :id)) "
-            + "and p.actComprobante.cnfLocal.id in :#{#securityFilterDto.localIds} "
+            + "and ((p.actComprobante != null and p.actComprobante.cnfLocal.id in :#{#securityFilterDto.localIds}) "
+            + "         or (p.actContrato.cnfLocal.id in :#{#securityFilterDto.localIds})) "
             + "and (:fechaVencimiento = null or p.fechaVencimiento <= :fechaVencimiento) order by p.id")
     List<ActPagoProgramacion> findByCnfMaestroId(@Param("id") long id, @Param("fechaVencimiento") LocalDate fechaVencimiento
             ,@Param("securityFilterDto") SecurityFilterDto securityFilterDto);

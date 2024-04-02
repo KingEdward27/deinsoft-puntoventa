@@ -122,16 +122,8 @@ public class BusinessController {
     }
     @GetMapping(value = "/get-data-sunat")
     public ResponseEntity<?> searchSunat (@Param("nroDoc") String nroDoc) throws Exception{
-        Map<String,Object> result = null;
-        Map<String,String> param = new HashMap<>();
-        param.put("numero", nroDoc);
-        if (nroDoc.length() == 8) {
-            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/dni", "", param);
-        } else if (nroDoc.length() == 11) {
-            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/ruc", "", param);
-        }
         
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(businessService.searchSunat(nroDoc));
     }
     @PostMapping(value = "/register-new-user")
     public ResponseEntity<?> registerNewUser(@Valid @RequestBody SegUsuario segUsuario, BindingResult result) throws Exception {

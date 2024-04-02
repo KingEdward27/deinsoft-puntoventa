@@ -18,6 +18,7 @@ import com.deinsoft.puntoventa.business.model.InvAlmacen;
 import com.deinsoft.puntoventa.business.model.SegRol;
 import com.deinsoft.puntoventa.business.model.SegRolUsuario;
 import com.deinsoft.puntoventa.business.repository.SegRolUsuarioRepository;
+import com.deinsoft.puntoventa.business.service.BusinessService;
 import com.deinsoft.puntoventa.business.service.CnfEmpresaService;
 import com.deinsoft.puntoventa.business.service.CnfLocalService;
 import com.deinsoft.puntoventa.business.service.CnfTipoDocumentoService;
@@ -83,6 +84,9 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
     @Autowired
     private InvAlmacenService invAlmacenService;
     
+    @Autowired
+    BusinessService businessService;
+    
     public List<SegUsuario> getAllSegUsuario(SegUsuario segUsuario) {
         List<SegUsuario> segUsuarioList = (List<SegUsuario>) segUsuarioRepository.getAllSegUsuario(segUsuario.getNombre().toUpperCase(), segUsuario.getEmail().toUpperCase(), segUsuario.getPassword().toUpperCase());
         return segUsuarioList;
@@ -121,16 +125,30 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
     @Override
     @Transactional
     public SegUsuario registerNewUser(SegUsuario segUsuario) throws Exception {
+        //valida ruc
+        if (segUsuario.getRucEmpresa().length() != 11) {
+            throw  new RuntimeException("RUC inválido!");
+        }
+        Map<String,Object> mapRuc = null;
+        try {
+            mapRuc = businessService.searchSunat(segUsuario.getRucEmpresa());
+        } catch (Exception e) {
+            throw new RuntimeException("RUC no existe en la SUNAT");
+        }
+        
+        if (mapRuc == null) {
+            throw new RuntimeException("RUC no existe en la SUNAT!");
+        }
         //validar empresa existente
         CnfEmpresa cnfEmpresa = cnfEmpresaService.getAllCnfEmpresa().stream()
                 .filter(predicate-> predicate.getNroDocumento().equals(segUsuario.getRucEmpresa()))
                 .findFirst().orElse(null);
         if (cnfEmpresa != null) {
-            throw  new Exception("La empresa ya se encuentra registrada");
+            throw new RuntimeException("La empresa ya se encuentra registrada");
         }
         
         if (Util.validaCorreo(segUsuario.getEmail())) {
-            throw  new Exception("El correo tiene un formato inválido");
+            throw  new RuntimeException("El correo tiene un formato inválido");
         }
         
         //validar email existente
@@ -138,7 +156,7 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
                 .filter(predicate -> predicate.getEmail().equals(segUsuario.getEmail()))
                 .findFirst().orElse(null);
         if (segUsuarioFromDb != null) {
-            throw  new Exception("El email del usuario ya se encuentra registrado");
+            throw  new RuntimeException("El email del usuario ya se encuentra registrado");
         }
         //grabar empresa
         CnfTipoDocumento tipoDoc = cnfTipoDocumentoService.getAllCnfTipoDocumento().stream()
@@ -148,8 +166,8 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         CnfEmpresa empresa = new CnfEmpresa();
         empresa.setCnfTipoDocumento(tipoDoc);
         empresa.setNroDocumento(segUsuario.getRucEmpresa());
-        empresa.setNombre(segUsuario.getNombreEmpresa());
-        empresa.setDescripcion(segUsuario.getNombreEmpresa());
+        empresa.setNombre(mapRuc.get("nombre").toString());
+        empresa.setDescripcion(mapRuc.get("nombre").toString());
         empresa.setPerfilEmpresa(segUsuario.getPerfilEmpresa());
         CnfEmpresa empresaResult = cnfEmpresaService.save(empresa);
         

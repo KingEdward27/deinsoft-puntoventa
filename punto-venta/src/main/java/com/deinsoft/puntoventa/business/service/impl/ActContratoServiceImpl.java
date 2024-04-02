@@ -409,13 +409,18 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                 .map(mapper -> {
                     if (mapper.getFlagEstado().equals("2")) {
                         mapper.setEstadoDescripcion("Corte Efectuado");
+                        mapper.setColor("red");
                     } else {
+                        
+                        mapper.setColor("green");
                         if (mapper.getMesesDeuda() > 1) {
                             mapper.setEstadoDescripcion("Afecto a Corte");
+                            mapper.setColor("yellow");
                         } else if (mapper.getMesesDeuda() == 1) {
                             if (LocalDate.now().getDayOfMonth() == 0) {
                                 if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 1) {
                                     mapper.setEstadoDescripcion("Afecto a Corte");
+                                    mapper.setColor("yellow");
                                 }
                                 if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0) {
                                     mapper.setEstadoDescripcion("Vigente");
@@ -425,6 +430,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                                 if (LocalDate.now().getDayOfMonth() >= mapper.getCnfPlanContrato().getDiaProcesoCorte()) {
                                     if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 1) {
                                         mapper.setEstadoDescripcion("Afecto a Corte");
+                                        mapper.setColor("yellow");
                                     }
                                     if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0) {
                                         mapper.setEstadoDescripcion("Vigente");

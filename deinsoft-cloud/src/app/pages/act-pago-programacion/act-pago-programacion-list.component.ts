@@ -213,6 +213,7 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
         size: 'lg',
         });
         let list : any[] = [];
+        this.total = 0;
         await this.listData.forEach(element => {
           let total = 0
           if (element.amtToPay > 0) {
@@ -221,8 +222,8 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
              actPagoDetalle.monto = (element.amtToPay > actPagoDetalle.montoDeuda? actPagoDetalle.montoDeuda: element.amtToPay);
              actPagoDetalle.actPagoProgramacion = element;
              this.modalRef.componentInstance.model.cnfMaestro = element.actContrato?element.actContrato.cnfMaestro : element.actComprobante.cnfMaestro;
-             total = total + actPagoDetalle.monto;
-             this.total = total;
+             this.total = this.total + actPagoDetalle.monto;
+             
              list.push(actPagoDetalle);
           }
         });

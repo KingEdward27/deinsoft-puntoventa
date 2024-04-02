@@ -32,6 +32,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.apache.commons.io.FileUtils;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpMethod;
 /**
  *
  * @author EDWARD-PC
@@ -248,5 +250,18 @@ public class BusinessServiceImpl implements BusinessService {
         byte[] bytes = new byte[n];
         stream.read(bytes, 0, n);
         return bytes;
+    }
+    
+    public Map<String,Object> searchSunat (String nroDoc) throws Exception {
+        Map<String,Object> result = null;
+        Map<String,String> param = new HashMap<>();
+        param.put("numero", nroDoc);
+        if (nroDoc.length() == 8) {
+            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/dni", "", param);
+        } else if (nroDoc.length() == 11) {
+            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/ruc", "", param);
+        }
+        
+        return result;
     }
 }

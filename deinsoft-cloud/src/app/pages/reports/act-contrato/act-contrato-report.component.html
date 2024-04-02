@@ -117,7 +117,7 @@
                                             |
                                             translate}} </label>
                                         <div class="col-sm-12 col-lg-9">
-                                            <select name="model.flagEstado"
+                                            <select name="model.flagEstado" [compareWith]="comparePerfil"
                                                 [(ngModel)]="model.flagEstado" class="form-control-sm col-sm-12 col-lg-6">
                                                 <option [ngValue]="0">Afecto a corte</option>
                                                 <option [ngValue]="1">Vigente</option>
@@ -178,7 +178,7 @@
                                 <td>{{item.ultimoPago}}</td>
                                 <td class="content-number">S/ {{item.montoPendiente | number:'1.2-2'}}</td>
                                 <td>{{item.nroPoste}}</td>
-                                <td><p [ngClass]="'stateContrato' + item.flagEstado">{{item.estadoDescripcion}}</p></td>
+                                <td><p [ngClass]="'state' + item.color">{{item.estadoDescripcion}}</p></td>
                             </tr>
                         </tbody>
                     </table>

@@ -710,7 +710,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         
         Double totalGanancia = listVentas.stream().map(mapper -> {
             return mapper.getListActComprobanteDetalle().stream()
-                    .mapToDouble(o -> (o.getCnfProducto().getPrecio().subtract(o.getCnfProducto().getCosto())).doubleValue())
+                    .mapToDouble(o -> (o.getPrecio().subtract(o.getCnfProducto().getCosto())).doubleValue())
                     .sum();
         }).mapToDouble(o -> o).sum();
         Map<String, Object> map = new HashMap<>();

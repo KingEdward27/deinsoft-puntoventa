@@ -118,7 +118,8 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
 
             for (ActPagoProgramacion pendientesAnteriores : list) {
                 if (pendientesAnteriores.getFechaVencimiento().compareTo(actPagoDetalle.getActPagoProgramacion().getFechaVencimiento()) < 0
-                        && pendientesAnteriores.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0) {
+                        && pendientesAnteriores.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0 
+                        && pendientesAnteriores.getFechaVencimiento().compareTo(actPagoDetalle.getActPagoProgramacion().getFechaVencimiento()) != 0) {
                     throw new Exception("Debe cancelar las cuotas anteriores. Mes pendiente: " + pendientesAnteriores.getFechaVencimiento().getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase());
                 }
 //                if (pendientesAnteriores.getFechaVencimiento().compareTo(actPagoDetalle.getActPagoProgramacion().getFechaVencimiento()) == 0

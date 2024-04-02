@@ -173,7 +173,8 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
         List<String> listCodes = new ArrayList<>();
         for (CnfProducto cnfProducto : cnfProductoList) {
             String code = StringUtils.leftPad(String.valueOf(cnfProducto.getCnfEmpresa().getId()), 3, "0")
-                    + StringUtils.leftPad(String.valueOf(cnfProducto.getCnfMarca().getId()), 3, "0")
+                    + (cnfProducto.getCnfMarca() == null? "000": 
+                        StringUtils.leftPad(String.valueOf(cnfProducto.getCnfMarca().getId()), 3, "0"))
                     + StringUtils.leftPad(String.valueOf(cnfProducto.getCnfSubCategoria().getCnfCategoria().getId()), 3, "0")
                     + StringUtils.leftPad(String.valueOf(cnfProducto.getId()), 3, "0");
 

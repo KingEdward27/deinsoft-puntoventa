@@ -129,6 +129,9 @@ public class ActContrato implements Serializable {
     @Transient
     private String estadoDescripcion;
     
+    @Transient
+    private String color;
+    
     public long getId() {
         return id;
     }
@@ -335,6 +338,14 @@ public class ActContrato implements Serializable {
 
     public void setMesesDeuda(int mesesDeuda) {
         this.mesesDeuda = mesesDeuda;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     

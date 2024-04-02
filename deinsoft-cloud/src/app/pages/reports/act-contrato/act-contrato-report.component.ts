@@ -29,6 +29,7 @@ export class ActContratoReportComponent extends CommonReportFormComponent implem
     super.ngOnInit();
     
     this.selectThisMonth();
+    this.model.flagEstado = "0";
   }
   // public getAllDataByFilters() {
   //   let cnfEmpresa = this.deps.appService.getProfile().profile.split("|")[1];
@@ -93,5 +94,15 @@ export class ActContratoReportComponent extends CommonReportFormComponent implem
 
     });
   }
+
+  comparePerfil(a1: any, a2: any): boolean {
+    if (a1 === undefined && a2 === undefined) {
+        return true;
+    }
+    console.log(a1?.id+'-'+a2?.id);
+    
+    return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
+        ? false : a1.id === a2.id;
+}
   
 }

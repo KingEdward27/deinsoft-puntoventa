@@ -16,15 +16,20 @@ import java.util.Map;
  * @author EDWARD-PC
  */
 public interface BusinessService {
-     public RespuestaPSE sendApi(String tableName, long id) throws ParseException;
-     public byte[] getPDF(long id, int tipo) throws ParseException;
-     
-     public Map<String, Object> savePurchase(JsonData jsonData);
-     public Map<String, Object> saveSale(JsonData jsonData);
-     
-     public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception;
-     
-     public byte[] print2(String staticResourcesFolder, int tipo, ActComprobante actComprobante,boolean isTicket) throws Exception;
-     
-     public byte[] printPago(String staticResourcesFolder, int tipo, ActPago actPago,boolean isTicket) throws Exception;
+
+    public RespuestaPSE sendApi(String tableName, long id) throws ParseException;
+
+    public byte[] getPDF(long id, int tipo) throws ParseException;
+
+    public Map<String, Object> savePurchase(JsonData jsonData);
+
+    public Map<String, Object> saveSale(JsonData jsonData);
+
+    public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception;
+
+    public byte[] print2(String staticResourcesFolder, int tipo, ActComprobante actComprobante, boolean isTicket) throws Exception;
+
+    public byte[] printPago(String staticResourcesFolder, int tipo, ActPago actPago, boolean isTicket) throws Exception;
+
+    public Map<String, Object> searchSunat(String nroDoc) throws Exception;
 }

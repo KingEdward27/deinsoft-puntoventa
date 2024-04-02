@@ -12,6 +12,7 @@ import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.repository.ActPagoProgramacionRepository;
 import com.deinsoft.puntoventa.business.service.ActPagoProgramacionService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.model.ActContrato;
 import com.deinsoft.puntoventa.business.model.ActPago;
@@ -87,8 +88,10 @@ public class ActPagoProgramacionServiceImpl
     }
 
     public List<ActPagoProgramacion> getAllActPagoProgramacionByCnfMaestro(long id, LocalDate fechaVencimiento, long cnfLocalId, boolean onlyPendientes) {
+        
+        SecurityFilterDto sec = listRoles();
         List<ActPagoProgramacion> actPagoProgramacionList
-                = (List<ActPagoProgramacion>) actPagoProgramacionRepository.findByCnfMaestroId(id, fechaVencimiento,listRoles());
+                = (List<ActPagoProgramacion>) actPagoProgramacionRepository.findByCnfMaestroId(id, fechaVencimiento,sec);
 
         List<ActPago> actPagoList = actPagoRepository.findAll();
 
@@ -109,7 +112,11 @@ public class ActPagoProgramacionServiceImpl
                             if (data.getFechaVencimiento().compareTo(LocalDate.now()) >= 0) {
                                 data.setColor("yellow");
                             } else {
-                                data.setColor("red");
+                                if (data.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0) {
+                                    data.setColor("red");
+                                } else {
+                                    data.setColor("green");
+                                }
                             }
                             data.setMes(data.getFechaVencimiento().getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase());
 
@@ -148,8 +155,8 @@ public class ActPagoProgramacionServiceImpl
                 continue;
             }
             ActPagoProgramacion programacionMesActual = actPagoProgramacionRepository.findByActContratoId(actContrato.getId()).stream()
-                    .filter(predicate -> predicate.getFechaVencimiento().withDayOfMonth(1)
-                            .compareTo(LocalDate.now().withDayOfMonth(1)) == 0)
+//                    .filter(predicate -> predicate.getFechaVencimiento().withDayOfMonth(1)
+//                            .compareTo(LocalDate.now().withDayOfMonth(1)) == 0)
                     .findFirst().orElse(null);
             if (programacionMesActual != null) {
                 if (programacionMesActual.getFechaVencimiento().withDayOfMonth(1)

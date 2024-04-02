@@ -125,7 +125,7 @@
                                                 <th class="text-nowrap">
                                                     {{'webpagos.act_pago_programacion.fecha_vencimiento' | translate}}
                                                 </th>
-                                                <th class="text-nowrap">{{'webpagos.act_pago_programacion.monto' |
+                                                <th width="10%" class="text-nowrap">{{'webpagos.act_pago_programacion.monto' |
                                                     translate}}</th>
                                                 <th class="text-nowrap">
                                                     {{'webpagos.act_pago_programacion.monto_pendiente' | translate}}
@@ -156,12 +156,11 @@
                                                     <td>{{item.actComprobante?item.actComprobante.serie + '-' +item.actComprobante.numero : 
                                                         item.actContrato.serie + '-' +item.actContrato.numero}}</td>
                                                 <td >{{item.mes}}</td>
-                                                <td *ngIf="item.montoPendiente == 0">{{item.fechaVencimiento}}</td>
-                                                <td *ngIf="item.montoPendiente != 0" [ngClass] = "'state' + item.color">{{item.fechaVencimiento}}</td>
+                                                <td class="text-center">{{item.fechaVencimiento}}</td>
                                                 <td class="content-number">{{item.monto | number:'1.2-2' | currency:'S/'}}</td>
                                                 <td class="content-number">{{item.montoPendiente | number:'1.2-2' | currency:'S/'}}</td>
                                                 <td>{{item.ultimoPago}}</td>
-                                                <td >{{item.montoPendiente == 0? 'CANCELADO':'PENDIENTE'}}</td> 
+                                                <td  [ngClass] = "'state' + item.color">{{item.montoPendiente == 0? 'CANCELADO':'PENDIENTE'}}</td> 
                                                 
                                                 
                                                     

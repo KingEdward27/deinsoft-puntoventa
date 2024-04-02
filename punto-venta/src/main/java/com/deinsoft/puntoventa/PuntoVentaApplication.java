@@ -8,12 +8,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
+@EnableScheduling
 @EnableConfigurationProperties(AppConfig.class)
 public class PuntoVentaApplication extends WebMvcConfigurerAdapter implements CommandLineRunner {
 
@@ -62,7 +64,7 @@ public class PuntoVentaApplication extends WebMvcConfigurerAdapter implements Co
 //        };
 //    }
     
-    @Scheduled(cron = "0 30 4 * * *")
+    @Scheduled(cron = "0 49 23 * * *")
     void refreshProgramacionPagos() {
         System.out.println("init refreshProgramacionPagos()");
         actPagoProgramacionService.refreshProgramacionPagos();
