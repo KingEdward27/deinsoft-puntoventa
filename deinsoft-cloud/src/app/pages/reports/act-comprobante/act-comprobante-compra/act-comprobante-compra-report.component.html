@@ -167,8 +167,8 @@
 
                             <div class="col-sm-12 col-lg-12">
                                 <div>
-                                    <table id="dtData"
-                                        class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-bordered table-td-valign-middle">
+                                    <table id="dtDataCompras"
+                                        class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
                                         <thead>
                                             <tr>
                                                 <th width="1%">Nro.</th>
@@ -190,8 +190,10 @@
                                         </thead>
                                         <tbody>
                                             <ng-container *ngFor="let item of listData; index as i">
-                                                <tr style="background-color: #ECECEC">
-                                                    <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
+                                                <tr>
+                                                    <td width="1%" class="f-w-600 text-inverse">{{i+1}} 
+                                                        <!-- <a class="fa fa-plus" (click) = "showDetail(item)" style="color: green;"></a> -->
+                                                    </td>
                                                     <td>{{item.fecha}}</td>
                                                     <td>{{item.cnfLocal.nombre}}</td>
                                                     <td>{{item.invAlmacen.nombre}}</td>
@@ -202,22 +204,25 @@
                                                     <td class="content-number">{{item.cnfMoneda.simbolo + ' ' + (item.total | number:'1.2-2')}}</td>
                                                     
                                                 </tr>
-                                                <tr *ngFor="let item2 of item.listActComprobanteDetalle; index as i">
-                                                    <td colspan="8">
-                                                        <div class="row2">
-                                                            <div class="col-lg-6 col-sm-12">
-                                                                <p style="margin: auto;">{{'Producto: ' + (item2.cnfProducto.nombre)}}</p>
-                                                                <p style="margin: auto;">{{'Precio: ' + item.cnfMoneda.simbolo + ' ' + (item2.precio | number:'1.2-2')}}</p>
+                                                <!-- <ng-container *ngFor="let item2 of item.listActComprobanteDetalle; index as i2">
+                                                    <tr *ngIf="item.showDetail">
+                                                        <td colspan="8">
+                                                            <div class="row2">
+                                                                <div class="col-lg-6 col-sm-12">
+                                                                    <p style="margin: auto;">{{'Producto: ' + (item2.cnfProducto.nombre)}}</p>
+                                                                    <p style="margin: auto;">{{'Precio: ' + item.cnfMoneda.simbolo + ' ' + (item2.precio | number:'1.2-2')}}</p>
+                                                                </div>
+                                                                <div class="col-lg-6 col-sm-12">
+                                                                    <p style="margin: auto;">{{'Cantidad: ' + (item2.cantidad | number:'1.2-2')}}</p>
+                                                                    <p style="margin: auto;">{{'Importe: ' + item.cnfMoneda.simbolo + ' ' + (item2.importe | number:'1.2-2')}}</p>
+                                                                </div>
                                                             </div>
-                                                            <div class="col-lg-6 col-sm-12">
-                                                                <p style="margin: auto;">{{'Cantidad: ' + (item2.cantidad | number:'1.2-2')}}</p>
-                                                                <p style="margin: auto;">{{'Importe: ' + item.cnfMoneda.simbolo + ' ' + (item2.importe | number:'1.2-2')}}</p>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        
-                                                    </td>
-                                                </tr>
+                                                            
+                                                            
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                                 -->
                                             </ng-container>
                                             
                                         </tbody>

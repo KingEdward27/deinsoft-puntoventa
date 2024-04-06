@@ -5,7 +5,10 @@
 package com.deinsoft.puntoventa.business.service.impl;
 
 import com.deinsoft.puntoventa.business.model.ActComprobante;
+import com.deinsoft.puntoventa.business.model.ActContrato;
 import com.deinsoft.puntoventa.business.model.ActPago;
+import com.deinsoft.puntoventa.business.repository.ActComprobanteRepository;
+import com.deinsoft.puntoventa.business.repository.ActContratoRepository;
 import com.deinsoft.puntoventa.business.service.BusinessService;
 import com.deinsoft.puntoventa.facturador.client.EnvioPSE;
 import com.deinsoft.puntoventa.facturador.client.RespuestaPSE;
@@ -20,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,6 +51,12 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Autowired
     TransactionService transactionService;
+    
+    @Autowired
+    ActComprobanteRepository actComprobanteRepository;
+    
+    @Autowired
+    ActContratoRepository actContratoRepository;
 
 //    public static String urlBase = "http://localhost:8080/api/v1/";
 //    public static String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NTA5MjAwMTYsImlzcyI6IkRFSU5TT0ZUIiwianRpIjoiREVGQUNULUpXVCIsInN1YiI6IjEwNDE0MzE2NTk1L1BFUkVaIERFTEdBRE8gQkxBTkNBIE5FUkkiLCJudW1Eb2MiOiIxMDQxNDMxNjU5NSIsInJhem9uU29jaWFsIjoiUEVSRVogREVMR0FETyBCTEFOQ0EgTkVSSSIsInVzdWFyaW9Tb2wiOiI0MTQzMTY1OSIsImV4cCI6MTY4MjkyMDAxNn0.1Csg7-tYUYtrpMDHGwMG8K04_aGUXrj8Vbm3qqeSYL6GDxsg-JOOf-VxWHXWeBXGzZ-3C6Br3DB1kJpOH_Ueog";
@@ -263,5 +273,50 @@ public class BusinessServiceImpl implements BusinessService {
         }
         
         return result;
+    }
+    
+    @Override
+    public void verifyPlan(ActComprobante actComprobante, ActContrato actContrato) throws Exception {
+        if (actComprobante != null) {
+            int month = actComprobante.getFecha().getMonthValue();
+            List<ActComprobante> listVentas = actComprobanteRepository.findByCnfEmpresaIdAndMonth(
+                    actComprobante.getCnfLocal().getCnfEmpresa().getId(),month);
+            Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
+            if (actComprobante.getCnfLocal().getCnfEmpresa().getPlan() == 1 
+                    && (listVentas.size() >= 10 || sumVentas.compareTo(10000d) >= 0)) {
+                throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+            }
+
+            if (actComprobante.getCnfLocal().getCnfEmpresa().getPlan() == 2
+                    && (listVentas.size() >= 25 || sumVentas.compareTo(20000d) >= 0)) {
+                throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+            }
+
+            if (actComprobante.getCnfLocal().getCnfEmpresa().getPlan() == 3
+                    && (listVentas.size() >= 50 || sumVentas.compareTo(100000d) >= 0)) {
+                throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+            }
+        } else {
+            int month = actContrato.getFecha().getMonthValue();
+            List<ActContrato> listVentas = actContratoRepository.findByCnfEmpresaIdAndMonth(
+                    actContrato.getCnfLocal().getCnfEmpresa().getId(),month);
+            //Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
+            
+            if (actContrato.getCnfLocal().getCnfEmpresa().getPlan() == 1 
+                    && listVentas.size() >= 10 ) {
+                throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+            }
+
+            if (actContrato.getCnfLocal().getCnfEmpresa().getPlan() == 2
+                    && (listVentas.size() >= 25)) {
+                throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+            }
+
+            if (actContrato.getCnfLocal().getCnfEmpresa().getPlan() == 3
+                    && (listVentas.size() >= 50)) {
+                throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+            }
+        }
+        
     }
 }

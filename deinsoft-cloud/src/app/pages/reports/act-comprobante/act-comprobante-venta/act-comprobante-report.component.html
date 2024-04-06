@@ -141,7 +141,23 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label
+                                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.flag_estado'
+                                                |
+                                                translate}} </label>
+                                            <div class="col-sm-12 col-lg-9">
+                                                <select name="model.flagEnvioPse" [compareWith]="comparePerfil"
+                                                    [(ngModel)]="model.flagEnvioPse" class="form-control-sm col-sm-12 col-lg-6">
+                                                    <option [ngValue]="2">Enviado a SUNAT</option>
+                                                    <option [ngValue]="-1">Todos</option>
+                                                    <option [ngValue]="0">Rechazado</option>
+                                                </select>
+    
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -160,12 +176,16 @@
                             </div>
                         </div>
                         <br>
-
+                        <!-- <div>
+                            <app-checkbox (valueChange)="changeView($event)">
+                                Más datos
+                            </app-checkbox>
+                        </div> -->
                         <div class="form-group-sm row">
 
                             <div class="col-sm-12 col-lg-12">
                                 <div>
-                                    <table id="dtData"
+                                    <table id="dtDataVentas"
                                         class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
                                         <thead>
                                             <tr>
@@ -184,23 +204,31 @@
                                                     translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.total' | translate}}
                                                 </th>
+                                                <th class="text-nowrap">{{'webpagos.act_comprobante.envio_pse_flag' |
+                                                    translate}}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <ng-container *ngFor="let item of listData; index as i">
-                                                <tr style="background-color: #ECECEC">
+                                                <tr>
                                                     <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
                                                     <td>{{item.fecha}}</td>
                                                     <td>{{item.cnfLocal.nombre}}</td>
                                                     <td>{{item.invAlmacen.nombre}}</td>
                                                     <td>{{item.cnfTipoComprobante.nombre}}</td>
                                                     <td>{{item.serie + '-' +item.numero}}</td>
-                                                    <td>{{item.cnfMaestro.apellidoPaterno + ' ' +
-                                                        item.cnfMaestro.apellidoMaterno + ' ' + item.cnfMaestro.nombres}}
+                                                    <td>{{item.cnfMaestro.razonSocial}}
                                                     </td>
                                                     <td class="content-number">{{item.cnfMoneda.simbolo + ' ' + (item.total | number:'1.2-2')}}</td>
+                                                    <td ><p *ngIf="item.envioPseFlag != '0'"[ngClass]="'state' + item.envioPseFlag"> {{item.envioPseFlag == '2'?"ENVIADO":
+                                                        item.envioPseFlag == '0'?"RECHAZADO":
+                                                        item.envioPseFlag == '1'?"REGISTRADO":
+                                                        "NO APLICA"}}</p>
+                                                        <p *ngIf="item.envioPseFlag == '0'" ngbPopover="Mensaje de error: {{item.envioPseMensaje}}"
+                                                        triggers="mouseenter:mouseleave" [ngClass]="'state' + item.envioPseFlag">RECHAZADO</p>
+                                                    </td>
                                                 </tr>
-                                                <tr *ngFor="let item2 of item.listActComprobanteDetalle; index as i">
+                                                <!-- <tr *ngFor="let item2 of item.listActComprobanteDetalle; index as i">
                                                     <td colspan="8">
                                                         <div class="row2">
                                                             <div class="col-lg-6 col-sm-12">
@@ -215,7 +243,7 @@
                                                         
                                                         
                                                     </td>
-                                                </tr>
+                                                </tr> -->
                                             </ng-container>
                                             
                                         </tbody>

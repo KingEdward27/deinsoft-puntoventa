@@ -2,6 +2,7 @@ package com.deinsoft.puntoventa.business.repository;
 
 import com.deinsoft.puntoventa.business.bean.ParamBean;
 import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
+import com.deinsoft.puntoventa.business.model.ActComprobante;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -48,4 +49,7 @@ public interface ActContratoRepository extends JpaRepository<ActContrato,Long> {
                 + "and p.cnfLocal.id in :#{#securityFilterDto.localIds}")
         List<ActContrato> getReportActContrato(@Param("paramBean") ParamBean paramBean,@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 
+        @Query(value = "select p from actContrato p "
+            + "where p.cnfLocal.cnfEmpresa.id =  ?1 and month(fecha) = ?2 and flagEstado = '1'")
+        List<ActContrato> findByCnfEmpresaIdAndMonth(long id, int month);
 }

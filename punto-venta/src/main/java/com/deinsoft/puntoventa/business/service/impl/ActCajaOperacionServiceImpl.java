@@ -12,8 +12,10 @@ import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
 import com.deinsoft.puntoventa.business.service.ActCajaOperacionService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
 import com.deinsoft.puntoventa.business.model.CnfLocal;
 import com.deinsoft.puntoventa.business.repository.CnfLocalRepository;
+import com.deinsoft.puntoventa.util.Constantes;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,11 +42,24 @@ public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperac
         Optional<ActCajaOperacion> actCajaOperacionOptional = actCajaOperacionRepository.findById(id);
         if (actCajaOperacionOptional.isPresent()) {
             actCajaOperacion = actCajaOperacionOptional.get();
+            SecurityFilterDto f = listRoles();
+            if (f.getEmpresaId() != actCajaOperacion.getActCajaTurno().getActCaja().getCnfEmpresa().getId()) {
+                throw new SecurityException(Constantes.MSG_NO_AUTHORIZED);
+            }
+        } else {
+            throw new SecurityException(Constantes.MSG_NO_EXISTS_ITEM);
         }
         return actCajaOperacion;
     }
 
-    public ActCajaOperacion saveActCajaOperacion(ActCajaOperacion actCajaOperacion) {
+    public ActCajaOperacion saveActCajaOperacion(ActCajaOperacion actCajaOperacion) throws Exception {
+        if (actCajaOperacion.getId()!= 0) {
+            ActCajaOperacion actCajaOperacionBd = actCajaOperacionRepository.getById(actCajaOperacion.getId());
+            if (actCajaOperacionBd.getActComprobante() != null || actCajaOperacionBd.getActPago() != null) {
+                throw new Exception("No puede editar esta operación");
+            }
+        }
+        
         ActCajaOperacion actCajaOperacionResult = actCajaOperacionRepository.save(actCajaOperacion);
         return actCajaOperacionResult;
     }

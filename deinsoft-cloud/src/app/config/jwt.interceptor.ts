@@ -7,13 +7,14 @@ import { catchError } from "rxjs/operators";
 import { UtilService } from "../services/util.service";
 import { AuthenticationService } from "@services/authentication.service";
 import { AppService } from "@services/app.service";
+import { Location } from "@angular/common";
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor{
 
     constructor(
                 private router: Router,private utilService:UtilService, private appService: AppService,
-                private http: HttpClient,private auth:AuthenticationService){}
+                private http: HttpClient,private auth:AuthenticationService, private location: Location){}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{
         
@@ -46,7 +47,9 @@ export class JwtInterceptor implements HttpInterceptor{
                         //window.location.reload();
                     }else{
                       if (error.status === 401) {
+                        
                         this.utilService.msgAccessDeniedWithMessage(error.error);
+                        this.location.back()
                       }
                       if (error.status === 400) {
                         if (error.error.message?.includes("Date")) {

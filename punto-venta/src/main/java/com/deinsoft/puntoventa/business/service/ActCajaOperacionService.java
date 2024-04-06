@@ -16,7 +16,7 @@ public interface ActCajaOperacionService extends CommonService<ActCajaOperacion>
 
     public ActCajaOperacion getActCajaOperacion(Long id);
 
-    public ActCajaOperacion saveActCajaOperacion(ActCajaOperacion actCajaOperacion);
+    public ActCajaOperacion saveActCajaOperacion(ActCajaOperacion actCajaOperacion)  throws Exception ;
 
     public List<ActCajaOperacion> getAllActCajaOperacion();
 

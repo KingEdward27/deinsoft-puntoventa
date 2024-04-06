@@ -20,7 +20,7 @@ import { InvAlmacenService } from '@/business/service/inv-almacen.service';
 import { ActComprobanteDetalleService } from '@/business/service/act-comprobante-detalle.service';
 import { UtilService } from '@services/util.service';
 import { CustomAdapter, CustomDateParserFormatter } from '@/base/util/CustomDate';
-import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, switchMap, tap, filter } from 'rxjs/operators';
 import { CnfProductoService } from '@/business/service/cnf-producto.service';
 import { CnfProducto } from '@/business/model/cnf-producto.model';
 import { ActComprobanteDetalle } from '@/business/model/act-comprobante-detalle.model';
@@ -100,6 +100,7 @@ export class ActComprobanteReportFormComponent extends CommonReportFormComponent
   public modalRef!: NgbModalRef;
   listData: any;
   total:number;
+  detailed:boolean;
   constructor(public deps: MyBaseComponentDependences) {
     super(deps);
   }
@@ -116,9 +117,10 @@ export class ActComprobanteReportFormComponent extends CommonReportFormComponent
     return this.deps.actComprobanteService.getReport(this.model).subscribe(data => {
       
       this.listData = data;
+      this.listData = this.listData.filter(data => this.model.flagEnvioPse == "-1" || (this.model.flagEnvioPse != "-1" && data.envioPseFlag == this.model.flagEnvioPse))
       this.loadingCnfMaestro = false;
       setTimeout(() => {
-        this.dataTable = $('#dtData').DataTable(this.datablesSettings);
+        this.dataTable = $('#dtDataVentas').DataTable(this.datablesSettings);
       }, 1);
       this.dataTable?.destroy();
       console.log(data);
@@ -158,6 +160,17 @@ export class ActComprobanteReportFormComponent extends CommonReportFormComponent
       this.generateAttachment("Reporte de ventas", blob, extension);
     })
     
+  }
+  changeView(event:any){
+    this.detailed = !this.detailed;
+  }
+  comparePerfil(a1: any, a2: any): boolean {
+      if (a1 === undefined && a2 === undefined) {
+          return true;
+      }
+      
+      return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
+          ? false : a1.id === a2.id;
   }
 }
 

@@ -16,7 +16,7 @@ public interface CnfProductoService extends CommonService<CnfProducto> {
 
     public List<CnfProducto> getAllCnfProducto(CnfProducto cnfProducto);
 
-    public CnfProducto getCnfProducto(Long id);
+    public CnfProducto getCnfProducto(Long id) throws Exception;
 
     public CnfProducto saveCnfProducto(CnfProducto cnfProducto,MultipartFile file);
 

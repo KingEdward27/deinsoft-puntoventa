@@ -37,10 +37,15 @@ public class ActCajaTurnoController extends CommonController<ActCajaTurno, ActCa
     }
 
     @GetMapping(value = "/get-act-caja-turno")
-    public ActCajaTurno getActCajaTurno(@Param("id") Long id) {
+    public ResponseEntity<?> getActCajaTurno(@Param("id") Long id) {
         logger.info("getActCajaTurno received: " + id);
-        ActCajaTurno actCajaTurno = actCajaTurnoService.getActCajaTurno(id);
-        return actCajaTurno;
+        try {
+            ActCajaTurno actCajaTurno = actCajaTurnoService.getActCajaTurno(id);
+            return ResponseEntity.status(HttpStatus.OK).body(actCajaTurno);
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e);
+        }
+        
     }
 
     @PostMapping(value = "/save-act-caja-turno")

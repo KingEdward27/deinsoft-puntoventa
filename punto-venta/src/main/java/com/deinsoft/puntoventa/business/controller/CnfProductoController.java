@@ -55,10 +55,16 @@ public class CnfProductoController extends CommonController<CnfProducto, CnfProd
     }
 
     @GetMapping(value = "/get-cnf-producto")
-    public CnfProducto getCnfProducto(@Param("id") Long id) {
+    public ResponseEntity<?> getCnfProducto(@Param("id") Long id) throws Exception {
         logger.info("getCnfProducto received: " + id);
-        CnfProducto cnfProducto = cnfProductoService.getCnfProducto(id);
-        return cnfProducto;
+        
+        try {
+            CnfProducto cnfProducto = cnfProductoService.getCnfProducto(id);
+            return ResponseEntity.status(HttpStatus.OK).body(cnfProducto);
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e);
+        }
+        
     }
 
     @PostMapping(value = "/save-cnf-producto", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

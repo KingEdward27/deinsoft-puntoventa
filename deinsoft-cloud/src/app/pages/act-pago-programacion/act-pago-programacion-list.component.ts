@@ -215,7 +215,6 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
         let list : any[] = [];
         this.total = 0;
         await this.listData.forEach(element => {
-          let total = 0
           if (element.amtToPay > 0) {
              let actPagoDetalle = new ActPagoDetalle();
              actPagoDetalle.montoDeuda = element.monto;

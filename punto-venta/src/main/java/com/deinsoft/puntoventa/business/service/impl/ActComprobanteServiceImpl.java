@@ -145,6 +145,13 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             }).collect(Collectors.toSet());
             
             actComprobante.setListActComprobanteDetalle(list);
+            
+            SecurityFilterDto f = listRoles();
+            if (f.getEmpresaId() != actComprobante.getCnfLocal().getCnfEmpresa().getId()) {
+                throw new SecurityException(Constantes.MSG_NO_AUTHORIZED);
+            }
+        } else {
+            throw new SecurityException(Constantes.MSG_NO_EXISTS_ITEM);
         }
         return actComprobante;
     }
@@ -153,7 +160,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     @Override
     public ActComprobante saveActComprobante(ActComprobante actComprobante) throws Exception {
         
-        verifyPlan(actComprobante);
+        businessService.verifyPlan(actComprobante, null);
         
         ActComprobante actComprobanteResult = null;
 
@@ -561,7 +568,9 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         paramWorked.setFechaHasta(LocalDate.parse(paramWorked.getPeriodo() + String.valueOf(lastDay), YYYYMMDD_FORMATER));
         paramWorked.setFlagEstado("2");
         List<String> x = getReportActComprobante(paramWorked)
-                .stream().map(mapper -> {
+                .stream()
+                .filter(predicate -> predicate.getCnfTipoComprobante().getFlagElectronico().equals("1"))
+                .map(mapper -> {
                     BigDecimal multiplicand = BigDecimal.ONE;
                     if (mapper.getCnfTipoComprobante().getCodigoSunat().equals(Constantes.TIPO_DOC_NOTA_CREDITO)) {
                         multiplicand = multiplicand.multiply(BigDecimal.valueOf(-1));
@@ -758,24 +767,4 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         return item.getCnfProducto().getNombre();
     }
     
-    void verifyPlan(ActComprobante actComprobante) throws Exception {
-        int month = actComprobante.getFecha().getMonthValue();
-        List<ActComprobante> listVentas = actComprobanteRepository.findByCnfEmpresaIdAndMonth(
-                actComprobante.getCnfLocal().getCnfEmpresa().getId(),month);
-        Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
-        if (actComprobante.getCnfLocal().getCnfEmpresa().getPlan() == 1 
-                && (listVentas.size() >= 10 || sumVentas.compareTo(10000d) >= 0)) {
-            throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
-        }
-        
-        if (actComprobante.getCnfLocal().getCnfEmpresa().getPlan() == 2
-                && (listVentas.size() >= 25 || sumVentas.compareTo(20000d) >= 0)) {
-            throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
-        }
-        
-        if (actComprobante.getCnfLocal().getCnfEmpresa().getPlan() == 3
-                && (listVentas.size() >= 50 || sumVentas.compareTo(100000d) >= 0)) {
-            throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
-        }
-    }
 }

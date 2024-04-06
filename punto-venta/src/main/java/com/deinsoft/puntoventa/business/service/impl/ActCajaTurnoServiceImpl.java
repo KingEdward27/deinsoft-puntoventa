@@ -12,9 +12,11 @@ import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 import com.deinsoft.puntoventa.business.repository.ActCajaTurnoRepository;
 import com.deinsoft.puntoventa.business.service.ActCajaTurnoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
+import com.deinsoft.puntoventa.util.Constantes;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -35,11 +37,17 @@ public class ActCajaTurnoServiceImpl extends CommonServiceImpl<ActCajaTurno, Act
 //                .collect(Collectors.toList());
     }
 
-    public ActCajaTurno getActCajaTurno(Long id) {
+    public ActCajaTurno getActCajaTurno(Long id){
         ActCajaTurno actCajaTurno = null;
         Optional<ActCajaTurno> actCajaTurnoOptional = actCajaTurnoRepository.findById(id);
         if (actCajaTurnoOptional.isPresent()) {
             actCajaTurno = actCajaTurnoOptional.get();
+            SecurityFilterDto f = listRoles();
+            if (f.getEmpresaId() != actCajaTurno.getActCaja().getCnfEmpresa().getId()) {
+                throw new SecurityException(Constantes.MSG_NO_AUTHORIZED);
+            }
+        } else {
+            throw new SecurityException(Constantes.MSG_NO_EXISTS_ITEM);
         }
         return actCajaTurno;
     }

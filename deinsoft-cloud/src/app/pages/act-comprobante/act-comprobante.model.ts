@@ -37,4 +37,5 @@ export class ActComprobante {
 	invAlmacen: InvAlmacen = new InvAlmacen();
 	listActComprobanteDetalle: ActComprobanteDetalle[] = [];
 	token?: string = "";
+	showDetail:boolean = false;
 };

@@ -13,9 +13,11 @@ import org.springframework.validation.BindingResult;
 import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
+import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.business.service.ActCajaOperacionService;
 import java.time.LocalDateTime;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/act-caja-operacion")
@@ -34,19 +36,28 @@ public class ActCajaOperacionController extends CommonController<ActCajaOperacio
     }
 
     @GetMapping(value = "/get-act-caja-operacion")
-    public ActCajaOperacion getActCajaOperacion(@Param("id") Long id) {
+    public ResponseEntity<?> getActCajaOperacion(@Param("id") Long id) {
         logger.info("getActCajaOperacion received: " + id);
-        ActCajaOperacion actCajaOperacion = actCajaOperacionService.getActCajaOperacion(id);
-        return actCajaOperacion;
+        
+        try {
+            ActCajaOperacion actCajaOperacion = actCajaOperacionService.getActCajaOperacion(id);
+            return ResponseEntity.status(HttpStatus.OK).body(actCajaOperacion);
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e);
+        }
     }
 
     @PostMapping(value = "/save-act-caja-operacion")
-    public ResponseEntity<?> saveActCajaOperacion(@Valid @RequestBody ActCajaOperacion actCajaOperacion, BindingResult result) {
+    public ResponseEntity<?> saveActCajaOperacion(@Valid @RequestBody ActCajaOperacion actCajaOperacion, BindingResult result) throws Exception {
         if (actCajaOperacion.getActComprobante() != null && actCajaOperacion.getActComprobante().getId() == 0) actCajaOperacion.setActComprobante(null);
         if (actCajaOperacion.getActPago()!= null && actCajaOperacion.getActPago().getId() == 0) actCajaOperacion.setActPago(null);
         actCajaOperacion.setEstado("1");
         actCajaOperacion.setFechaRegistro(LocalDateTime.now());
-        return super.crear(actCajaOperacion, result);
+        if (result.hasErrors()) {
+            return this.validar(result);
+        }
+        //return super.crear(actCajaOperacion, result);
+        return ResponseEntity.status(HttpStatus.OK).body(actCajaOperacionService.saveActCajaOperacion(actCajaOperacion));
     }
 
     @GetMapping(value = "/get-all-act-caja-operacion-combo")

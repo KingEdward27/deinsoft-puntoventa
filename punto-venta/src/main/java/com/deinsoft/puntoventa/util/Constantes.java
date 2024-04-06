@@ -33,4 +33,7 @@ public class Constantes {
     
     public static DateTimeFormatter YYYYMM_FORMATER = DateTimeFormatter.ofPattern("yyyyMM");
     public static DateTimeFormatter DDMMYYYY_FORMATER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    
+    public static final String MSG_NO_AUTHORIZED = "No tiene acceso a ver esta página";
+    public static final String MSG_NO_EXISTS_ITEM = "Item no existe";
 }

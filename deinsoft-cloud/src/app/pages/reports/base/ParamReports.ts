@@ -35,5 +35,6 @@ export class ParamBean {
 	
 	cnfZona:CnfZona = new CnfZona();
 	flagEstado: string = '-1';
+	flagEnvioPse: string = '2';
 	periodo:string;
 };

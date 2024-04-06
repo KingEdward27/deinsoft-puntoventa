@@ -63,10 +63,15 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
     }
 
     @GetMapping(value = "/get-act-comprobante")
-    public ActComprobante getActComprobante(@Param("id") Long id) {
+    public ResponseEntity<?> getActComprobante(@Param("id") Long id) {
         logger.info("getActComprobante received: " + id);
-        ActComprobante actComprobante = actComprobanteService.getActComprobante(id);
-        return actComprobante;
+        try {
+            ActComprobante actComprobante = actComprobanteService.getActComprobante(id);
+            return ResponseEntity.status(HttpStatus.OK).body(actComprobante);
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e);
+        }
+        
     }
 
     @PostMapping(value = "/save-act-comprobante")

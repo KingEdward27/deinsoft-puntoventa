@@ -12,12 +12,15 @@ import com.deinsoft.puntoventa.business.model.CnfProducto;
 import com.deinsoft.puntoventa.business.repository.CnfProductoRepository;
 import com.deinsoft.puntoventa.business.service.CnfProductoService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
+import com.deinsoft.puntoventa.business.exception.BusinessException;
 import com.deinsoft.puntoventa.business.service.StorageService;
 import com.deinsoft.puntoventa.config.AppConfig;
 import com.deinsoft.puntoventa.framework.security.AuthenticationHelper;
 import com.deinsoft.puntoventa.framework.util.CodigoQR;
 import com.deinsoft.puntoventa.framework.util.GenerateItextPdf;
 import com.deinsoft.puntoventa.framework.util.Util;
+import com.deinsoft.puntoventa.util.Constantes;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -61,11 +64,17 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
         return cnfProductoList;
     }
 
-    public CnfProducto getCnfProducto(Long id) {
+    public CnfProducto getCnfProducto(Long id) throws Exception {
         CnfProducto cnfProducto = null;
         Optional<CnfProducto> cnfProductoOptional = cnfProductoRepository.findById(id);
         if (cnfProductoOptional.isPresent()) {
             cnfProducto = cnfProductoOptional.get();
+            SecurityFilterDto f = listRoles();
+            if (f.getEmpresaId() != cnfProducto.getCnfEmpresa().getId()) {
+                throw new SecurityException(Constantes.MSG_NO_AUTHORIZED);
+            }
+        } else {
+            throw new SecurityException(Constantes.MSG_NO_EXISTS_ITEM);
         }
         return cnfProducto;
     }

@@ -64,7 +64,7 @@ public class PuntoVentaApplication extends WebMvcConfigurerAdapter implements Co
 //        };
 //    }
     
-    @Scheduled(cron = "0 49 23 * * *")
+    @Scheduled(cron = "0 30 4 * * *")
     void refreshProgramacionPagos() {
         System.out.println("init refreshProgramacionPagos()");
         actPagoProgramacionService.refreshProgramacionPagos();

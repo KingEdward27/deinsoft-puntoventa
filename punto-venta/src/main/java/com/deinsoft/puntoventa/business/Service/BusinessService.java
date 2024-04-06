@@ -5,6 +5,7 @@
 package com.deinsoft.puntoventa.business.service;
 
 import com.deinsoft.puntoventa.business.model.ActComprobante;
+import com.deinsoft.puntoventa.business.model.ActContrato;
 import com.deinsoft.puntoventa.business.model.ActPago;
 import com.deinsoft.puntoventa.facturador.client.RespuestaPSE;
 import com.deinsoft.puntoventa.framework.model.JsonData;
@@ -32,4 +33,6 @@ public interface BusinessService {
     public byte[] printPago(String staticResourcesFolder, int tipo, ActPago actPago, boolean isTicket) throws Exception;
 
     public Map<String, Object> searchSunat(String nroDoc) throws Exception;
+    
+    public void verifyPlan(ActComprobante actComprobante, ActContrato actContrato) throws Exception;
 }

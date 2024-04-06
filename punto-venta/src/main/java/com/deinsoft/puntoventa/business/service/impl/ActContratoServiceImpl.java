@@ -25,6 +25,7 @@ import com.deinsoft.puntoventa.business.repository.CnfFormaPagoDetalleRepository
 import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
 import com.deinsoft.puntoventa.business.service.ActContratoService;
 import com.deinsoft.puntoventa.business.service.ActPagoProgramacionService;
+import com.deinsoft.puntoventa.business.service.BusinessService;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -62,6 +63,9 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
     @Autowired
     ActPagoRepository actPagoRepository;
 
+    @Autowired
+    BusinessService businessService;
+    
     static DateTimeFormatter YYYYMM_FORMATER = DateTimeFormatter.ofPattern("yyyyMM");
 
     public List<ActContrato> getAllActContrato(ActContrato actContrato) {
@@ -89,6 +93,9 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 
     @Transactional
     public ActContrato saveActContrato(ActContrato actContrato) throws Exception {
+        
+        businessService.verifyPlan(null, actContrato);
+        
         long id = actContrato.getId();
         if (id == 0) {
             actContrato.setFechaRegistro(LocalDateTime.now());

@@ -115,10 +115,10 @@ export class ActComprobanteCompraReportFormComponent extends CommonReportFormCom
     return this.deps.actComprobanteService.getReport(this.model).subscribe(data => {
       this.listData = data;
       this.loadingCnfMaestro = false;
-      setTimeout(() => {
-        this.dataTable = $('#dtData').DataTable(this.datablesSettings);
-      }, 1);
       this.dataTable?.destroy();
+      setTimeout(() => {
+        this.dataTable = $('#dtDataCompras').DataTable(this.datablesSettings);
+      }, 1);
       console.log(data);
       this.listData.forEach(element => {
         this.total = this.total + element.total
@@ -155,6 +155,9 @@ export class ActComprobanteCompraReportFormComponent extends CommonReportFormCom
       this.generateAttachment("Compras", blob, extension);
     })
     
+  }
+  showDetail(item:any) {
+    item.showDetail = !item.showDetail;
   }
 }
 
