@@ -6,6 +6,7 @@ package com.deinsoft.puntoventa.business.service.impl;
 
 import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.business.model.ActContrato;
+import com.deinsoft.puntoventa.business.model.ActOrden;
 import com.deinsoft.puntoventa.business.model.ActPago;
 import com.deinsoft.puntoventa.business.repository.ActComprobanteRepository;
 import com.deinsoft.puntoventa.business.repository.ActContratoRepository;
@@ -238,7 +239,7 @@ public class BusinessServiceImpl implements BusinessService {
         return bytes;
     }
     @Override
-    public byte[] print2(String staticResourcesFolder, int tipo, ActComprobante actComprobante,boolean isTicket) throws Exception {
+    public byte[] printComprobante(String staticResourcesFolder, int tipo, ActComprobante actComprobante,boolean isTicket) throws Exception {
         ByteArrayInputStream stream = Impresion.Imprimir2(staticResourcesFolder, tipo, actComprobante, isTicket);
         if (stream == null) {
             System.out.println("Ocurrió un error al generar el pdf desde la base de datos");
@@ -249,6 +250,20 @@ public class BusinessServiceImpl implements BusinessService {
         stream.read(bytes, 0, n);
         return bytes;
     }
+    
+    @Override
+    public byte[] printOrden(String staticResourcesFolder, int tipo, ActOrden actOrden,boolean isTicket) throws Exception {
+        ByteArrayInputStream stream = Impresion.ImprimirOrden(staticResourcesFolder, tipo, actOrden, isTicket);
+        if (stream == null) {
+            System.out.println("Ocurrió un error al generar el pdf desde la base de datos");
+            return null;
+        }
+        int n = stream.available();
+        byte[] bytes = new byte[n];
+        stream.read(bytes, 0, n);
+        return bytes;
+    }
+    
     @Override
     public byte[] printPago(String staticResourcesFolder, int tipo, ActPago actPago,boolean isTicket) throws Exception {
         ByteArrayInputStream stream = Impresion.ImprimirPago(staticResourcesFolder, tipo, actPago, isTicket);

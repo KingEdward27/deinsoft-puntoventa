@@ -159,14 +159,14 @@ public class EnvioPSE2 {
                 jsonBody = servicio.toJson(servicio);
                 return jsonBody;
             } catch (IllegalArgumentException ex) {
-                Logger.getLogger(EnvioPSE2.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EnvioPSE2.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
                 return ex.getMessage();
             } catch (IllegalAccessException ex) {
-                Logger.getLogger(EnvioPSE2.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EnvioPSE2.class.getName()).log(Level.SEVERE,  ex.getMessage(), ex);
                 return ex.getMessage();
             }
         } catch (Exception ex) {
-            Logger.getLogger(EnvioPSE2.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EnvioPSE2.class.getName()).log(Level.SEVERE,  ex.getMessage(), ex);
             return ex.getMessage();
         }
 

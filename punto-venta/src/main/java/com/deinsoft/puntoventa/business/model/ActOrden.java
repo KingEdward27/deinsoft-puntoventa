@@ -111,16 +111,16 @@ public class ActOrden implements Serializable {
     @JoinColumn(name = "inv_almacen_id")
     private InvAlmacen invAlmacen;
 
-    @OneToMany(mappedBy = "actComprobante", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JsonIgnoreProperties(value = {"actComprobante"}, allowSetters = true)
-    private Set<ActComprobanteDetalle> listActComprobanteDetalle;
+    @OneToMany(mappedBy = "actOrden", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnoreProperties(value = {"actOrden"}, allowSetters = true)
+    private Set<ActOrdenDetalle> listActOrdenDetalle;
 
     @OneToOne
     @JoinColumn(name = "seg_usuario_id")
     private SegUsuario segUsuario;
     
     
-    public void addActComprobanteDetalle(ActOrdenDetalle item) {
+    public void addActOrdenDetalle(ActOrdenDetalle item) {
         item.setActOrden(this);
     }
 
@@ -284,13 +284,15 @@ public class ActOrden implements Serializable {
         this.invAlmacen = invAlmacen;
     }
 
-    public Set<ActComprobanteDetalle> getListActComprobanteDetalle() {
-        return listActComprobanteDetalle;
+    public Set<ActOrdenDetalle> getListActOrdenDetalle() {
+        return listActOrdenDetalle;
     }
 
-    public void setListActComprobanteDetalle(Set<ActComprobanteDetalle> listActComprobanteDetalle) {
-        this.listActComprobanteDetalle = listActComprobanteDetalle;
+    public void setListActOrdenDetalle(Set<ActOrdenDetalle> listActOrdenDetalle) {
+        this.listActOrdenDetalle = listActOrdenDetalle;
     }
+
+   
 
     public SegUsuario getSegUsuario() {
         return segUsuario;

@@ -255,64 +255,6 @@ public class EnvioPSE {
 
         return new RestTemplate(requestFactory);
     }
-//    public Map<String,Object> getPDF(String id,int tipo) {
-//        boolean result = false;
-//        Map<String,Object> respuesta = null;
-//        System.out.println("ticket: "+id);
-//        try {
-//            HashMap<String,String> map = new HashMap<>();
-//            map.put("id", id);
-//            map.put("tipo", String.valueOf(tipo));
-//            URL url = new URL(this.url);
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//            conn.setDoInput(true);
-//            conn.setDoOutput(true);
-//            conn.setRequestMethod("POST");
-//            conn.setRequestProperty("Accept", "application/json");
-//            conn.setRequestProperty("Authorization", this.token);
-//            conn.setRequestProperty("Content-Type", "application/json");
-//            //conn.setRequestProperty("Content-Length", String.valueOf(getPostDataString(map).length));
-//            //conn.getOutputStream().write(getPostDataString(map));
-//            
-//
-//            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
-//            writer.write(getPostDataString(map));
-//            writer.flush();
-//            
-//            
-//            conn.connect();
-//            BufferedReader br = null;
-//            if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
-//                br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-//                result = true;
-//            } else {
-//                br = new BufferedReader(new InputStreamReader((conn.getErrorStream())));
-//                result = false;
-//            }
-//            String output, jsonString = "";
-//            System.out.println("output is-----------------");
-//
-//            while ((output = br.readLine()) != null) {
-//                System.out.println(output);
-//                jsonString = jsonString + output;
-//            }
-//            respuesta = new Gson().fromJson(
-//                jsonString, new TypeToken<HashMap<String, Object>>() {}.getType()
-//            );
-//            writer.close();
-//            //respuesta = new RespuestaPSE(jsonString, result);
-//
-//            return respuesta;
-//        } catch (IOException e) {
-////            System.out.println(Util.exceptionToString(e));
-//            e.printStackTrace();
-//            return respuesta;
-//        } catch (Exception e) {
-////            System.out.println(Util.exceptionToString(e));
-//            e.printStackTrace();
-//            return respuesta;
-//        }
-//    }
     public RespuestaPSE envioJsonPSE(String jsonBody) {
         boolean result = false;
         RespuestaPSE respuesta = null;

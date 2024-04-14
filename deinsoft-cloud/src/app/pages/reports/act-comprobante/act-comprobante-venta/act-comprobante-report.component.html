@@ -224,7 +224,7 @@
                                                         item.envioPseFlag == '0'?"RECHAZADO":
                                                         item.envioPseFlag == '1'?"REGISTRADO":
                                                         "NO APLICA"}}</p>
-                                                        <p *ngIf="item.envioPseFlag == '0'" ngbPopover="Mensaje de error: {{item.envioPseMensaje}}"
+                                                        <p *ngIf="item.envioPseFlag == '0'" ngbPopover ="Mensaje de error: {{item.envioPseMensaje}}"
                                                         triggers="mouseenter:mouseleave" [ngClass]="'state' + item.envioPseFlag">RECHAZADO</p>
                                                     </td>
                                                 </tr>

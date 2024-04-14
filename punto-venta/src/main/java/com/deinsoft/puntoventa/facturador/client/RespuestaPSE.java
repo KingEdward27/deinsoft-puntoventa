@@ -171,7 +171,8 @@ public class RespuestaPSE {
                 System.out.println("pdf o xml no considerado en respuesta");
             }
             
-        }else   
+        }
+        else   
         {
             this.errMessage = String.valueOf(object.get("message"));
 //            this.errType = String.valueOf(object.get("type"));

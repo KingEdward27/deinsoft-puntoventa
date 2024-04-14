@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deinsoft.puntoventa.business.commons.service.CommonService;
 
 import com.deinsoft.puntoventa.business.model.SegUsuario;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 @Service
 @Transactional
@@ -28,4 +30,6 @@ public interface SegUsuarioService extends CommonService<SegUsuario> {
     public SegUsuario getRecoverPassword(SegUsuario segUsuario) throws Exception ;
     
     public SegUsuario recoverPassword(SegUsuario segUsuario) throws Exception ;
+    
+    public void sendMailUsuario(SegUsuario usuarioRepo) throws IOException, UnsupportedEncodingException;
 }

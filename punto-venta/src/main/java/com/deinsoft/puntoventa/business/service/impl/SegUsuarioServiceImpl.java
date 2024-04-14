@@ -27,16 +27,21 @@ import com.deinsoft.puntoventa.business.service.SegRolService;
 import com.deinsoft.puntoventa.framework.util.Util;
 import com.deinsoft.puntoventa.util.MailBean;
 import com.deinsoft.puntoventa.util.SendMail;
+import com.deinsoft.puntoventa.util.mail.EmailRequest;
+import com.deinsoft.puntoventa.util.mail.SendMailClient;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -72,8 +77,8 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
     @Value("${app.config.mail.user}")
     private String mailUser;
     
-    @Value("${app.config.mail.pass}")
-    private String mailPass;
+//    @Value("${app.config.mail.pass}")
+//    private String mailPass;
     
     @Autowired
     SendMail sendMail;
@@ -264,6 +269,8 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         
         return segUsuarioResult;
     }
+    
+    @Override
     public void sendMailUsuario(SegUsuario usuarioRepo) throws IOException, UnsupportedEncodingException {
         
         //before use -> clean and build
@@ -280,14 +287,18 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         
         Map<String, String> inlineImages = new HashMap<String, String>();
         
-        
         String url;
         if (this.environment.getActiveProfiles()[0].equalsIgnoreCase("local")) {
             
+            InputStream isImg = SegUsuarioServiceImpl.class
+                .getResourceAsStream("/mail/logo_deinsoft.png");
+            byte[] bytes = IOUtils.toByteArray(isImg);
+            inlineImages.put("image1", new String(Base64.encodeBase64(bytes)));
+            
             //before use -> clean and build
-            URL logotipo1 = SegUsuarioServiceImpl.class
-                    .getClassLoader().getResource("mail/logo_deinsoft.png");
-            inlineImages.put("image1", logotipo1.getPath());
+//            URL logotipo1 = SegUsuarioServiceImpl.class
+//                    .getClassLoader().getResource("mail/logo_deinsoft.png");
+//            inlineImages.put("image1", logotipo1.getPath());
             
             url = this.url + "#/recover-password;string=" + claveSeguridad;
         } else {
@@ -297,9 +308,6 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
             url = this.url + "recover-password;string=" + claveSeguridad;
         }
 
-        
-        
-        
         String cuerpo = Util.readFile(is, StandardCharsets.UTF_8);
         
         cuerpo = cuerpo.replace("{{titulo}}", "Recuperación de contraseña");
@@ -314,13 +322,75 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         cuerpo = cuerpo.replace("{{telefonoUsuario}}", "123456");
         cuerpo = cuerpo.replace("{{nombreUsuario}}", usuarioRepo.getNombre());
         
-        sendMail.sendEmail(new MailBean("Recuperación de contraseña",
-                cuerpo,
-                mailUser,
-                mailPass,
-                usuarioRepo.getEmail(),
-                null, inlineImages));
+        byte[] encodedBytes = Base64.encodeBase64(cuerpo.getBytes(StandardCharsets.UTF_8));
+//        System.out.println("encodedBytes " + new String(encodedBytes));
+
+        SendMailClient s = new SendMailClient(new EmailRequest(
+                new String(encodedBytes), "", "Recuperación de contraseña", Map.of(
+                    "name", "INIFACT","email", mailUser
+                ), Arrays.asList(Map.of(
+                    "name", usuarioRepo.getNombre(),"email", usuarioRepo.getEmail()
+                )), null));
+        s.send();
     }
+    
+//    public void sendMailUsuario(SegUsuario usuarioRepo) throws IOException, UnsupportedEncodingException {
+//        
+//        //before use -> clean and build
+//        InputStream is = SegUsuarioServiceImpl.class
+//                .getResourceAsStream("/mail/correo_recuperarcontraseña.email");
+//
+//        String claveSeguridad = "";
+//        try {
+//            claveSeguridad = Util.encryptMessage(String.valueOf(usuarioRepo.getId()).getBytes("UTF-8")
+//                    ,"1234567890123456");
+//        } catch (Exception ex) {
+//            Logger.getLogger(SegUsuarioServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        Map<String, String> inlineImages = new HashMap<String, String>();
+//        
+//        String url;
+//        if (this.environment.getActiveProfiles()[0].equalsIgnoreCase("local")) {
+//            
+//            //before use -> clean and build
+//            URL logotipo1 = SegUsuarioServiceImpl.class
+//                    .getClassLoader().getResource("mail/logo_deinsoft.png");
+//            inlineImages.put("image1", logotipo1.getPath());
+//            
+//            url = this.url + "#/recover-password;string=" + claveSeguridad;
+//        } else {
+//            String tomcatHome = System.getProperty( "catalina.base" );
+//            inlineImages.put("image1", tomcatHome + "/conf/recursos/videoteca/logowillax.png");
+//            
+//            url = this.url + "recover-password;string=" + claveSeguridad;
+//        }
+//
+//        
+//        
+//        
+//        String cuerpo = Util.readFile(is, StandardCharsets.UTF_8);
+//        
+//        cuerpo = cuerpo.replace("{{titulo}}", "Recuperación de contraseña");
+//        cuerpo = cuerpo.replace("{{colorCode}}", "#3a55a6");
+//        cuerpo = cuerpo.replace("{{descripcionSoftware}}", "Software de Gestión de ventas - DEINSOFT");
+//        
+//        cuerpo = cuerpo.replace("{{descripcionLogotipo}}", "Deinsoft - Software de Gestión de ventas");
+//        cuerpo = cuerpo.replace("{{urlLogotipo}}", "cid:image1");
+//        cuerpo = cuerpo.replace("{{urlInicio}}", "Recuperación de contraseña");
+//        cuerpo = cuerpo.replace("{{descripcionRecuperacion}}", "Recuperación de contraseña");
+//        cuerpo = cuerpo.replace("{{linkRecuperaPass}}", url);
+//        cuerpo = cuerpo.replace("{{telefonoUsuario}}", "123456");
+//        cuerpo = cuerpo.replace("{{nombreUsuario}}", usuarioRepo.getNombre());
+//        
+//        sendMail.sendEmail(new MailBean("Recuperación de contraseña",
+//                cuerpo,
+//                mailUser,
+//                mailPass,
+//                usuarioRepo.getEmail(),
+//                null, inlineImages));
+//    }
+    
     public SegUsuario getMatchUser(String param1) {
         List<SegUsuario> users = segUsuarioRepository.findAll();
         SegUsuario usuarioToUpdate = new SegUsuario();

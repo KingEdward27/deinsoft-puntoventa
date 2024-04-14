@@ -215,10 +215,14 @@
                                                         "Registrado":item.flagEstado == '2'? "Validado" :"Anulado"}}
                                                     </p>
                                                 </td>
-                                                <td ><p [ngClass]="'state' + item.envioPseFlag"> {{item.envioPseFlag == '2'?"ENVIADO":
+                                                <td ><p *ngIf="item.envioPseFlag != '0'" [ngClass]="'state' + item.envioPseFlag" > {{item.envioPseFlag == '2'?"ENVIADO":
                                                     item.envioPseFlag == '0'?"RECHAZADO":
                                                     item.envioPseFlag == '1'?"REGISTRADO":
-                                                    "NO APLICA"}}</p></td>
+                                                    "NO APLICA"}}</p>
+                                                
+                                                    <p *ngIf="item.envioPseFlag == '0'" ngbPopover ="Mensaje de error: {{item.envioPseMensaje}}"
+                                                    triggers="mouseenter:mouseleave"> RECHAZADO</p>
+                                                    </td>
                                                 <td>
                                                     <div class="row row2">
                                                         <div class="col-sm-3 col-xs-3 text-right"><a class="fas fa-eye"

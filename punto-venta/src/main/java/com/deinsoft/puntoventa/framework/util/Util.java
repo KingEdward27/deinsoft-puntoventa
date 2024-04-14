@@ -4,8 +4,10 @@
  */
 package com.deinsoft.puntoventa.framework.util;
 
+import com.deinsoft.puntoventa.facturador.client.RespuestaPSE;
 import static com.deinsoft.puntoventa.util.Util.toByteArray;
 import com.google.common.io.Files;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -13,10 +15,15 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.security.InvalidKeyException;
@@ -260,5 +267,54 @@ public class Util {
 //        byte[] encoded = Files.readAllBytes(Paths.get(path));
         byte[] encoded = IOUtils.toByteArray(is);
         return new String(encoded, encoding);
+    }
+    
+    public static String simpleApi(String urlParam, String jsonBody, HttpMethod httpMethod, String authorization
+            , String accept
+            , String contentType) {
+        boolean result = false;
+        RespuestaPSE respuesta = null;
+        System.out.println("jsonBody: "+jsonBody);
+        try {
+            URL url = new URL(urlParam);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestMethod(httpMethod.name());
+            conn.setRequestProperty("Accept", accept);
+            conn.setRequestProperty("Authorization", authorization);
+            conn.setRequestProperty("Content-Type", contentType);
+            conn.connect();
+
+            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+            writer.write(jsonBody);
+            writer.close();
+
+            BufferedReader br = null;
+            if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
+                br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+                result = true;
+            } else {
+                br = new BufferedReader(new InputStreamReader((conn.getErrorStream())));
+                result = false;
+            }
+            String output, jsonString = "";
+            System.out.println("output is-----------------");
+
+            while ((output = br.readLine()) != null) {
+                System.out.println(output);
+                jsonString = jsonString + output;
+            }
+            return jsonString;
+        } catch (ConnectException e) {
+            e.printStackTrace();
+            return null;
+        }catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }catch (Exception e) {
+            e.printStackTrace();
+           return null;
+        }
     }
 }

@@ -6,6 +6,7 @@ package com.deinsoft.puntoventa.business.service;
 
 import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.business.model.ActContrato;
+import com.deinsoft.puntoventa.business.model.ActOrden;
 import com.deinsoft.puntoventa.business.model.ActPago;
 import com.deinsoft.puntoventa.facturador.client.RespuestaPSE;
 import com.deinsoft.puntoventa.framework.model.JsonData;
@@ -28,9 +29,11 @@ public interface BusinessService {
 
     public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception;
 
-    public byte[] print2(String staticResourcesFolder, int tipo, ActComprobante actComprobante, boolean isTicket) throws Exception;
+    public byte[] printComprobante(String staticResourcesFolder, int tipo, ActComprobante actComprobante, boolean isTicket) throws Exception;
 
     public byte[] printPago(String staticResourcesFolder, int tipo, ActPago actPago, boolean isTicket) throws Exception;
+    
+    public byte[] printOrden(String staticResourcesFolder, int tipo, ActOrden actOrden,boolean isTicket) throws Exception;
 
     public Map<String, Object> searchSunat(String nroDoc) throws Exception;
     

@@ -57,11 +57,11 @@ public class SendMail {
         Session mailSession = null;
         try {
             Properties props = new Properties();
-            props.put("mail.smtp.host", appConfig.getMailHost());
-            props.put("mail.smtp.port", appConfig.getMailPort());
-            props.put("mail.smtp.auth", appConfig.getMailAuth());
-            
-            props.put("mail.smtp.socketFactory.port", appConfig.getMailPort());
+//            props.put("mail.smtp.host", appConfig.getMailHost());
+//            props.put("mail.smtp.port", appConfig.getMailPort());
+//            props.put("mail.smtp.auth", appConfig.getMailAuth());
+//            
+//            props.put("mail.smtp.socketFactory.port", appConfig.getMailPort());
             props.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
 //            props.put("mail.smtp.starttls.enable","true");
             props.put("mail.smtp.debug", "true");
