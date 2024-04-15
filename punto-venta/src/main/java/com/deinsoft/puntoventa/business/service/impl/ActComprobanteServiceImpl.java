@@ -740,7 +740,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                     .concat(item.getCnfLocal().getCnfEmpresa().getNroDocumento())
                     .concat(item.getFecha().format(Constantes.YYYYMM_FORMATER))
                     .concat("00")
-                    .concat("080100")//codigo libro
+                    .concat("080400")//codigo libro
                     .concat("02")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
                     .concat("1")//Indicador de operaciones -> 0 Cierre o baja de RUC  / 1 Empresa operativa  / 2 Cierre de libro
                     .concat("1")//Indicador del contenido del libro o registro -> 1 Con información / 0 Sin información

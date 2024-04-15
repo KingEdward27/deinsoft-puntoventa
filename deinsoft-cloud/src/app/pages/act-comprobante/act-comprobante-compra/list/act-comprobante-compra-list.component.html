@@ -194,12 +194,12 @@
                                                     {{'webpagos.act_comprobante.cnf_tipo_comprobante' | translate}}</th>
                                                     <th class="text-nowrap">
                                                         {{'webpagos.act_comprobante.cnf_forma_pago' | translate}}</th>
-                                                <th class="text-nowrap">{{'webpagos.act_comprobante.numero' |
-                                                    translate}}</th>
-                                                <th class="text-nowrap">{{'webpagos.act_comprobante.proveedor' |
-                                                    translate}}</th>
-                                                <th class="text-nowrap">{{'webpagos.act_comprobante.total' | translate}}
-                                                </th>
+                                                <th class="text-nowrap">{{'webpagos.act_comprobante.numero' | translate}}</th>
+                                                <th class="text-nowrap">{{'webpagos.cnf_maestro.nro_doc' | translate}}</th>
+                                                <th class="text-nowrap">{{'webpagos.act_comprobante.proveedor' | translate}}</th>
+                                                <th class="text-nowrap">{{'webpagos.act_comprobante.subtotal' | translate}}</th>
+                                                <th class="text-nowrap">{{'webpagos.act_comprobante.igv' | translate}}</th>
+                                                <th class="text-nowrap">{{'webpagos.act_comprobante.total' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.flag_estado' |
                                                     translate}}</th>
                                                 <th width="1%" class="text-nowrap">{{'webpagos.actionsText' |
@@ -217,7 +217,10 @@
                                                 <td>{{item.cnfTipoComprobante.nombre}}</td>
                                                 <td>{{item.cnfFormaPago.nombre}}</td>
                                                 <td>{{item.serie + '-' +item.numero}}</td>
+                                                <td>{{item.cnfMaestro.nroDoc}}</td>
                                                 <td>{{item.cnfMaestro.razonSocial}}</td>
+                                                <td class="content-number">{{item.cnfMoneda.simbolo + ' ' + (item.subtotal | number:'1.2-2')}}</td>
+                                                <td class="content-number">{{item.cnfMoneda.simbolo + ' ' + (item.igv | number:'1.2-2')}}</td>
                                                 <td class="content-number">{{item.cnfMoneda.simbolo + ' ' + (item.total | number:'1.2-2')}}</td>
                                                 <td><p [ngClass]="'state' + item.flagEstado">{{item.flagEstado == '1'? "Registrado":item.flagEstado == '2'? "Validado" :"Anulado"}}</p> </td>
                                                 <td>

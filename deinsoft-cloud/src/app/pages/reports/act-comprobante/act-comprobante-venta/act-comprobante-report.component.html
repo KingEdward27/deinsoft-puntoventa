@@ -200,8 +200,11 @@
                                                     {{'webpagos.act_comprobante.cnf_tipo_comprobante' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.numero' |
                                                     translate}}</th>
+                                                <th class="text-nowrap">{{'webpagos.cnf_maestro.nro_doc' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.cnf_maestro' |
                                                     translate}}</th>
+                                                <th class="text-nowrap">{{'webpagos.act_comprobante.subtotal' | translate}}</th>
+                                                <th class="text-nowrap">{{'webpagos.act_comprobante.igv' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.total' | translate}}
                                                 </th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.envio_pse_flag' |
@@ -217,8 +220,11 @@
                                                     <td>{{item.invAlmacen.nombre}}</td>
                                                     <td>{{item.cnfTipoComprobante.nombre}}</td>
                                                     <td>{{item.serie + '-' +item.numero}}</td>
+                                                    <td>{{item.cnfMaestro.nroDoc}}
                                                     <td>{{item.cnfMaestro.razonSocial}}
                                                     </td>
+                                                    <td class="content-number">{{item.cnfMoneda.simbolo + ' ' + (item.subtotal | number:'1.2-2')}}</td>
+                                                    <td class="content-number">{{item.cnfMoneda.simbolo + ' ' + (item.igv | number:'1.2-2')}}</td>
                                                     <td class="content-number">{{item.cnfMoneda.simbolo + ' ' + (item.total | number:'1.2-2')}}</td>
                                                     <td ><p *ngIf="item.envioPseFlag != '0'"[ngClass]="'state' + item.envioPseFlag"> {{item.envioPseFlag == '2'?"ENVIADO":
                                                         item.envioPseFlag == '0'?"RECHAZADO":
@@ -249,7 +255,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan = "7">Total:</td>
+                                                <td colspan = "10">Total:</td>
                                                 <td class="content-number">{{(listData?listData[0]:null)?.cnfMoneda.simbolo}} {{total| number:'1.2-2'}}</td>
                                             </tr>
                                         </tfoot>
