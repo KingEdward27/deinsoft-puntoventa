@@ -386,7 +386,7 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
 //        sendMail.sendEmail(new MailBean("Recuperación de contraseña",
 //                cuerpo,
 //                mailUser,
-//                mailPass,
+//                "123456",
 //                usuarioRepo.getEmail(),
 //                null, inlineImages));
 //    }

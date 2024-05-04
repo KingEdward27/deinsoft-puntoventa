@@ -17,6 +17,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.dto.ReporteContableDto;
 import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
 import com.deinsoft.puntoventa.business.dto.TopProductosDto;
+import com.deinsoft.puntoventa.business.exception.BusinessException;
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 import com.deinsoft.puntoventa.business.model.ActComprobanteDetalle;
@@ -230,6 +231,11 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         ActComprobante actComprobanteResult = null;
 
         actComprobante.setSegUsuario(auth.getLoggedUserdata());
+        
+        List<ActComprobante> listExists =  actComprobanteRepository.findByCnfEmpresaIdAndNumberCp(actComprobante);
+        if (!listExists.isEmpty()) {
+            throw new BusinessException("Ya existe un comprobante de compra con la misma numeración");
+        }
         try {
             actComprobante.setFechaRegistro(LocalDateTime.now());
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
@@ -576,27 +582,34 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                         multiplicand = multiplicand.multiply(BigDecimal.valueOf(-1));
                     }
 
-                    String line = mapper.getCnfLocal().getCnfEmpresa().getNroDocumento().concat("|")
-                            .concat(mapper.getCnfLocal().getCnfEmpresa().getNombre()).concat("|")
-                            .concat(mapper.getFecha().format(Constantes.YYYYMM_FORMATER)).concat("|")
+                    String line = mapper.getCnfLocal().getCnfEmpresa().getNroDocumento()
                             .concat("|")
-                            .concat(mapper.getFecha().format(Constantes.DDMMYYYY_FORMATER)).concat("|")
+                            .concat(mapper.getCnfLocal().getCnfEmpresa().getNombre())
                             .concat("|")
-                            .concat(mapper.getCnfTipoComprobante().getCodigoSunat()).concat("|")
+                            .concat(mapper.getFecha().format(Constantes.YYYYMM_FORMATER))
+                            .concat("|")
+                            .concat("|")
+                            .concat(mapper.getFecha().format(Constantes.DDMMYYYY_FORMATER))
+                            .concat("|")
+                            .concat("|")
+                            .concat(mapper.getCnfTipoComprobante().getCodigoSunat())
+                            .concat("|")
                             .concat(mapper.getSerie())
                             .concat("|")
-                            .concat(mapper.getNumero()).concat("|")
+                            .concat("|")
+                            .concat(String.format("%08d",Integer.parseInt(mapper.getNumero())))//9
+                            .concat("|")
                             .concat("|")
                             .concat(mapper.getCnfMaestro().getCnfTipoDocumento().getCodigoSunat()).concat("|")
                             .concat(mapper.getCnfMaestro().getNroDoc()).concat("|")
-                            .concat(mapper.getCnfMaestro().getRazonSocial()).concat("|")
-                            .concat("|");
-                    line = line.concat(Formatos.df.format(mapper.getSubtotal().multiply(multiplicand))).concat("|")
-                            .concat("0.00").concat("|")//DESCUENTO
-                            .concat(Formatos.df.format(mapper.getIgv().multiply(multiplicand))).concat("|")
-                            .concat("0.00").concat("|");//DESCUENTO
+                            .concat(mapper.getCnfMaestro().getRazonSocial()).concat("|");
+                    line = line.concat(Formatos.df.format(mapper.getSubtotal().multiply(multiplicand))).concat("|")//15
+                            //.concat("").concat("|")//DESCUENTO
+                            .concat(Formatos.df.format(mapper.getIgv().multiply(multiplicand))).concat("|");
+                            //.concat("").concat("|");//DESCUENTO
                     line = line.concat("0.00").concat("|")//exonerada
                             .concat("0.00").concat("|")//inafecta
+                            .concat("0.00").concat("|")
                             .concat("0.00").concat("|")
                             .concat("0.00").concat("|")
                             .concat("0.00").concat("|")
@@ -719,7 +732,8 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         
         Double totalGanancia = listVentas.stream().map(mapper -> {
             return mapper.getListActComprobanteDetalle().stream()
-                    .mapToDouble(o -> (o.getPrecio().subtract(o.getCnfProducto().getCosto())).doubleValue())
+                    .mapToDouble(o -> (o.getPrecio()
+                            .subtract(o.getCnfProducto().getCosto() == null? BigDecimal.ZERO:o.getCnfProducto().getCosto())).doubleValue())
                     .sum();
         }).mapToDouble(o -> o).sum();
         Map<String, Object> map = new HashMap<>();

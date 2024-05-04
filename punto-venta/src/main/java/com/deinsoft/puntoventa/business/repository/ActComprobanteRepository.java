@@ -64,4 +64,10 @@ public interface ActComprobanteRepository extends JpaRepository<ActComprobante, 
             + "where p.cnfLocal.cnfEmpresa.id =  ?1 and month(fecha) = ?2 and flagEstado = '2' and flagIsventa = '1'")
     List<ActComprobante> findByCnfEmpresaIdAndMonth(long id, int month);
     
+    @Query(value = "select p from actComprobante p "
+            + "where p.cnfLocal.cnfEmpresa.id =  :#{#actComprobante.cnfLocal.cnfEmpresa.id} "
+            + "and serie = :#{#actComprobante.serie} and numero = :#{#actComprobante.numero} "
+            + "and flagIsventa = :#{#actComprobante.flagIsventa}")
+    List<ActComprobante> findByCnfEmpresaIdAndNumberCp(@Param("actComprobante") ActComprobante actComprobante);
+    
 }
