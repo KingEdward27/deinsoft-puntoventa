@@ -318,17 +318,17 @@ public class BusinessServiceImpl implements BusinessService {
             //Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
             
             if (actContrato.getCnfLocal().getCnfEmpresa().getPlan() == 1 
-                    && listVentas.size() >= 10 ) {
+                    && listVentas.size() >= 20 ) {
                 throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
             }
 
             if (actContrato.getCnfLocal().getCnfEmpresa().getPlan() == 2
-                    && (listVentas.size() >= 25)) {
+                    && (listVentas.size() >= 250)) {
                 throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
             }
 
             if (actContrato.getCnfLocal().getCnfEmpresa().getPlan() == 3
-                    && (listVentas.size() >= 50)) {
+                    && (listVentas.size() >= 400)) {
                 throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
             }
         }

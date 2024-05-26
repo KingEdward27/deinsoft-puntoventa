@@ -36,4 +36,6 @@ public class Constantes {
     
     public static final String MSG_NO_AUTHORIZED = "No tiene acceso a ver esta página";
     public static final String MSG_NO_EXISTS_ITEM = "Item no existe";
+    public static final String COD_ESTADO_ACTIVO = "1";
+    public static final String COD_TIPO_COMPROBANTE_CONTRATO = "CNT";
 }

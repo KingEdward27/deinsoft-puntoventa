@@ -13,6 +13,7 @@ import javax.validation.Valid;
 
 import com.deinsoft.puntoventa.business.model.CnfEmpresa;
 import com.deinsoft.puntoventa.business.service.CnfEmpresaService;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/cnf-empresa")
@@ -39,7 +40,8 @@ public class CnfEmpresaController extends CommonController<CnfEmpresa, CnfEmpres
 
     @PostMapping(value = "/save-cnf-empresa")
     public ResponseEntity<?> saveCnfEmpresa(@Valid @RequestBody CnfEmpresa cnfEmpresa, BindingResult result) {
-        return super.crear(cnfEmpresa, result);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(cnfEmpresaService.saveCnfEmpresa(cnfEmpresa));
     }
 
     @GetMapping(value = "/get-all-cnf-empresa-combo")

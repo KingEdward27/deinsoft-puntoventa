@@ -78,6 +78,8 @@ public class PuntoVentaApplication extends WebMvcConfigurerAdapter implements Co
             String bcryptPassword = passwordEncoder.encode(password);
             System.out.println(bcryptPassword);
         }
+        
+        
     }
     
 }

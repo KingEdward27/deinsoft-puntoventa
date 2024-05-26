@@ -74,6 +74,24 @@ public class CnfMaestro implements Serializable {
     @JoinColumn(name = "cnf_distrito_id")
     private CnfDistrito cnfDistrito;
 
+    public CnfMaestro() {
+    }
+
+    public CnfMaestro(String nroDoc, String nombres, String apellidoPaterno, String apellidoMaterno, String razonSocial, String direccion, String correo, String telefono, CnfTipoDocumento cnfTipoDocumento, CnfEmpresa cnfEmpresa) {
+        this.nroDoc = nroDoc;
+        this.nombres = nombres;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.razonSocial = razonSocial;
+        this.direccion = direccion;
+        this.correo = correo;
+        this.telefono = telefono;
+        this.cnfTipoDocumento = cnfTipoDocumento;
+        this.cnfEmpresa = cnfEmpresa;
+    }
+
+    
+    
     public Long getId() {
         return id;
     }

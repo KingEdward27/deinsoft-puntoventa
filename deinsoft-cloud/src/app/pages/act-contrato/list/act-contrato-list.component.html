@@ -1,22 +1,3 @@
-<!-- Content Header (Page header) -->
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>{{'webpagos.act_contrato.home.title'| translate}}</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.adminModule"></a></li>
-                    <li class="breadcrumb-item active">{{'webpagos.act_contrato.home.title'| translate}}</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-    <!-- /.container-fluid -->
-</section>
-
 <!-- Main content -->
 <section class="content">
     <!-- Default box -->
@@ -47,6 +28,24 @@
                             </div>
                         </div>
 
+                    </div>
+                    <div class="row">
+                        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                            <button type="button" [routerLink]="['/new-contrato']" class="btn btn-primary" title="Nuevo">
+                                <i class="fa fa-plus-circle"></i></button>
+                            
+                            <div class="btn-group" role="group">
+                                <app-dropdown show-arrow class="btn btn-primary" >
+                                    <ng-container dropdown-button>
+                                        Importar registros
+                                    </ng-container>
+                                    <ng-container dropdown-menu>
+                                        <a class="dropdown-item" (click)="exportTemplate()"><i class="fa fa-file-excel"></i> Descargar Plantilla</a>
+                                        <a class="dropdown-item" (click)="import()"><i class="fa fa-upload"></i> Importar</a>
+                                    </ng-container>
+                                </app-dropdown>  
+                            </div>
+                          </div>
                     </div>
                     <br>
                     <table id="dtDataActContrato"
@@ -121,9 +120,9 @@
                                         <div *ngIf="item.flagEstado == '1'" class="col-sm-4 col-xs-4 text-center"><a class="fas fa-ban"
                                                 (click)="cortarLinea(item)" style="cursor: pointer;"
                                                 title="{{'webpagos.btnCut' | translate}}"></a></div>
-                                        <div class="col-sm-4 col-xs-4 text-center"><a class="fas fa-edit"
+                                        <!-- <div class="col-sm-4 col-xs-4 text-center"><a class="fas fa-edit"
                                                 (click)="editar(item)" style="cursor: pointer;"
-                                                title="{{'webpagos.btnEdit' | translate}}"></a></div>
+                                                title="{{'webpagos.btnEdit' | translate}}"></a></div> -->
                                         <div class="col-sm-4 col-xs-4 text-center"><a (click)="eliminar(item)" class="fas fa-trash"
                                                 style="cursor: pointer;" title="{{'webpagos.btnDelete' | translate}}"></a></div>
                                     </div>

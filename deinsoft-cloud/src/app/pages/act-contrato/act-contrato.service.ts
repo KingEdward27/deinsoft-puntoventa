@@ -101,5 +101,31 @@ export class ActContratoService {
     let params = new HttpParams().set("id", arg1);
     return this.http.get<any>(this.url + '/get-dashboard-act-contrato', { params });
   }
+
+  public getVideoPathFromResources(nameVideo: string, sizeVideo: string): Observable<string> {
+    return this.http.get(`${this.url}/get-path?fileName=${nameVideo}&fileSize=${sizeVideo}`, { responseType: 'text' });
+  }
+
+  public export(): Observable<any> {
+    return this.http.post(this.url+"/export/excel", null, {observe: 'response', responseType: 'blob'});
+  }
+  public import(form: any, fileToUpload:any): Observable<any> {
+    const formData: FormData = new FormData();
+    const mData = JSON.stringify(form);
+    formData.append('cnfLocal', mData);
+    if (fileToUpload) {
+      formData.append('file', fileToUpload, fileToUpload?.name);
+    }
+    
+    return this.http.post(this.url + '/import',formData);
+  }
+
+  public postFile(fileToUpload: File): Observable<any> {
+    const endpoint = this.url + '/upload';
+    const formData: FormData = new FormData();
+    formData.append('file', fileToUpload, fileToUpload.name);
+    return this.http.post(endpoint, formData, { headers: {}, reportProgress: true, observe: 'events' })
+
+  }
 }
 

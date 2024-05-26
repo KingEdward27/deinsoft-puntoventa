@@ -70,13 +70,13 @@ export class ActComprobanteReportContableFormComponent extends CommonReportFormC
   public modelOrig: ActComprobante = new ActComprobante();
   cnfProducto: any;
   formatter = (x: { nombre: string }) => x.nombre;
-  dataTable:any;
+  dataTable: any;
   loadingCnfImpuestoCondicion: boolean = false;
   selectDefaultImpuestoCondicion: any = { id: 0, nombre: "- Seleccione -" };
   listImpuestoCondicion: any;
   public modalRef!: NgbModalRef;
   listData: any;
-  total:number;
+  total: number;
   constructor(public deps: MyBaseComponentDependences) {
     super(deps);
   }
@@ -90,7 +90,7 @@ export class ActComprobanteReportContableFormComponent extends CommonReportFormC
     this.total = 0
     return this.deps.actComprobanteService.getReportContable(this.model.cnfLocal.id).subscribe(data => {
       console.log(data);
-      
+
       this.listData = data;
       // this.loadingCnfMaestro = false;
       // setTimeout(() => {
@@ -102,7 +102,7 @@ export class ActComprobanteReportContableFormComponent extends CommonReportFormC
       //   this.total = this.total + element.total
       // });
     })
-    
+
   }
   print(item: any) {
     this.modalRef = this.deps.modalService.open(MessageModalComponent);
@@ -121,7 +121,7 @@ export class ActComprobanteReportContableFormComponent extends CommonReportFormC
 
     });
   }
-  generateTxt(item : any, isVenta: string){
+  generateTxt(item: any, isVenta: string) {
     this.model.periodo = item.periodo;
     this.model.flagIsventa = isVenta;
     this.deps.actComprobanteService.getTxtSire(this.model, 'blob').subscribe(data => {
@@ -129,8 +129,12 @@ export class ActComprobanteReportContableFormComponent extends CommonReportFormC
       console.log(data.headers);
       let contentType = data.body.type;
       const blob = new Blob([data.body], { type: contentType });
-      this.generateAttachment2(isVenta=="1"?item.fileNameVentas:item.fileNameCompras, blob);
+      this.generateAttachment2(isVenta == "1" ? item.fileNameVentas : item.fileNameCompras, blob);
+    }, err => {
+      this.deps.utilService.msgHTTP400WithMessage(this.deps.utilService.blobToString(err.error));
+      this.error = err.error;
     })
   }
+  
 }
 

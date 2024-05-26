@@ -152,7 +152,7 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
             throw new RuntimeException("La empresa ya se encuentra registrada");
         }
         
-        if (Util.validaCorreo(segUsuario.getEmail())) {
+        if (!Util.validaCorreo(segUsuario.getEmail())) {
             throw  new RuntimeException("El correo tiene un formato inválido");
         }
         
@@ -174,6 +174,7 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         empresa.setNombre(mapRuc.get("nombre").toString());
         empresa.setDescripcion(mapRuc.get("nombre").toString());
         empresa.setPerfilEmpresa(segUsuario.getPerfilEmpresa());
+        empresa.setPlan(1);
         CnfEmpresa empresaResult = cnfEmpresaService.save(empresa);
         
         CnfLocal local = new CnfLocal();

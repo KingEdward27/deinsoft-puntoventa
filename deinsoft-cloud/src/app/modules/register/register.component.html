@@ -72,10 +72,10 @@
                             value="agree"
                         />
                         <label for="agreeTerms">
-                            I agree to the <a href="#">terms</a>
+                            I agree to the <a [routerLink]="['/terms']">terms</a>
                         </label>
                     </div>
-                </div> -->
+                </div>  -->
                 <!-- /.col -->
                 <div class="col-12">
                     <app-button [type]="'submit'" [block]="true" [loading]="isAuthLoading"

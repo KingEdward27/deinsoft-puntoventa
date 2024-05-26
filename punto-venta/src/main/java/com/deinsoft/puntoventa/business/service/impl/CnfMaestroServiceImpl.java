@@ -22,7 +22,10 @@ public class CnfMaestroServiceImpl extends CommonServiceImpl<CnfMaestro, CnfMaes
     CnfMaestroRepository cnfMaestroRepository;
 
     public List<CnfMaestro> getAllCnfMaestro(CnfMaestro cnfMaestro) {
-        List<CnfMaestro> cnfMaestroList = (List<CnfMaestro>) cnfMaestroRepository.getAllCnfMaestro(cnfMaestro.getNroDoc().toUpperCase(), cnfMaestro.getNombres().toUpperCase(), cnfMaestro.getApellidoPaterno().toUpperCase(), cnfMaestro.getApellidoMaterno().toUpperCase(), cnfMaestro.getRazonSocial().toUpperCase(), cnfMaestro.getDireccion().toUpperCase(), cnfMaestro.getCorreo().toUpperCase(), cnfMaestro.getTelefono().toUpperCase(), cnfMaestro.getFlagEstado().toUpperCase());
+        List<CnfMaestro> cnfMaestroList = (List<CnfMaestro>) cnfMaestroRepository.getAllCnfMaestro(cnfMaestro.getNroDoc().toUpperCase(), 
+                cnfMaestro.getNombres().toUpperCase(), cnfMaestro.getApellidoPaterno().toUpperCase(), 
+                cnfMaestro.getApellidoMaterno().toUpperCase(), cnfMaestro.getRazonSocial().toUpperCase(), cnfMaestro.getDireccion().toUpperCase(), 
+                cnfMaestro.getCorreo().toUpperCase(), cnfMaestro.getTelefono().toUpperCase(), cnfMaestro.getFlagEstado().toUpperCase());
         return cnfMaestroList;
     }
 

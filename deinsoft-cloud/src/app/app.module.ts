@@ -134,6 +134,8 @@ import { SegPermisoForm2Component } from '@pages/security/seg-permiso/form2/seg-
 import { CnfTipoSistemaListComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-sistema.list';
 import { CnfTipoSistemaFormComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-sistema.form';
 import { ActComprobanteReportContableFormComponent } from '@pages/reports/act-comprobante/act-comprobante-venta-contable/act-comprobante-report-contable.component';
+import { TermsComponent } from '@modules/terms/terms.component';
+import { UploadComponent } from '@pages/act-contrato/modal/message-modal.component';
 
 @NgModule({
     declarations: [
@@ -251,7 +253,9 @@ import { ActComprobanteReportContableFormComponent } from '@pages/reports/act-co
         SegPermisoForm2Component,
         CnfTipoSistemaListComponent,
         CnfTipoSistemaFormComponent,
-        ActComprobanteReportContableFormComponent
+        ActComprobanteReportContableFormComponent,
+        TermsComponent,
+        UploadComponent
     ],
     imports: [
         BrowserModule,

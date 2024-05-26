@@ -28,6 +28,16 @@ public class CnfZona implements Serializable {
     @JoinColumn(name = "cnf_empresa_id")
     private CnfEmpresa cnfEmpresa;
 
+    public CnfZona() {
+    }
+
+    
+    
+    public CnfZona(String nombre, CnfEmpresa cnfEmpresa) {
+        this.nombre = nombre;
+        this.cnfEmpresa = cnfEmpresa;
+    }
+
     
     public long getId() {
         return id;

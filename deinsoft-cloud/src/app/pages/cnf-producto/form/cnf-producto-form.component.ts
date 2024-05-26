@@ -263,10 +263,12 @@ export class CnfProductoFormComponent implements OnInit {
   onChangePorcentaje(value: any) {
     this.model.porcentajeGanancia = value;
     this.model.precio = this.model.costo  + this.model.costo * this.model.porcentajeGanancia / 100
+    this.model.precio = Math.round((this.model.precio + Number.EPSILON) * 100) / 100;
   }
   onChangePrecio(value: any) {
     this.model.precio = value;
-    this.model.porcentajeGanancia = this.model.precio * 100 / this.model.costo 
+    this.model.porcentajeGanancia = (this.model.precio * 100 / this.model.costo ) - 100
+    this.model.porcentajeGanancia = Math.round((this.model.porcentajeGanancia + Number.EPSILON) * 100) / 100;
   }
 }
 

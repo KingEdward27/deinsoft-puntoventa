@@ -63,7 +63,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         
         if (optionValid.length > 0 || state.url == '/' 
         || state.url == '/generic-form' || state.url == '/generic-child-form' || state.url == '/profile' 
-        || state.url == '/swagger-ui' || state.url == '/change-password' || state.url.includes('/recover-password')) {
+        || state.url == '/swagger-ui' || state.url == '/change-password' || state.url == '/terms' || state.url.includes('/recover-password')) {
             
             return this.getProfile();
         }

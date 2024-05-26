@@ -32,9 +32,16 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,6 +61,13 @@ import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -63,6 +77,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
@@ -73,7 +88,7 @@ public class Util {
 
     private static final String ALGORITHM = "AES";
     private static final String TRANSFORMATION = "AES/ECB/PKCS5Padding";
-    
+
     public static BigDecimal getBigDecimalValue(Map<String, Object> map, String key) {
         if (map.get(key) == null) {
             return BigDecimal.ZERO;
@@ -218,6 +233,7 @@ public class Util {
         zos.close();
         return bos.toByteArray();
     }
+
     public static byte[] generateFile(String fileName, String content) {
         try {
             File tempDir = Files.createTempDir();
@@ -233,6 +249,7 @@ public class Util {
             return null;
         }
     }
+
     public static boolean validaCorreo(String email) {
         // Patrón para validar el email
         Pattern pattern = Pattern
@@ -241,6 +258,7 @@ public class Util {
         Matcher mather = pattern.matcher(email);
         return mather.find();
     }
+
     public static String encryptMessage(byte[] message, String encKeyString) throws InvalidKeyException, NoSuchPaddingException,
             NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
         Cipher cipher = Cipher.getInstance(TRANSFORMATION);
@@ -262,19 +280,19 @@ public class Util {
         byte[] clearMessage = cipher.doFinal(Base64.getDecoder().decode(encryptedMessage));
         return new String(clearMessage);
     }
-    
+
     public static String readFile(InputStream is, Charset encoding) throws IOException {
 //        byte[] encoded = Files.readAllBytes(Paths.get(path));
         byte[] encoded = IOUtils.toByteArray(is);
         return new String(encoded, encoding);
     }
-    
-    public static String simpleApi(String urlParam, String jsonBody, HttpMethod httpMethod, String authorization
-            , String accept
-            , String contentType) {
+
+    public static String simpleApi(String urlParam, String jsonBody, HttpMethod httpMethod, String authorization,
+             String accept,
+             String contentType) {
         boolean result = false;
         RespuestaPSE respuesta = null;
-        System.out.println("jsonBody: "+jsonBody);
+        System.out.println("jsonBody: " + jsonBody);
         try {
             URL url = new URL(urlParam);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -309,12 +327,114 @@ public class Util {
         } catch (ConnectException e) {
             e.printStackTrace();
             return null;
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-           return null;
+            return null;
         }
+    }
+
+    public static List<Object[]> importExcel(MultipartFile reapExcelDataFile, boolean includeFirstLine) throws IOException {
+
+        List<Object[]> listResult = null;
+        try {
+            Workbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
+            Sheet datatypeSheet = workbook.getSheetAt(0);
+            int columnsCount = datatypeSheet.getRow(0).getLastCellNum();
+            listResult = new ArrayList<>();
+            Iterator<Row> iterator = datatypeSheet.iterator();
+            int row = -1;
+            int column = 0;
+            while (iterator.hasNext()) {
+                Object[] rowArray = new Object[columnsCount];
+                Row currentRow = iterator.next();
+                Iterator<Cell> cellIterator = currentRow.iterator();
+                column = 0;
+                row++;
+                Cell currentCell;
+                for (int i = 0; i < currentRow.getLastCellNum(); i++) {
+                    currentCell = currentRow.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    if (null == currentCell.getCellType()) {
+                        column++;
+                        break;
+                    } else //getCellTypeEnum shown as deprecated for version 3.15
+                    //getCellTypeEnum ill be renamed to getCellType starting from version 4.0
+                    {
+                        switch (currentCell.getCellType()) {
+                            case STRING:
+                                rowArray[column] = currentCell.getStringCellValue();
+                                break;
+                            case NUMERIC:
+//                                rowArray[column] = currentCell.getNumericCellValue();
+                                if (DateUtil.isCellDateFormatted(currentCell)) {
+                                    rowArray[column] = currentCell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                                } else {
+                                    rowArray[column] = currentCell.getNumericCellValue();
+                                }
+                                break;
+                            default:
+                                rowArray[column] = currentCell.getStringCellValue();
+                                break;
+                        }
+                    }
+
+                    column++;
+                }
+//                while (cellIterator.hasNext()) {
+//                    Cell currentCell = cellIterator.next();
+//                    if (null == currentCell.getCellType()) {
+//                        column++;
+//                        break;
+//                    } else //getCellTypeEnum shown as deprecated for version 3.15
+//                    //getCellTypeEnum ill be renamed to getCellType starting from version 4.0
+//                    {
+//                        switch (currentCell.getCellType()) {
+//                            case STRING:
+//                                rowArray[column] = currentCell.getStringCellValue();
+//                                break;
+//                            case NUMERIC:
+////                                rowArray[column] = currentCell.getNumericCellValue();
+//                                if (DateUtil.isCellDateFormatted(currentCell)) {
+//                                    rowArray[column] = currentCell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//                                } else {
+//                                    rowArray[column] = currentCell.getNumericCellValue();
+//                                }
+//                                break;
+//                            default:
+//                                rowArray[column] = currentCell.getStringCellValue();
+//                                break;
+//                        }
+//                    }
+//
+//                    column++;
+//                }
+                if (includeFirstLine && row == 0) {
+                    listResult.add(rowArray);
+                } else if (row > 0) {
+                    listResult.add(rowArray);
+                }
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return listResult;
+    }
+
+    public static LocalDate getDateFromString(String fechaVencimiento, DateTimeFormatter format) {
+        try {
+            if (fechaVencimiento.equals("")) {
+                return null;
+            }
+            format = format.withLocale(Locale.getDefault());  // Locale specifies human language for translating, and cultural norms for lowercase/uppercase and abbreviations and such. Example: Locale.US or Locale.CANADA_FRENCH
+            LocalDate date = LocalDate.parse(fechaVencimiento, format);
+            return date;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 }

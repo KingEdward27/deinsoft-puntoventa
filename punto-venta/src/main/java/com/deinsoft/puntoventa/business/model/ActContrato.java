@@ -111,6 +111,11 @@ public class ActContrato implements Serializable {
     @JoinColumn(name = "cnf_zona_id")
     private CnfZona cnfZona;
     
+    @ColumnDefault("0")
+    @Size(max = 1)
+    @Column(name = "flag_imported", length = 1)
+    private String flagImported;
+    
     @Transient
     private long cnfEmpresaId;
     
@@ -346,6 +351,14 @@ public class ActContrato implements Serializable {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getFlagImported() {
+        return flagImported;
+    }
+
+    public void setFlagImported(String flagImported) {
+        this.flagImported = flagImported;
     }
 
     

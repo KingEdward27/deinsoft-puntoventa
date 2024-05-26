@@ -144,7 +144,7 @@
                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.porcentaje_ganancia' |
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-9">
-                                <input type="number" [(ngModel)]="model.porcentajeGanancia" 
+                                <input type="number" [(ngModel)]="model.porcentajeGanancia" step='0.01' value='0.00' placeholder='0.00' 
                                 maxlength="14" name="porcentajeGanancia" id="porcentajeGanancia"
                                 (input)="onChangePorcentaje($event.target.value)"
                                     class="form-control-sm col-sm-12 col-lg-6"
@@ -157,7 +157,7 @@
                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.precio' |
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-9">
-                                <input type="number" [ngModel]="model.precio | number:'1.2-3'" maxlength="14" name="precio" id="precio"
+                                <input type="number" [ngModel]="model.precio" step='0.01' value='0.00' placeholder='0.00' maxlength="14" name="precio" id="precio"
                                     name="precio" class="form-control-sm col-sm-12 col-lg-6"
                                     (input)="onChangePrecio($event.target.value)"
                                     placeholder="Ingrese precio" />

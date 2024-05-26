@@ -14,10 +14,10 @@ import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 
 public interface ActContratoRepository extends JpaRepository<ActContrato,Long> {
 	@Query(value="select p from actContrato p "+ 
-                "where p.cnfLocal.cnfEmpresa.id = ?1 and upper(p.serie) like %?2% and upper(p.numero) like %?3% and upper(p.observacion) like %?4% "
-                + "and upper(p.flagEstado) like %?5% and upper(p.nroPoste) like %?6% and upper(p.urlMap) like %?7% and upper(p.direccion) like %?8% "
+                "where p.cnfLocal.cnfEmpresa.id = ?1 and upper(p.serie) like %?2% and upper(p.numero) like %?3% "
+                + "and upper(p.flagEstado) like %?4% and upper(p.nroPoste) like %?5% and upper(p.urlMap) like %?6% and upper(p.direccion) like %?7% "
                 + "and p.cnfLocal.id in :#{#securityFilterDto.localIds}")
-	List<ActContrato> getAllActContrato(long cnfLocalId, String serie,String numero,String observacion,String flagEstado,String nroPoste,
+	List<ActContrato> getAllActContrato(long cnfLocalId, String serie,String numero,String flagEstado,String nroPoste,
                 String urlMap,String direccion,@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
         
 	@Query(value="select p from actContrato p "+

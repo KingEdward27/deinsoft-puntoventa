@@ -8,6 +8,8 @@ import { UtilService } from '../../../services/util.service';
 import { AppService } from '../../../services/app.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActContratoCorteFormModalComponent } from '@pages/act-contrato-corte/modal/act-contrato-corte-form-modal.component';
+import { UploadComponent } from '../modal/message-modal.component';
+
 @Component({
   selector: 'app-act-contrato-list',
   templateUrl: './act-contrato-list.component.html'
@@ -82,5 +84,45 @@ export class ActContratoListComponent implements OnInit {
     this.modalRef.componentInstance.cnfMaestro.subscribe((receivedEntry:any) => {
       console.log(receivedEntry);
     })
+  }
+  exportTemplate() {
+    this.actContratoService.export().subscribe(data => {
+
+      console.log(data.body);
+      if (data.body.type != 'application/json') {
+        var contentType = 'application/pdf';
+        var extension = "pdf";
+
+        if (data.body.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+          data.body.type == "application/octet-stream") {
+          contentType = data.body.type;
+          extension = "xlsx";
+        }
+        const blob = new Blob([data.body], { type: contentType });
+        this.generateAttachment("Plantilla subida de videos", blob, extension);
+      }
+    });
+  }
+
+  import() {
+    this.modalRef = this.modalService.open(UploadComponent, { size: 'lg' });
+      this.modalRef.componentInstance.message = "Importar registros de videos";
+      // this.modalRef.closed.subscribe(result => {
+      //   this.router.navigate(["/venta"]);
+      // })
+  }
+  
+  generateAttachment(fileName: string, blob: Blob, extension: string) {
+    const data = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = data;
+    link.download = fileName+"." + extension;
+    link.dispatchEvent(new MouseEvent('click', {
+      bubbles: true, cancelable: true, view: window
+    }));
+    setTimeout(() => {
+      window.URL.revokeObjectURL(data);
+      link.remove
+    }, 100);
   }
 }

@@ -105,13 +105,13 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
 
     @Autowired
     BusinessService businessService;
-    
+
     @Autowired
     CnfImpuestoCondicionService cnfImpuestoCondicionService;
 
     @Autowired
     ActPagoRepository actPagoRepository;
-    
+
     @Autowired
     AppConfig appConfig;
 
@@ -129,7 +129,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                 actComprobante.getEnvioPseMensaje().toUpperCase(),
                 actComprobante.getXmlhash().toUpperCase(),
                 actComprobante.getCodigoqr().toUpperCase(),
-                actComprobante.getNumTicket().toUpperCase(),securityFilterDto);
+                actComprobante.getNumTicket().toUpperCase(), securityFilterDto);
         return actComprobanteList;
     }
 
@@ -141,12 +141,12 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             actComprobante = actComprobanteOptional.get();
             list = actComprobante.getListActComprobanteDetalle().stream().map(mapper -> {
                 mapper.setCnfImpuestoCondicion(
-                cnfImpuestoCondicionService.getCnfImpuestoCondicion(mapper.getCnfImpuestoCondicion().getId()));
+                        cnfImpuestoCondicionService.getCnfImpuestoCondicion(mapper.getCnfImpuestoCondicion().getId()));
                 return mapper;
             }).collect(Collectors.toSet());
-            
+
             actComprobante.setListActComprobanteDetalle(list);
-            
+
             SecurityFilterDto f = listRoles();
             if (f.getEmpresaId() != actComprobante.getCnfLocal().getCnfEmpresa().getId()) {
                 throw new SecurityException(Constantes.MSG_NO_AUTHORIZED);
@@ -160,19 +160,18 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     @Transactional
     @Override
     public ActComprobante saveActComprobante(ActComprobante actComprobante) throws Exception {
-        
+
         businessService.verifyPlan(actComprobante, null);
-        
+
         ActComprobante actComprobanteResult = null;
 
         actComprobante.setSegUsuario(auth.getLoggedUserdata());
         //tiene que obedecer un parametro de configuración caja turno, por ahora null
-        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actComprobante.getSegUsuario().getId(),listRoles());
+        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(actComprobante.getSegUsuario().getId(), listRoles());
         actCajaTurno = actCajaTurno.stream()
                 .filter(item -> item.getEstado().equals("1"))
                 .collect(Collectors.toList());
-        
-        
+
         if (actCajaTurno.isEmpty()) {
             throw new Exception("El usuario no tiene caja aperturada");
         }
@@ -231,8 +230,8 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         ActComprobante actComprobanteResult = null;
 
         actComprobante.setSegUsuario(auth.getLoggedUserdata());
-        
-        List<ActComprobante> listExists =  actComprobanteRepository.findByCnfEmpresaIdAndNumberCp(actComprobante);
+
+        List<ActComprobante> listExists = actComprobanteRepository.findByCnfEmpresaIdAndNumberCp(actComprobante);
         if (!listExists.isEmpty()) {
             throw new BusinessException("Ya existe un comprobante de compra con la misma numeración");
         }
@@ -267,7 +266,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         invAlmacenProductoService.registerProductMovementAndUpdateStock(actComprobante, null);
 
         //save pagos programacion
-        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(auth.getLoggedUserdata().getId(),listRoles());
+        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(auth.getLoggedUserdata().getId(), listRoles());
         actCajaTurno = actCajaTurno.stream()
                 .filter(item -> item.getEstado().equals("1"))
                 .collect(Collectors.toList());
@@ -275,24 +274,24 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             throw new Exception("El usuario no tiene caja aperturada");
         }
 
-        saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno, 
+        saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno,
                 actComprobante.getFlagIsventa().equals("1") ? true : false);
 
         actComprobante.setFlagEstado("2");
         ActComprobante actComprobanteDb = actComprobanteRepository.save(actComprobante);
-        
+
         //send to sunat
-        if (actComprobanteDb.getCnfTipoComprobante().getFlagElectronico().equals("1") 
+        if (actComprobanteDb.getCnfTipoComprobante().getFlagElectronico().equals("1")
                 && actComprobanteDb.getFlagIsventa().equals("1")) {
             RespuestaPSE respuestaPSE = sendApi(actComprobanteDb.getId());
         }
-        
+
     }
 
     @Override
     public RespuestaPSE sendApi(long id) {
         RespuestaPSE result = null;
-        
+
         ActComprobante actComprobante = getActComprobante(id);
 //        Map<String,Object> local = (Map<String,Object>)mapVenta.get("cnf_local");
 //        Map<String,Object> empresa = (Map<String,Object>)local.get("cnf_empresa");
@@ -300,7 +299,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         String token = actComprobante.getCnfLocal().getCnfEmpresa().getToken();
 //        if (ruta == null) throw new RuntimeException ("Ruta PSE no configurado");
 //        if (token == null) throw new RuntimeException ("token PSE no configurado");
-        EnvioPSE2 envioPSE = new EnvioPSE2(ruta,token);
+        EnvioPSE2 envioPSE = new EnvioPSE2(ruta, token);
         String jsonBody = envioPSE.paramToJson(actComprobante);
         RespuestaPSE resultEnvioPSE = envioPSE.envioJsonPSE(jsonBody);
 
@@ -331,7 +330,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         save(actComprobante);
         return result;
     }
-    
+
     public List<ActComprobante> getAllActComprobante() {
         List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.findAll();
         return actComprobanteList;
@@ -380,7 +379,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
 
     @Override
     public List<ActComprobante> getReportActComprobante(ParamBean paramBean) {
-        List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getReportActComprobante(paramBean,listRoles());
+        List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.getReportActComprobante(paramBean, listRoles());
         return actComprobanteList;
     }
 
@@ -425,7 +424,6 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                         }
                         invAlmacenProductoRepository.save(invBalance);
                     }
-                    
 
                     invMovimientoProductoRepository.deleteByActComprobante(actInvoice);
                 }
@@ -597,7 +595,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                             .concat(mapper.getSerie())
                             .concat("|")
                             .concat("|")
-                            .concat(String.format("%08d",Integer.parseInt(mapper.getNumero())))//9
+                            .concat(String.format("%08d", Integer.parseInt(mapper.getNumero())))//9
                             .concat("|")
                             .concat("|")
                             .concat(mapper.getCnfMaestro().getCnfTipoDocumento().getCodigoSunat()).concat("|")
@@ -606,7 +604,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                     line = line.concat(Formatos.df.format(mapper.getSubtotal().multiply(multiplicand))).concat("|")//15
                             //.concat("").concat("|")//DESCUENTO
                             .concat(Formatos.df.format(mapper.getIgv().multiply(multiplicand))).concat("|");
-                            //.concat("").concat("|");//DESCUENTO
+                    //.concat("").concat("|");//DESCUENTO
                     line = line.concat("0.00").concat("|")//exonerada
                             .concat("0.00").concat("|")//inafecta
                             .concat("0.00").concat("|")
@@ -618,7 +616,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                     line = line.concat(Formatos.df.format(mapper.getTotal().multiply(multiplicand))).concat("|")
                             .concat(mapper.getCnfMoneda().getCodigo()).concat("|")
                             .concat("|")//tipo cambio
-                            
+
                             .concat("|")//fecha emision comprobante modificado
                             .concat("|")//tipo comprobante modificado
                             .concat("|")//serie comprobante modificado
@@ -633,11 +631,12 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         String joined = x.stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(""));
+//        String fileName = "temp";
         String fileName = "LE"
                 .concat(paramBean.getCnfLocal().getCnfEmpresa().getNroDocumento())
                 .concat(paramBean.getFechaDesde().format(Constantes.YYYYMM_FORMATER))
                 .concat("00")
-                .concat("080400")//codigo libro
+                .concat(paramWorked.getFlagIsventa().equals("1") ? "140100" : "080400")//codigo libro
                 .concat("02")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
                 .concat("1")//Indicador de operaciones -> 0 Cierre o baja de RUC  / 1 Empresa operativa  / 2 Cierre de libro
                 .concat("1")//Indicador del contenido del libro o registro -> 1 Con información / 0 Sin información
@@ -663,13 +662,13 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         List<ReporteContableDto> x = list.stream()
                 .filter(predicate -> predicate.getCnfTipoComprobante().getFlagElectronico().equals("1"))
                 .collect(
-                Collectors.groupingBy(item -> grouping(item),
-                        Collectors.summingDouble(mapper -> mapper.getTotal().floatValue())))
+                        Collectors.groupingBy(item -> grouping(item),
+                                Collectors.summingDouble(mapper -> mapper.getTotal().floatValue())))
                 .entrySet().stream()
                 .map(mapper -> {
-                    return new ReporteContableDto(mapper.getKey().split("-")[0], 
-                            mapper.getValue(),mapper.getKey().split("-")[1],mapper.getKey().split("-")[2]);
-                            })
+                    return new ReporteContableDto(mapper.getKey().split("-")[0],
+                            mapper.getValue(), mapper.getKey().split("-")[1], mapper.getKey().split("-")[2]);
+                })
                 .sorted(Comparator.comparing(ReporteContableDto::getPeriodo, Collections.reverseOrder()))
                 .collect(Collectors.toList());
 
@@ -678,62 +677,59 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
 
     @Override
     public Map<String, Object> getDashboardActComprobantes(ParamBean param) {
-        
+
         param.setFlagIsventa("1");
         param.setFlagEstado("2");
         List<ActComprobante> listVentas = getReportActComprobante(param);
         Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
-        
+
         List<Long> listClientes = listVentas.stream().map(action -> {
             return action.getCnfMaestro().getId();
         }).distinct().collect(Collectors.toList());
-        
+
         String moneda = "";
         if (!listVentas.isEmpty()) {
             moneda = listVentas.get(0).getCnfLocal().getCnfEmpresa().getCnfMoneda().getSimbolo();
         }
-        
+
         List<ActComprobanteDetalle> listActComprobanteDetalle = new ArrayList<>();
         for (ActComprobante listVenta : listVentas) {
             listActComprobanteDetalle.addAll(listVenta.getListActComprobanteDetalle());
         }
         List<TopProductosDto> listTopProducts = listActComprobanteDetalle.stream()
                 .collect(
-                Collectors.groupingBy(item -> grouping(item),
-                        Collectors.summingDouble(mapper -> mapper.getImporte().floatValue())))
+                        Collectors.groupingBy(item -> grouping(item),
+                                Collectors.summingDouble(mapper -> mapper.getImporte().floatValue())))
                 .entrySet().stream()
                 .map(mapper -> {
-                    return new TopProductosDto(mapper.getKey(), 
+                    return new TopProductosDto(mapper.getKey(),
                             mapper.getValue());
-                            })
+                })
                 .sorted(Comparator.comparing(TopProductosDto::getPrecio, Collections.reverseOrder()))
                 .limit(5)
                 .collect(Collectors.toList());
-        
+
         List<TopProductosDto> listTopClients = listVentas.stream()
                 .collect(
-                Collectors.groupingBy(item -> item.getCnfMaestro().getRazonSocial(),
-                        Collectors.summingDouble(mapper -> mapper.getTotal().floatValue())))
+                        Collectors.groupingBy(item -> item.getCnfMaestro().getRazonSocial(),
+                                Collectors.summingDouble(mapper -> mapper.getTotal().floatValue())))
                 .entrySet().stream()
                 .map(mapper -> {
-                    return new TopProductosDto(mapper.getKey(), 
+                    return new TopProductosDto(mapper.getKey(),
                             mapper.getValue());
-                            })
+                })
                 .sorted(Comparator.comparing(TopProductosDto::getPrecio, Collections.reverseOrder()))
                 .limit(5)
                 .collect(Collectors.toList());
-        
-        
+
         param.setFlagIsventa("2");
         List<ActComprobante> listCompras = getReportActComprobante(param);
         Double sumCompras = listCompras.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
-        
-        
-        
+
         Double totalGanancia = listVentas.stream().map(mapper -> {
             return mapper.getListActComprobanteDetalle().stream()
                     .mapToDouble(o -> (o.getPrecio()
-                            .subtract(o.getCnfProducto().getCosto() == null? BigDecimal.ZERO:o.getCnfProducto().getCosto())).doubleValue())
+                    .subtract(o.getCnfProducto().getCosto() == null ? BigDecimal.ZERO : o.getCnfProducto().getCosto())).doubleValue())
                     .sum();
         }).mapToDouble(o -> o).sum();
         Map<String, Object> map = new HashMap<>();
@@ -748,37 +744,37 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         map.put("listTopClients", listTopClients);
         return map;
     }
-    
+
     String grouping(ActComprobante item) {
         String fileNameCompras = "LE"
-                    .concat(item.getCnfLocal().getCnfEmpresa().getNroDocumento())
-                    .concat(item.getFecha().format(Constantes.YYYYMM_FORMATER))
-                    .concat("00")
-                    .concat("080400")//codigo libro
-                    .concat("02")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
-                    .concat("1")//Indicador de operaciones -> 0 Cierre o baja de RUC  / 1 Empresa operativa  / 2 Cierre de libro
-                    .concat("1")//Indicador del contenido del libro o registro -> 1 Con información / 0 Sin información
-                    .concat("1")//Indicador de la moneda utilizada -> 1 Soles  / 2 Dólares
-                    .concat("2")//Indicador de libro electrónico generado por el MIGE IGV/RVIE -> Generado por el SIRE ( Fijo) (2)
-                    //.concat("1")//Correlativo de los ajustes posteriores -> Puede ser 01, 02, 03, etc. Según el correlativo que corresponde.
-                    .concat(".zip");
+                .concat(item.getCnfLocal().getCnfEmpresa().getNroDocumento())
+                .concat(item.getFecha().format(Constantes.YYYYMM_FORMATER))
+                .concat("00")
+                .concat("080400")//codigo libro
+                .concat("02")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
+                .concat("1")//Indicador de operaciones -> 0 Cierre o baja de RUC  / 1 Empresa operativa  / 2 Cierre de libro
+                .concat("1")//Indicador del contenido del libro o registro -> 1 Con información / 0 Sin información
+                .concat("1")//Indicador de la moneda utilizada -> 1 Soles  / 2 Dólares
+                .concat("2")//Indicador de libro electrónico generado por el MIGE IGV/RVIE -> Generado por el SIRE ( Fijo) (2)
+                //.concat("1")//Correlativo de los ajustes posteriores -> Puede ser 01, 02, 03, etc. Según el correlativo que corresponde.
+                .concat(".zip");
         String fileNameVentas = "LE"
-                    .concat(item.getCnfLocal().getCnfEmpresa().getNroDocumento())
-                    .concat(item.getFecha().format(Constantes.YYYYMM_FORMATER))
-                    .concat("00")
-                    .concat("140100")//codigo libro
-                    .concat("02")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
-                    .concat("1")//Indicador de operaciones -> 0 Cierre o baja de RUC  / 1 Empresa operativa  / 2 Cierre de libro
-                    .concat("1")//Indicador del contenido del libro o registro -> 1 Con información / 0 Sin información
-                    .concat("1")//Indicador de la moneda utilizada -> 1 Soles  / 2 Dólares
-                    .concat("2")//Indicador de libro electrónico generado por el MIGE IGV/RVIE -> Generado por el SIRE ( Fijo) (2)
-                    //.concat("1")//Correlativo de los ajustes posteriores -> Puede ser 01, 02, 03, etc. Según el correlativo que corresponde.
-                    .concat(".zip");
-        return item.getFecha().format(YYYYMM_FORMATER) + "-" +fileNameCompras + "-" +fileNameVentas;
+                .concat(item.getCnfLocal().getCnfEmpresa().getNroDocumento())
+                .concat(item.getFecha().format(Constantes.YYYYMM_FORMATER))
+                .concat("00")
+                .concat("140100")//codigo libro
+                .concat("02")//Código de oportunidad de presentación del RVIE/RCE: -> RCE Cuando realiza ajustes posteriores
+                .concat("1")//Indicador de operaciones -> 0 Cierre o baja de RUC  / 1 Empresa operativa  / 2 Cierre de libro
+                .concat("1")//Indicador del contenido del libro o registro -> 1 Con información / 0 Sin información
+                .concat("1")//Indicador de la moneda utilizada -> 1 Soles  / 2 Dólares
+                .concat("2")//Indicador de libro electrónico generado por el MIGE IGV/RVIE -> Generado por el SIRE ( Fijo) (2)
+                //.concat("1")//Correlativo de los ajustes posteriores -> Puede ser 01, 02, 03, etc. Según el correlativo que corresponde.
+                .concat(".zip");
+        return item.getFecha().format(YYYYMM_FORMATER) + "-" + fileNameCompras + "-" + fileNameVentas;
     }
-    
+
     String grouping(ActComprobanteDetalle item) {
         return item.getCnfProducto().getNombre();
     }
-    
+
 }

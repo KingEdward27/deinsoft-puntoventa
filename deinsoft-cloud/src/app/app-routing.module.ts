@@ -85,6 +85,7 @@ import { SegPermisoForm2Component } from '@pages/security/seg-permiso/form2/seg-
 import { CnfTipoSistemaFormComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-sistema.form';
 import { CnfTipoSistemaListComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-sistema.list';
 import { ActComprobanteReportContableFormComponent } from '@pages/reports/act-comprobante/act-comprobante-venta-contable/act-comprobante-report-contable.component';
+import { TermsComponent } from '@modules/terms/terms.component';
 const routes: Routes = [
     {
         path: '',
@@ -188,8 +189,7 @@ const routes: Routes = [
             {path: 'new-maestro',component: CnfMaestroForm2Component},
             {path: 'tipo-sistema',component: CnfTipoSistemaListComponent},
             {path: 'new-tipo-sistema',component: CnfTipoSistemaFormComponent},
-            {path: 'report-contable',component: ActComprobanteReportContableFormComponent},
-            
+            {path: 'report-contable',component: ActComprobanteReportContableFormComponent}
         ]
     },
     {
@@ -200,6 +200,11 @@ const routes: Routes = [
     {
         path: 'register',
         component: RegisterComponent,
+        canActivate: [NonAuthGuard]
+    },
+    {
+        path: 'terms',
+        component: TermsComponent,
         canActivate: [NonAuthGuard]
     },
     {

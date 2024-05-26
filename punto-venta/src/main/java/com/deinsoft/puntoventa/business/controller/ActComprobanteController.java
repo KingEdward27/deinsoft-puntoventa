@@ -44,7 +44,7 @@ import org.springframework.http.MediaType;
 @RequestMapping("/api/business/act-comprobante")
 public class ActComprobanteController extends CommonController<ActComprobante, ActComprobanteService> {
 
-    private static final Logger logger = LoggerFactory.getLogger(ActComprobanteController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActComprobanteController.class);
 
     @Autowired
     ActComprobanteService actComprobanteService;
@@ -57,14 +57,14 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
     
     @GetMapping(value = "/get-all-act-comprobante")
     public List<ActComprobante> getAllActComprobante(ActComprobante actComprobante) {
-        logger.info("getAllActComprobante received: " + actComprobante.toString());
+        LOG.info("getAllActComprobante received: " + actComprobante.toString());
         List<ActComprobante> actComprobanteList = actComprobanteService.getAllActComprobante(actComprobante);
         return actComprobanteList;
     }
 
     @GetMapping(value = "/get-act-comprobante")
     public ResponseEntity<?> getActComprobante(@Param("id") Long id) {
-        logger.info("getActComprobante received: " + id);
+        LOG.info("getActComprobante received: " + id);
         try {
             ActComprobante actComprobante = actComprobanteService.getActComprobante(id);
             return ResponseEntity.status(HttpStatus.OK).body(actComprobante);
@@ -189,7 +189,7 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
     }
     @PostMapping(value = "/get-report-act-comprobante")
     public List<ActComprobante> getReportActComprobante(@RequestBody ParamBean paramBean) {
-        logger.info("getAllActComprobante received: " + paramBean.toString());
+        LOG.info("getAllActComprobante received: " + paramBean.toString());
         List<ActComprobante> actComprobanteList = actComprobanteService.getReportActComprobante(paramBean);
         return actComprobanteList;
     }
@@ -277,18 +277,20 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
     }
     @PostMapping(value = "/generateSireTxt")
     public ResponseEntity<?> generateTxt(@RequestBody ParamBean paramBean, HttpServletResponse response) throws Exception {
-        GeneratedFile data = actComprobanteService.generateSireTxt(paramBean);
+        GeneratedFile data = null;
+        try {
+            data = actComprobanteService.generateSireTxt(paramBean);
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
         ByteArrayInputStream stream = new ByteArrayInputStream(data.getData());
         HttpHeaders httpHeaders = new HttpHeaders();
         ContentDisposition contentDisposition = ContentDisposition.builder("inline")
           .filename("Filename")
           .build();
         httpHeaders.setContentDisposition(contentDisposition);
-//        httpHeaders.add("Content-Type", "application/zip");
         httpHeaders.setContentDisposition(ContentDisposition.builder("attachment").filename(data.getFileName()).build());
-//        httpHeaders.setContentLength(data.getData().length);
-        MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
-//        httpHeaders.set("fileName", data.getFileName());
         return ResponseEntity.status(HttpStatus.CREATED).headers(httpHeaders).body(new InputStreamResource(stream));
     }
     

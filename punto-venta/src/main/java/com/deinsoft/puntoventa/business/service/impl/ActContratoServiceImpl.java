@@ -1,7 +1,10 @@
 package com.deinsoft.puntoventa.business.service.impl;
 
 import com.deinsoft.puntoventa.business.bean.ParamBean;
+import com.deinsoft.puntoventa.business.bean.UploadResponse;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
+import com.deinsoft.puntoventa.business.exception.BusinessException;
 import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
 import com.deinsoft.puntoventa.business.model.ActCajaTurno;
 import com.deinsoft.puntoventa.business.model.ActComprobante;
@@ -15,28 +18,48 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deinsoft.puntoventa.business.model.ActContrato;
 import com.deinsoft.puntoventa.business.model.ActPago;
 import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
+import com.deinsoft.puntoventa.business.model.CnfEmpresa;
 import com.deinsoft.puntoventa.business.model.CnfFormaPagoDetalle;
+import com.deinsoft.puntoventa.business.model.CnfLocal;
+import com.deinsoft.puntoventa.business.model.CnfMaestro;
 import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
+import com.deinsoft.puntoventa.business.model.CnfPlanContrato;
+import com.deinsoft.puntoventa.business.model.CnfTipoComprobante;
+import com.deinsoft.puntoventa.business.model.CnfTipoDocumento;
+import com.deinsoft.puntoventa.business.model.CnfZona;
 import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
 import com.deinsoft.puntoventa.business.repository.ActContratoRepository;
 import com.deinsoft.puntoventa.business.repository.ActPagoProgramacionRepository;
 import com.deinsoft.puntoventa.business.repository.ActPagoRepository;
 import com.deinsoft.puntoventa.business.repository.CnfFormaPagoDetalleRepository;
+import com.deinsoft.puntoventa.business.repository.CnfMaestroRepository;
 import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
 import com.deinsoft.puntoventa.business.service.ActContratoService;
 import com.deinsoft.puntoventa.business.service.ActPagoProgramacionService;
 import com.deinsoft.puntoventa.business.service.BusinessService;
+import com.deinsoft.puntoventa.business.service.CnfEmpresaService;
+import com.deinsoft.puntoventa.business.service.CnfMaestroService;
+import com.deinsoft.puntoventa.business.service.CnfPlanContratoService;
+import com.deinsoft.puntoventa.business.service.CnfTipoComprobanteService;
+import com.deinsoft.puntoventa.business.service.CnfTipoDocumentoService;
+import com.deinsoft.puntoventa.business.service.CnfZonaService;
+import com.deinsoft.puntoventa.framework.util.Util;
+import com.deinsoft.puntoventa.util.Constantes;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -65,15 +88,39 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 
     @Autowired
     BusinessService businessService;
+
+    @Autowired
+    CnfTipoDocumentoService cnfTipoDocumentoService;
+
+    @Autowired
+    CnfPlanContratoService cnfPlanContratoService;
+
+    @Autowired
+    CnfZonaService cnfZonaService;
+
+    @Autowired
+    CnfEmpresaService cnfEmpresaService;
+
+    @Autowired
+    CnfMaestroRepository cnfMaestroRepository;
     
+    @Autowired
+    CnfMaestroService cnfMaestroService;
+    
+    @Autowired
+    CnfTipoComprobanteService cnfTipoComprobanteService;
+
     static DateTimeFormatter YYYYMM_FORMATER = DateTimeFormatter.ofPattern("yyyyMM");
+
+    static DateTimeFormatter DD_MM_YYYY_FORMATER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    static DateTimeFormatter YYYY_MM_D_FORMATER = DateTimeFormatter.ofPattern("yyyy-M-d");
+    static DateTimeFormatter YYYYMMDD_FORMATER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     public List<ActContrato> getAllActContrato(ActContrato actContrato) {
         List<ActContrato> actContratoList = (List<ActContrato>) actContratoRepository.getAllActContrato(
                 actContrato.getCnfEmpresaId(),
                 actContrato.getSerie().toUpperCase(),
                 actContrato.getNumero().toUpperCase(),
-                actContrato.getObservacion().toUpperCase(),
                 actContrato.getFlagEstado().toUpperCase(),
                 actContrato.getNroPoste().toUpperCase(),
                 actContrato.getUrlMap().toUpperCase(),
@@ -93,9 +140,9 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 
     @Transactional
     public ActContrato saveActContrato(ActContrato actContrato) throws Exception {
-        
+
         businessService.verifyPlan(null, actContrato);
-        
+
         long id = actContrato.getId();
         if (id == 0) {
             actContrato.setFechaRegistro(LocalDateTime.now());
@@ -105,21 +152,11 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
         }
         actContrato.setSegUsuario(auth.getLoggedUserdata());
         if (id == 0) {
-            List<CnfNumComprobante> numComprobante = cnfNumComprobanteRepository.findByCnfTipoComprobanteCodigoAndCnfLocalId(
-                    "CNT",
-                    actContrato.getCnfLocal().getId());
-            if (numComprobante.isEmpty()) {
-                throw new Exception("No existe numeración para el tipo de comprobante y el local");
-            }
             List<ActContrato> listContratos = actContratoRepository.findByCnfMaestroIdAndCnfPlanContratoId(actContrato.getCnfMaestro().getId(), actContrato.getCnfPlanContrato().getId());
             if (!listContratos.isEmpty()) {
                 throw new Exception("Ya existe un registro con el mismo plan y mismo cliente");
             }
-            CnfNumComprobante cnfNumComprobante = numComprobante.get(0);
-            cnfNumComprobante.setUltimoNro(numComprobante.get(0).getUltimoNro() + 1);
-            cnfNumComprobanteRepository.save(cnfNumComprobante);
-
-            actContrato.setNumero(String.format("%08d", cnfNumComprobante.getUltimoNro()));
+            setSerieAndNumero(actContrato);
         }
 
         ActContrato actContratoResult = actContratoRepository.save(actContrato);
@@ -128,11 +165,31 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
             if ((actContrato.getCnfFormaPago() != null && actContrato.getCnfFormaPago().getId() > 0)) {
                 saveActPagoProgramacionOrCajaOperacion(actContratoResult);
             } else {
-                saveActPagoProgramacionMensualRepetitivo(actContratoResult);
+                try {
+                    saveActPagoProgramacionMensualRepetitivo(actContratoResult);
+                } catch (Exception e) {
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    throw e;
+                }
             }
         }
 
         return actContratoResult;
+    }
+
+    private void setSerieAndNumero(ActContrato actContrato) throws Exception {
+        List<CnfNumComprobante> numComprobante = cnfNumComprobanteRepository.findByCnfTipoComprobanteCodigoAndCnfLocalId(
+                Constantes.COD_TIPO_COMPROBANTE_CONTRATO,
+                actContrato.getCnfLocal().getId());
+        if (numComprobante.isEmpty()) {
+            throw new Exception("No existe numeración para el tipo de comprobante y el local");
+        }
+        
+        CnfNumComprobante cnfNumComprobante = numComprobante.get(0);
+        cnfNumComprobante.setUltimoNro(numComprobante.get(0).getUltimoNro() + 1);
+        cnfNumComprobanteRepository.save(cnfNumComprobante);
+        actContrato.setSerie(cnfNumComprobante.getSerie());
+        actContrato.setNumero(String.format("%08d", cnfNumComprobante.getUltimoNro()));
     }
 
     public List<ActContrato> getAllActContrato() {
@@ -199,7 +256,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
         long elapsedMonths = ChronoUnit.MONTHS.between(LocalDate.now(),
                 actContrato.getFecha().withDayOfMonth(LocalDate.now().getDayOfMonth()));
         if (elapsedMonths < 0 || elapsedMonths > 1) {
-            throw new Exception("Fecha de isntalación invalida");
+            throw new Exception("Fecha de instalación invalida");
         }
         LocalDate proxDate = actContrato.getFecha()
                 .withDayOfMonth(diaVencimiento);
@@ -329,7 +386,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 
     @Override
     public List<ActContrato> getReportActContratos(ParamBean paramBean) {
-        List<ActContrato> actContratoList = (List<ActContrato>) actContratoRepository.getReportActContrato(paramBean,listRoles());
+        List<ActContrato> actContratoList = (List<ActContrato>) actContratoRepository.getReportActContrato(paramBean, listRoles());
 
         List<ActPagoProgramacion> actPagoProgramacionList = actPagoProgramacionRepository.findAll();
 
@@ -418,7 +475,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                         mapper.setEstadoDescripcion("Corte Efectuado");
                         mapper.setColor("red");
                     } else {
-                        
+
                         mapper.setColor("green");
                         if (mapper.getMesesDeuda() > 1) {
                             mapper.setEstadoDescripcion("Afecto a Corte");
@@ -468,7 +525,6 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
     public Map<String, Object> getDashboardActContratos(long empresaId) {
 
 //        actPagoProgramacionService.refreshProgramacionPagos();
-
         List<ActPagoProgramacion> actPagoProgramacionList = actPagoProgramacionRepository.findAll().stream()
                 .filter(predicate -> predicate.getActContrato() != null)
                 .filter(predicate -> predicate.getActContrato().getCnfLocal().getCnfEmpresa().getId() == empresaId)
@@ -500,8 +556,176 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
         Map<String, Object> map = new HashMap<>();
         map.put("cantidadContratos", actContratoList.size());
         map.put("cantidadDeudores", actContratoList.stream().filter(predicate -> predicate.getEstadoDescripcion().equals("Afecto a Corte")).count());
-        map.put("ratioEndeudamiento", actContratoList.stream().filter(predicate -> predicate.getEstadoDescripcion().equals("Vigente")).count() / actContratoList.size());
+        map.put("ratioEndeudamiento", actContratoList.stream().filter(predicate -> predicate.getEstadoDescripcion().equals("Vigente")).count() / (actContratoList.isEmpty() ? 1 : actContratoList.size()));
         map.put("totalMontoPagos", total);
         return map;
+    }
+
+    @Override
+    public List<UploadResponse> importExcel(MultipartFile reapExcelDataFile, CnfLocal cnfLocal) throws IOException, Exception {
+        List<Object[]> list = Util.importExcel(reapExcelDataFile, false);
+        List<ActContrato> listActContrato = new ArrayList<>();
+
+        SecurityFilterDto f = listRoles();
+        List<CnfTipoDocumento> listTipoDoc = cnfTipoDocumentoService.getAllCnfTipoDocumento();
+        List<CnfPlanContrato> listPlan = cnfPlanContratoService.getAllCnfPlanContrato();
+        List<CnfZona> listZona = cnfZonaService.getAllCnfZona();
+        
+        List<CnfMaestro> listCnfMaestroInDb = cnfMaestroService.getAllCnfMaestroByCnfEmpresa(f.getEmpresaId());
+        List<ActContrato> listActContratoInDb = getAllActContrato();
+        ActContrato actContrato = new ActContrato();
+        List<UploadResponse> listResponse = new ArrayList<>();
+        int row = -1;
+        List<String> errorMessage = new ArrayList<>();
+        List<CnfMaestro> listCnfMaestro = new ArrayList<>();
+        CnfTipoDocumento cnfTipoDocumento = null;
+        CnfPlanContrato cnfPlanContrato;
+        CnfZona cnfZona;
+        CnfMaestro cnfMaestro;
+        boolean existsErrors = false;
+        if (cnfLocal == null) {
+            throw new BusinessException("Debe seleccionar el local");
+        }
+        CnfEmpresa empresa = cnfEmpresaService.getCnfEmpresa(f.getEmpresaId());
+        CnfTipoComprobante cnfTipoComprobante = cnfTipoComprobanteService.getAllCnfTipoComprobante().stream()
+                        .filter(predicate -> predicate.getCodigo().equals(Constantes.COD_TIPO_COMPROBANTE_CONTRATO)).findFirst().orElse(null);
+        if (cnfTipoComprobante == null) {
+            throw new BusinessException("No existe el tipo de comprobante para el registro de Contratos. Consulte con administrador TI");
+        }
+        //String[] cabecera = {
+//        "Apellido Paterno", 0
+//        "Apellido materno", 1
+//        "Nombres", 2
+//        "Razón Social", 3
+//        "Tipo de documento (1= DNI,6=RUC)",4
+        //    "Número de documento",5
+        //    "fecha de instalación (DD/MM/YYYY)",6
+//        "Plan",7
+//        "Zona",8
+//        "Dirección",9
+//        "Telefono",10
+//        "Correo"};11
+//        "nro poste";12
+        for (Object[] object : list) {
+            row++;
+            errorMessage.clear();
+            if (object.length != 13) {
+                errorMessage.add("Se esperaban 13 columnas");
+                existsErrors = true;
+                listResponse.add(new UploadResponse(row, errorMessage));
+            } else {
+                actContrato = listActContratoInDb.stream()
+                        .filter(predicate -> predicate.getCnfMaestro().getNroDoc().equals(String.valueOf(object[5]))
+                        && predicate.getCnfPlanContrato().getNombre().equals(String.valueOf(object[7])))
+                        .findFirst().orElse(null);
+                if (actContrato != null) {
+                    errorMessage.add("Ya existe contrato para el cliente con el plan y mismo cliente");
+                    existsErrors = true;
+                    listResponse.add(new UploadResponse(row, errorMessage));
+                    continue;
+                }
+                actContrato = new ActContrato();
+
+                try {
+                    Float tipoDoc = Float.parseFloat(String.valueOf(object[4]).trim());
+                    cnfTipoDocumento = listTipoDoc.stream().filter(predicate -> predicate.getCodigoSunat().equals(
+                            String.valueOf(tipoDoc.intValue())))
+                            .findFirst().orElse(null);
+                    if (cnfTipoDocumento == null) {
+                        errorMessage.add("Tipo de documento no existe");
+                    }
+                } catch (Exception e) {
+                    errorMessage.add("Formato d tipo de documento incorrecto");
+                }
+
+                cnfPlanContrato = listPlan.stream().filter(predicate -> predicate.getNombre().equals(String.valueOf(object[7])))
+                        .findFirst().orElse(null);
+                if (cnfPlanContrato == null) {
+                    errorMessage.add("Plan no existe. Debe registrar el plan primero");
+                }
+
+                cnfZona = listZona.stream().filter(predicate -> predicate.getNombre().equals(String.valueOf(object[8])))
+                        .findFirst().orElse(null);
+                if (cnfZona == null) {
+                    cnfZona = cnfZonaService.save(new CnfZona(String.valueOf(object[8]), empresa));
+                }
+
+                if (String.valueOf(object[4]).equals("1") && String.valueOf(object[5]).length() != 8) {
+                    errorMessage.add("El Número de documento para el tipo de documento DNI debe tener 8 dígitos");
+                }
+                if (String.valueOf(object[4]).equals("6") && String.valueOf(object[5]).length() != 11) {
+                    errorMessage.add("El Número de documento para el tipo de documento RUC debe tener 11 dígitos");
+                }
+                if (String.valueOf(object[4]).equals("1") && String.valueOf(object[2]).trim().length() == 0) {
+                    errorMessage.add("Si el Tipo de documento es DNI debe ingresar al menos los nombres del cliente");
+                }
+                if (String.valueOf(object[4]).equals("6") && String.valueOf(object[3]).trim().length() == 0) {
+                    errorMessage.add("Si el Tipo de documento es RUC debe ingresar la razón social");
+                }
+                if (String.valueOf(object[7]).trim().equals("") || String.valueOf(object[7]).trim().equals("null")) {
+                    errorMessage.add("Paln no pude estar vacío");
+                }
+                if (String.valueOf(object[8]).trim().equals("") || String.valueOf(object[8]).trim().equals("null")) {
+                    errorMessage.add("Zona no pude estar vacío");
+                }
+                if (String.valueOf(object[9]).trim().equals("") || String.valueOf(object[9]).trim().equals("null")) {
+                    errorMessage.add("Dirección no pude estar vacío");
+                }
+                cnfMaestro = listCnfMaestroInDb.stream()
+                        .filter(predicate -> predicate.getNroDoc().equals(String.valueOf(object[5]))).findFirst().orElse(null);
+                if (cnfMaestro != null) {
+                    errorMessage.add("Cliente ya existe");
+                } else {
+                    cnfMaestro = new CnfMaestro(String.valueOf(object[5]),
+                        String.valueOf(object[2]), String.valueOf(object[0]), String.valueOf(object[1]),
+                        String.valueOf(object[3]), String.valueOf(object[9]), String.valueOf(object[11]),
+                        String.valueOf(object[10]),
+                        cnfTipoDocumento,
+                        empresa);
+                    listCnfMaestroInDb.add(cnfMaestro);
+                    listCnfMaestro.add(cnfMaestro);
+                    actContrato.setCnfMaestro(cnfMaestro);
+                }
+                
+
+                actContrato.setFecha(Util.getDateFromString(String.valueOf(object[6]), YYYY_MM_D_FORMATER));
+                if (actContrato.getFecha() == null) {
+                    errorMessage.add("Fecha de instalación no puede estar en blanco o en formato incorrecto");
+                }
+
+                actContrato.setDireccion(String.valueOf(object[9]));
+                actContrato.setCnfPlanContrato(cnfPlanContrato);
+                actContrato.setCnfZona(cnfZona);
+                actContrato.setFechaRegistro(LocalDateTime.now());
+                actContrato.setCnfLocal(cnfLocal);
+                actContrato.setFlagEstado(Constantes.COD_ESTADO_ACTIVO);
+                actContrato.setCnfTipoComprobante(cnfTipoComprobante);
+                actContrato.setUrlMap("");
+                actContrato.setNroPoste(String.valueOf(object[12]));
+                actContrato.setFlagImported("1");
+                setSerieAndNumero(actContrato);
+                
+                //validar nombrs para otro nro documento
+                //calcular monto primer pago
+                try {
+                    businessService.verifyPlan(null, actContrato);
+                } catch (Exception e) {
+                    errorMessage.add(e.getMessage());
+                }
+                
+                if (errorMessage.isEmpty()) {
+                    listActContrato.add(actContrato);
+                } else {
+                    existsErrors = true;
+                }
+                listResponse.add(new UploadResponse(row, errorMessage));
+            }
+
+        }
+        if (!existsErrors) {
+            cnfMaestroRepository.saveAll(listCnfMaestro);
+            actContratoRepository.saveAll(listActContrato);
+        }
+        return listResponse;
     }
 }
