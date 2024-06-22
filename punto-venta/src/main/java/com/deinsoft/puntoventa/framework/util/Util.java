@@ -33,6 +33,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -117,7 +119,7 @@ public class Util {
         }
 
     }
-
+    
     public static Map<String, Object> toMap(Object object, String[] visibles) {
         Map<String, Object> map = new HashMap<>();
         try {
@@ -371,7 +373,12 @@ public class Util {
                                 if (DateUtil.isCellDateFormatted(currentCell)) {
                                     rowArray[column] = currentCell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                                 } else {
-                                    rowArray[column] = currentCell.getNumericCellValue();
+                                    DataFormatter fmt = new DataFormatter();
+
+
+                                    rowArray[column] = fmt.formatCellValue(currentCell);
+                                    //rowArray[column] = currentCell.getNumericCellValue();
+                                    
                                 }
                                 break;
                             default:
@@ -436,5 +443,25 @@ public class Util {
             return null;
         }
 
+    }
+    public static String getStringValue(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (o != null) {
+            return String.valueOf(o).trim();
+        }
+        return null;
+    }
+    public static boolean validateFormatDate(String inputTimeString) {
+        try {
+            if (isNullOrEmpty(inputTimeString)) {
+                return false;
+            }
+            LocalDate.parse(inputTimeString);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

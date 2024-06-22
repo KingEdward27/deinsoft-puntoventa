@@ -22,4 +22,6 @@ public interface CnfZonaService extends CommonService<CnfZona> {
     public List<CnfZona> getAllCnfZonaByCnfEmpresa(long id);
 
     public void delete(long id);
+    
+    public List<CnfZona> saveAll(List<CnfZona> cnfZona) ;
 }

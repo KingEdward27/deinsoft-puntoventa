@@ -43,6 +43,8 @@ export class UploadComponent implements OnInit {
   selectDefaultCnfLocal: any = { id: 0, nombre: "- Seleccione -" }; listCnfLocal: any;
   cnfLocal: CnfLocal = new CnfLocal();
   loadingCnfLocal: boolean = false;
+  listResult: any[];
+  messageResult:string;
   constructor(public activeModal: NgbActiveModal,private commonService: CommonService,
     private mediaService: MediaService,private actContratoService:ActContratoService, private utilService: UtilService,
     private cnfLocalService: CnfLocalService, private appService: AppService) {
@@ -221,6 +223,8 @@ export class UploadComponent implements OnInit {
         this.actContratoService.import(this.cnfLocal,this.fileToUpload)
           .subscribe(data => {
             this.utilService.msgOkOperation();
+            this.listResult = data;
+            this.messageResult = "Se subieron corectamente " + this.listResult.length + " registros";
           }, err => {
             console.log(err);
             

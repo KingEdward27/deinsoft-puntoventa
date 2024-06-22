@@ -182,13 +182,34 @@ public class InvAlmacenProductoServiceImpl
                     if (list.size() > 1) {
                         throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
                     }
-                    if (list.size() == 0) {
+                    if (list.isEmpty() && data.getInvMovAlmacen().getInvTipoMovAlmacen().getNaturaleza().equals("-1")) {
                         throw new RuntimeException("No existe stock para el almacen y producto seleccionados");
                     }
-                    InvAlmacenProducto stock = list.get(0);
+                    
+                    InvAlmacenProducto stock = new InvAlmacenProducto();
+                    if (!data.getInvMovAlmacen().getInvTipoMovAlmacen().getNaturaleza().equals("-1")) {
+                        if (list.size() == 0) {
+                            stock = new InvAlmacenProducto();
+                            stock.setCantidad(data.getCantidad());
+
+                        } else {
+                            stock = list.get(0);
+                            stock.setCantidad(stock.getCantidad().add(data.getCantidad()));
+                        }
+                    } else {
+                        if (list.size() == 0) {
+                            stock = new InvAlmacenProducto();
+                            stock.setCantidad(data.getCantidad());
+
+                        } else {
+                            stock = list.get(0);
+                            stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
+                        }
+                    }
+//                    InvAlmacenProducto stock = list.get(0);
                     stock.setCnfProducto(data.getCnfProducto());
                     stock.setInvAlmacen(invMovAlmacen.getInvAlmacen());
-                    stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
+//                    stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
                     invAlmacenProductoRepository.save(stock);
 
                     InvMovimientoProducto mov = new InvMovimientoProducto();

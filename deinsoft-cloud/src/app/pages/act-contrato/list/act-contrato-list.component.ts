@@ -99,14 +99,14 @@ export class ActContratoListComponent implements OnInit {
           extension = "xlsx";
         }
         const blob = new Blob([data.body], { type: contentType });
-        this.generateAttachment("Plantilla subida de videos", blob, extension);
+        this.generateAttachment("Plantilla subida de contratos", blob, extension);
       }
     });
   }
 
   import() {
     this.modalRef = this.modalService.open(UploadComponent, { size: 'lg' });
-      this.modalRef.componentInstance.message = "Importar registros de videos";
+      this.modalRef.componentInstance.message = "Importar registros de contratos";
       // this.modalRef.closed.subscribe(result => {
       //   this.router.navigate(["/venta"]);
       // })

@@ -39,6 +39,11 @@ public class CnfZonaServiceImpl extends CommonServiceImpl<CnfZona, CnfZonaReposi
         return cnfZonaResult;
     }
 
+    public List<CnfZona> saveAll(List<CnfZona> cnfZona) {
+        List<CnfZona> cnfZonaResult = cnfZonaRepository.saveAll(cnfZona);
+        return cnfZonaResult;
+    }
+    
     public List<CnfZona> getAllCnfZona() {
         List<CnfZona> cnfZonaList = (List<CnfZona>) cnfZonaRepository.findAll();
         return cnfZonaList;

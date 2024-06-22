@@ -103,10 +103,10 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 
     @Autowired
     CnfMaestroRepository cnfMaestroRepository;
-    
+
     @Autowired
     CnfMaestroService cnfMaestroService;
-    
+
     @Autowired
     CnfTipoComprobanteService cnfTipoComprobanteService;
 
@@ -184,7 +184,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
         if (numComprobante.isEmpty()) {
             throw new Exception("No existe numeración para el tipo de comprobante y el local");
         }
-        
+
         CnfNumComprobante cnfNumComprobante = numComprobante.get(0);
         cnfNumComprobante.setUltimoNro(numComprobante.get(0).getUltimoNro() + 1);
         cnfNumComprobanteRepository.save(cnfNumComprobante);
@@ -562,7 +562,8 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
     }
 
     @Override
-    public List<UploadResponse> importExcel(MultipartFile reapExcelDataFile, CnfLocal cnfLocal) throws IOException, Exception {
+    @Transactional
+    public List<UploadResponse> importExcel(MultipartFile reapExcelDataFile, CnfLocal cnfLocal) throws IOException {
         List<Object[]> list = Util.importExcel(reapExcelDataFile, false);
         List<ActContrato> listActContrato = new ArrayList<>();
 
@@ -570,17 +571,17 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
         List<CnfTipoDocumento> listTipoDoc = cnfTipoDocumentoService.getAllCnfTipoDocumento();
         List<CnfPlanContrato> listPlan = cnfPlanContratoService.getAllCnfPlanContrato();
         List<CnfZona> listZona = cnfZonaService.getAllCnfZona();
-        
+
         List<CnfMaestro> listCnfMaestroInDb = cnfMaestroService.getAllCnfMaestroByCnfEmpresa(f.getEmpresaId());
         List<ActContrato> listActContratoInDb = getAllActContrato();
         ActContrato actContrato = new ActContrato();
         List<UploadResponse> listResponse = new ArrayList<>();
-        int row = -1;
+        int row = -1, col = 0;
         List<String> errorMessage = new ArrayList<>();
         List<CnfMaestro> listCnfMaestro = new ArrayList<>();
         CnfTipoDocumento cnfTipoDocumento = null;
         CnfPlanContrato cnfPlanContrato;
-        CnfZona cnfZona;
+        CnfZona cnfZona = null;
         CnfMaestro cnfMaestro;
         boolean existsErrors = false;
         if (cnfLocal == null) {
@@ -588,7 +589,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
         }
         CnfEmpresa empresa = cnfEmpresaService.getCnfEmpresa(f.getEmpresaId());
         CnfTipoComprobante cnfTipoComprobante = cnfTipoComprobanteService.getAllCnfTipoComprobante().stream()
-                        .filter(predicate -> predicate.getCodigo().equals(Constantes.COD_TIPO_COMPROBANTE_CONTRATO)).findFirst().orElse(null);
+                .filter(predicate -> predicate.getCodigo().equals(Constantes.COD_TIPO_COMPROBANTE_CONTRATO)).findFirst().orElse(null);
         if (cnfTipoComprobante == null) {
             throw new BusinessException("No existe el tipo de comprobante para el registro de Contratos. Consulte con administrador TI");
         }
@@ -606,126 +607,161 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 //        "Telefono",10
 //        "Correo"};11
 //        "nro poste";12
-        for (Object[] object : list) {
-            row++;
-            errorMessage.clear();
-            if (object.length != 13) {
-                errorMessage.add("Se esperaban 13 columnas");
-                existsErrors = true;
-                listResponse.add(new UploadResponse(row, errorMessage));
-            } else {
-                actContrato = listActContratoInDb.stream()
-                        .filter(predicate -> predicate.getCnfMaestro().getNroDoc().equals(String.valueOf(object[5]))
-                        && predicate.getCnfPlanContrato().getNombre().equals(String.valueOf(object[7])))
-                        .findFirst().orElse(null);
-                if (actContrato != null) {
-                    errorMessage.add("Ya existe contrato para el cliente con el plan y mismo cliente");
+        try {
+            for (Object[] object : list) {
+                row++;
+                col = 0;
+                errorMessage.clear();
+                if (object.length != 13) {
+                    errorMessage.add("Se esperaban 13 columnas");
                     existsErrors = true;
                     listResponse.add(new UploadResponse(row, errorMessage));
-                    continue;
-                }
-                actContrato = new ActContrato();
+                } else {
+                    String apellidoPaterno = Util.getStringValue(object[col++]);
+                    String apellidoMaterno = Util.getStringValue(object[col++]);
+                    String nombres = Util.getStringValue(object[col++]);
+                    String razonSocial = Util.getStringValue(object[col++]);
+                    String tipoDocumento = Util.getStringValue(object[col++]);
+                    String numDocumento = Util.getStringValue(object[col++]);
+                    String fechaInstalacion = Util.getStringValue(object[col++]);
+                    String plan = Util.getStringValue(object[col++]);
+                    String zona = Util.getStringValue(object[col++]);
+                    String direccion = Util.getStringValue(object[col++]);
+                    String telefono = Util.getStringValue(object[col++]);
+                    String correo = Util.getStringValue(object[col++]);
+                    String nroPoste = Util.getStringValue(object[col++]);
 
-                try {
-                    Float tipoDoc = Float.parseFloat(String.valueOf(object[4]).trim());
-                    cnfTipoDocumento = listTipoDoc.stream().filter(predicate -> predicate.getCodigoSunat().equals(
-                            String.valueOf(tipoDoc.intValue())))
-                            .findFirst().orElse(null);
-                    if (cnfTipoDocumento == null) {
-                        errorMessage.add("Tipo de documento no existe");
+                    if (Util.isNullOrEmpty(numDocumento)) {
+                        errorMessage.add("Número de documento no debe estar vació");
                     }
-                } catch (Exception e) {
-                    errorMessage.add("Formato d tipo de documento incorrecto");
+                    if (Util.isNullOrEmpty(plan)) {
+                        errorMessage.add("Plan no debe estar vació");
+                    }
+                    actContrato = listActContratoInDb.stream()
+                            .filter(predicate -> predicate.getCnfMaestro().getNroDoc().equals(numDocumento)
+                            && predicate.getCnfPlanContrato().getNombre().equals(plan))
+                            .findFirst().orElse(null);
+                    if (actContrato != null) {
+                        errorMessage.add("Ya existe contrato para el cliente con el plan y mismo cliente");
+                        existsErrors = true;
+                        listResponse.add(new UploadResponse(row, errorMessage));
+                        continue;
+                    }
+                    actContrato = new ActContrato();
+
+                    if (Util.isNullOrEmpty(tipoDocumento)) {
+                        errorMessage.add("Código de tipo de documento no existe");
+                    }
+                    try {
+                        Float tipoDoc = Float.parseFloat(tipoDocumento.trim());
+                        cnfTipoDocumento = listTipoDoc.stream().filter(predicate -> predicate.getCodigoSunat().equals(
+                                String.valueOf(tipoDoc.intValue())))
+                                .findFirst().orElse(null);
+                        if (cnfTipoDocumento == null) {
+                            errorMessage.add("Tipo de documento no existe");
+                        }
+                    } catch (Exception e) {
+                        errorMessage.add("Formato de tipo de documento incorrecto");
+                    }
+
+                    cnfPlanContrato = listPlan.stream().filter(predicate -> predicate.getNombre().equals(plan))
+                            .findFirst().orElse(null);
+                    if (cnfPlanContrato == null) {
+                        errorMessage.add("Plan no existe. Debe registrar el plan primero");
+                    }
+
+                    if (!Util.isNullOrEmpty(zona)) {
+                        cnfZona = listZona.stream().filter(predicate -> predicate.getNombre().equals(zona))
+                                .findFirst().orElse(null);
+                        if (cnfZona == null) {
+//                        cnfZona = cnfZonaService.save(new CnfZona(zona, empresa));
+                            listZona.add(cnfZona);
+                        }
+                    }
+
+                    if (tipoDocumento.equals("1") && numDocumento.length() != 8) {
+                        errorMessage.add("El Número de documento para el tipo de documento DNI debe tener 8 dígitos");
+                    }
+                    if (tipoDocumento.equals("6") && numDocumento.length() != 11) {
+                        errorMessage.add("El Número de documento para el tipo de documento RUC debe tener 11 dígitos");
+                    }
+                    if (tipoDocumento.equals("1") && nombres == null) {
+                        errorMessage.add("Si el Tipo de documento es DNI debe ingresar al menos los nombres del cliente");
+                    }
+                    if (tipoDocumento.equals("6") && razonSocial == null) {
+                        errorMessage.add("Si el Tipo de documento es RUC debe ingresar la razón social");
+                    }
+                    if (direccion == null) {
+                        errorMessage.add("Dirección no pude estar vacío");
+                    }
+                    cnfMaestro = listCnfMaestroInDb.stream()
+                            .filter(predicate -> predicate.getNroDoc().equals(numDocumento)).findFirst().orElse(null);
+                    if (cnfMaestro != null) {
+                        errorMessage.add("Cliente ya existe");
+                    } else {
+                        cnfMaestro = new CnfMaestro(numDocumento,
+                                nombres, apellidoPaterno, apellidoMaterno,
+                                razonSocial, direccion, correo,
+                                telefono,
+                                cnfTipoDocumento,
+                                empresa);
+                        listCnfMaestroInDb.add(cnfMaestro);
+                        listCnfMaestro.add(cnfMaestro);
+                        actContrato.setCnfMaestro(cnfMaestro);
+                    }
+
+                    if (!Util.validateFormatDate(fechaInstalacion)) {
+                        errorMessage.add("Fecha de instalación no puede estar en blanco o en formato incorrecto");
+                    } else {
+                        actContrato.setFecha(Util.getDateFromString(fechaInstalacion, YYYY_MM_D_FORMATER));
+                    }
+
+                    
+
+                    
+
+                    if (errorMessage.isEmpty()) {
+                        actContrato.setDireccion(direccion);
+                        actContrato.setCnfPlanContrato(cnfPlanContrato);
+                        actContrato.setCnfZona(cnfZona);
+                        actContrato.setFechaRegistro(LocalDateTime.now());
+                        actContrato.setCnfLocal(cnfLocal);
+                        actContrato.setFlagEstado(Constantes.COD_ESTADO_ACTIVO);
+                        actContrato.setCnfTipoComprobante(cnfTipoComprobante);
+                        actContrato.setUrlMap("");
+                        actContrato.setNroPoste(nroPoste);
+                        actContrato.setFlagImported("1");
+                        try {
+                            setSerieAndNumero(actContrato);
+
+                        } catch (Exception e) {
+                            throw new BusinessException("Hubo un problema al asignar serie y número a los contratos");
+                        }
+                        //validar nombrs para otro nro documento
+                        //calcular monto primer pago
+                        try {
+                            businessService.verifyPlan(null, actContrato);
+                        } catch (Exception e) {
+                            errorMessage.add(e.getMessage());
+                        }
+                        listActContrato.add(actContrato);
+                    } else {
+                        existsErrors = true;
+                    }
+                    listResponse.add(new UploadResponse(row, errorMessage));
                 }
 
-                cnfPlanContrato = listPlan.stream().filter(predicate -> predicate.getNombre().equals(String.valueOf(object[7])))
-                        .findFirst().orElse(null);
-                if (cnfPlanContrato == null) {
-                    errorMessage.add("Plan no existe. Debe registrar el plan primero");
-                }
-
-                cnfZona = listZona.stream().filter(predicate -> predicate.getNombre().equals(String.valueOf(object[8])))
-                        .findFirst().orElse(null);
-                if (cnfZona == null) {
-                    cnfZona = cnfZonaService.save(new CnfZona(String.valueOf(object[8]), empresa));
-                }
-
-                if (String.valueOf(object[4]).equals("1") && String.valueOf(object[5]).length() != 8) {
-                    errorMessage.add("El Número de documento para el tipo de documento DNI debe tener 8 dígitos");
-                }
-                if (String.valueOf(object[4]).equals("6") && String.valueOf(object[5]).length() != 11) {
-                    errorMessage.add("El Número de documento para el tipo de documento RUC debe tener 11 dígitos");
-                }
-                if (String.valueOf(object[4]).equals("1") && String.valueOf(object[2]).trim().length() == 0) {
-                    errorMessage.add("Si el Tipo de documento es DNI debe ingresar al menos los nombres del cliente");
-                }
-                if (String.valueOf(object[4]).equals("6") && String.valueOf(object[3]).trim().length() == 0) {
-                    errorMessage.add("Si el Tipo de documento es RUC debe ingresar la razón social");
-                }
-                if (String.valueOf(object[7]).trim().equals("") || String.valueOf(object[7]).trim().equals("null")) {
-                    errorMessage.add("Paln no pude estar vacío");
-                }
-                if (String.valueOf(object[8]).trim().equals("") || String.valueOf(object[8]).trim().equals("null")) {
-                    errorMessage.add("Zona no pude estar vacío");
-                }
-                if (String.valueOf(object[9]).trim().equals("") || String.valueOf(object[9]).trim().equals("null")) {
-                    errorMessage.add("Dirección no pude estar vacío");
-                }
-                cnfMaestro = listCnfMaestroInDb.stream()
-                        .filter(predicate -> predicate.getNroDoc().equals(String.valueOf(object[5]))).findFirst().orElse(null);
-                if (cnfMaestro != null) {
-                    errorMessage.add("Cliente ya existe");
-                } else {
-                    cnfMaestro = new CnfMaestro(String.valueOf(object[5]),
-                        String.valueOf(object[2]), String.valueOf(object[0]), String.valueOf(object[1]),
-                        String.valueOf(object[3]), String.valueOf(object[9]), String.valueOf(object[11]),
-                        String.valueOf(object[10]),
-                        cnfTipoDocumento,
-                        empresa);
-                    listCnfMaestroInDb.add(cnfMaestro);
-                    listCnfMaestro.add(cnfMaestro);
-                    actContrato.setCnfMaestro(cnfMaestro);
-                }
-                
-
-                actContrato.setFecha(Util.getDateFromString(String.valueOf(object[6]), YYYY_MM_D_FORMATER));
-                if (actContrato.getFecha() == null) {
-                    errorMessage.add("Fecha de instalación no puede estar en blanco o en formato incorrecto");
-                }
-
-                actContrato.setDireccion(String.valueOf(object[9]));
-                actContrato.setCnfPlanContrato(cnfPlanContrato);
-                actContrato.setCnfZona(cnfZona);
-                actContrato.setFechaRegistro(LocalDateTime.now());
-                actContrato.setCnfLocal(cnfLocal);
-                actContrato.setFlagEstado(Constantes.COD_ESTADO_ACTIVO);
-                actContrato.setCnfTipoComprobante(cnfTipoComprobante);
-                actContrato.setUrlMap("");
-                actContrato.setNroPoste(String.valueOf(object[12]));
-                actContrato.setFlagImported("1");
-                setSerieAndNumero(actContrato);
-                
-                //validar nombrs para otro nro documento
-                //calcular monto primer pago
-                try {
-                    businessService.verifyPlan(null, actContrato);
-                } catch (Exception e) {
-                    errorMessage.add(e.getMessage());
-                }
-                
-                if (errorMessage.isEmpty()) {
-                    listActContrato.add(actContrato);
-                } else {
-                    existsErrors = true;
-                }
-                listResponse.add(new UploadResponse(row, errorMessage));
             }
+            if (!existsErrors) {
+                cnfZonaService.saveAll(listZona);
+                cnfMaestroRepository.saveAll(listCnfMaestro);
+                actContratoRepository.saveAll(listActContrato);
+            }
+        } catch (Exception e) {
 
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
-        if (!existsErrors) {
-            cnfMaestroRepository.saveAll(listCnfMaestro);
-            actContratoRepository.saveAll(listActContrato);
-        }
+
         return listResponse;
     }
 }
