@@ -164,7 +164,8 @@ public class ActContratoController extends CommonController<ActContrato, ActCont
         ObjectMapper mapper = new ObjectMapper();
         CnfLocal cnfLocalObject = mapper.readValue(cnfLocal, CnfLocal.class);
         List<UploadResponse> list = actContratoService.importExcel(file, cnfLocalObject);
-        UploadResponse listWithErrors = list.stream().filter(predicate -> !predicate.getMessage().isEmpty()).findFirst().orElse(null);
+        UploadResponse listWithErrors = list.stream()
+                .filter(predicate -> !predicate.getMessage().get(0).equals("Ok")).findFirst().orElse(null);
         if (listWithErrors != null) {
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(list);
         }

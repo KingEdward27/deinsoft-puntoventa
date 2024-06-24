@@ -15,10 +15,10 @@ values (1, 'SOL','S/', 'SOLES','PEN');
 
 INSERT INTO cnf_empresa (`cnf_empresa_id`,`cnf_tipo_documento_id`,`nombre`,`descripcion`,`nro_documento`,`direccion`,`telefono`,`empresacol`,
 `cnf_distrito_id`,`estado`,`token`,`ruta_pse`,cnf_moneda_id) 
-VALUES (1,3,'DESARROLLO INTEGRAL DE SOFTWARE','DEINSOFT','20534999616','JR LOS CLAVELES 123','1322323',NULL,1004,NULL,NULL,NULL,1);
+VALUES (1,3,'DESARROLLO INTEGRAL DE SOFTWARE','DEINSOFT','20534999616','JR LOS CLAVELES 123','1322323',NULL,null,NULL,NULL,NULL,1);
 INSERT INTO cnf_empresa (`cnf_empresa_id`,`cnf_tipo_documento_id`,`nombre`,`descripcion`,`nro_documento`,`direccion`,`telefono`,`empresacol`,
 `cnf_distrito_id`,`estado`,`token`,`ruta_pse`, cnf_moneda_id) 
-VALUES (2,3,'BATERIAS DON TELE','BATERIAS DON TELE','12345678901','AV PANAMERICANA SUR 1332 - A','',NULL,1004,'1',
+VALUES (2,3,'BATERIAS DON TELE','BATERIAS DON TELE','12345678901','AV PANAMERICANA SUR 1332 - A','',NULL,null,'1',
 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NTA5MjAwMTYsImlzcyI6IkRFSU5TT0ZUIiwianRpIjoiREVGQUNULUpXVCIsInN1YiI6IjEwNDE0MzE2NTk1L1BFUkVaIERFTEdBRE8gQkxBTkNBIE5FUkkiLCJudW1Eb2MiOiIxMDQxNDMxNjU5NSIsInJhem9uU29jaWFsIjoiUEVSRVogREVMR0FETyBCTEFOQ0EgTkVSSSIsInVzdWF','http://localhost:8080/api/v1/document/send-document',1);
 
 INSERT INTO seg_usuario (`seg_usuario_id`,`nombre`,`email`,`password`,`estado`,`cnf_empresa_id`) 

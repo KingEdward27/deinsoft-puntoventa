@@ -27,6 +27,7 @@ import com.deinsoft.puntoventa.business.model.CnfPlanContrato;
 import com.deinsoft.puntoventa.business.model.CnfTipoComprobante;
 import com.deinsoft.puntoventa.business.model.CnfTipoDocumento;
 import com.deinsoft.puntoventa.business.model.CnfZona;
+import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.business.repository.ActCajaOperacionRepository;
 import com.deinsoft.puntoventa.business.repository.ActContratoRepository;
 import com.deinsoft.puntoventa.business.repository.ActPagoProgramacionRepository;
@@ -53,6 +54,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
@@ -140,7 +142,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 
     @Transactional
     public ActContrato saveActContrato(ActContrato actContrato) throws Exception {
-
+        SecurityFilterDto securityFilterDto = listRoles();
         businessService.verifyPlan(null, actContrato);
 
         long id = actContrato.getId();
@@ -488,20 +490,24 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                                 }
                                 if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0) {
                                     mapper.setEstadoDescripcion("Vigente");
+                                    mapper.setMesesDeuda(0);
                                     mapper.setMontoPendiente(BigDecimal.ZERO);
                                 }
                             } else {
-                                if (LocalDate.now().getDayOfMonth() >= mapper.getCnfPlanContrato().getDiaProcesoCorte()) {
+                                if (mapper.getCnfPlanContrato().getDiaProcesoCorte() != null && LocalDate.now().getDayOfMonth() >= mapper.getCnfPlanContrato().getDiaProcesoCorte()) {
                                     if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 1) {
                                         mapper.setEstadoDescripcion("Afecto a Corte");
                                         mapper.setColor("yellow");
                                     }
                                     if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0) {
                                         mapper.setEstadoDescripcion("Vigente");
+                                        mapper.setMesesDeuda(0);
                                         mapper.setMontoPendiente(BigDecimal.ZERO);
                                     }
                                 } else {
                                     mapper.setEstadoDescripcion("Vigente");
+                                    
+                                    mapper.setMesesDeuda(0);
                                     mapper.setMontoPendiente(BigDecimal.ZERO);
                                 }
                             }
@@ -584,6 +590,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
         CnfZona cnfZona = null;
         CnfMaestro cnfMaestro;
         boolean existsErrors = false;
+        SegUsuario user = auth.getLoggedUserdata();
         if (cnfLocal == null) {
             throw new BusinessException("Debe seleccionar el local");
         }
@@ -611,7 +618,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
             for (Object[] object : list) {
                 row++;
                 col = 0;
-                errorMessage.clear();
+                errorMessage = new ArrayList<>();
                 if (object.length != 13) {
                     errorMessage.add("Se esperaban 13 columnas");
                     existsErrors = true;
@@ -654,7 +661,8 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                     }
                     try {
                         Float tipoDoc = Float.parseFloat(tipoDocumento.trim());
-                        cnfTipoDocumento = listTipoDoc.stream().filter(predicate -> predicate.getCodigoSunat().equals(
+                        cnfTipoDocumento = listTipoDoc.stream()
+                                .filter(predicate -> predicate.getCodigoSunat().equals(
                                 String.valueOf(tipoDoc.intValue())))
                                 .findFirst().orElse(null);
                         if (cnfTipoDocumento == null) {
@@ -664,17 +672,22 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                         errorMessage.add("Formato de tipo de documento incorrecto");
                     }
 
-                    cnfPlanContrato = listPlan.stream().filter(predicate -> predicate.getNombre().equals(plan))
+                    cnfPlanContrato = listPlan.stream().filter(predicate -> predicate.getNombre().equals(plan.trim()))
                             .findFirst().orElse(null);
                     if (cnfPlanContrato == null) {
                         errorMessage.add("Plan no existe. Debe registrar el plan primero");
                     }
 
-                    if (!Util.isNullOrEmpty(zona)) {
-                        cnfZona = listZona.stream().filter(predicate -> predicate.getNombre().equals(zona))
+                    if (Util.isNullOrEmpty(zona)) {
+                        errorMessage.add("Debe ingresar la zona");
+                    } else {
+                        cnfZona = listZona.stream().filter(predicate -> predicate.getNombre().equals(zona.trim()))
                                 .findFirst().orElse(null);
                         if (cnfZona == null) {
+                            cnfZona = new CnfZona(zona, empresa);
 //                        cnfZona = cnfZonaService.save(new CnfZona(zona, empresa));
+                            listZona.add(cnfZona);
+                        } else {
                             listZona.add(cnfZona);
                         }
                     }
@@ -694,10 +707,24 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                     if (direccion == null) {
                         errorMessage.add("Dirección no pude estar vacío");
                     }
+                    if (tipoDocumento.equals("1")) {
+                        razonSocial = "";
+                        if (!Util.isNullOrEmpty(apellidoPaterno)) {
+                            razonSocial = razonSocial + apellidoPaterno + " ";
+                        }
+                        if (!Util.isNullOrEmpty(apellidoMaterno)) {
+                            razonSocial = razonSocial + apellidoMaterno + " ";
+                        }
+                        if (!Util.isNullOrEmpty(nombres)) {
+                            razonSocial = razonSocial + nombres + " ";
+                        }
+                        razonSocial = razonSocial.trim();
+                    }
                     cnfMaestro = listCnfMaestroInDb.stream()
                             .filter(predicate -> predicate.getNroDoc().equals(numDocumento)).findFirst().orElse(null);
                     if (cnfMaestro != null) {
-                        errorMessage.add("Cliente ya existe");
+                        actContrato.setCnfMaestro(cnfMaestro);
+                        //errorMessage.add("Cliente ya existe");
                     } else {
                         cnfMaestro = new CnfMaestro(numDocumento,
                                 nombres, apellidoPaterno, apellidoMaterno,
@@ -731,6 +758,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                         actContrato.setUrlMap("");
                         actContrato.setNroPoste(nroPoste);
                         actContrato.setFlagImported("1");
+                        actContrato.setSegUsuario(user);
                         try {
                             setSerieAndNumero(actContrato);
 
@@ -745,10 +773,13 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                             errorMessage.add(e.getMessage());
                         }
                         listActContrato.add(actContrato);
+                        listActContratoInDb.add(actContrato);
                     } else {
                         existsErrors = true;
                     }
-                    listResponse.add(new UploadResponse(row, errorMessage));
+                    listResponse.add(new UploadResponse(row, 
+                            errorMessage.isEmpty()?Arrays.asList("Ok"):errorMessage));
+                    
                 }
 
             }
@@ -758,7 +789,11 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                 actContratoRepository.saveAll(listActContrato);
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
+//            System.out.println("1 "+ e.getCause());
+//            System.out.println("2" + e.getLocalizedMessage());
+            listResponse.add(new UploadResponse(row,Arrays.asList("Error inesperado: " 
+                    + e.toString())));
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
 

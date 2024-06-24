@@ -13,6 +13,8 @@ import com.deinsoft.puntoventa.business.service.SegUsuarioService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.model.CnfEmpresa;
 import com.deinsoft.puntoventa.business.model.CnfLocal;
+import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
+import com.deinsoft.puntoventa.business.model.CnfTipoComprobante;
 import com.deinsoft.puntoventa.business.model.CnfTipoDocumento;
 import com.deinsoft.puntoventa.business.model.InvAlmacen;
 import com.deinsoft.puntoventa.business.model.SegRol;
@@ -21,6 +23,7 @@ import com.deinsoft.puntoventa.business.repository.SegRolUsuarioRepository;
 import com.deinsoft.puntoventa.business.service.BusinessService;
 import com.deinsoft.puntoventa.business.service.CnfEmpresaService;
 import com.deinsoft.puntoventa.business.service.CnfLocalService;
+import com.deinsoft.puntoventa.business.service.CnfTipoComprobanteService;
 import com.deinsoft.puntoventa.business.service.CnfTipoDocumentoService;
 import com.deinsoft.puntoventa.business.service.InvAlmacenService;
 import com.deinsoft.puntoventa.business.service.SegRolService;
@@ -88,6 +91,9 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
     
     @Autowired
     private InvAlmacenService invAlmacenService;
+    
+    @Autowired
+    private CnfTipoComprobanteService cnfTipoComprobanteService;
     
     @Autowired
     BusinessService businessService;
@@ -205,6 +211,17 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         segRolUsuario.setSegUsuario(segUsuarioResult);
         segRolUsuario.setEmpresa(empresaResult);
         segRolUsuarioRepository.save(segRolUsuario);
+        
+        CnfTipoComprobante cnfTipoComprobante = cnfTipoComprobanteService.getAllCnfTipoComprobante().stream()
+                .filter(predicate -> predicate.getNombre().equalsIgnoreCase("CONTRATO"))
+                .findFirst().orElse(null);
+        
+        CnfNumComprobante num = new CnfNumComprobante();
+        num.setCnfEmpresa(cnfEmpresa);
+        num.setCnfLocal(local);
+        num.setCnfTipoComprobante(cnfTipoComprobante);
+        num.setSerie("CT01");
+        num.setUltimoNro(1000);
         
         return segUsuarioResult;
     }

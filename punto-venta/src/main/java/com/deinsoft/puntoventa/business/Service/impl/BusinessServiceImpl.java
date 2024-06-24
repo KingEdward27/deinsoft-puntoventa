@@ -286,7 +286,7 @@ public class BusinessServiceImpl implements BusinessService {
         } else if (nroDoc.length() == 11) {
             result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/ruc", "", param);
         }
-        
+        //https://dniruc.apisperu.com/api/v1/dni/12345678?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InlpbmNvcl8xNkBob3RtYWlsLmNvbSJ9.1I3qDYtchpNofaV2fWBgSVCQ8SFoDsg3ILSwvNKBjsM
         return result;
     }
     

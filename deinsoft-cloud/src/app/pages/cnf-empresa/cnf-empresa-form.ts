@@ -30,9 +30,9 @@ export class CnfEmpresaForm2Component implements OnInit{
                 {tableName: "cnf_distrito", "columnName":"nombre","type":"select",loadState : 0,loadFor:"cnf_distrito_id",relatedBy:"cnf_distrito_id"},
                 
                 {tableName: "cnf_empresa",columnName:"flag_compra_rapida","type":"select",loadState : 1, relatedBy :"flag_compra_rapida",
-                listData:[]},
+                listData:[],hidden:false},
                 {tableName: "cnf_empresa",columnName:"flag_venta_rapida","type":"select",loadState : 1, relatedBy :"flag_venta_rapida",
-                listData:[]},
+                listData:[],hidden:false},
                 {tableName: "cnf_moneda", "columnName":"nombre","type":"select",
                 loadState : 1,relatedBy:"cnf_moneda_id"},
         ],
@@ -67,10 +67,16 @@ export class CnfEmpresaForm2Component implements OnInit{
     // this.prop.columnsForm[11].listData.push([2, "Servicio de pago mensual"]); 
     // this.prop.columnsForm[11].listData.push([3, "Colegio"]); 
     // this.prop.columnsForm[11].listData.push([4, "Lavanderia"]); 
-    
-    let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+    let user = this.appService.getProfile();
+    let cnfEmpresa = user.profile.split("|")[1];
     this.prop.id = cnfEmpresa;
-    console.log(cnfEmpresa);
+    console.log(user.empresaPrincipal);
+    
+    if (user.empresaPrincipal.perfilEmpresa == 2) {
+      this.prop.columnsForm[9].hidden  =true;
+      this.prop.columnsForm[10].hidden  =true;
+    }
+    console.log(this.appService.getProfile());
     
     // this.prop.columnsForm[11].listData.push([0, "- Seleccione -"]);
     // this.prop.columnsForm[11].listData.push([1, "Venta de productos y servicios"]);

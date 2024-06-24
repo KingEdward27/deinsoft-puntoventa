@@ -56,6 +56,7 @@ public class SegUsuario implements Serializable {
     @Column(name = "flag_recover_password", nullable = true)
     private byte flagRecoverPassword;
 
+    @ColumnDefault("0")
     @Transient
     private String tokenRecoverPassword;
     

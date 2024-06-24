@@ -31,7 +31,7 @@ public class CnfPlanContrato implements Serializable {
     @Column(name = "precio", nullable = true)
     private BigDecimal precio;
     
-    
+    @ColumnDefault("0")
     @Column(name = "precio_reinstalacion", nullable = true)
     private BigDecimal precioReinstalacion;
     

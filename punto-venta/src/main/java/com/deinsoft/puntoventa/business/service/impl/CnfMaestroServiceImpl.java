@@ -11,6 +11,7 @@ import com.deinsoft.puntoventa.business.model.CnfMaestro;
 import com.deinsoft.puntoventa.business.repository.CnfMaestroRepository;
 import com.deinsoft.puntoventa.business.service.CnfMaestroService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
 import com.deinsoft.puntoventa.framework.util.Util;
 
 @Service
@@ -39,8 +40,13 @@ public class CnfMaestroServiceImpl extends CommonServiceImpl<CnfMaestro, CnfMaes
     }
 
     public CnfMaestro saveCnfMaestro(CnfMaestro cnfMaestro) throws Exception {
+        SecurityFilterDto securityFilterDto = listRoles();
         if (!Util.isNullOrEmpty(cnfMaestro.getNroDoc())) {
             CnfMaestro item = cnfMaestroRepository.findByNroDoc(cnfMaestro.getNroDoc());
+            if (securityFilterDto.getEmpresaId() != item.getCnfEmpresa().getId()) {
+                item = null;
+            }
+        
             if (item != null && item.getId() != null) {
                 throw new Exception("Ya existe un  cliente/trabajador con el mismo número de documento");
             }
