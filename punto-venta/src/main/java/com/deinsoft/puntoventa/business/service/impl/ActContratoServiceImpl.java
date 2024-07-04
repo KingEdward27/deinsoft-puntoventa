@@ -257,7 +257,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
         //primero validar si es mes actual
         long elapsedMonths = ChronoUnit.MONTHS.between(LocalDate.now(),
                 actContrato.getFecha().withDayOfMonth(LocalDate.now().getDayOfMonth()));
-        if (elapsedMonths < 0 || elapsedMonths > 1) {
+        if (elapsedMonths > 1) {
             throw new Exception("Fecha de instalación invalida");
         }
         LocalDate proxDate = actContrato.getFecha()
@@ -281,17 +281,43 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                 days = ChronoUnit.DAYS.between(actContrato.getFecha().plusMonths(1), actContrato.getFecha().withDayOfMonth(diaVencimiento).plusMonths(1));
             }
         }
-
-        actPayment.setFechaVencimiento(proxDate);
-//        
-//        if (actContrato.getFecha().getMonthValue() == LocalDate.now().getMonthValue()
-//                && diaVencimiento <= actContrato.getCnfPlanContrato().getDiaVencimiento()) {
-//            throw new Exception("No se encontró fecha de vencimiento para el plan seleccionado");
-//        }
-
-        actPayment.setMonto(new BigDecimal(actContrato.getCnfPlanContrato().getPrecioInstalacion().doubleValue() + actContrato.getCnfPlanContrato().getPrecio().doubleValue() / actContrato.getFecha().lengthOfMonth() * days));
-        actPayment.setMontoPendiente(actPayment.getMonto());
-        actPagoProgramacionRepository.save(actPayment);
+        if (elapsedMonths < 0) {
+            for (long i = elapsedMonths; i <= 0; i++) {
+                actPayment = new ActPagoProgramacion();
+                actPayment.setFecha(actContrato.getFecha());
+                actPayment.setActContrato(actContrato);
+                proxDate = actContrato.getFecha()
+                        .withDayOfMonth(diaVencimiento)
+                        .plusMonths(Math.abs(elapsedMonths - i));//0,1,2
+                actPayment.setFechaVencimiento(proxDate);
+                
+                if (diaVencimiento >= actContrato.getFecha().getDayOfMonth()) {
+                    days = ChronoUnit.DAYS.between(actContrato.getFecha(), actContrato.getFecha().withDayOfMonth(diaVencimiento));
+                } else {
+                    days = ChronoUnit.DAYS.between(actContrato.getFecha(), actContrato.getFecha().withDayOfMonth(diaVencimiento).plusMonths(1));
+                }
+                
+                if (i == elapsedMonths) {
+                     actPayment.setMonto(new BigDecimal(actContrato.getCnfPlanContrato()
+                        .getPrecioInstalacion().doubleValue() 
+                        + actContrato.getCnfPlanContrato().getPrecio().doubleValue() 
+                                / actContrato.getFecha().lengthOfMonth() * days));
+                } else {
+                    actPayment.setMonto(new BigDecimal(actContrato.getCnfPlanContrato().getPrecio().doubleValue()));
+                }
+               
+                actPayment.setMontoPendiente(actPayment.getMonto());
+                actPagoProgramacionRepository.save(actPayment);
+            }
+        } else {
+            actPayment.setFechaVencimiento(proxDate);
+            actPayment.setMonto(new BigDecimal(actContrato.getCnfPlanContrato().getPrecioInstalacion().doubleValue() 
+                    + actContrato.getCnfPlanContrato().getPrecio().doubleValue() 
+                            / actContrato.getFecha().lengthOfMonth() * days));
+            actPayment.setMontoPendiente(actPayment.getMonto());
+            actPagoProgramacionRepository.save(actPayment);
+        }
+        
     }
 
     private void saveActPagoProgramacionOrCajaOperacion(ActContrato actContrato) throws Exception {

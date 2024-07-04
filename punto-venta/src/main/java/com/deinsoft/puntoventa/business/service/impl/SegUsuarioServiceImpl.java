@@ -28,6 +28,7 @@ import com.deinsoft.puntoventa.business.service.CnfTipoDocumentoService;
 import com.deinsoft.puntoventa.business.service.InvAlmacenService;
 import com.deinsoft.puntoventa.business.service.SegRolService;
 import com.deinsoft.puntoventa.framework.util.Util;
+import com.deinsoft.puntoventa.util.Constantes;
 import com.deinsoft.puntoventa.util.MailBean;
 import com.deinsoft.puntoventa.util.SendMail;
 import com.deinsoft.puntoventa.util.mail.EmailRequest;
@@ -220,7 +221,7 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         num.setCnfEmpresa(cnfEmpresa);
         num.setCnfLocal(local);
         num.setCnfTipoComprobante(cnfTipoComprobante);
-        num.setSerie("CT01");
+        num.setSerie(Constantes.COD_TIPO_COMPROBANTE_CONTRATO);
         num.setUltimoNro(1000);
         
         return segUsuarioResult;

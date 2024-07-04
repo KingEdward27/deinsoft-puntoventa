@@ -340,27 +340,58 @@ hr {
     margin-top: 2rem;
   }
 }
-@media screen and (max-width: 600px) {
-  th {
-    display: none;
+ /* @media screen and (max-width: 600px) {
+  table {
+    background: #fff;
+    border-collapse: collapse;
+    width: 100%;
+    box-shadow: 1px 1px 2px #ccc;
   }
-
+  thead {
+    left: -9999rem;
+    position: absolute;
+    top: -9999rem;
+  }
   td {
     display: block;
     width: 100%;
-    box-sizing: border-box;
-    text-align: right; /* Ajusta según tus preferencias */
+    color: #1f1919;
   }
-  tbody {
-    
-    display: contents;
+  td:before {
+    content: attr(id) ":";
+    display: inline-block;
+    font-size: .875rem;
+    font-weight: 300;
+    margin-right: .5rem;
   }
-  tr {
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 0.5em;
-    display: block;
+  tr:nth-last-of-type(even) {
+    background: rgba(56, 113, 170, 0.15) !important;
   }
-}
+  @media(min-width: 600px) {
+    table {
+      border-collapse: collapse;
+    }
+    thead {
+      left: 0;
+      position: relative;
+      top: 0;
+    }
+    th {
+      color: #888;
+      font-size: .875rem;
+      font-weight: 300;
+      text-align: left;
+    }
+    td, th {
+      display: table-cell;
+      padding: .75rem 1rem;
+      margin: 0;
+    }
+    td:before {
+      content: none;
+    }
+  }
+}  */
 .stateContrato1 {
   background: rgb(243, 209, 58);
   border: 2px solid #535353;

@@ -200,7 +200,7 @@ export class CommonReportFormComponent implements OnInit {
         //   previous: 'Ant.'
         // }
       },
-      responsive: false
+      responsive: true
     }
     this.datablesSettingsWithInputs = {
       deferRender: true,

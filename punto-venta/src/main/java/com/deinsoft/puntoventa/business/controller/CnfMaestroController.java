@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 @RequestMapping("/api/business/cnf-maestro")
@@ -119,9 +120,24 @@ public class CnfMaestroController extends CommonController<CnfMaestro, CnfMaestr
         Map<String,String> param = new HashMap<>();
         param.put("numero", nroDoc);
         if (nroDoc.length() == 8) {
-            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/dni", "", param);
+            
+            try {
+                
+                result = new Util().simpleApi(HttpMethod.GET, "https://api.apis.net.pe/v1/dni", "", param);
+            } catch (HttpClientErrorException e) {
+                logger.error(e.getMessage() + " " + nroDoc);
+            }
+            if (result == null) {
+                param = new HashMap<>();
+                param.put("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InlpbmNvcl8xNkBob3RtYWlsLmNvbSJ9.1I3qDYtchpNofaV2fWBgSVCQ8SFoDsg3ILSwvNKBjsM");
+                result = new Util().simpleApi(HttpMethod.GET, "https://dniruc.apisperu.com/api/v1/dni/" + nroDoc, "", param);
+                if (result.get("success") != null && result.get("success").toString().equals("false")) {
+                    throw new Exception("404 Not Found: \"Not Found\" " + nroDoc);
+                }
+            }
+            
         } else if (nroDoc.length() == 11) {
-            result = new Util().simpleGet(HttpMethod.GET, "https://api.apis.net.pe/v1/ruc", "", param);
+            result = new Util().simpleApi(HttpMethod.GET, "https://api.apis.net.pe/v1/ruc", "", param);
         }
         
         return ResponseEntity.status(HttpStatus.OK).body(result);

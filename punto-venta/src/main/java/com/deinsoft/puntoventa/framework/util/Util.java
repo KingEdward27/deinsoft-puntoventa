@@ -78,6 +78,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -163,7 +164,7 @@ public class Util {
         return x;
     }
 
-    public Map<String, Object> simpleGet(HttpMethod httpMethod, String url, String token, Map<String, String> params) throws Exception {
+    public Map<String, Object> simpleApi(HttpMethod httpMethod, String url, String token, Map<String, String> params) throws Exception {
         Map<String, Object> respuesta = null;
         HttpHeaders headers = new HttpHeaders();
         //headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -171,15 +172,21 @@ public class Util {
         headers.add("Content-Type", "application/json");
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
 
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        for (Map.Entry<String, String> entry : params.entrySet())
+            multiValueMap.put(entry.getKey(), Arrays.asList(entry.getValue()));
+
         String urlTemplate = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam("numero", "{numero}")
+//                .queryParam("numero", "{numero}")
+                .queryParams(multiValueMap)
                 .encode()
                 .toUriString();
-
+        
         HttpEntity<MultiValueMap<String, String>> entityReq = new HttpEntity<>(body, headers);
         ResponseEntity<Map> response = getRestTemplate().exchange(urlTemplate,
                 httpMethod, entityReq,
                 Map.class, params);
+        
         if (response.hasBody() && (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.CREATED)) {
             respuesta = response.getBody();
             if (respuesta != null) {
