@@ -158,9 +158,9 @@
                                 <p>Total Clientes</p>
                             </div>
                             <div class="icon">
-                                <i class="ion ion-bag"></i>
+                                <i class="ion ion-person"></i>
                             </div>
-                            <a routerLink="/compra" class="small-box-footer">Ir <i
+                            <a routerLink="/maestro" class="small-box-footer">Ir <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -173,9 +173,9 @@
                                 <p>Total Morosos</p>
                             </div>
                             <div class="icon">
-                                <i class="ion ion-bag"></i>
+                                <i class="ion ion-person"></i>
                             </div>
-                            <a routerLink="/venta" class="small-box-footer">Ir <i
+                            <a routerLink="/rpt-contratos" class="small-box-footer">Ir <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -184,13 +184,13 @@
                         <!-- small box -->
                         <div class="small-box bg-warning">
                             <div class="inner">
-                                <h3>{{ratioEndeudamiento}}</h3>
+                                <h3>{{ratioEndeudamiento | number:'1.2-2'}} %</h3>
                                 <p>Ratio recuperación</p>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-pie-graph"></i>
                             </div>
-                            <a routerLink="/rpt-compras" class="small-box-footer">Ir <i
+                            <a routerLink="/rpt-contratos" class="small-box-footer">Ir <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -199,13 +199,13 @@
                         <!-- small box -->
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <h3>{{totalMontoPagos}}</h3>
+                                <h3>{{listData.moneda}} {{totalMontoPagos| number:'1.2-2'}}</h3>
                                 <p>Total recaudación</p>
                             </div>
                             <div class="icon">
-                                <i class="ion ion-pie-graph"></i>
+                                <i class="ion ion-bag"></i>
                             </div>
-                            <a routerLink="/rpt-ventas" class="small-box-footer">Ir <i
+                            <a routerLink="/rpt-contratos" class="small-box-footer">Ir <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -225,7 +225,7 @@
                 </div>
                 <!-- /.row -->
                 
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-lg-6 col-sm-12">
                         <div class="card">
                             <div class="card-header">
@@ -276,7 +276,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 
             </div>
         </div>

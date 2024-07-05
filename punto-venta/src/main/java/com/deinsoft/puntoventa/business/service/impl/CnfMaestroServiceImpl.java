@@ -43,7 +43,7 @@ public class CnfMaestroServiceImpl extends CommonServiceImpl<CnfMaestro, CnfMaes
         SecurityFilterDto securityFilterDto = listRoles();
         if (!Util.isNullOrEmpty(cnfMaestro.getNroDoc())) {
             CnfMaestro item = cnfMaestroRepository.findByNroDoc(cnfMaestro.getNroDoc());
-            if (securityFilterDto.getEmpresaId() != item.getCnfEmpresa().getId()) {
+            if (item != null && securityFilterDto.getEmpresaId() != item.getCnfEmpresa().getId()) {
                 item = null;
             }
         

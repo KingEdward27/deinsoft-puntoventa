@@ -23,6 +23,7 @@ import com.deinsoft.puntoventa.business.repository.SegRolUsuarioRepository;
 import com.deinsoft.puntoventa.business.service.BusinessService;
 import com.deinsoft.puntoventa.business.service.CnfEmpresaService;
 import com.deinsoft.puntoventa.business.service.CnfLocalService;
+import com.deinsoft.puntoventa.business.service.CnfNumComprobanteService;
 import com.deinsoft.puntoventa.business.service.CnfTipoComprobanteService;
 import com.deinsoft.puntoventa.business.service.CnfTipoDocumentoService;
 import com.deinsoft.puntoventa.business.service.InvAlmacenService;
@@ -97,6 +98,9 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
     private CnfTipoComprobanteService cnfTipoComprobanteService;
     
     @Autowired
+    private CnfNumComprobanteService cnfNumComprobanteService;
+    
+    @Autowired
     BusinessService businessService;
     
     public List<SegUsuario> getAllSegUsuario(SegUsuario segUsuario) {
@@ -153,7 +157,7 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         }
         //validar empresa existente
         CnfEmpresa cnfEmpresa = cnfEmpresaService.getAllCnfEmpresa().stream()
-                .filter(predicate-> predicate.getNroDocumento().equals(segUsuario.getRucEmpresa()))
+                .filter(predicate-> predicate.getNroDocumento().equals(segUsuario.getRucEmpresa()) && predicate.getEstado().equals("1"))
                 .findFirst().orElse(null);
         if (cnfEmpresa != null) {
             throw new RuntimeException("La empresa ya se encuentra registrada");
@@ -182,6 +186,7 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         empresa.setDescripcion(mapRuc.get("nombre").toString());
         empresa.setPerfilEmpresa(segUsuario.getPerfilEmpresa());
         empresa.setPlan(1);
+        empresa.setEstado("1");
         CnfEmpresa empresaResult = cnfEmpresaService.save(empresa);
         
         CnfLocal local = new CnfLocal();
@@ -221,9 +226,10 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         num.setCnfEmpresa(cnfEmpresa);
         num.setCnfLocal(local);
         num.setCnfTipoComprobante(cnfTipoComprobante);
-        num.setSerie(Constantes.COD_TIPO_COMPROBANTE_CONTRATO);
-        num.setUltimoNro(1000);
-        
+        num.setSerie(Constantes.COD_DEFAULT_SERIE_COMPROBANTE_CONTRATO);
+        num.setUltimoNro(10000000);
+        num.setCnfEmpresa(cnfEmpresa);
+        cnfNumComprobanteService.save(num);
         return segUsuarioResult;
     }
     

@@ -562,6 +562,9 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                 .filter(predicate -> predicate.getActContrato().getCnfLocal().getCnfEmpresa().getId() == empresaId)
                 .collect(Collectors.toList());
 
+        
+        
+        long totalCuentasCanceladas = actPagoProgramacionList.stream().filter(predicate -> predicate.getMontoPendiente().compareTo(BigDecimal.ZERO) <= 0).count();
         Double total = actPagoRepository.findAll().stream()
                 .filter(predicate -> predicate.getCnfLocal() != null && predicate.getCnfLocal().getCnfEmpresa().getId() == empresaId)
                 .collect(Collectors.summingDouble(e -> e.getTotal().doubleValue()));
@@ -585,10 +588,19 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                 })
                 .collect(Collectors.toList());
 
+        String moneda = "";
+        if (!actContratoList.isEmpty()) {
+            moneda = actContratoList.get(0).getCnfLocal().getCnfEmpresa().getCnfMoneda().getSimbolo();
+        }
+        
         Map<String, Object> map = new HashMap<>();
+        map.put("moneda", moneda);
         map.put("cantidadContratos", actContratoList.size());
         map.put("cantidadDeudores", actContratoList.stream().filter(predicate -> predicate.getEstadoDescripcion().equals("Afecto a Corte")).count());
-        map.put("ratioEndeudamiento", actContratoList.stream().filter(predicate -> predicate.getEstadoDescripcion().equals("Vigente")).count() / (actContratoList.isEmpty() ? 1 : actContratoList.size()));
+
+        float r = Float.valueOf(totalCuentasCanceladas)
+                / (actPagoProgramacionList.isEmpty() ? 1 : actPagoProgramacionList.size());
+        map.put("ratioEndeudamiento", r * 100);
         map.put("totalMontoPagos", total);
         return map;
     }
@@ -672,7 +684,8 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                     }
                     actContrato = listActContratoInDb.stream()
                             .filter(predicate -> predicate.getCnfMaestro().getNroDoc().equals(numDocumento)
-                            && predicate.getCnfPlanContrato().getNombre().equals(plan))
+                            && predicate.getCnfPlanContrato().getNombre().equals(plan)
+                            && predicate.getCnfLocal().getId() == cnfLocal.getId())
                             .findFirst().orElse(null);
                     if (actContrato != null) {
                         errorMessage.add("Ya existe contrato para el cliente con el plan y mismo cliente");
@@ -698,7 +711,8 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                         errorMessage.add("Formato de tipo de documento incorrecto");
                     }
 
-                    cnfPlanContrato = listPlan.stream().filter(predicate -> predicate.getNombre().equals(plan.trim()))
+                    cnfPlanContrato = listPlan.stream().filter(predicate -> predicate.getNombre().equals(plan.trim())
+                            && predicate.getCnfEmpresa().getId() == f.getEmpresaId())
                             .findFirst().orElse(null);
                     if (cnfPlanContrato == null) {
                         errorMessage.add("Plan no existe. Debe registrar el plan primero");
@@ -707,7 +721,8 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                     if (Util.isNullOrEmpty(zona)) {
                         errorMessage.add("Debe ingresar la zona");
                     } else {
-                        cnfZona = listZona.stream().filter(predicate -> predicate.getNombre().equals(zona.trim()))
+                        cnfZona = listZona.stream().filter(predicate -> predicate.getNombre().equals(zona.trim())
+                                && predicate.getCnfEmpresa().getId() == f.getEmpresaId())
                                 .findFirst().orElse(null);
                         if (cnfZona == null) {
                             cnfZona = new CnfZona(zona, empresa);
@@ -806,13 +821,17 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                     listResponse.add(new UploadResponse(row, 
                             errorMessage.isEmpty()?Arrays.asList("Ok"):errorMessage));
                     
+                    
                 }
 
             }
             if (!existsErrors) {
                 cnfZonaService.saveAll(listZona);
                 cnfMaestroRepository.saveAll(listCnfMaestro);
-                actContratoRepository.saveAll(listActContrato);
+                List<ActContrato> savedList = actContratoRepository.saveAll(listActContrato);
+                for (ActContrato actContrato1 : savedList) {
+                    saveActPagoProgramacionMensualRepetitivo(actContrato1);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

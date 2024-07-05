@@ -69,7 +69,7 @@ public class CommonServiceImpl<E, R extends PagingAndSortingRepository<E, Long>>
         Long empresaId = null;
         for (SegRolUsuario role : listRoles) {
             if (role.getLocal() == null) {
-                cnfLocalRepository.findByCnfEmpresaId(role.getEmpresa().getId());
+                //cnfLocalRepository.findByCnfEmpresaId(role.getEmpresa().getId());
                 listLocales = cnfLocalRepository.findByCnfEmpresaId(role.getEmpresa().getId())
                         .stream().map(mapper -> mapper.getId()).collect(Collectors.toList());
                 return new SecurityFilterDto(role.getEmpresa().getId(), listLocales);

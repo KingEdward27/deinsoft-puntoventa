@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 
 /**
@@ -45,6 +46,7 @@ public class CodigoQR {
     private static final int qr_image_height = 400;
     private static final String IMAGE_FORMAT = "png";
     private static final String IMG_PATH = "qrcode.png";
+    public static final String TMP_DIR = System.getProperty("java.io.tmpdir");
     public static String GenerarQR (String data) throws Exception{
  
         // Encode URL in QR format
@@ -65,7 +67,10 @@ public class CodigoQR {
                 }
             }
             Path temp = Files.createTempFile("", IMG_PATH);
+            //Path temp = Files.createFile(Paths.get(TMP_DIR), IMG_PATH);
+            //File temp = new File(TMP_DIR, IMG_PATH);
             String absolutePath = temp.toString();
+            System.out.println("absolutePath qr: " + absolutePath);
             // Write the image to a file
             FileOutputStream qrCode = new FileOutputStream(absolutePath);
             ImageIO.write(image, IMAGE_FORMAT, qrCode);
