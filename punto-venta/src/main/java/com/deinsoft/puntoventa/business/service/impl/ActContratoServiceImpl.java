@@ -290,34 +290,34 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                         .withDayOfMonth(diaVencimiento)
                         .plusMonths(Math.abs(elapsedMonths - i));//0,1,2
                 actPayment.setFechaVencimiento(proxDate);
-                
+
                 if (diaVencimiento >= actContrato.getFecha().getDayOfMonth()) {
                     days = ChronoUnit.DAYS.between(actContrato.getFecha(), actContrato.getFecha().withDayOfMonth(diaVencimiento));
                 } else {
                     days = ChronoUnit.DAYS.between(actContrato.getFecha(), actContrato.getFecha().withDayOfMonth(diaVencimiento).plusMonths(1));
                 }
-                
+
                 if (i == elapsedMonths) {
-                     actPayment.setMonto(new BigDecimal(actContrato.getCnfPlanContrato()
-                        .getPrecioInstalacion().doubleValue() 
-                        + actContrato.getCnfPlanContrato().getPrecio().doubleValue() 
-                                / actContrato.getFecha().lengthOfMonth() * days));
+                    actPayment.setMonto(new BigDecimal(actContrato.getCnfPlanContrato()
+                            .getPrecioInstalacion().doubleValue()
+                            + actContrato.getCnfPlanContrato().getPrecio().doubleValue()
+                            / actContrato.getFecha().lengthOfMonth() * days));
                 } else {
                     actPayment.setMonto(new BigDecimal(actContrato.getCnfPlanContrato().getPrecio().doubleValue()));
                 }
-               
+
                 actPayment.setMontoPendiente(actPayment.getMonto());
                 actPagoProgramacionRepository.save(actPayment);
             }
         } else {
             actPayment.setFechaVencimiento(proxDate);
-            actPayment.setMonto(new BigDecimal(actContrato.getCnfPlanContrato().getPrecioInstalacion().doubleValue() 
-                    + actContrato.getCnfPlanContrato().getPrecio().doubleValue() 
-                            / actContrato.getFecha().lengthOfMonth() * days));
+            actPayment.setMonto(new BigDecimal(actContrato.getCnfPlanContrato().getPrecioInstalacion().doubleValue()
+                    + actContrato.getCnfPlanContrato().getPrecio().doubleValue()
+                    / actContrato.getFecha().lengthOfMonth() * days));
             actPayment.setMontoPendiente(actPayment.getMonto());
             actPagoProgramacionRepository.save(actPayment);
         }
-        
+
     }
 
     private void saveActPagoProgramacionOrCajaOperacion(ActContrato actContrato) throws Exception {
@@ -532,7 +532,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                                     }
                                 } else {
                                     mapper.setEstadoDescripcion("Vigente");
-                                    
+
                                     mapper.setMesesDeuda(0);
                                     mapper.setMontoPendiente(BigDecimal.ZERO);
                                 }
@@ -562,8 +562,6 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                 .filter(predicate -> predicate.getActContrato().getCnfLocal().getCnfEmpresa().getId() == empresaId)
                 .collect(Collectors.toList());
 
-        
-        
         long totalCuentasCanceladas = actPagoProgramacionList.stream().filter(predicate -> predicate.getMontoPendiente().compareTo(BigDecimal.ZERO) <= 0).count();
         Double total = actPagoRepository.findAll().stream()
                 .filter(predicate -> predicate.getCnfLocal() != null && predicate.getCnfLocal().getCnfEmpresa().getId() == empresaId)
@@ -592,7 +590,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
         if (!actContratoList.isEmpty()) {
             moneda = actContratoList.get(0).getCnfLocal().getCnfEmpresa().getCnfMoneda().getSimbolo();
         }
-        
+
         Map<String, Object> map = new HashMap<>();
         map.put("moneda", moneda);
         map.put("cantidadContratos", actContratoList.size());
@@ -784,10 +782,6 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                         actContrato.setFecha(Util.getDateFromString(fechaInstalacion, YYYY_MM_D_FORMATER));
                     }
 
-                    
-
-                    
-
                     if (errorMessage.isEmpty()) {
                         actContrato.setDireccion(direccion);
                         actContrato.setCnfPlanContrato(cnfPlanContrato);
@@ -808,24 +802,24 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                         }
                         //validar nombrs para otro nro documento
                         //calcular monto primer pago
-                        try {
-                            businessService.verifyPlan(null, actContrato);
-                        } catch (Exception e) {
-                            errorMessage.add(e.getMessage());
-                        }
+
                         listActContrato.add(actContrato);
                         listActContratoInDb.add(actContrato);
                     } else {
                         existsErrors = true;
                     }
-                    listResponse.add(new UploadResponse(row, 
-                            errorMessage.isEmpty()?Arrays.asList("Ok"):errorMessage));
-                    
-                    
+                    listResponse.add(new UploadResponse(row,
+                            errorMessage.isEmpty() ? Arrays.asList("Ok") : errorMessage));
+
                 }
 
             }
             if (!existsErrors) {
+                try {
+                    businessService.verifyPlanContratos2(listActContrato);
+                } catch (Exception e) {
+                    errorMessage.add(e.getMessage());
+                }
                 cnfZonaService.saveAll(listZona);
                 cnfMaestroRepository.saveAll(listCnfMaestro);
                 List<ActContrato> savedList = actContratoRepository.saveAll(listActContrato);
@@ -837,7 +831,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
             e.printStackTrace();
 //            System.out.println("1 "+ e.getCause());
 //            System.out.println("2" + e.getLocalizedMessage());
-            listResponse.add(new UploadResponse(row,Arrays.asList("Error inesperado: " 
+            listResponse.add(new UploadResponse(row, Arrays.asList("Error inesperado: "
                     + e.toString())));
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }

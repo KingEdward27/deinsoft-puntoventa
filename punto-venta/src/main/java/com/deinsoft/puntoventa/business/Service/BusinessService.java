@@ -11,6 +11,7 @@ import com.deinsoft.puntoventa.business.model.ActPago;
 import com.deinsoft.puntoventa.facturador.client.RespuestaPSE;
 import com.deinsoft.puntoventa.framework.model.JsonData;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,4 +39,6 @@ public interface BusinessService {
     public Map<String, Object> searchSunat(String nroDoc) throws Exception;
     
     public void verifyPlan(ActComprobante actComprobante, ActContrato actContrato) throws Exception;
+    
+    public void verifyPlanContratos2(List<ActContrato> actContrato) throws Exception;
 }

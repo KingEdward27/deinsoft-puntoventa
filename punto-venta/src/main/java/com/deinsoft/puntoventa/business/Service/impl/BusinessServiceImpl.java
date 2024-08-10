@@ -39,6 +39,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.apache.commons.io.FileUtils;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpMethod;
+
 /**
  *
  * @author EDWARD-PC
@@ -52,28 +53,27 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Autowired
     TransactionService transactionService;
-    
+
     @Autowired
     ActComprobanteRepository actComprobanteRepository;
-    
+
     @Autowired
     ActContratoRepository actContratoRepository;
 
 //    public static String urlBase = "http://localhost:8080/api/v1/";
 //    public static String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NTA5MjAwMTYsImlzcyI6IkRFSU5TT0ZUIiwianRpIjoiREVGQUNULUpXVCIsInN1YiI6IjEwNDE0MzE2NTk1L1BFUkVaIERFTEdBRE8gQkxBTkNBIE5FUkkiLCJudW1Eb2MiOiIxMDQxNDMxNjU5NSIsInJhem9uU29jaWFsIjoiUEVSRVogREVMR0FETyBCTEFOQ0EgTkVSSSIsInVzdWFyaW9Tb2wiOiI0MTQzMTY1OSIsImV4cCI6MTY4MjkyMDAxNn0.1Csg7-tYUYtrpMDHGwMG8K04_aGUXrj8Vbm3qqeSYL6GDxsg-JOOf-VxWHXWeBXGzZ-3C6Br3DB1kJpOH_Ueog";
-
     @Override
     public RespuestaPSE sendApi(String tableName, long id) throws ParseException {
         RespuestaPSE result = null;
-        
+
         Map<String, Object> mapVenta = jdbcRepository.findById(tableName, id);
-        Map<String,Object> local = (Map<String,Object>)mapVenta.get("cnf_local");
-        Map<String,Object> empresa = (Map<String,Object>)local.get("cnf_empresa");
-        String ruta = Util.getStringValue(empresa,"ruta_pse");
-        String token = Util.getStringValue(empresa,"token");
+        Map<String, Object> local = (Map<String, Object>) mapVenta.get("cnf_local");
+        Map<String, Object> empresa = (Map<String, Object>) local.get("cnf_empresa");
+        String ruta = Util.getStringValue(empresa, "ruta_pse");
+        String token = Util.getStringValue(empresa, "token");
 //        if (ruta == null) throw new RuntimeException ("Ruta PSE no configurado");
 //        if (token == null) throw new RuntimeException ("token PSE no configurado");
-        EnvioPSE envioPSE = new EnvioPSE(ruta,token);
+        EnvioPSE envioPSE = new EnvioPSE(ruta, token);
         String jsonBody = envioPSE.paramToJson(mapVenta);
         RespuestaPSE resultEnvioPSE = envioPSE.envioJsonPSE(jsonBody);
 
@@ -105,8 +105,8 @@ public class BusinessServiceImpl implements BusinessService {
     public byte[] getPDF(long id, int tipo) throws ParseException {
         byte[] result = null;
         Map<String, Object> mapVenta = jdbcRepository.findById("act_comprobante", id);
-        Map<String,Object> local = (Map<String,Object>)mapVenta.get("cnf_local");
-        Map<String,Object> empresa = (Map<String,Object>)local.get("cnf_empresa");
+        Map<String, Object> local = (Map<String, Object>) mapVenta.get("cnf_local");
+        Map<String, Object> empresa = (Map<String, Object>) local.get("cnf_empresa");
         EnvioPSE envioPSE = new EnvioPSE(empresa.get("ruta_pse").toString(), empresa.get("token").toString());
         Map<String, Object> mapResult = null;
         try {
@@ -138,13 +138,14 @@ public class BusinessServiceImpl implements BusinessService {
 //        jdbcRepository.update(json);
         return result;
     }
+
     @Override
-    @Transactional(rollbackFor = {Exception.class,Throwable.class}, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(rollbackFor = {Exception.class, Throwable.class}, propagation = Propagation.REQUIRES_NEW)
     public Map<String, Object> saveSale(JsonData jsonData) {
         Map<String, Object> resultSave = null;
-        
+
         try {
-            
+
             ObjectMapper oMapper = new ObjectMapper();
             jdbcRepository.create(jsonData.getTableName(), jsonData.getFilters());
             String idColumn = jdbcRepository.getColumnPk(jsonData.getTableName());
@@ -161,8 +162,8 @@ public class BusinessServiceImpl implements BusinessService {
 //                }
             }
             resultSave = jdbcRepository.findById(jsonData.getTableName(), idValue);
-            
-            if(!resultSave.isEmpty()){
+
+            if (!resultSave.isEmpty()) {
                 for (Detail detail : jsonData.getDetails()) {
                     if (detail.getTableName().equalsIgnoreCase("act_comprobante_detalle")) {
                         for (Map<String, Object> object : detail.getFilters()) {
@@ -175,13 +176,14 @@ public class BusinessServiceImpl implements BusinessService {
 
                 }
             }
-            
+
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             ex.printStackTrace();
         }
         return resultSave;
     }
+
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public Map<String, Object> savePurchase(JsonData jsonData) {
@@ -206,6 +208,7 @@ public class BusinessServiceImpl implements BusinessService {
         }
         return resultSave;
     }
+
     @Override
     public byte[] getPDFLocal(long id, int tipo) throws ParseException, Exception {
         byte[] result = null;
@@ -221,13 +224,14 @@ public class BusinessServiceImpl implements BusinessService {
 //            result = Base64.decodeBase64(mapResult.get("pdfBase64").toString());
 //        }
         Map<String, Object> mapVenta = jdbcRepository.findById("act_comprobante", id);
-        byte[] bytes = print(tipo,mapVenta,false);
+        byte[] bytes = print(tipo, mapVenta, false);
 //        if (!appConfig.getEnvironment().equals("PRODUCTION")) {
 //            FileUtils.writeByteArrayToFile(new File("D:/report.pdf"), bytes);
 //        }
         return bytes;
     }
-    private byte[] print(int tipo, Map<String, Object> mapVenta,boolean isTicket) throws Exception {
+
+    private byte[] print(int tipo, Map<String, Object> mapVenta, boolean isTicket) throws Exception {
         ByteArrayInputStream stream = Impresion.Imprimir(tipo, mapVenta, isTicket);
         if (stream == null) {
             System.out.println("Ocurrió un error al generar el pdf desde la base de datos");
@@ -238,8 +242,9 @@ public class BusinessServiceImpl implements BusinessService {
         stream.read(bytes, 0, n);
         return bytes;
     }
+
     @Override
-    public byte[] printComprobante(String staticResourcesFolder, int tipo, ActComprobante actComprobante,boolean isTicket) throws Exception {
+    public byte[] printComprobante(String staticResourcesFolder, int tipo, ActComprobante actComprobante, boolean isTicket) throws Exception {
         ByteArrayInputStream stream = Impresion.Imprimir2(staticResourcesFolder, tipo, actComprobante, isTicket);
         if (stream == null) {
             System.out.println("Ocurrió un error al generar el pdf desde la base de datos");
@@ -250,9 +255,9 @@ public class BusinessServiceImpl implements BusinessService {
         stream.read(bytes, 0, n);
         return bytes;
     }
-    
+
     @Override
-    public byte[] printOrden(String staticResourcesFolder, int tipo, ActOrden actOrden,boolean isTicket) throws Exception {
+    public byte[] printOrden(String staticResourcesFolder, int tipo, ActOrden actOrden, boolean isTicket) throws Exception {
         ByteArrayInputStream stream = Impresion.ImprimirOrden(staticResourcesFolder, tipo, actOrden, isTicket);
         if (stream == null) {
             System.out.println("Ocurrió un error al generar el pdf desde la base de datos");
@@ -263,9 +268,9 @@ public class BusinessServiceImpl implements BusinessService {
         stream.read(bytes, 0, n);
         return bytes;
     }
-    
+
     @Override
-    public byte[] printPago(String staticResourcesFolder, int tipo, ActPago actPago,boolean isTicket) throws Exception {
+    public byte[] printPago(String staticResourcesFolder, int tipo, ActPago actPago, boolean isTicket) throws Exception {
         ByteArrayInputStream stream = Impresion.ImprimirPago(staticResourcesFolder, tipo, actPago, isTicket);
         if (stream == null) {
             System.out.println("Ocurrió un error al generar el pdf desde la base de datos");
@@ -276,10 +281,10 @@ public class BusinessServiceImpl implements BusinessService {
         stream.read(bytes, 0, n);
         return bytes;
     }
-    
-    public Map<String,Object> searchSunat (String nroDoc) throws Exception {
-        Map<String,Object> result = null;
-        Map<String,String> param = new HashMap<>();
+
+    public Map<String, Object> searchSunat(String nroDoc) throws Exception {
+        Map<String, Object> result = null;
+        Map<String, String> param = new HashMap<>();
         param.put("numero", nroDoc);
         if (nroDoc.length() == 8) {
             result = new Util().simpleApi(HttpMethod.GET, "https://api.apis.net.pe/v1/dni", "", param);
@@ -289,15 +294,50 @@ public class BusinessServiceImpl implements BusinessService {
         //https://dniruc.apisperu.com/api/v1/dni/12345678?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InlpbmNvcl8xNkBob3RtYWlsLmNvbSJ9.1I3qDYtchpNofaV2fWBgSVCQ8SFoDsg3ILSwvNKBjsM
         return result;
     }
-    
+
+    void verifyPlanContrato(ActContrato actContrato1) throws Exception {
+        
+        int month = actContrato1.getFecha().getMonthValue();
+        List<ActContrato> listVentas = actContratoRepository.findByCnfEmpresaIdAndMonth(
+                actContrato1.getCnfLocal().getCnfEmpresa().getId(), month);
+        if (actContrato1.getCnfLocal().getCnfEmpresa().getPlan() == 1
+                && listVentas.size() >= 20) {
+            throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+        }
+
+        if (actContrato1.getCnfLocal().getCnfEmpresa().getPlan() == 2
+                && (listVentas.size() >= 250)) {
+            throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+        }
+
+        if (actContrato1.getCnfLocal().getCnfEmpresa().getPlan() == 3
+                && (listVentas.size() >= 400)) {
+            throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+        }
+    }
+
+    @Override
+    public void verifyPlanContratos2(List<ActContrato> actContratoList) throws Exception {
+        //Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
+        
+        for (ActContrato actContrato1 : actContratoList) {
+            int month = actContrato1.getFecha().getMonthValue();
+            List<ActContrato> listVentas = actContratoRepository.findByCnfEmpresaIdAndMonth(
+                actContrato1.getCnfLocal().getCnfEmpresa().getId(), month);
+            verifyPlanContrato(actContrato1);
+            listVentas.add(actContrato1);
+        }
+
+    }
+
     @Override
     public void verifyPlan(ActComprobante actComprobante, ActContrato actContrato) throws Exception {
         if (actComprobante != null) {
             int month = actComprobante.getFecha().getMonthValue();
             List<ActComprobante> listVentas = actComprobanteRepository.findByCnfEmpresaIdAndMonth(
-                    actComprobante.getCnfLocal().getCnfEmpresa().getId(),month);
+                    actComprobante.getCnfLocal().getCnfEmpresa().getId(), month);
             Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
-            if (actComprobante.getCnfLocal().getCnfEmpresa().getPlan() == 1 
+            if (actComprobante.getCnfLocal().getCnfEmpresa().getPlan() == 1
                     && (listVentas.size() >= 10 || sumVentas.compareTo(10000d) >= 0)) {
                 throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
             }
@@ -312,26 +352,27 @@ public class BusinessServiceImpl implements BusinessService {
                 throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
             }
         } else {
-            int month = actContrato.getFecha().getMonthValue();
-            List<ActContrato> listVentas = actContratoRepository.findByCnfEmpresaIdAndMonth(
-                    actContrato.getCnfLocal().getCnfEmpresa().getId(),month);
-            //Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
-            
-            if (actContrato.getCnfLocal().getCnfEmpresa().getPlan() == 1 
-                    && listVentas.size() >= 20 ) {
-                throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
-            }
-
-            if (actContrato.getCnfLocal().getCnfEmpresa().getPlan() == 2
-                    && (listVentas.size() >= 250)) {
-                throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
-            }
-
-            if (actContrato.getCnfLocal().getCnfEmpresa().getPlan() == 3
-                    && (listVentas.size() >= 400)) {
-                throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
-            }
+            verifyPlanContrato(actContrato);
+//            int month = actContrato.getFecha().getMonthValue();
+//            List<ActContrato> listVentas = actContratoRepository.findByCnfEmpresaIdAndMonth(
+//                    actContrato.getCnfLocal().getCnfEmpresa().getId(), month);
+//            //Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
+//
+//            if (actContrato.getCnfLocal().getCnfEmpresa().getPlan() == 1
+//                    && listVentas.size() >= 20) {
+//                throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+//            }
+//
+//            if (actContrato.getCnfLocal().getCnfEmpresa().getPlan() == 2
+//                    && (listVentas.size() >= 250)) {
+//                throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+//            }
+//
+//            if (actContrato.getCnfLocal().getCnfEmpresa().getPlan() == 3
+//                    && (listVentas.size() >= 400)) {
+//                throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+//            }
         }
-        
+
     }
 }

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity(name = "cnfEmpresa")
 @Table(name = "cnf_empresa")
@@ -88,6 +89,9 @@ public class CnfEmpresa implements Serializable {
     
     @Column(name = "fecha_cambio_plan")
     private LocalDateTime fechaCambioPlan;
+    
+    @Column(name = "fecha_registro", nullable = true)
+    private LocalDateTime fechaRegistro;
     
     public long getId() {
         return id;
@@ -223,6 +227,10 @@ public class CnfEmpresa implements Serializable {
 
     public void setPlan(int plan) {
         this.plan = plan;
+    }
+
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.deinsoft.puntoventa.business.repository.SegRolUsuarioRepository;
 import com.deinsoft.puntoventa.business.service.BusinessService;
 import com.deinsoft.puntoventa.business.service.CnfEmpresaService;
 import com.deinsoft.puntoventa.business.service.CnfLocalService;
+import com.deinsoft.puntoventa.business.service.CnfMonedaService;
 import com.deinsoft.puntoventa.business.service.CnfNumComprobanteService;
 import com.deinsoft.puntoventa.business.service.CnfTipoComprobanteService;
 import com.deinsoft.puntoventa.business.service.CnfTipoDocumentoService;
@@ -39,6 +40,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -75,6 +77,9 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
     
     @Autowired
     SegRolService segRolService;
+    
+    @Autowired
+    CnfMonedaService cnfMonedaService;
     
     @Value("${app.config.url}")
     private String url;
@@ -187,7 +192,10 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         empresa.setPerfilEmpresa(segUsuario.getPerfilEmpresa());
         empresa.setPlan(1);
         empresa.setEstado("1");
-        CnfEmpresa empresaResult = cnfEmpresaService.save(empresa);
+        empresa.setFechaRegistro(LocalDateTime.now());
+        empresa.setCnfMoneda(cnfMonedaService.getAllCnfMoneda().stream()
+                .filter(predicate -> predicate.getCodigo().equals("PEN")).findFirst().orElse(null));
+        CnfEmpresa empresaResult = cnfEmpresaService.saveCnfEmpresa(empresa);
         
         CnfLocal local = new CnfLocal();
         local.setCnfEmpresa(empresaResult);
