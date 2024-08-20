@@ -40,7 +40,7 @@
                                 class="col-lg-4 col-sm-12 col-form-label">{{'webpagos.act_contrato_corte.observacion' |
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-8">
-                                <textarea rows="3" [(ngModel)]="model.observacion" maxlength="20" name="observacion"
+                                <textarea rows="3" [(ngModel)]="model.observacion" maxlength="2000" name="observacion"
                                     id="observacion" name="observacion" class="form-control-sm-ta col-sm-12 col-lg-12"
                                     placeholder="Ingrese observacion" ></textarea>
                                 <div class="alert alert-danger col-sm-12 col-lg-12" *ngIf="error?.observacion">{{

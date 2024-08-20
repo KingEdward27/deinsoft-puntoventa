@@ -266,7 +266,8 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         invAlmacenProductoService.registerProductMovementAndUpdateStock(actComprobante, null);
 
         //save pagos programacion
-        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId(auth.getLoggedUserdata().getId(), listRoles());
+        List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId
+        (auth.getLoggedUserdata().getId(), listRoles());
         actCajaTurno = actCajaTurno.stream()
                 .filter(item -> item.getEstado().equals("1"))
                 .collect(Collectors.toList());

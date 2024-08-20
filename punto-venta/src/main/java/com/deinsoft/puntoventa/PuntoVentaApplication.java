@@ -21,21 +21,25 @@ public class PuntoVentaApplication extends WebMvcConfigurerAdapter implements Co
 
     @Autowired
     JdbcRepository jdbcRepository;
-    
+
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
-    
+
     @Autowired
     ActPagoProgramacionService actPagoProgramacionService;
-    
+
     @Autowired
     AppConfig appConfig;
-    
+
     public static void main(String[] args) {
-        
+
         SpringApplication.run(PuntoVentaApplication.class, args);
+//        SendSms s = new SendSms();
+//        s.sendSms();
+//        SendOzekiSmsClient s = new SendOzekiSmsClient();
+//        s.send();
     }
-    
+
 //    @Bean
 //    public WebMvcConfigurer corsConfigurer() {
 //        return new WebMvcConfigurer() {
@@ -63,13 +67,12 @@ public class PuntoVentaApplication extends WebMvcConfigurerAdapter implements Co
 //            storageService.init();
 //        };
 //    }
-    
     @Scheduled(cron = "0 30 4 * * *")
     void refreshProgramacionPagos() {
         System.out.println("init refreshProgramacionPagos()");
         actPagoProgramacionService.refreshProgramacionPagos();
     }
-    
+
     @Override
     public void run(String... args) throws Exception {
         String password = "123456";
@@ -78,8 +81,7 @@ public class PuntoVentaApplication extends WebMvcConfigurerAdapter implements Co
             String bcryptPassword = passwordEncoder.encode(password);
             System.out.println(bcryptPassword);
         }
-        
-        
+
     }
-    
+
 }

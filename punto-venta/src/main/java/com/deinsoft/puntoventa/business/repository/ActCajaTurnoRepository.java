@@ -21,7 +21,8 @@ public interface ActCajaTurnoRepository extends JpaRepository<ActCajaTurno, Long
             + "where p.segUsuario.id = :id "
             + "and p.actCaja.cnfEmpresa.id = :#{#securityFilterDto.empresaId} "
             +"order by p.id desc")
-    List<ActCajaTurno> findBySegUsuarioId(@Param("id") long id,@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
+    List<ActCajaTurno> findBySegUsuarioId(@Param("id") long id,
+            @Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 
 
     @Query(value = "select p from actCajaTurno p "

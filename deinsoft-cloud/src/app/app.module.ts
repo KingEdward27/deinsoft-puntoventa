@@ -62,7 +62,7 @@ import { CnfUnidadMedidaComponent } from '@pages/cnf-unidadmedida/cnf-unidadmedi
 import { CnfNumComprobanteComponent } from '@pages/cnf-numcomprobante/cnf-numcomprobante';
 import { CnfMaestroComponent } from '@pages/cnf-maestro/cnf-maestro';
 import { CnfFormaPagoComponent } from '@pages/cnf-formapago/cnf-formapago';
-import { InvAlmacenComponent } from '@pages/inv-almacen/inv-almacen';
+import { InvAlmacenComponent } from '@pages/inv-almacen/inv-almacen-list';
 import { ActCompraFormComponent } from '@pages/act-compra/act-compra-form.component';
 import { ActVentaFormComponent } from '@pages/act-venta/act-venta-form.component';
 import { JwtInterceptor } from './config/jwt.interceptor';
@@ -136,6 +136,9 @@ import { CnfTipoSistemaFormComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-si
 import { ActComprobanteReportContableFormComponent } from '@pages/reports/act-comprobante/act-comprobante-venta-contable/act-comprobante-report-contable.component';
 import { TermsComponent } from '@modules/terms/terms.component';
 import { UploadComponent } from '@pages/act-contrato/modal/message-modal.component';
+import { InvAlmacenFormComponent } from '@pages/inv-almacen/inv-almacen-form';
+import { ActOrdenFormComponent } from '@pages/act-orden/form/act-orden-form.component';
+import { ActOrdenListComponent } from '@pages/act-orden/list/act-orden-list.component';
 
 @NgModule({
     declarations: [
@@ -190,6 +193,7 @@ import { UploadComponent } from '@pages/act-contrato/modal/message-modal.compone
         CnfFormaPagoComponent,
 
         InvAlmacenComponent,
+        InvAlmacenFormComponent,
         GenericModalComponent,
         ActCompraFormComponent,
         ActVentaFormComponent,
@@ -254,6 +258,8 @@ import { UploadComponent } from '@pages/act-contrato/modal/message-modal.compone
         CnfTipoSistemaListComponent,
         CnfTipoSistemaFormComponent,
         ActComprobanteReportContableFormComponent,
+        ActOrdenFormComponent,
+        ActOrdenListComponent,
         TermsComponent,
         UploadComponent
     ],

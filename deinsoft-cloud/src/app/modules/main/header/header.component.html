@@ -4,7 +4,7 @@
             ><i class="fas fa-bars"></i
         ></a>
     </li>
-    <!-- <li class="nav-item d-none d-sm-inline-block">
+    <!-- <li class="nav-item d-none d-sm-inline-block"> 
         <a [routerLink]="['/']" class="nav-link">Home</a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
@@ -12,7 +12,7 @@
     </li> -->
 </ul>
 
-<form class="form-inline ml-3" [formGroup]="searchForm" *ngIf="false">
+<form class="form-inline ml-3" [formGroup]="searchForm" *ngIf = "false" >
     <div class="input-group input-group-sm">
         <input
             class="form-control form-control-navbar"
@@ -27,11 +27,20 @@
         </div>
     </div>
 </form>
-
-<ul class="navbar-nav ml-auto">
+<ul class="navbar-nav" >
+    
+    <a class="btn btn-success" href="https://api.whatsapp.com/send?phone=978512583&text=Buenos días, quisiera mas información para subir de plan del sistema " 
+    target="_blank">
+        MEJORAR PLAN / ASISTENCIA TECNICA <i class="fas fa-user"></i>
+    </a> 
+</ul>
+<ul class="navbar-nav ml-auto mr-2">
     
     <!-- <app-messages></app-messages>
     <app-notifications></app-notifications>
     <app-language></app-language> -->
+    <!-- <button class="btn btn-success" style="margin-inline: 15px;" type="submit">
+        MEJORAR PLAN
+    </button> -->
     <app-user></app-user>
 </ul>

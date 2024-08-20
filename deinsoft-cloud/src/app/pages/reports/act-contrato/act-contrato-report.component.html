@@ -151,25 +151,23 @@
                             <tr>
                                 <th width="1%">Nro.</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.cnf_local' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.act_contrato.cnf_maestro' | translate}}</th>
+                                <th width="15%" class="text-nowrap">{{'webpagos.act_contrato.cnf_maestro' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.cnf_plan_contrato' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.cnf_zona' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.vicinity' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.direccion' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.act_contrato.meses_deuda' | translate}}</th>
+                                <th width="1%" class="text-nowrap">{{'webpagos.act_contrato.meses_deuda' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.ultimo_pago' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.monto_deuda' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.act_contrato.nro_poste' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.act_contrato.flag_estado' | translate}}</th>
                             </tr>
                         </thead>
                         <tbody>
 
                             <tr *ngFor="let item of listData; index as i" class="odd gradeX">
-                                <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
+                                <td class="f-w-600 text-inverse">{{i+1}}</td>
                                 <td>{{item.cnfLocal?.nombre}}</td>
-                                <td>{{item.cnfMaestro?.apellidoPaterno +' '+ item.cnfMaestro?.apellidoMaterno + ' ' +
-                                    item.cnfMaestro?.nombres}}</td>
+                                <td>{{item.cnfMaestro?.razonSocial}}</td>
                                 <td>{{item.cnfPlanContrato?.nombre}}</td>
                                 <td>{{item.cnfZona?.nombre}}</td>
                                 <td>{{item.vicinity}}</td>
@@ -177,7 +175,6 @@
                                 <td>{{item.mesesDeuda}}</td>
                                 <td>{{item.ultimoPago}}</td>
                                 <td class="content-number">S/ {{item.montoPendiente | number:'1.2-2'}}</td>
-                                <td>{{item.nroPoste}}</td>
                                 <td><p [ngClass]="'state' + item.color">{{item.estadoDescripcion}}</p></td>
                             </tr>
                         </tbody>

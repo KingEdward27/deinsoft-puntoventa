@@ -11,14 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import javax.validation.Valid;
 
-import com.deinsoft.puntoventa.business.model.ActContratoCorte;
+import com.deinsoft.puntoventa.business.model.ActContratoMov;
 import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.business.service.ActContratoCorteService;
 import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/act-contrato-corte")
-public class ActContratoCorteController extends CommonController<ActContratoCorte, ActContratoCorteService> {
+public class ActContratoCorteController extends CommonController<ActContratoMov, ActContratoCorteService> {
 
     private static final Logger logger = LoggerFactory.getLogger(ActContratoCorteController.class);
 
@@ -26,21 +26,21 @@ public class ActContratoCorteController extends CommonController<ActContratoCort
     ActContratoCorteService actContratoCorteService;
 
     @GetMapping(value = "/get-all-act-contrato-corte")
-    public List<ActContratoCorte> getAllActContratoCorte(ActContratoCorte actContratoCorte) {
+    public List<ActContratoMov> getAllActContratoCorte(ActContratoMov actContratoCorte) {
         logger.info("getAllActContratoCorte received: " + actContratoCorte.toString());
-        List<ActContratoCorte> actContratoCorteList = actContratoCorteService.getAllActContratoCorte(actContratoCorte);
+        List<ActContratoMov> actContratoCorteList = actContratoCorteService.getAllActContratoCorte(actContratoCorte);
         return actContratoCorteList;
     }
 
     @GetMapping(value = "/get-act-contrato-corte")
-    public ActContratoCorte getActContratoCorte(@Param("id") Long id) {
+    public ActContratoMov getActContratoCorte(@Param("id") Long id) {
         logger.info("getActContratoCorte received: " + id);
-        ActContratoCorte actContratoCorte = actContratoCorteService.getActContratoCorte(id);
+        ActContratoMov actContratoCorte = actContratoCorteService.getActContratoCorte(id);
         return actContratoCorte;
     }
 
     @PostMapping(value = "/save-act-contrato-corte")
-    public ResponseEntity<?> saveActContratoCorte(@Valid @RequestBody ActContratoCorte actContratoCorte, BindingResult result) {
+    public ResponseEntity<?> saveActContratoCorte(@Valid @RequestBody ActContratoMov actContratoCorte, BindingResult result) {
         if (result.hasErrors()) {
             return this.validar(result);
         }
@@ -49,8 +49,8 @@ public class ActContratoCorteController extends CommonController<ActContratoCort
     }
 
     @GetMapping(value = "/get-all-act-contrato-corte-combo")
-    public List<ActContratoCorte> getAllActContratoCorte() {
-        List<ActContratoCorte> actContratoCorteList = actContratoCorteService.getAllActContratoCorte();
+    public List<ActContratoMov> getAllActContratoCorte() {
+        List<ActContratoMov> actContratoCorteList = actContratoCorteService.getAllActContratoCorte();
         return actContratoCorteList;
     }
 
@@ -61,14 +61,14 @@ public class ActContratoCorteController extends CommonController<ActContratoCort
     }
 
     @GetMapping(value = "/get-all-act-contrato-corte-by-act-contrato")
-    public List<ActContratoCorte> getAllActContratoCorteByActContrato(@Param("id") Long id) {
-        List<ActContratoCorte> actContratoCorteList = actContratoCorteService.getAllActContratoCorteByActContrato(id);
+    public List<ActContratoMov> getAllActContratoCorteByActContrato(@Param("id") Long id) {
+        List<ActContratoMov> actContratoCorteList = actContratoCorteService.getAllActContratoCorteByActContrato(id);
         return actContratoCorteList;
     }
 
     @GetMapping(value = "/get-all-act-contrato-corte-by-seg-usuario")
-    public List<ActContratoCorte> getAllActContratoCorteBySegUsuario(@Param("id") Long id) {
-        List<ActContratoCorte> actContratoCorteList = actContratoCorteService.getAllActContratoCorteBySegUsuario(id);
+    public List<ActContratoMov> getAllActContratoCorteBySegUsuario(@Param("id") Long id) {
+        List<ActContratoMov> actContratoCorteList = actContratoCorteService.getAllActContratoCorteBySegUsuario(id);
         return actContratoCorteList;
     }
 }

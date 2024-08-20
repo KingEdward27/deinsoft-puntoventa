@@ -42,6 +42,10 @@ public class ActComprobanteDetalle implements Serializable {
     private BigDecimal afectacionIgv;
 
     @NotNull
+    @Column(name = "precio_venta", length = 14, nullable = false)
+    private BigDecimal precioVenta;
+    
+    @NotNull
     @Valid
     @OneToOne
     @JoinColumn(name = "act_comprobante_id")
@@ -62,9 +66,6 @@ public class ActComprobanteDetalle implements Serializable {
     @Transient
     private Float porcentajeGanancia;
     
-    //al comprar
-    @Transient
-    private BigDecimal precioVenta;
 
     public long getId() {
         return id;

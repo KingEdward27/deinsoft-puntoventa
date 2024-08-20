@@ -93,6 +93,10 @@ public class CnfEmpresa implements Serializable {
     @Column(name = "fecha_registro", nullable = true)
     private LocalDateTime fechaRegistro;
     
+    @ColumnDefault("1")
+    @Column(name = "tipo_costo_inventario", length = 1, nullable = false)
+    private short tipoCostoInventario;
+    
     public long getId() {
         return id;
     }
@@ -231,6 +235,14 @@ public class CnfEmpresa implements Serializable {
 
     public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public short getTipoCostoInventario() {
+        return tipoCostoInventario;
+    }
+
+    public void setTipoCostoInventario(short tipoCostoInventario) {
+        this.tipoCostoInventario = tipoCostoInventario;
     }
 
     @Override

@@ -171,13 +171,15 @@ export class GenericForm2Component extends CommonService implements OnInit {
       console.log(this.properties.id);
       
       if (element.type != 'input' && element.type != 'date') {
-        if (this.properties.id == 0) {
+        if (this.properties.id == undefined) {
           if (element.loadState == 1 && element.columnName != element.relatedBy) {
             let condition = ""
             element.filters?.forEach((elementFilter: any) => {
               condition = condition + elementFilter.columnName + " = " + elementFilter.value + " and"
             })
             condition = condition.substring(0,condition.length-4);
+            console.log(condition);
+            
             super.getListComboByTableName(element.tableName, element.columnName,condition).subscribe(data => {
               data.push([0, "- Seleccione -"]);
               data.sort();
@@ -367,9 +369,10 @@ export class GenericForm2Component extends CommonService implements OnInit {
   }
   save() {
     //console.log(this.properties);
-    const resultFromChild = this.onPreSave.call(this, 20);
-    //console.log(resultFromChild);
-    if (resultFromChild) {
+    let resultFromChild = false
+    resultFromChild = this.onPreSave?.call(this, 20);
+    console.log(resultFromChild);
+    if (resultFromChild || resultFromChild == undefined) {
       this.preSave();
       let myMap = new Map();
       myMap.set("id", this.properties.id ? this.properties.id : 0);

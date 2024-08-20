@@ -113,7 +113,7 @@
                                 <!-- <td>{{item.nroPoste}}</td> -->
                                 <td>{{item.direccion}}</td>
                                 <td>{{item.vicinity}}</td>
-                                <td>{{item.flagEstado == '1'? "Activo": "Corte Efectuado"}}</td>
+                                <td><p [ngClass]="'state' + item.color">{{item.estadoDescripcion}}</p></td>
                                 <td>
                                     <div class="row2">
                                         <div *ngIf="item.flagEstado == '1'" class="col-sm-4 col-xs-4 text-center"><a class="fas fa-ban"

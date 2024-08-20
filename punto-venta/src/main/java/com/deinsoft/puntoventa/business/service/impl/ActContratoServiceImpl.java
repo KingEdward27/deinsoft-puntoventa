@@ -5,21 +5,15 @@ import com.deinsoft.puntoventa.business.bean.UploadResponse;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
 import com.deinsoft.puntoventa.business.exception.BusinessException;
-import com.deinsoft.puntoventa.business.model.ActCajaOperacion;
-import com.deinsoft.puntoventa.business.model.ActCajaTurno;
-import com.deinsoft.puntoventa.business.model.ActComprobante;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.deinsoft.puntoventa.business.model.ActContrato;
 import com.deinsoft.puntoventa.business.model.ActPago;
 import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.model.CnfEmpresa;
-import com.deinsoft.puntoventa.business.model.CnfFormaPagoDetalle;
 import com.deinsoft.puntoventa.business.model.CnfLocal;
 import com.deinsoft.puntoventa.business.model.CnfMaestro;
 import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
@@ -55,7 +49,6 @@ import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -119,6 +112,11 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
     static DateTimeFormatter YYYYMMDD_FORMATER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     public List<ActContrato> getAllActContrato(ActContrato actContrato) {
+        
+        List<ActPagoProgramacion> actPagoProgramacionList = actPagoProgramacionRepository.findAll();
+
+        List<ActPago> actPagoList = actPagoRepository.findAll();
+        
         List<ActContrato> actContratoList = (List<ActContrato>) actContratoRepository.getAllActContrato(
                 actContrato.getCnfEmpresaId(),
                 actContrato.getSerie().toUpperCase(),
@@ -128,7 +126,15 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                 actContrato.getUrlMap().toUpperCase(),
                 actContrato.getDireccion().toUpperCase(),
                 listRoles());
-        return actContratoList;
+        return actContratoList
+                .stream()
+                .map(mapper -> {
+                    return processContratos(mapper, actPagoProgramacionList, actPagoList, null);
+                })
+                .map(mapper -> {
+                    return processVisibility(mapper);
+                }).collect(Collectors.toList())
+                ;
     }
 
     public ActContrato getActContrato(Long id) {
@@ -437,120 +443,111 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                     }
                 })
                 .map(mapper -> {
-                    if (mapper.getMontoPendiente() == null) {
-                        mapper.setMontoPendiente(BigDecimal.ZERO);
-                    }
-                    List<ActPagoProgramacion> actPagoProgramacionList2
-                            = actPagoProgramacionList.stream()
-                                    .filter(data -> data.getActContrato() != null && data.getActContrato().getId() == mapper.getId())
-                                    .collect(Collectors.toList());
-
-                    actPagoProgramacionList2.forEach(action -> {
-                        if ((action.getMontoPendiente().compareTo(action.getMonto()) != 0)) {
-
-                            ActPago actPago
-                                    = actPagoList.stream()
-                                            .filter(data -> data.getListActPagoDetalle().stream()
-                                            .anyMatch(predicate -> predicate.getActPagoProgramacion() != null
-                                            && predicate.getActPagoProgramacion().getId() == action.getId()))
-                                            .findFirst().orElse(new ActPago());
-
-                            //mapper.setUltimoPago(actPago.getSerie() + "-" + actPago.getNumero() + " (" + actPago.getFecha().format(DateTimeFormatter.ISO_DATE) + "): " + actPago.getTotal());
-                            mapper.setUltimoPago(actPago.getSerie() + "-" + actPago.getNumero() + " ("
-                                    + action.getFechaVencimiento().getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES")) + "): " + actPago.getTotal());
-                            if (action.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0) {
-                                mapper.setMesesDeuda(mapper.getMesesDeuda() + 1);
-                                mapper.setMontoPendiente(mapper.getMontoPendiente().add(action.getMontoPendiente()));
-                            }
-                        } else {
-                            if (action.getFechaVencimiento().compareTo(paramBean.getFechaVencimiento()) <= 0) {
-
-                                mapper.setMesesDeuda(mapper.getMesesDeuda() + 1);
-                                mapper.setMontoPendiente(mapper.getMontoPendiente().add(action.getMontoPendiente()));
-
-                            }
-                        }
-
-                    });
-                    return mapper;
-//                            .map(mapper2 -> {
-//                                if ((mapper2.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0)) {
-//                                    mapper.setUltimoPago("xx");
-//                                } else {
-//                                    if (mapper2.getFechaVencimiento().compareTo(paramBean.getFechaVencimiento()) <= 0) {
-//
-//                                        mapper.setMontoPendiente(mapper.getMontoPendiente().add(mapper2.getMontoPendiente()));
-//                                    }
-//                                }
-//                                return mapper2;
-//                            });
-//                    actPagoProgramacionList.forEach(action -> {
-                    //                        if (action.getActContrato() != null && action.getActContrato().getId() == mapper.getId()) {
-                    //                            if ((action.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0)) {
-                    //                                mapper.setUltimoPago("xx");
-                    //                            } else {
-                    //                                if (action.getFechaVencimiento().compareTo(paramBean.getFechaVencimiento()) <= 0) {
-                    //
-                    //                                    mapper.setMontoPendiente(mapper.getMontoPendiente().add(action.getMontoPendiente()));
-                    //                                }
-                    //                            }
-                    //                        }
-                    //                    });
-                    //                    return mapper; 
+                    return processContratos(mapper, actPagoProgramacionList, actPagoList, paramBean);
                 })
                 .map(mapper -> {
-                    if (mapper.getFlagEstado().equals("2")) {
-                        mapper.setEstadoDescripcion("Corte Efectuado");
-                        mapper.setColor("red");
-                    } else {
-
-                        mapper.setColor("green");
-                        if (mapper.getMesesDeuda() > 1) {
-                            mapper.setEstadoDescripcion("Afecto a Corte");
-                            mapper.setColor("yellow");
-                        } else if (mapper.getMesesDeuda() == 1) {
-                            if (LocalDate.now().getDayOfMonth() == 0) {
-                                if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 1) {
-                                    mapper.setEstadoDescripcion("Afecto a Corte");
-                                    mapper.setColor("yellow");
-                                }
-                                if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0) {
-                                    mapper.setEstadoDescripcion("Vigente");
-                                    mapper.setMesesDeuda(0);
-                                    mapper.setMontoPendiente(BigDecimal.ZERO);
-                                }
-                            } else {
-                                if (mapper.getCnfPlanContrato().getDiaProcesoCorte() != null && LocalDate.now().getDayOfMonth() >= mapper.getCnfPlanContrato().getDiaProcesoCorte()) {
-                                    if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 1) {
-                                        mapper.setEstadoDescripcion("Afecto a Corte");
-                                        mapper.setColor("yellow");
-                                    }
-                                    if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0) {
-                                        mapper.setEstadoDescripcion("Vigente");
-                                        mapper.setMesesDeuda(0);
-                                        mapper.setMontoPendiente(BigDecimal.ZERO);
-                                    }
-                                } else {
-                                    mapper.setEstadoDescripcion("Vigente");
-
-                                    mapper.setMesesDeuda(0);
-                                    mapper.setMontoPendiente(BigDecimal.ZERO);
-                                }
-                            }
-
-                        } else {
-                            mapper.setEstadoDescripcion("Vigente");
-                            mapper.setMontoPendiente(BigDecimal.ZERO);
-                        }
-                    }
-
-                    return mapper;
+                    return processVisibility(mapper);
                 })
                 .filter(predicate -> (paramBean.getFlagEstado().equals("0") && predicate.getEstadoDescripcion().equals("Afecto a Corte"))
                 || (paramBean.getFlagEstado().equals("1") && predicate.getEstadoDescripcion().equals("Vigente"))
                 || paramBean.getFlagEstado().equals("2"))
                 .collect(Collectors.toList());
 
+    }
+
+    private ActContrato processVisibility(ActContrato mapper) {
+        if (mapper.getFlagEstado().equals("2")) {
+            mapper.setEstadoDescripcion("Corte Efectuado");
+            mapper.setColor("red");
+        } else {
+            
+            mapper.setColor("green");
+            if (mapper.getMesesDeuda() > 1) {
+                mapper.setEstadoDescripcion("Afecto a Corte");
+                mapper.setColor("yellow");
+            } else if (mapper.getMesesDeuda() == 1) {
+                if (LocalDate.now().getDayOfMonth() == 0) {
+                    if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 1) {
+                        mapper.setEstadoDescripcion("Afecto a Corte");
+                        mapper.setColor("yellow");
+                    }
+                    if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0) {
+                        mapper.setEstadoDescripcion("Vigente");
+                        mapper.setMesesDeuda(0);
+                        mapper.setMontoPendiente(BigDecimal.ZERO);
+                    }
+                } else {
+                    if (mapper.getCnfPlanContrato().getDiaProcesoCorte() != null && LocalDate.now().getDayOfMonth() >= mapper.getCnfPlanContrato().getDiaProcesoCorte()) {
+                        if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 1) {
+                            mapper.setEstadoDescripcion("Afecto a Corte");
+                            mapper.setColor("yellow");
+                        }
+                        if (mapper.getMontoPendiente().compareTo(BigDecimal.ZERO) == 0) {
+                            mapper.setEstadoDescripcion("Vigente");
+                            mapper.setMesesDeuda(0);
+                            mapper.setMontoPendiente(BigDecimal.ZERO);
+                        }
+                    } else {
+                        mapper.setEstadoDescripcion("Vigente");
+                        
+                        mapper.setMesesDeuda(0);
+                        mapper.setMontoPendiente(BigDecimal.ZERO);
+                    }
+                }
+                
+            } else {
+                mapper.setEstadoDescripcion("Vigente");
+                mapper.setMontoPendiente(BigDecimal.ZERO);
+            }
+        }
+        
+        return mapper;
+    }
+
+    private ActContrato processContratos(ActContrato mapper, List<ActPagoProgramacion> actPagoProgramacionList, 
+            List<ActPago> actPagoList, ParamBean paramBean) {
+        if (mapper.getMontoPendiente() == null) {
+            mapper.setMontoPendiente(BigDecimal.ZERO);
+        }
+        List<ActPagoProgramacion> actPagoProgramacionList2
+                = actPagoProgramacionList.stream()
+                        .filter(data -> data.getActContrato() != null && data.getActContrato().getId() == mapper.getId())
+                        .collect(Collectors.toList());
+        
+        actPagoProgramacionList2.forEach(action -> {
+            if ((action.getMontoPendiente().compareTo(action.getMonto()) != 0)) {
+                
+                ActPago actPago
+                        = actPagoList.stream()
+                                .filter(data -> data.getListActPagoDetalle().stream()
+                                        .anyMatch(predicate -> predicate.getActPagoProgramacion() != null
+                                                && predicate.getActPagoProgramacion().getId() == action.getId()))
+                                .findFirst().orElse(new ActPago());
+                
+                //mapper.setUltimoPago(actPago.getSerie() + "-" + actPago.getNumero() + " (" + actPago.getFecha().format(DateTimeFormatter.ISO_DATE) + "): " + actPago.getTotal());
+                mapper.setUltimoPago(actPago.getSerie() + "-" + actPago.getNumero() + " ("
+                        + action.getFechaVencimiento().getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES")) + "): " + actPago.getTotal());
+                if (action.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0) {
+                    mapper.setMesesDeuda(mapper.getMesesDeuda() + 1);
+                    mapper.setMontoPendiente(mapper.getMontoPendiente().add(action.getMontoPendiente()));
+                }
+            } else {
+                if (paramBean == null) {
+                    
+                    mapper.setMesesDeuda(mapper.getMesesDeuda() + 1);
+                    mapper.setMontoPendiente(mapper.getMontoPendiente().add(action.getMontoPendiente()));
+                    
+                }
+                if (paramBean != null && action.getFechaVencimiento().compareTo(paramBean.getFechaVencimiento()) <= 0) {
+                    
+                    mapper.setMesesDeuda(mapper.getMesesDeuda() + 1);
+                    mapper.setMontoPendiente(mapper.getMontoPendiente().add(action.getMontoPendiente()));
+                    
+                }
+            }
+            
+        });
+        return mapper;
     }
 
     @Override
@@ -605,7 +602,8 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
 
     @Override
     @Transactional
-    public List<UploadResponse> importExcel(MultipartFile reapExcelDataFile, CnfLocal cnfLocal) throws IOException {
+    public List<UploadResponse> importExcel(MultipartFile reapExcelDataFile, CnfLocal cnfLocal) 
+            throws IOException, Exception {
         List<Object[]> list = Util.importExcel(reapExcelDataFile, false);
         List<ActContrato> listActContrato = new ArrayList<>();
 
@@ -818,7 +816,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
                 try {
                     businessService.verifyPlanContratos2(listActContrato);
                 } catch (Exception e) {
-                    errorMessage.add(e.getMessage());
+                    throw e;
                 }
                 cnfZonaService.saveAll(listZona);
                 cnfMaestroRepository.saveAll(listCnfMaestro);
@@ -831,9 +829,10 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
             e.printStackTrace();
 //            System.out.println("1 "+ e.getCause());
 //            System.out.println("2" + e.getLocalizedMessage());
-            listResponse.add(new UploadResponse(row, Arrays.asList("Error inesperado: "
-                    + e.toString())));
+//            listResponse.add(new UploadResponse(row, Arrays.asList("Error inesperado: "
+//                    + e.toString())));
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            throw e;
         }
 
         return listResponse;

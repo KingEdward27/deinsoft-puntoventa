@@ -1,6 +1,6 @@
-<a (click)="toggleDropdown()">
+<a lass="nav-link" (click)="toggleDropdown()">
     <ng-content select="[dropdown-button]"></ng-content>
-    <i class="fa fa-caret-down"></i>
+    <i *ngIf="arrow"  class="fa fa-caret-down"></i>
 </a>
 
 <app-dropdown-menu *ngIf="isOpen" [size]="size">

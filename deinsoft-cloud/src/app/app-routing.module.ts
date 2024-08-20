@@ -29,7 +29,7 @@ import { CnfSubCategoriaComponent } from '@pages/cnf-subcategoria/cnf-subcategor
 import { CnfNumComprobanteComponent } from '@pages/cnf-numcomprobante/cnf-numcomprobante';
 import { CnfMaestroComponent } from '@pages/cnf-maestro/cnf-maestro';
 import { CnfFormaPagoComponent } from '@pages/cnf-formapago/cnf-formapago';
-import { InvAlmacenComponent } from '@pages/inv-almacen/inv-almacen';
+import { InvAlmacenComponent } from '@pages/inv-almacen/inv-almacen-list';
 import { ActVentaFormComponent } from '@pages/act-venta/act-venta-form.component';
 import { ActCompraFormComponent } from '@pages/act-compra/act-compra-form.component';
 import { GenericFormComponent } from './base/components/generic-form/generic-form.component';
@@ -86,6 +86,9 @@ import { CnfTipoSistemaFormComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-si
 import { CnfTipoSistemaListComponent } from '@pages/cnf-tipo-sistema/cnf-tipo-sistema.list';
 import { ActComprobanteReportContableFormComponent } from '@pages/reports/act-comprobante/act-comprobante-venta-contable/act-comprobante-report-contable.component';
 import { TermsComponent } from '@modules/terms/terms.component';
+import { InvAlmacenFormComponent } from '@pages/inv-almacen/inv-almacen-form';
+import { ActOrdenFormComponent } from '@pages/act-orden/form/act-orden-form.component';
+import { ActOrdenListComponent } from '@pages/act-orden/list/act-orden-list.component';
 const routes: Routes = [
     {
         path: '',
@@ -133,6 +136,7 @@ const routes: Routes = [
             {path: 'maestro',component: CnfMaestroList2Component},
             {path: 'forma-pago',component: CnfFormaPagoComponent},
             {path: 'almacen',component: InvAlmacenComponent},
+            {path: 'new-almacen',component: InvAlmacenFormComponent},
             {path: 'compra',component: ActComprobanteCompraFormComponent},
             {path: 'usuario',component: SegUsuarioComponent},
             {path: 'perfil',component: SegRolComponent},
@@ -189,7 +193,9 @@ const routes: Routes = [
             {path: 'new-maestro',component: CnfMaestroForm2Component},
             {path: 'tipo-sistema',component: CnfTipoSistemaListComponent},
             {path: 'new-tipo-sistema',component: CnfTipoSistemaFormComponent},
-            {path: 'report-contable',component: ActComprobanteReportContableFormComponent}
+            {path: 'report-contable',component: ActComprobanteReportContableFormComponent},
+            {path: 'list-orden',component: ActOrdenListComponent},
+            {path: 'orden',component: ActOrdenFormComponent}
         ]
     },
     {

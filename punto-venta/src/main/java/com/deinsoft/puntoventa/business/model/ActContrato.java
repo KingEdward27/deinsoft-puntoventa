@@ -12,7 +12,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Type;
 import org.springframework.validation.annotation.Validated;
 
 @Entity(name = "actContrato")
@@ -20,11 +22,16 @@ import org.springframework.validation.annotation.Validated;
 public class ActContrato implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+//
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "act_contrato_id", nullable = false, unique = true)
     private long id;
+//    @Id
+//    @Column(name = "act_contrato_uuid")
+//    @Type(type = "uuid-char")
+//    private UUID id = UUID.randomUUID();
+//    private long id;
 
     @NotNull
     @JsonFormat(pattern = "dd-MM-yyyy")
@@ -136,7 +143,7 @@ public class ActContrato implements Serializable {
     
     @Transient
     private String color;
-    
+
     public long getId() {
         return id;
     }

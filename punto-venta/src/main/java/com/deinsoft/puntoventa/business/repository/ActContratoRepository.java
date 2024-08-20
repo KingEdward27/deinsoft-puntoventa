@@ -50,6 +50,6 @@ public interface ActContratoRepository extends JpaRepository<ActContrato,Long> {
         List<ActContrato> getReportActContrato(@Param("paramBean") ParamBean paramBean,@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 
         @Query(value = "select p from actContrato p "
-            + "where p.cnfLocal.cnfEmpresa.id =  ?1 and month(fecha) = ?2 and flagEstado = '1'")
-        List<ActContrato> findByCnfEmpresaIdAndMonth(long id, int month);
+            + "where p.cnfLocal.cnfEmpresa.id =  ?1 and flagEstado = '1'")
+        List<ActContrato> findByCnfEmpresaId(long id);
 }

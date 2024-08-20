@@ -9,8 +9,8 @@ export class CnfProducto {
 	id: number = 0;
 	codigo: string = "";
 	nombre: string = "";
-	costo!: number;
-	precio!: number;
+	costo: number = 0;
+	precio: number = 0;
 	existencia!: number;
 	rutaImagen: string = "";
 	flagEstado: string = "";
@@ -19,7 +19,7 @@ export class CnfProducto {
 	cnfEmpresa: CnfEmpresa = new CnfEmpresa();
 	cnfSubCategoria: CnfSubCategoria = new CnfSubCategoria();
 	cnfMarca: CnfMarca = new CnfMarca();
-	porcentajeGanancia!: number;
+	porcentajeGanancia: number = 0;
 	stockMinimo!: number;
 	token?: string = "";
 	file:any;

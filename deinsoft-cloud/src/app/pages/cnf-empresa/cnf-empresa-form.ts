@@ -35,6 +35,9 @@ export class CnfEmpresaForm2Component implements OnInit{
                 listData:[],hidden:false},
                 {tableName: "cnf_moneda", "columnName":"nombre","type":"select",
                 loadState : 1,relatedBy:"cnf_moneda_id"},
+                {tableName: "cnf_empresa",columnName:"tipo_costo_inventario",
+                 "type":"select",loadState : 1, relatedBy :"tipo_costo_inventario",
+                 listData:[]}
         ],
     //filters sería para filtros adicionales
     "conditions":[],
@@ -89,6 +92,9 @@ export class CnfEmpresaForm2Component implements OnInit{
 
     this.prop.columnsForm[10].listData.push([0, "NO"]);
     this.prop.columnsForm[10].listData.push([1, "SI"]);
+
+    this.prop.columnsForm[12].listData.push([1, "Promedio Ponderado"]);
+    this.prop.columnsForm[12].listData.push([2, "Último costo"]);
 
     this.prop.conditions.push({"columnName":"cnf_empresa.cnf_empresa_id","value":cnfEmpresa});
     this.prop.preSave.push({columnForm:"cnf_empresa.cnf_empresa_id",value:cnfEmpresa});

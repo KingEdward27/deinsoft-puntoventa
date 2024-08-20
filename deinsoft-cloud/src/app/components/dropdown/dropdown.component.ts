@@ -14,7 +14,9 @@ import {
 })
 export class DropdownComponent implements OnInit {
     public isOpen: boolean = false;
+    public arrow: boolean = false;
     @Input() size: string = 'md';
+    @Input() setArrow: boolean = true;
     @HostBinding('class.nav-item') hasNavItem: boolean = true;
     @HostBinding('class.dropdown') hasDropdown: boolean = true;
     @HostListener('document:click', ['$event'])
@@ -26,7 +28,10 @@ export class DropdownComponent implements OnInit {
 
     constructor(private dropdownElement: ElementRef) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.arrow = this.setArrow;
+        console.log(this.arrow);
+    }
 
     public toggleDropdown() {
         this.isOpen = !this.isOpen;

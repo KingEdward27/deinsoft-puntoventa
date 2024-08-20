@@ -7,30 +7,32 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import org.hibernate.annotations.ColumnDefault;
 
-@Entity(name = "actContratoCorte")
-@Table(name = "act_contrato_corte")
-public class ActContratoCorte implements Serializable {
+@Entity(name = "actContratoMov")
+@Table(name = "act_contrato_mov")
+public class ActContratoMov implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_act_contrato_corte_id")
-    @SequenceGenerator(name = "seq_act_contrato_corte_id", sequenceName = "seq_act_contrato_corte_id", allocationSize = 1)
-    @Column(name = "act_contrato_corte_id", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "act_contrato_mov_id", nullable = false, unique = true)
     private long id;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "fecha", length = 0, nullable = true)
     private LocalDate fecha;
 
+    @ColumnDefault("1")
     @Size(max = 1)
     @Column(name = "flag_estado", length = 1, nullable = true)
     private String flagEstado; 
 
-    @Column(name = "seg_ususario_id", length = 19, nullable = true)
-    private long segUsusarioId;
-
+    @Size(max = 1)
+    @Column(name = "flag_tipo", length = 1, nullable = false)
+    private String flagTipo; 
+    
     @OneToOne
     @JoinColumn(name = "act_contrato_id")
     private ActContrato actContrato;
@@ -63,13 +65,6 @@ public class ActContratoCorte implements Serializable {
         this.flagEstado = flagEstado;
     }
 
-    public long getSegUsusarioId() {
-        return segUsusarioId;
-    }
-
-    public void setSegUsusarioId(long segUsusarioId) {
-        this.segUsusarioId = segUsusarioId;
-    }
 
     public ActContrato getActContrato() {
         return actContrato;
@@ -87,10 +82,18 @@ public class ActContratoCorte implements Serializable {
         this.segUsuario = segUsuario;
     }
 
+    public String getFlagTipo() {
+        return flagTipo;
+    }
+
+    public void setFlagTipo(String flagTipo) {
+        this.flagTipo = flagTipo;
+    }
+
     @Override
     public String toString() {
         return "actContratoCorte [id=" + id + ", actContrato=" + (actContrato != null ? actContrato : "")
-                + ", fecha=" + fecha + ", flgEstado=" + flagEstado + ", segUsusarioId=" + segUsusarioId + "]";
+                + ", fecha=" + fecha + ", flgEstado=" + flagEstado + "]";
     }
 
 }

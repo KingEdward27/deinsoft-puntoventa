@@ -45,6 +45,9 @@ export class CnfEmpresaEmpresaComponent extends GenericListComponent implements 
                    listData:[]},
                    {tableName: "cnf_moneda", "columnName":"nombre","type":"select",
                    loadState : 1,relatedBy:"cnf_moneda_id"},
+                   {tableName: "cnf_empresa",columnName:"tipo_costo_inventario",
+                    "type":"select",loadState : 1, relatedBy :"tipo_costo_inventario",
+                    listData:[]}
            ],
     //filters sería para filtros adicionales
     "conditions":[],

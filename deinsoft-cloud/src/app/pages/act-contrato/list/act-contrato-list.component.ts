@@ -77,10 +77,9 @@ export class ActContratoListComponent implements OnInit {
     this.modalRef = this.modalService.open(ActContratoCorteFormModalComponent);
     
     this.modalRef.componentInstance.model.actContrato = item;
-    // this.modalRef.closed.subscribe(result => {
-    //   this.getListCnfMaestro();
-    //   // this.model.cnfBpartner = 
-    // })
+    this.modalRef.closed.subscribe(result => {
+      this.getAllData();
+    })
     this.modalRef.componentInstance.cnfMaestro.subscribe((receivedEntry:any) => {
       console.log(receivedEntry);
     })
@@ -107,9 +106,9 @@ export class ActContratoListComponent implements OnInit {
   import() {
     this.modalRef = this.modalService.open(UploadComponent, { size: 'lg' });
       this.modalRef.componentInstance.message = "Importar registros de contratos";
-      // this.modalRef.closed.subscribe(result => {
-      //   this.router.navigate(["/venta"]);
-      // })
+      this.modalRef.closed.subscribe(result => {
+        this.getAllData();
+      })
   }
   
   generateAttachment(fileName: string, blob: Blob, extension: string) {

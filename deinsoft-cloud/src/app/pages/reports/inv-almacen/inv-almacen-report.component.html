@@ -109,6 +109,8 @@
                                                     translate}}</th>
                                                 <th class="text-nowrap">
                                                     {{'webpagos.inv_almacen_producto.cnf_producto' | translate}}</th>
+                                                <th class="text-nowrap">
+                                                        {{'webpagos.cnf_producto.precio' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.inv_almacen_producto.cantidad' |
                                                     translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.cnf_producto.costo' |
@@ -124,6 +126,7 @@
                                                 <td>{{item.invAlmacen.cnfLocal.nombre}}</td>
                                                 <td>{{item.invAlmacen.nombre}}</td>
                                                 <td>{{item.cnfProducto.nombre}}</td>
+                                                <td class="content-number">{{item.cnfProducto.cnfEmpresa.cnfMoneda.simbolo }} {{item.cnfProducto.precio | number:'1.2-2'}}</td>
                                                 <td class="content-number">{{item.cantidad}}</td>
                                                 <td class="content-number">{{item.cnfProducto.cnfEmpresa.cnfMoneda.simbolo + ' ' + (item.cnfProducto.costo?item.cnfProducto.costo:0)}}</td>
                                                 <td class="content-number">{{item.cnfProducto.cnfEmpresa.cnfMoneda.simbolo + ' ' + ((item.cantidad * (item.cnfProducto.costo?item.cnfProducto.costo:0)) | number:'1.2-2')}}</td>

@@ -260,15 +260,23 @@ export class CnfProductoFormComponent implements OnInit {
     return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
       ? false : a1.id === a2.id;
   }
+
+  onChangeCosto(value: any) {
+    if (this.model.porcentajeGanancia){
+      this.onChangePorcentaje(this.model.porcentajeGanancia);
+    }
+    
+  }
   onChangePorcentaje(value: any) {
-    this.model.porcentajeGanancia = value;
-    this.model.precio = this.model.costo  + this.model.costo * this.model.porcentajeGanancia / 100
-    this.model.precio = Math.round((this.model.precio + Number.EPSILON) * 100) / 100;
+      // this.model.porcentajeGanancia = value;
+      this.model.precio = this.model.costo  + this.model.costo * this.model.porcentajeGanancia / 100
+      this.model.precio = Math.round((this.model.precio + Number.EPSILON) * 100) / 100;
+    
   }
   onChangePrecio(value: any) {
-    this.model.precio = value;
-    this.model.porcentajeGanancia = (this.model.precio * 100 / this.model.costo ) - 100
-    this.model.porcentajeGanancia = Math.round((this.model.porcentajeGanancia + Number.EPSILON) * 100) / 100;
+      console.log(this.model);
+      this.model.porcentajeGanancia = (this.model.precio * 100 / this.model.costo ) - 100
+      this.model.porcentajeGanancia = Math.round((this.model.porcentajeGanancia + Number.EPSILON) * 100) / 100;
   }
 }
 

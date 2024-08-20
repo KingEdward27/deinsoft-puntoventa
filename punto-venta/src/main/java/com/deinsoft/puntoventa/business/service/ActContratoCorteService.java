@@ -5,23 +5,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deinsoft.puntoventa.business.commons.service.CommonService;
-import com.deinsoft.puntoventa.business.model.ActContratoCorte;
+import com.deinsoft.puntoventa.business.model.ActContratoMov;
 
 @Service
 @Transactional
-public interface ActContratoCorteService extends CommonService<ActContratoCorte> {
+public interface ActContratoCorteService extends CommonService<ActContratoMov> {
 
-    public List<ActContratoCorte> getAllActContratoCorte(ActContratoCorte actContratoCorte);
+    public List<ActContratoMov> getAllActContratoCorte(ActContratoMov actContratoCorte);
 
-    public ActContratoCorte getActContratoCorte(Long id);
+    public ActContratoMov getActContratoCorte(Long id);
 
-    public ActContratoCorte saveActContratoCorte(ActContratoCorte actContratoCorte);
+    public ActContratoMov saveActContratoCorte(ActContratoMov actContratoCorte);
 
-    public List<ActContratoCorte> getAllActContratoCorte();
+    public List<ActContratoMov> getAllActContratoCorte();
 
-    public List<ActContratoCorte> getAllActContratoCorteByActContrato(long id);
+    public List<ActContratoMov> getAllActContratoCorteByActContrato(long id);
 
-    public List<ActContratoCorte> getAllActContratoCorteBySegUsuario(long id);
+    public List<ActContratoMov> getAllActContratoCorteBySegUsuario(long id);
 
     public void delete(long id);
 }

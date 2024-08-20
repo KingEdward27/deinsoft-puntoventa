@@ -152,6 +152,12 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
             }
             total = total.add(actPagoDetalle.getMonto());
         }
+        
+        
+        CnfNumComprobante cnfNumComprobante = numComprobante.get(0);
+        cnfNumComprobante.setUltimoNro(numComprobante.get(0).getUltimoNro() + 1);
+        cnfNumComprobanteRepository.save(cnfNumComprobante);
+        
         detail = detail.substring(0, detail.length() - 2);
         actPago.setFechaRegistro(LocalDateTime.now());
         actPago.setNumero(String.valueOf(numComprobante.get(0).getUltimoNro() + 1));
@@ -175,6 +181,7 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago, ActPagoReposi
         actCajaOperacion.setDetail(detail);
         actCajaOperacionRepository.save(actCajaOperacion);
 
+        
         return actPagoResult;
     }
 

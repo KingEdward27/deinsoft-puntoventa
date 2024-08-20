@@ -169,7 +169,7 @@ public class ActOrdenServiceImpl extends CommonServiceImpl<ActOrden, ActOrdenRep
 //            if (numComprobante.isEmpty()) {
 //                throw new Exception("No existe numeración para el tipo de comprobante y el local");
 //            }
-            if (actOrden.getId() == 0) {
+            if (actOrden.getId() != null) {
 
                 List<CnfNumComprobante> numComprobante = cnfNumComprobanteRepository.findByCnfTipoComprobanteIdAndCnfLocalId(
                         actOrden.getCnfTipoComprobante().getId(),
@@ -192,7 +192,7 @@ public class ActOrdenServiceImpl extends CommonServiceImpl<ActOrden, ActOrdenRep
                 actOrden.addActOrdenDetalle(data);
             });
             actOrdenResult = actOrdenRepository.save(actOrden);
-            if (actOrden.getId() != 0) {
+            if (actOrden.getId() != null) {
                 if (actOrdenResult.getCnfLocal().getCnfEmpresa().getFlagVentaRapida() == 1) {
 //                    validate(actOrden.getId());
 

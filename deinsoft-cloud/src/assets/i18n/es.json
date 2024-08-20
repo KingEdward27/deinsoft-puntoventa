@@ -25,6 +25,8 @@
     "btnGenerateInvoice":"Generar Factura",
     "btnGenerateDocument":"Generar Guía",
     "btnAccept":"Aceptar",
+    "btnClose":"Cerrar Caja",
+    "btnCut":"Corte servicio",
     "actionsText": "Acciones",
     "txtNoCoincidences":"No hay coincidenciaaas",
     "incorrectFormatEmail":"Formato de correo electrónico inválido",
@@ -52,7 +54,8 @@
       "perfil_empresa":"Perfil empresa",
       "flag_compra_rapida": "Compra rápida?",
       "flag_venta_rapida": "Venta rápida?",
-      "cnf_moneda":"Moneda principal"
+      "cnf_moneda":"Moneda principal",
+      "tipo_costo_inventario":"Tipo de costro de inventario"
     },
     "cnf_moneda": {
       "home": {
@@ -565,7 +568,7 @@
       "precio": "Precio",
       "dia_vencimiento":"Día de vencimiento (31 = fin de mes)",
       "precio_instalacion": "Precio instalación",
-      "dia_proceso_corte":"Día de proceso de corte"
+      "dia_proceso_corte":"Día de proceso de corte (31 = fin de mes)"
     },
     "cnf_zona": {
       "home": {

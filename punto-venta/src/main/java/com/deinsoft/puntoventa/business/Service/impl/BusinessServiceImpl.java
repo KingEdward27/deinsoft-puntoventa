@@ -295,37 +295,43 @@ public class BusinessServiceImpl implements BusinessService {
         return result;
     }
 
-    void verifyPlanContrato(ActContrato actContrato1) throws Exception {
-        
-        int month = actContrato1.getFecha().getMonthValue();
-        List<ActContrato> listVentas = actContratoRepository.findByCnfEmpresaIdAndMonth(
-                actContrato1.getCnfLocal().getCnfEmpresa().getId(), month);
+    void verifyPlanContrato(List<ActContrato> listContratos, ActContrato actContrato1) throws Exception {
+
+//        int month = actContrato1.getFecha().getMonthValue();
+        List<ActContrato> listContratosFromDb;
+        if (listContratos == null) {
+            listContratosFromDb = actContratoRepository.findByCnfEmpresaId(
+                    actContrato1.getCnfLocal().getCnfEmpresa().getId());
+        } else {
+            listContratosFromDb = listContratos;
+        }
+
         if (actContrato1.getCnfLocal().getCnfEmpresa().getPlan() == 1
-                && listVentas.size() >= 20) {
-            throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+                && listContratosFromDb.size() >= 20) {
+            throw new Exception("Lo sentimos, su plan actual no le permite generar mas contratos. Máximo: "+20);
         }
 
         if (actContrato1.getCnfLocal().getCnfEmpresa().getPlan() == 2
-                && (listVentas.size() >= 250)) {
-            throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+                && (listContratosFromDb.size() >= 250)) {
+            throw new Exception("Lo sentimos, su plan actual no le permite generar mas contratos. Máximo: "+250);
         }
 
         if (actContrato1.getCnfLocal().getCnfEmpresa().getPlan() == 3
-                && (listVentas.size() >= 400)) {
-            throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
+                && (listContratosFromDb.size() >= 400)) {
+            throw new Exception("Lo sentimos, su plan actual no le permite generar mas contratos. Máximo: "+400);
         }
+        listContratosFromDb.add(actContrato1);
     }
 
     @Override
     public void verifyPlanContratos2(List<ActContrato> actContratoList) throws Exception {
         //Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
-        
+
+        List<ActContrato> listVentas = actContratoRepository.findByCnfEmpresaId(
+                actContratoList.get(0).getCnfLocal().getCnfEmpresa().getId());
         for (ActContrato actContrato1 : actContratoList) {
-            int month = actContrato1.getFecha().getMonthValue();
-            List<ActContrato> listVentas = actContratoRepository.findByCnfEmpresaIdAndMonth(
-                actContrato1.getCnfLocal().getCnfEmpresa().getId(), month);
-            verifyPlanContrato(actContrato1);
-            listVentas.add(actContrato1);
+            verifyPlanContrato(listVentas, actContrato1);
+//            listVentas.add(actContrato1);
         }
 
     }
@@ -352,7 +358,7 @@ public class BusinessServiceImpl implements BusinessService {
                 throw new Exception("Lo sentimos, su plan actual no le permite generar mas ventas en el mes actual");
             }
         } else {
-            verifyPlanContrato(actContrato);
+            verifyPlanContrato(null,actContrato);
 //            int month = actContrato.getFecha().getMonthValue();
 //            List<ActContrato> listVentas = actContratoRepository.findByCnfEmpresaIdAndMonth(
 //                    actContrato.getCnfLocal().getCnfEmpresa().getId(), month);

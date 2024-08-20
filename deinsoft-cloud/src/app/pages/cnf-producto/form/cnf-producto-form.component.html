@@ -133,8 +133,11 @@
                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.costo' |
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-9">
-                                <input type="number" [ngModel]="model.costo | number:'1.2-3'" maxlength="14" name="costo" id="costo"
-                                    name="costo" class="form-control-sm col-sm-12 col-lg-6"
+                                <input type="number" [ngModel]="model.costo" maxlength="14" 
+                                    name="costo" 
+                                    (ngModelChange)="model.costo = $event" id="costo"
+                                    (input)="onChangeCosto($event.target.value)" 
+                                    class="form-control-sm col-sm-12 col-lg-6" onclick="this.select()"
                                     placeholder="Ingrese costo" />
                                 <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.costo">{{ error.costo }}</div>
                             </div>
@@ -144,9 +147,10 @@
                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.porcentaje_ganancia' |
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-9">
-                                <input type="number" [(ngModel)]="model.porcentajeGanancia" step='0.01' value='0.00' placeholder='0.00' 
+                                <input type="number" [(ngModel)]="model.porcentajeGanancia" placeholder='0.00' 
                                 maxlength="14" name="porcentajeGanancia" id="porcentajeGanancia"
-                                (input)="onChangePorcentaje($event.target.value)"
+                                (ngModelChange)="model.porcentajeGanancia = $event"
+                                (input)="onChangePorcentaje($event.target.value)" onclick="this.select()"
                                     class="form-control-sm col-sm-12 col-lg-6"
                                     placeholder="Ingrese porcentaje de ganancia" />
                                 <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.porcentajeGanancia">{{ error.porcentajeGanancia }}</div>
@@ -157,9 +161,11 @@
                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.precio' |
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-9">
-                                <input type="number" [ngModel]="model.precio" step='0.01' value='0.00' placeholder='0.00' maxlength="14" name="precio" id="precio"
-                                    name="precio" class="form-control-sm col-sm-12 col-lg-6"
-                                    (input)="onChangePrecio($event.target.value)"
+                                <input type="number" [ngModel]="model.precio"  placeholder='0.00'
+                                (ngModelChange)="model.precio = $event" 
+                                (input)="onChangePrecio($event.target.value)"
+                                maxlength="14" name="precio" id="precio"
+                                    name="precio" class="form-control-sm col-sm-12 col-lg-6" onclick="this.select()"
                                     placeholder="Ingrese precio" />
                                 <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.precio">{{ error.precio
                                     }}</div>

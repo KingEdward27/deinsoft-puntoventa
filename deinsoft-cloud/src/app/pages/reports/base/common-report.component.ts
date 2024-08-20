@@ -45,11 +45,13 @@ import { ActCajaOperacion } from '../../../business/model/act-caja-operacion.mod
 import { ActCajaOperacionService } from '../../../business/service/act-caja-operacion.service';
 import { CnfZonaService } from '../../../business/service/cnf-zona.service';
 import { ActContratoService } from '@pages/act-contrato/act-contrato.service';
+import { ActOrdenService } from '@pages/act-orden/act-orden.service';
 
 @Injectable()
 export class MyBaseComponentDependences {
   constructor(public actComprobanteService: ActComprobanteService,
     public actContratoService: ActContratoService,
+    public actOrdenService: ActOrdenService,
     public router: Router,
     public utilService: UtilService,
     public cnfMaestroService: CnfMaestroService,
