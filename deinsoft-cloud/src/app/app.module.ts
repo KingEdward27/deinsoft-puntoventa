@@ -139,6 +139,7 @@ import { UploadComponent } from '@pages/act-contrato/modal/message-modal.compone
 import { InvAlmacenFormComponent } from '@pages/inv-almacen/inv-almacen-form';
 import { ActOrdenFormComponent } from '@pages/act-orden/form/act-orden-form.component';
 import { ActOrdenListComponent } from '@pages/act-orden/list/act-orden-list.component';
+import { SegUsuarioFormPasswordComponent } from '@pages/security/seg-usuario/form-password/seg-usuario-form-password.component';
 
 @NgModule({
     declarations: [
@@ -261,7 +262,8 @@ import { ActOrdenListComponent } from '@pages/act-orden/list/act-orden-list.comp
         ActOrdenFormComponent,
         ActOrdenListComponent,
         TermsComponent,
-        UploadComponent
+        UploadComponent,
+        SegUsuarioFormPasswordComponent
     ],
     imports: [
         BrowserModule,

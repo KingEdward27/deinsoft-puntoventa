@@ -89,6 +89,7 @@ import { TermsComponent } from '@modules/terms/terms.component';
 import { InvAlmacenFormComponent } from '@pages/inv-almacen/inv-almacen-form';
 import { ActOrdenFormComponent } from '@pages/act-orden/form/act-orden-form.component';
 import { ActOrdenListComponent } from '@pages/act-orden/list/act-orden-list.component';
+import { SegUsuarioFormPasswordComponent } from '@pages/security/seg-usuario/form-password/seg-usuario-form-password.component';
 const routes: Routes = [
     {
         path: '',
@@ -195,7 +196,8 @@ const routes: Routes = [
             {path: 'new-tipo-sistema',component: CnfTipoSistemaFormComponent},
             {path: 'report-contable',component: ActComprobanteReportContableFormComponent},
             {path: 'list-orden',component: ActOrdenListComponent},
-            {path: 'orden',component: ActOrdenFormComponent}
+            {path: 'orden',component: ActOrdenFormComponent},
+            {path: 'change-password',component: SegUsuarioFormPasswordComponent}
         ]
     },
     {

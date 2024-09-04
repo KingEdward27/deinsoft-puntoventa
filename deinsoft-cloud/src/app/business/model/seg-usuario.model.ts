@@ -1,4 +1,5 @@
 import { CnfEmpresa } from './cnf-empresa.model';
+import { SegRolUsuario } from './seg-rol-usuario.model';
 
 export class SegUsuario {
 	id: number = 0;
@@ -12,4 +13,5 @@ export class SegUsuario {
 	nombreEmpresa:string;
 	perfilEmpresa: number = 0;
 	tokenRecoverPassword?: string = "";
+	listSegRolUsuario: SegRolUsuario[] = [];
 };

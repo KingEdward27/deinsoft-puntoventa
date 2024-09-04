@@ -10,8 +10,9 @@
 
         <form>
             <div class="input-group mb-3">
-                <input type="number" name="segUsuario.rucEmpresa" maxlength="11" class="form-control" [(ngModel)]="segUsuario.rucEmpresa"
-                    (focusout)="searchSunat()" placeholder="Ingrese el RUC de su empresa" />
+                <input type="number" name="segUsuario.rucEmpresa" maxlength="11" class="form-control"
+                    [(ngModel)]="segUsuario.rucEmpresa" (focusout)="searchSunat()"
+                    placeholder="Ingrese el RUC de su empresa" />
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-id-card"></span>
@@ -19,7 +20,8 @@
                 </div>
             </div>
             <div class="input-group mb-3">
-                <input type="text" name="segUsuario.nombreEmpresa" class="form-control" disabled [(ngModel)]="segUsuario.nombreEmpresa" />
+                <input type="text" name="segUsuario.nombreEmpresa" class="form-control" disabled
+                    [(ngModel)]="segUsuario.nombreEmpresa" />
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-industry"></span>
@@ -27,7 +29,8 @@
                 </div>
             </div>
             <div class="input-group mb-3">
-                <input type="email" name="segUsuario.email" class="form-control" placeholder="Email" [(ngModel)]="segUsuario.email" />
+                <input type="email" name="segUsuario.email" class="form-control" placeholder="Email"
+                    [(ngModel)]="segUsuario.email" />
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-envelope"></span>
@@ -35,26 +38,40 @@
                 </div>
             </div>
             <div class="input-group mb-3">
-                <input type="password" name="segUsuario.password" class="form-control" placeholder="Contraseña" [(ngModel)]="segUsuario.password" />
+                <input type="password" name="segUsuario.password" class="form-control" required minlength="8"
+                    placeholder="Contraseña" [(ngModel)]="segUsuario.password" #password="ngModel"
+                    [ngClass]="{ 'is-invalid': password.invalid && password.touched }" />
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-lock"></span>
                     </div>
                 </div>
+                <div *ngIf="password.invalid && password.touched" class="invalid-feedback">
+                    Contraseña debe tener al menos 8 caracteres
+                </div>
             </div>
             <div class="input-group mb-3">
-                <input type="password" name="segUsuario.repassword" class="form-control" [(ngModel)]="segUsuario.repassword"
-                    placeholder="Repita su contraseña" />
+                <input type="password" name="segUsuario.repassword" required minlength="8" class="form-control"
+                    [(ngModel)]="segUsuario.repassword"
+                    #repassword="ngModel" placeholder="Repita su contraseña"
+                    [ngClass]="{ 'is-invalid': password.invalid && password.touched || 
+                                password != repassword && repassword.touched }" />
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-lock"></span>
                     </div>
+                </div>
+                <div *ngIf="repassword.invalid && repassword.touched" class="invalid-feedback">
+                    Contraseña debe tener al menos 8 caracteres
+                </div>
+                <div *ngIf="password != repassword && repassword.touched" class="invalid-feedback">
+                    Contraseñas deben coincidir
                 </div>
             </div>
             <label style="font-weight: normal;">Perfil de empresa:
             </label>
-            <select name="selectedPerfil" [compareWith]="comparePerfil" id = "selectedPerfil" [(ngModel)]="segUsuario.perfilEmpresa"
-                class="form-control col-sm-12 col-lg-12">
+            <select name="selectedPerfil" [compareWith]="comparePerfil" id="selectedPerfil"
+                [(ngModel)]="segUsuario.perfilEmpresa" class="form-control col-sm-12 col-lg-12">
                 <option *ngFor="let item of listPerfiles; index as i;" [ngValue]="item.id">
                     {{item.nombre}}
                 </option>
@@ -79,7 +96,7 @@
                 <!-- /.col -->
                 <div class="col-12">
                     <app-button [type]="'submit'" [block]="true" [loading]="isAuthLoading"
-                        [disabled]="isFacebookLoading || isGoogleLoading" (click) = "registerByAuth()">
+                        [disabled]="isFacebookLoading || isGoogleLoading" (click)="registerByAuth()">
                         Registro
                     </app-button>
                 </div>

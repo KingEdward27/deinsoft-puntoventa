@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 import { GenericMasterDetailFormComponent } from '../base/components/generic-master-detail-form/generic-master-detail-form.component';
 import { Status } from '../base/interfaces/State';
 import { CommonService } from '../base/services/common.service';
+import { SegAccionBoton } from '@/business/model/seg-accion-botones';
+import { AppService } from './app.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +26,8 @@ export class UtilService {
   url: string = environment.apiUrl;
   public titleExport = ""
   constructor(private http: HttpClient, private router: Router, private translate: TranslateService,
-    public ngbCalendar: NgbCalendar, public dateAdapter: NgbDateAdapter<dayjs.Dayjs>) {
+    public ngbCalendar: NgbCalendar, public dateAdapter: NgbDateAdapter<dayjs.Dayjs>,
+    private appService: AppService) {
     let lang = localStorage.getItem('lang');
     console.log(lang);
     // if (rememberUser != "null") {
@@ -573,5 +576,43 @@ export class UtilService {
     x.send();
     URL.revokeObjectURL(u);
     return x.responseText;
+  }
+
+  async setAppPermisos(route:string):Promise<SegAccionBoton> {
+    let url = route.split(";").length>0?route.split(";")[0].replace("new-",""):route.replace("new-","");
+    let menu = this.appService.getMenu();
+    console.log(menu);
+    let list: any[] = [];
+    menu.forEach(element => {
+      let vars = element.children.filter(
+          item => item.path == url);
+      if (vars.length > 0) list.push(vars[0]);
+    });
+    let botones = new SegAccionBoton();
+    console.log(list);
+    
+    list[0].listSegPermiso.forEach(element => {
+      //comentar luego esta parte
+      botones.guardar = true; 
+      botones.editar = true;
+      botones.eliminar = true;
+      botones.descargar = true;
+      botones.verDetalle = true;
+      botones.exportar = true;
+      botones.favorites = true;
+      botones.importar = true;
+
+      if (element.segAccion.nombre == 'GUARDAR') botones.guardar = true; 
+      if (element.segAccion.nombre == 'EDITAR') botones.editar = true;
+      if (element.segAccion.nombre == 'ELIMINAR') botones.eliminar = true;
+      if (element.segAccion.nombre == 'DESCARGAR') botones.descargar = true;
+      if (element.segAccion.nombre == 'VERDETALLE') botones.verDetalle = true;
+      if (element.segAccion.nombre == 'EXPORTAR') botones.exportar = true;
+      if (element.segAccion.nombre == 'FAVORITES') botones.favorites = true;
+      if (element.segAccion.nombre == 'IMPORTAR') botones.importar = true;
+    });
+    return botones;
+    // menu.segMenu.children.filter(
+    //   item => item.path[0] == route)
   }
 }
