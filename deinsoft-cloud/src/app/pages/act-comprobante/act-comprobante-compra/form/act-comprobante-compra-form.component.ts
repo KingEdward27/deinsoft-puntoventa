@@ -39,7 +39,7 @@ import { CnfMaestroFormModalComponent } from '../../../cnf-maestro/cnf-maestro-m
 
 @Component({
   selector: 'app-act-comprobante-compra-form',
-  templateUrl: './act-comprobante-compra-form.component.html', 
+  templateUrl: './act-comprobante-compra-form.component.html',
   providers: [
     { provide: NgbDateAdapter, useClass: CustomAdapter },
     { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter }
@@ -92,15 +92,15 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   public modelOrig: ActComprobante = new ActComprobante();
   cnfProducto: any;
   formatter = (x: { nombre: string }) => x.nombre;
-  formatterCnfMaestro = (x: CnfMaestro ) => (x.razonSocial).trim();
+  formatterCnfMaestro = (x: CnfMaestro) => (x.razonSocial).trim();
 
   loadingCnfImpuestoCondicion: boolean = false;
   selectDefaultImpuestoCondicion: any = { id: 0, nombre: "- Seleccione -" };
   listImpuestoCondicion: any;
   public modalRef!: NgbModalRef;
-  option:string = "1";
+  option: string = "1";
   empresaPrincipal: any
-  
+
   constructor(private actComprobanteService: ActComprobanteService,
     private router: Router,
     private utilService: UtilService,
@@ -118,7 +118,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     private dateAdapter: NgbDateAdapter<dayjs.Dayjs>,
     private ngbCalendar: NgbCalendar,
     private modalService: NgbModal,
-    private route: ActivatedRoute, config: NgbModalConfig,private appService:AppService) {
+    private route: ActivatedRoute, config: NgbModalConfig, private appService: AppService) {
     config.backdrop = 'static';
     config.keyboard = false;
   }
@@ -147,9 +147,9 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     // this.getListInvAlmacen();
     this.getListImpuestoCondicion();
     console.log(this.listCnfLocal);
-    
-    
-    
+
+
+
 
 
     this.model.total = 0;
@@ -164,7 +164,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
       this.option = params.get('option')!;
       console.log(this.id);
       if (!this.id) {
-        
+
         this.option = "1";
         this.isDataLoaded = true;
       }
@@ -183,7 +183,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   getListCnfProductAsObservable(term: any): Observable<any> {
 
     if (term.length >= 2) {
-      let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];  
+      let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
       return this.cnfProductoService.getAllDataComboTypeHead(term, cnfEmpresa)
         .pipe(
           tap(() => this.searchFailed = false),
@@ -231,7 +231,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     this.model.descuento = 0
     this.model.igv = Math.round((this.model.total - this.model.subtotal + Number.EPSILON) * 100) / 100
     console.log(actComprobanteDetalle);
-    
+
     this.model.listActComprobanteDetalle.push(actComprobanteDetalle);
     input.value = '';
   }
@@ -315,12 +315,12 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     this.loadingCnfMaestro = true;
     console.log(this.chargingsb);
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
-    if(cnfEmpresa == '*') {
+    if (cnfEmpresa == '*') {
       return this.cnfMaestroService.getAllDataCombo().subscribe(data => {
         this.listCnfMaestro = data;
         this.loadingCnfMaestro = false;
       })
-    }else{
+    } else {
       return this.cnfMaestroService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
         this.listCnfMaestro = data;
         this.loadingCnfMaestro = false;
@@ -356,12 +356,12 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     this.loadingCnfFormaPago = true;
     console.log(this.chargingsb);
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
-    if(cnfEmpresa == '*') {
+    if (cnfEmpresa == '*') {
       return this.cnfFormaPagoService.getAllDataCombo().subscribe(data => {
         this.listCnfFormaPago = data;
         this.loadingCnfFormaPago = false;
       })
-    }else{
+    } else {
       return this.cnfFormaPagoService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
         this.listCnfFormaPago = data;
         this.loadingCnfFormaPago = false;
@@ -402,22 +402,22 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     let user = this.appService.getProfile();
     console.log(user);
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
-    if(cnfEmpresa == '*') {
+    if (cnfEmpresa == '*') {
       return this.cnfLocalService.getAllDataCombo().subscribe(data => {
         this.listCnfLocal = data;
         this.loadingCnfLocal = false;
       })
-    }else{
+    } else {
       return this.cnfLocalService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
         this.listCnfLocal = data;
         this.loadingCnfLocal = false;
 
-        
-        if(this.listCnfLocal.length == 1) {
+
+        if (this.listCnfLocal.length == 1) {
           this.cnfLocalService.getData(this.listCnfLocal[0].id).subscribe(data => {
             this.model.cnfLocal = data
             this.getListInvAlmacen()
-            
+
           })
           // this.model.cnfLocal.id = this.listCnfLocal[0].id;
           // if (this.listInvAlmacen.length == 1){
@@ -426,7 +426,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
         }
       })
     }
-    
+
 
   }
   compareCnfLocal(a1: CnfLocal, a2: CnfLocal): boolean {
@@ -460,12 +460,12 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     return this.invAlmacenService.getAllByCnfLocalId(this.model.cnfLocal.id).subscribe(data => {
       this.listInvAlmacen = data;
       this.loadingInvAlmacen = false;
-      if(this.listInvAlmacen.length == 1){
+      if (this.listInvAlmacen.length == 1) {
         this.invAlmacenService.getData(this.listInvAlmacen[0].id).subscribe(data => {
           this.model.invAlmacen = data;
         })
       }
-      
+
     })
 
   }
@@ -486,8 +486,8 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   onChangeCosto(item: any, value: any) {
     item.importe = item.cantidad * value;
     console.log(item.porcentajeGanancia);
-    
-    item.precioVenta = (value*1) + (value * ((item.porcentajeGanancia)?(item.porcentajeGanancia/100):0));
+
+    item.precioVenta = (value * 1) + (value * ((item.porcentajeGanancia) ? (item.porcentajeGanancia / 100) : 0));
     item.afectacionIgv = item.importe - item.importe / 1.18
     this.updateTotals()
   }
@@ -502,7 +502,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
       this.model.igv = Math.round((this.model.total - this.model.subtotal + Number.EPSILON) * 100) / 100
     });
   }
-  removeItem(index:any){
+  removeItem(index: any) {
     this.model.listActComprobanteDetalle.splice(index, 1)
     this.updateTotals()
   }
@@ -512,7 +512,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
       this.getListCnfMaestro();
       // this.model.cnfBpartner = 
     })
-    this.modalRef.componentInstance.cnfMaestro.subscribe((receivedEntry:CnfMaestro) => {
+    this.modalRef.componentInstance.cnfMaestro.subscribe((receivedEntry: CnfMaestro) => {
       console.log(receivedEntry);
       this.getListCnfMaestro()
       this.model.cnfMaestro = receivedEntry
@@ -522,7 +522,7 @@ export class ActComprobanteCompraFormComponent implements OnInit {
 
     if (term.length >= 2) {
       let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
-      return this.cnfMaestroService.getAllDataComboTypeHead(term,cnfEmpresa)
+      return this.cnfMaestroService.getAllDataComboTypeHead(term, cnfEmpresa)
         .pipe(
           tap(() => this.searchFailed = false),
           catchError((err: any) => {
@@ -536,13 +536,40 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     }
 
   }
-searchCnfMaestro = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    distinctUntilChanged(),
-    switchMap(term => {
-      return this.getListCnfMestroAsObservable(term);
-    })
-  )
+  searchCnfMaestro = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap(term => {
+        return this.getListCnfMestroAsObservable(term);
+      })
+    )
+
+  focusOutRef() {
+    console.log(this.model.cnfLocal.id);
+    
+    this.actComprobanteService.getDataByCp(this.model.cnfLocal.id, this.model.serieRef, this.model.numeroRef).subscribe(data => {
+      if (!data) {
+        this.utilService.msgProblemNoItems();
+      } else {
+        
+        this.model.cnfMaestro = data.cnfMaestro;
+        this.model.subtotal = data.subtotal * -1;
+        this.model.igv = data.igv * -1;
+        this.model.total = data.total * -1;
+        this.model.cnfFormaPago = data.cnfFormaPago;
+        this.model.listActComprobanteDetalle = data.listActComprobanteDetalle;
+        this.model.listActComprobanteDetalle.forEach(element => {
+          element.id = 0;
+        });
+        console.log(this.model);
+        this.isDataLoaded = true;
+        //this.titulo = 'Editar ' + this.nombreModel;
+      }
+      
+    });
+
+  }
 }
+
 

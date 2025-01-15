@@ -66,7 +66,7 @@ public interface ActComprobanteRepository extends JpaRepository<ActComprobante, 
     
     @Query(value = "select p from actComprobante p "
             + "where p.cnfLocal.cnfEmpresa.id =  :#{#actComprobante.cnfLocal.cnfEmpresa.id} "
-            + "and serie = :#{#actComprobante.serie} and numero = :#{#actComprobante.numero} "
+            + "and serie = :#{#actComprobante.serie} and CAST(p.numero AS int) = CAST(:#{#actComprobante.numero} AS int) "
             + "and flagIsventa = :#{#actComprobante.flagIsventa}")
     List<ActComprobante> findByCnfEmpresaIdAndNumberCp(@Param("actComprobante") ActComprobante actComprobante);
     

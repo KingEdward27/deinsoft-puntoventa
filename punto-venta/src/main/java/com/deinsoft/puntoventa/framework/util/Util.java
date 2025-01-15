@@ -30,6 +30,7 @@ import java.security.InvalidKeyException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
@@ -470,5 +471,13 @@ public class Util {
         } catch (Exception e) {
             return false;
         }
+    }
+    public static String generateSafeToken() {
+        SecureRandom random = new SecureRandom();
+        byte[] bytes = new byte[36]; // 36 bytes * 8 = 288 bits, a little bit more than
+                                     // the 256 required bits 
+        random.nextBytes(bytes);
+        Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
+        return encoder.encodeToString(bytes);
     }
 }

@@ -140,6 +140,13 @@ public class ActComprobante implements Serializable {
     private SegUsuario segUsuario;
     
     
+    @Size(max = 4)
+    @Column(name = "serie_ref", length = 4, nullable = false)
+    private String serieRef;
+
+    @Size(max = 8)
+    @Column(name = "numero_ref", length = 8, nullable = false)
+    private String numeroRef;
     
     public void addActComprobanteDetalle(ActComprobanteDetalle item) {
         item.setActComprobante(this);
@@ -359,6 +366,22 @@ public class ActComprobante implements Serializable {
 
     public void setSegUsuario(SegUsuario segUsuario) {
         this.segUsuario = segUsuario;
+    }
+
+    public String getSerieRef() {
+        return serieRef;
+    }
+
+    public void setSerieRef(String serieRef) {
+        this.serieRef = serieRef;
+    }
+
+    public String getNumeroRef() {
+        return numeroRef;
+    }
+
+    public void setNumeroRef(String numeroRef) {
+        this.numeroRef = numeroRef;
     }
 
     @Override

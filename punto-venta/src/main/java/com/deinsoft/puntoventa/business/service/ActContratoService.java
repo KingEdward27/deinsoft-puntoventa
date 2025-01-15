@@ -39,7 +39,7 @@ public interface ActContratoService extends CommonService<ActContrato> {
     
     public List<ActContrato> getReportActContratos(ParamBean paramBean);
     
-    public Map<String,Object> getDashboardActContratos(long empresaId);
+    public Map<String,Object> getDashboardActContratos(long empresaId)  throws Exception ;
     
     public List<UploadResponse> importExcel(MultipartFile reapExcelDataFile,CnfLocal cnfLocal) throws IOException, Exception ;
 }

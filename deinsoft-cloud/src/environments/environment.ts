@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:8084/ventas-backend',
+    apiUrl: 'http://localhost:8084/deinsoft-puntoventa',
     //apiUrl: 'http://66.29.149.124:8080/ventas-backend',
     __TIMESTAMP__: String(new Date().getTime()),
 };

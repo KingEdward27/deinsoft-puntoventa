@@ -24,6 +24,7 @@ import com.deinsoft.puntoventa.business.model.ActComprobanteDetalle;
 import com.deinsoft.puntoventa.business.model.ActContrato;
 import com.deinsoft.puntoventa.business.model.ActPagoProgramacion;
 import com.deinsoft.puntoventa.business.model.CnfFormaPagoDetalle;
+import com.deinsoft.puntoventa.business.model.CnfLocal;
 import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
 import com.deinsoft.puntoventa.business.model.CnfProducto;
 import com.deinsoft.puntoventa.business.model.InvAlmacenProducto;
@@ -39,15 +40,12 @@ import com.deinsoft.puntoventa.business.repository.CnfFormaPagoDetalleRepository
 import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
 import com.deinsoft.puntoventa.business.repository.InvAlmacenProductoRepository;
 import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoRepository;
-import com.deinsoft.puntoventa.business.service.ActPagoProgramacionService;
 import com.deinsoft.puntoventa.business.service.CnfImpuestoCondicionService;
+import com.deinsoft.puntoventa.business.service.CnfLocalService;
 import com.deinsoft.puntoventa.business.service.InvAlmacenProductoService;
-import static com.deinsoft.puntoventa.business.service.impl.ActContratoServiceImpl.YYYYMM_FORMATER;
 import com.deinsoft.puntoventa.config.AppConfig;
-import com.deinsoft.puntoventa.facturador.client.EnvioPSE;
 import com.deinsoft.puntoventa.facturador.client.EnvioPSE2;
 import com.deinsoft.puntoventa.facturador.client.RespuestaPSE;
-import com.deinsoft.puntoventa.framework.model.JsonData;
 import com.deinsoft.puntoventa.framework.util.Formatos;
 import com.deinsoft.puntoventa.framework.util.Util;
 import com.deinsoft.puntoventa.util.Constantes;
@@ -112,6 +110,9 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
     @Autowired
     ActPagoRepository actPagoRepository;
 
+    @Autowired
+    CnfLocalService cnfLocalService;
+    
     @Autowired
     AppConfig appConfig;
 
@@ -746,6 +747,26 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         return map;
     }
 
+    @Override
+    public ActComprobante getByCnfEmpresaIdAndNumberCp(long localId, String serie, String numero) {
+        ActComprobante actComprobante = new ActComprobante();
+        actComprobante.setCnfLocal(cnfLocalService.getCnfLocal(localId));
+        actComprobante.setSerie(serie);
+        actComprobante.setNumero(numero);
+        actComprobante.setFlagIsventa("2");
+        List<ActComprobante> listExists = actComprobanteRepository.findByCnfEmpresaIdAndNumberCp(actComprobante);
+        
+        if (listExists.isEmpty()) {
+            throw new BusinessException("comprobante no encontrado");
+        }
+        
+        if (listExists.size() > 1) {
+            throw new BusinessException("La búsqueda resultó mas de un comprobante, consultar con ADMIN TI");
+        }
+        
+        return listExists.stream().findFirst().orElse(null);
+    }
+    
     String grouping(ActComprobante item) {
         String fileNameCompras = "LE"
                 .concat(item.getCnfLocal().getCnfEmpresa().getNroDocumento())

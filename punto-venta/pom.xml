@@ -12,7 +12,7 @@
     <artifactId>punto-venta</artifactId>
     <version>1.0.1</version>
     <name>punto-venta</name>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <description>Punto de venta</description>
     <properties>
         <java.version>8</java.version>
@@ -152,7 +152,7 @@
             <artifactId>guava</artifactId>
             <version>32.1.2-jre</version>
         </dependency>
-<!--        <dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
@@ -162,7 +162,7 @@
                 <artifactId>javax.servlet-api</artifactId>
                 <version>3.1.0</version>
                 <scope>provided</scope>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
@@ -180,7 +180,7 @@
     </dependencies>
     
     <build>
-        <finalName>ventas-backend</finalName>
+        <finalName>deinsoft-puntoventa</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

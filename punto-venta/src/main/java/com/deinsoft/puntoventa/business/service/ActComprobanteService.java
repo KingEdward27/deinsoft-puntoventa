@@ -56,4 +56,6 @@ public interface ActComprobanteService extends CommonService<ActComprobante> {
     RespuestaPSE sendApi(long id);
     
     public Map<String, Object> getDashboardActComprobantes(ParamBean param);
+    
+    public ActComprobante getByCnfEmpresaIdAndNumberCp(long localId, String serie, String numero);
 }

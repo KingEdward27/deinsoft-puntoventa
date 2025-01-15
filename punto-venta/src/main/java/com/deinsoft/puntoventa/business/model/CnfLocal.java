@@ -2,11 +2,8 @@ package com.deinsoft.puntoventa.business.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.time.*;
 import java.io.Serializable;
-import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
-import java.math.BigDecimal;
 
 @Entity(name = "cnfLocal")
 @Table(name = "cnf_local")
@@ -33,6 +30,15 @@ public class CnfLocal implements Serializable {
     @JoinColumn(name = "cnf_empresa_id")
     private CnfEmpresa cnfEmpresa;
 
+    public CnfLocal() {
+    }
+
+    
+    public CnfLocal(long id) {
+        this.id = id;
+    }
+
+    
     public long getId() {
         return id;
     }

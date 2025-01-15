@@ -142,7 +142,37 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+                                    <div *ngIf="model.cnfTipoComprobante.codigoSunat == '07'" class="col-lg-3 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label for="serieRef"
+                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.serieRef'
+                                                |
+                                                translate}} <span
+                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                            <div class="col-sm-12 col-lg-12">
+                                                <input type="text" 
+                                                    [(ngModel)]="model.serieRef" maxlength="4" 
+                                                    name="serieRef"
+                                                    id="serieRef" class="form-control col-sm-12 col-lg-12"
+                                                    placeholder="Ingrese serie de Referencia" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="model.cnfTipoComprobante.codigoSunat == '07'" class="col-lg-3 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label for="numeroRef"
+                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.numeroRef'
+                                                | translate}} <span
+                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                            <div class="col-sm-12 col-lg-12">
+                                                <input type="text" [(ngModel)]="model.numeroRef" maxlength="8"
+                                                    (focusout)="focusOutRef()"
+                                                    name="numeroRef" id="numeroRef"
+                                                    class="form-control col-sm-12 col-lg-12"
+                                                    placeholder="Ingrese número de Referencia"/>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-3 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label

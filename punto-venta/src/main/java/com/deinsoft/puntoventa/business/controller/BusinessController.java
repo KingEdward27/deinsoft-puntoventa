@@ -125,6 +125,7 @@ public class BusinessController {
         
         return ResponseEntity.status(HttpStatus.OK).body(businessService.searchSunat(nroDoc));
     }
+    
     @PostMapping(value = "/register-new-user")
     public ResponseEntity<?> registerNewUser(@Valid @RequestBody SegUsuario segUsuario, BindingResult result) throws Exception {
         return ResponseEntity.status(HttpStatus.OK).body(segUsuarioService.registerNewUser(segUsuario));

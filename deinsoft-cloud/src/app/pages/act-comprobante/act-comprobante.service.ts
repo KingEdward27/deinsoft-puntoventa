@@ -104,5 +104,10 @@ export class ActComprobanteService {
     return this.http.post<any>(this.url + '/get-dashboard-act-comprobante', form);
   }
 
+  public getDataByCp(localId: any, serie: string, numero: string): Observable<any> {
+    let params = new HttpParams().set("cnfLocalId", localId).set("serie", serie).set("numero", numero)
+    return this.http.get<ActComprobante>(`${this.url}/get-act-comprobante-by-cp`, { params });
+  }
+
 }
 

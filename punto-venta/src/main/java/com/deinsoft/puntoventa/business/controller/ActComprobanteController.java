@@ -295,7 +295,7 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
     }
     
     @GetMapping(value = "/get-list-contable")
-    public List<ReporteContableDto> getListaReporteContable(@Param("cnfLocalId") Long cnfLocalId) {
+    public List<ReporteContableDto> getListaReporteContable(@RequestParam("cnfLocalId") Long cnfLocalId) {
         List<ReporteContableDto> listReporteContableDto = actComprobanteService.getListaReporteContable(cnfLocalId);
         return listReporteContableDto;
     }
@@ -306,4 +306,18 @@ public class ActComprobanteController extends CommonController<ActComprobante, A
         return ResponseEntity.status(HttpStatus.OK).body(actDashboard);
     }
     
+    @GetMapping(value = "/get-act-comprobante-by-cp")
+    public ResponseEntity<?> getActComprobanteByCp(@RequestParam("cnfLocalId") Long id,
+            @RequestParam("serie") String serie,
+            @RequestParam("numero") String numero) {
+        
+        LOG.info("getActComprobante received: " + id);
+        try {
+            ActComprobante actComprobante = actComprobanteService.getByCnfEmpresaIdAndNumberCp(id,serie,numero);
+            return ResponseEntity.status(HttpStatus.OK).body(actComprobante);
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e);
+        }
+        
+    }
 }

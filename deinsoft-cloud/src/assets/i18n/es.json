@@ -196,7 +196,9 @@
       "fechaHasta":"Fecha fin",
       "envio_pse_flag":"Envío SUNAT",
       "fecha_vencimiento":"Fecha vencimiento",
-      "periodo":"Periodo"
+      "periodo":"Periodo",
+      "serieRef":"Serie Referencia",
+      "numeroRef": "Número Referencia"
     },
     "act_comprobante_detalle": {
       "home": {

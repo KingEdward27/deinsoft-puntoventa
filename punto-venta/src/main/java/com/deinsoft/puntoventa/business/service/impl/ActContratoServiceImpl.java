@@ -551,7 +551,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
     }
 
     @Override
-    public Map<String, Object> getDashboardActContratos(long empresaId) {
+    public Map<String, Object> getDashboardActContratos(long empresaId) throws Exception {
 
 //        actPagoProgramacionService.refreshProgramacionPagos();
         List<ActPagoProgramacion> actPagoProgramacionList = actPagoProgramacionRepository.findAll().stream()
@@ -586,11 +586,14 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActCo
         String moneda = "";
         if (!actContratoList.isEmpty()) {
             moneda = actContratoList.get(0).getCnfLocal().getCnfEmpresa().getCnfMoneda().getSimbolo();
+            if (actContratoList.get(0).getCnfLocal().getCnfEmpresa().getCnfMoneda() == null) {
+                throw new Exception("Revisar la configuración de su empresa, le falta registrar la moneda");
+            }
         }
 
         Map<String, Object> map = new HashMap<>();
         map.put("moneda", moneda);
-        map.put("cantidadContratos", actContratoList.size());
+        map.put("cantidadContratos", actContratoList == null? 0: actContratoList.size());
         map.put("cantidadDeudores", actContratoList.stream().filter(predicate -> predicate.getEstadoDescripcion().equals("Afecto a Corte")).count());
 
         float r = Float.valueOf(totalCuentasCanceladas)

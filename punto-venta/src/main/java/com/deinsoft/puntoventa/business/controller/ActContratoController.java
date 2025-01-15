@@ -124,7 +124,7 @@ public class ActContratoController extends CommonController<ActContrato, ActCont
         return actCajaOperacionList; 
     }
     @GetMapping(value = "/get-dashboard-act-contrato")
-    public ResponseEntity<?> getDashboardActContrato(@Param("id") Long id) {
+    public ResponseEntity<?> getDashboardActContrato(@Param("id") Long id) throws Exception {
         Map<String,Object> actDashboard = actContratoService.getDashboardActContratos(id);
         return ResponseEntity.status(HttpStatus.OK).body(actDashboard);
     }

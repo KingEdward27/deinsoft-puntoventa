@@ -108,7 +108,10 @@ public class InvAlmacenProductoServiceImpl
                     }
                     //actualizar stock almacen
                     InvAlmacenProducto stock = new InvAlmacenProducto();
-                    if (!actComprobante.getFlagIsventa().equals("1")) {
+                    boolean isForAddStock = (actComprobante.getFlagIsventa().equals("1") && actComprobante.getCnfTipoComprobante().getCodigoSunat().equals("07")) 
+                            || (!actComprobante.getFlagIsventa().equals("1") && !actComprobante.getCnfTipoComprobante().getCodigoSunat().equals("07"));
+                            
+                    if (isForAddStock) {
                         if (list.size() == 0) {
                             stock = new InvAlmacenProducto();
                             stock.setCantidad(data.getCantidad());
@@ -137,13 +140,15 @@ public class InvAlmacenProductoServiceImpl
                     mov.setActComprobante(actComprobante);
                     mov.setFecha(actComprobante.getFecha());
                     mov.setFechaRegistro(LocalDateTime.now());
-                    mov.setCantidad(data.getCantidad().multiply(
-                            actComprobante.getFlagIsventa().equals("1") ? BigDecimal.valueOf(-1) : BigDecimal.ONE));
-                    mov.setValor(actComprobante.getFlagIsventa().equals("1") ? cnfProducto.getCosto() : data.getPrecio());
+                    mov.setCantidad(data.getCantidad().multiply(!isForAddStock? 
+                                    BigDecimal.valueOf(-1) : BigDecimal.ONE));
+                    mov.setValor(!isForAddStock ? cnfProducto.getCosto() : data.getPrecio());
                     invMovimientoProductoRepository.save(mov);
 
-                    if (!actComprobante.getFlagIsventa().equals("1")) {
-                        List<InvMovimientoProducto> listMovs = (List<InvMovimientoProducto>) invMovimientoProductoRepository.findByCnfProductoId(data.getCnfProducto().getId(), actComprobante.getInvAlmacen().getId());
+                    if (isForAddStock) {
+                        List<InvMovimientoProducto> listMovs 
+                                = (List<InvMovimientoProducto>) invMovimientoProductoRepository.findByCnfProductoId(
+                                        data.getCnfProducto().getId(), actComprobante.getInvAlmacen().getId());
                         BigDecimal costo = BigDecimal.ZERO;
                         BigDecimal costoTotal = BigDecimal.ZERO;
                         BigDecimal cantidad = BigDecimal.ZERO;

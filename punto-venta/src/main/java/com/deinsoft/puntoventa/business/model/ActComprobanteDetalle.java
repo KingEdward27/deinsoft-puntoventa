@@ -41,8 +41,7 @@ public class ActComprobanteDetalle implements Serializable {
     @Column(name = "afectacion_igv", length = 20, nullable = false)
     private BigDecimal afectacionIgv;
 
-    @NotNull
-    @Column(name = "precio_venta", length = 14, nullable = false)
+    @Column(name = "precio_venta", length = 14, nullable = true)
     private BigDecimal precioVenta;
     
     @NotNull

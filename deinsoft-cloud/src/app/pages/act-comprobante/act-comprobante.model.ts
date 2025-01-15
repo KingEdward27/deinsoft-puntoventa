@@ -38,4 +38,7 @@ export class ActComprobante {
 	listActComprobanteDetalle: ActComprobanteDetalle[] = [];
 	token?: string = "";
 	showDetail:boolean = false;
+	
+	serieRef: string = "";
+	numeroRef: string = "";
 };
