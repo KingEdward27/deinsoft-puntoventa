@@ -296,7 +296,8 @@
       "cnf_sub_categoria":"Sub categoria",
       "flag_estado":"Estado",
       "porcentaje_ganancia":"Porcentaje ganancia (%)",
-      "stock_minimo": "Stock mínimo"
+      "stock_minimo": "Stock mínimo",
+      "cnf_paquete":"Contenido del paquete"
     },
     "inv_almacen": {
       "home": {
@@ -492,7 +493,7 @@
       "subtotal":"Subtotal",
       "serie":"Serie",
       "envio_pse_mensaje":"Envío F.E.",
-      "cnf_maestro":"Cliente",
+      "cnf_maestro":"Cliente/Proveedor",
       "cnf_tipo_comprobante":"Tipo",
       "cnf_forma_pago":"Forma de pago",
       "cnf_local":"Local",

@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
-public interface CnfProductoService extends CommonService<CnfProducto> {
+public interface CnfProductoService extends CommonService<CnfProducto,Long> {
 
     public List<CnfProducto> getAllCnfProducto(CnfProducto cnfProducto);
 

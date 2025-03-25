@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.ActComprobanteDetalle;
 
 @Service
 @Transactional
-public interface ActComprobanteDetalleService extends CommonService<ActComprobanteDetalle>{
+public interface ActComprobanteDetalleService extends CommonService<ActComprobanteDetalle,Long>{
 	
 	public List<ActComprobanteDetalle> getAllActComprobanteDetalle(ActComprobanteDetalle actComprobanteDetalle);
 	public ActComprobanteDetalle getActComprobanteDetalle(Long id);

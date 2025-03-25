@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class CnfProvinciaServiceImpl extends CommonServiceImpl<CnfProvincia,CnfProvinciaRepository> implements CnfProvinciaService  {
+public class CnfProvinciaServiceImpl extends CommonServiceImpl<CnfProvincia,Long,CnfProvinciaRepository> implements CnfProvinciaService  {
 	@Autowired 
 	CnfProvinciaRepository cnfProvinciaRepository;
 	

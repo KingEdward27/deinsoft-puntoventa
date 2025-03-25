@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class ActCajaServiceImpl extends CommonServiceImpl<ActCaja, ActCajaRepository> implements ActCajaService {
+public class ActCajaServiceImpl extends CommonServiceImpl<ActCaja,Long, ActCajaRepository> implements ActCajaService {
 
     @Autowired
     ActCajaRepository actCajaRepository;

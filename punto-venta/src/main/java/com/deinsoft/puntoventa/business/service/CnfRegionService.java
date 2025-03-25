@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfRegion;
 
 @Service
 @Transactional
-public interface CnfRegionService extends CommonService<CnfRegion>{
+public interface CnfRegionService extends CommonService<CnfRegion,Long>{
 	
 	public List<CnfRegion> getAllCnfRegion(CnfRegion cnfRegion);
 	public CnfRegion getCnfRegion(Long id);

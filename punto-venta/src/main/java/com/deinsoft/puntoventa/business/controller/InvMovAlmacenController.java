@@ -2,6 +2,8 @@ package com.deinsoft.puntoventa.business.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -53,9 +55,9 @@ public class InvMovAlmacenController extends CommonController<InvMovAlmacen, Inv
             return this.validar(result);
         }
         Map<String, Object> errores = new HashMap<>();
-        if(invMovAlmacen.getCnfMaestro().getId() == 0){
-            errores.put("cnfMaestro", " Debe seleccionar al cliente");
-        }
+//        if(invMovAlmacen.getCnfMaestro().getId() == 0){
+//            errores.put("cnfMaestro", " Debe seleccionar al cliente");
+//        }
         if(invMovAlmacen.getInvTipoMovAlmacen().getId() == 0){
             errores.put("cnfFormaPago", " Debe seleccionar el tipo de movimiento");
         }
@@ -115,6 +117,12 @@ public class InvMovAlmacenController extends CommonController<InvMovAlmacen, Inv
     @GetMapping(value = "/get-all-inv-mov-almacen-by-inv-almacen")
     public List<InvMovAlmacen> getAllInvMovAlmacenByInvAlmacen(@Param("id") Long id) {
         List<InvMovAlmacen> invMovAlmacenList = invMovAlmacenService.getAllInvMovAlmacenByInvAlmacen(id);
+        return invMovAlmacenList;
+    }
+
+    @PostMapping(value = "/get-report-inv-mov-almacen")
+    public List<InvMovAlmacen> getReportInvMovAlmacen(@RequestBody ParamBean paramBean) {
+        List<InvMovAlmacen> invMovAlmacenList = invMovAlmacenService.getReportInvMovAlmacen(paramBean);
         return invMovAlmacenList;
     }
 }

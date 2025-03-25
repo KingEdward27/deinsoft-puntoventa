@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfMaestro;
 
 @Service
 @Transactional
-public interface CnfMaestroService extends CommonService<CnfMaestro> {
+public interface CnfMaestroService extends CommonService<CnfMaestro,Long> {
 
     public List<CnfMaestro> getAllCnfMaestro(CnfMaestro cnfMaestro);
 

@@ -22,7 +22,7 @@ import java.math.RoundingMode;
 @Service
 @Transactional
 public class InvMovimientoProductoServiceImpl 
-        extends CommonServiceImpl<InvMovimientoProducto, InvMovimientoProductoRepository> implements InvMovimientoProductoService {
+        extends CommonServiceImpl<InvMovimientoProducto,Long, InvMovimientoProductoRepository> implements InvMovimientoProductoService {
 
     @Autowired
     InvMovimientoProductoRepository invMovimientoProductoRepository;

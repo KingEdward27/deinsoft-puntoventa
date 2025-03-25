@@ -201,8 +201,8 @@ export class CommonReportFormComponent implements OnInit {
         //   next: 'Sig.',
         //   previous: 'Ant.'
         // }
-      },
-      responsive: true
+      }//,
+      //responsive: true
     }
     this.datablesSettingsWithInputs = {
       deferRender: true,
@@ -214,7 +214,7 @@ export class CommonReportFormComponent implements OnInit {
       order: [[0, "asc"]],
       dom: 'lBftip',
       
-      responsive: true,
+      //responsive: true,
       buttons: [{
         extend: 'excel',
         title: this.titleExport,
@@ -475,6 +475,8 @@ export class CommonReportFormComponent implements OnInit {
         this.deps.invAlmacenService.getData(this.listInvAlmacen[0].id).subscribe(data => {
           this.model.invAlmacen = data;
         })
+      } else {
+        this.model.invAlmacen = this.selectDefaultInvAlmacen
       }
 
     })

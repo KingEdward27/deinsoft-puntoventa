@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @Service
 @Transactional
 public class InvAlmacenProductoServiceImpl
-        extends CommonServiceImpl<InvAlmacenProducto, InvAlmacenProductoRepository> implements InvAlmacenProductoService {
+        extends CommonServiceImpl<InvAlmacenProducto,Long, InvAlmacenProductoRepository> implements InvAlmacenProductoService {
 
     @Autowired
     InvMovimientoProductoRepository invMovimientoProductoRepository;

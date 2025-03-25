@@ -1,6 +1,8 @@
 package com.deinsoft.puntoventa.business.service;
 
 import java.util.List;
+
+import com.deinsoft.puntoventa.business.bean.ParamBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.deinsoft.puntoventa.business.commons.service.CommonService;
@@ -9,7 +11,7 @@ import com.deinsoft.puntoventa.business.model.InvMovAlmacen;
 
 @Service
 @Transactional
-public interface InvMovAlmacenService extends CommonService<InvMovAlmacen> {
+public interface InvMovAlmacenService extends CommonService<InvMovAlmacen,Long> {
 
     public List<InvMovAlmacen> getAllInvMovAlmacen(InvMovAlmacen invMovAlmacen);
 
@@ -32,4 +34,6 @@ public interface InvMovAlmacenService extends CommonService<InvMovAlmacen> {
     public void delete(long id);
     
     public void validate (InvMovAlmacen invMovAlmacen);
+
+    public List<InvMovAlmacen> getReportInvMovAlmacen(ParamBean paramBean);
 }

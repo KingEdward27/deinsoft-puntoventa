@@ -58,12 +58,13 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         }, err => {
             return false
         });
-        // console.log(state.url);
+        console.log(state.url);
         // console.log(optionValid);
         
         if (optionValid.length > 0 || state.url == '/' 
         || state.url == '/generic-form' || state.url == '/generic-child-form' || state.url == '/profile' 
-        || state.url == '/swagger-ui' || state.url == '/change-password' || state.url == '/terms' || state.url.includes('/recover-password')) {
+        || state.url == '/swagger-ui' || state.url == '/change-password' || state.url == '/terms' || state.url.includes('/recover-password') 
+        || state.url.includes('/add-new')) {
             
             return this.getProfile();
         }

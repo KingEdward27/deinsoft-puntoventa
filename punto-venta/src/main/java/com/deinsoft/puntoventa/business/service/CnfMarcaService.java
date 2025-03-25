@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfMarca;
 
 @Service
 @Transactional
-public interface CnfMarcaService extends CommonService<CnfMarca>{
+public interface CnfMarcaService extends CommonService<CnfMarca,Long>{
 	
 	public List<CnfMarca> getAllCnfMarca(CnfMarca cnfMarca);
 	public CnfMarca getCnfMarca(Long id);

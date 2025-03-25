@@ -58,7 +58,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
-public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato, ActContratoRepository> implements ActContratoService {
+public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato,Long, ActContratoRepository> implements ActContratoService {
 
     @Autowired
     ActContratoRepository actContratoRepository;

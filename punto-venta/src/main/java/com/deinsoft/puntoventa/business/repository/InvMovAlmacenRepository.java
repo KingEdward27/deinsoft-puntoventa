@@ -3,6 +3,9 @@ package com.deinsoft.puntoventa.business.repository;
 
 import java.util.List;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
+import com.deinsoft.puntoventa.business.model.ActComprobante;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -37,5 +40,12 @@ public interface InvMovAlmacenRepository extends JpaRepository<InvMovAlmacen,Lon
 			"where p.invAlmacen.id =  ?1 ")
 	List<InvMovAlmacen>findByInvAlmacenId(long id);
 
-
+	@Query(value = "select p from invMovAlmacen p "
+			+ "where (:#{#paramBean.cnfLocal.id} = 0l or p.cnfLocal.id = :#{#paramBean.cnfLocal.id}) "
+			+ "and (:#{#paramBean.invAlmacen.id} = 0l or p.invAlmacen.id = :#{#paramBean.invAlmacen.id}) "
+			+ "and (p.fecha between :#{#paramBean.fechaDesde} and :#{#paramBean.fechaHasta}) "
+			+ "and (:#{#paramBean.flagEstado} = '-1' or p.flagEstado = :#{#paramBean.flagEstado}) "
+			+ "and p.cnfLocal.id in :#{#securityFilterDto.localIds}")
+	List<InvMovAlmacen> getReportInvMovAlmacen(@Param("paramBean") ParamBean paramBean,
+												 @Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 }

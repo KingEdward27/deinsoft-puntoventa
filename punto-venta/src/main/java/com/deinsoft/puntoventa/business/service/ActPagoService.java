@@ -12,7 +12,7 @@ import java.text.ParseException;
 
 @Service
 @Transactional
-public interface ActPagoService extends CommonService<ActPago> {
+public interface ActPagoService extends CommonService<ActPago,Long> {
 
     public List<ActPago> getAllActPago(ActPago actPago);
 

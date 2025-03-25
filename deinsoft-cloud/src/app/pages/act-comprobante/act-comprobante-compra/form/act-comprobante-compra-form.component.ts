@@ -232,6 +232,10 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     this.model.igv = Math.round((this.model.total - this.model.subtotal + Number.EPSILON) * 100) / 100
     console.log(actComprobanteDetalle);
 
+    let contador = 0;
+    this.model.listActComprobanteDetalle.forEach(item => {
+      item.index = contador++;
+    });
     this.model.listActComprobanteDetalle.push(actComprobanteDetalle);
     input.value = '';
   }
@@ -503,7 +507,9 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     });
   }
   removeItem(index: any) {
-    this.model.listActComprobanteDetalle.splice(index, 1)
+    // this.model.listActComprobanteDetalle.splice(index, 1)
+    this.model.listActComprobanteDetalle.filter(e => e.index !== index);
+    this.model.listActComprobanteDetalle.splice(index, 1);
     this.updateTotals()
   }
   addNewCnfMestro() {
@@ -545,31 +551,31 @@ export class ActComprobanteCompraFormComponent implements OnInit {
       })
     )
 
-  focusOutRef() {
-    console.log(this.model.cnfLocal.id);
+  // focusOutRef() {
+  //   console.log(this.model.cnfLocal.id);
     
-    this.actComprobanteService.getDataByCp(this.model.cnfLocal.id, this.model.serieRef, this.model.numeroRef).subscribe(data => {
-      if (!data) {
-        this.utilService.msgProblemNoItems();
-      } else {
+  //   this.actComprobanteService.getDataByCp(this.model.cnfLocal.id, this.model.serieRef, this.model.numeroRef).subscribe(data => {
+  //     if (!data) {
+  //       this.utilService.msgProblemNoItems();
+  //     } else {
         
-        this.model.cnfMaestro = data.cnfMaestro;
-        this.model.subtotal = data.subtotal * -1;
-        this.model.igv = data.igv * -1;
-        this.model.total = data.total * -1;
-        this.model.cnfFormaPago = data.cnfFormaPago;
-        this.model.listActComprobanteDetalle = data.listActComprobanteDetalle;
-        this.model.listActComprobanteDetalle.forEach(element => {
-          element.id = 0;
-        });
-        console.log(this.model);
-        this.isDataLoaded = true;
-        //this.titulo = 'Editar ' + this.nombreModel;
-      }
+  //       this.model.cnfMaestro = data.cnfMaestro;
+  //       this.model.subtotal = data.subtotal * -1;
+  //       this.model.igv = data.igv * -1;
+  //       this.model.total = data.total * -1;
+  //       this.model.cnfFormaPago = data.cnfFormaPago;
+  //       this.model.listActComprobanteDetalle = data.listActComprobanteDetalle;
+  //       this.model.listActComprobanteDetalle.forEach(element => {
+  //         element.id = 0;
+  //       });
+  //       console.log(this.model);
+  //       this.isDataLoaded = true;
+  //       //this.titulo = 'Editar ' + this.nombreModel;
+  //     }
       
-    });
+  //   });
 
-  }
+  // }
 }
 
 

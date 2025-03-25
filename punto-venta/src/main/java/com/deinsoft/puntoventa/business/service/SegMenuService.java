@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.SegMenu;
 
 @Service
 @Transactional
-public interface SegMenuService extends CommonService<SegMenu>{
+public interface SegMenuService extends CommonService<SegMenu,Long>{
 	
 	public List<SegMenu> getAllSegMenu(SegMenu segMenu);
 	public SegMenu getSegMenu(Long id);

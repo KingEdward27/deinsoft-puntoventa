@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class CnfImpuestoCondicionServiceImpl extends CommonServiceImpl<CnfImpuestoCondicion,CnfImpuestoCondicionRepository> implements CnfImpuestoCondicionService  {
+public class CnfImpuestoCondicionServiceImpl extends CommonServiceImpl<CnfImpuestoCondicion,Long,CnfImpuestoCondicionRepository> implements CnfImpuestoCondicionService  {
 	@Autowired 
 	CnfImpuestoCondicionRepository cnfImpuestoCondicionRepository;
 	

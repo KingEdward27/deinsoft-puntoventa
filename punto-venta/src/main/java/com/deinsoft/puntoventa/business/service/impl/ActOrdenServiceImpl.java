@@ -59,7 +59,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
 @Transactional
-public class ActOrdenServiceImpl extends CommonServiceImpl<ActOrden, ActOrdenRepository>
+public class ActOrdenServiceImpl extends CommonServiceImpl<ActOrden,Long, ActOrdenRepository>
         implements ActOrdenService {
 
     @Autowired

@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfFormaPagoDetalle;
 
 @Service
 @Transactional
-public interface CnfFormaPagoDetalleService extends CommonService<CnfFormaPagoDetalle>{
+public interface CnfFormaPagoDetalleService extends CommonService<CnfFormaPagoDetalle,Long>{
 	
 	public List<CnfFormaPagoDetalle> getAllCnfFormaPagoDetalle(CnfFormaPagoDetalle cnfFormaPagoDetalle);
 	public CnfFormaPagoDetalle getCnfFormaPagoDetalle(Long id);

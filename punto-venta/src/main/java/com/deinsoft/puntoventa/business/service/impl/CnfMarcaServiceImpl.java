@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class CnfMarcaServiceImpl extends CommonServiceImpl<CnfMarca,CnfMarcaRepository> implements CnfMarcaService  {
+public class CnfMarcaServiceImpl extends CommonServiceImpl<CnfMarca,Long,CnfMarcaRepository> implements CnfMarcaService  {
 	@Autowired 
 	CnfMarcaRepository cnfMarcaRepository;
 	

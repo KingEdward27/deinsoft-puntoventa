@@ -36,7 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
-public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfProductoRepository>
+public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, Long, CnfProductoRepository>
         implements CnfProductoService {
 
     @Autowired
@@ -91,14 +91,16 @@ public class CnfProductoServiceImpl extends CommonServiceImpl<CnfProducto, CnfPr
             cnfProducto.setCnfUnidadMedida(null);
         }
         cnfProducto.setFechaRegistro(LocalDateTime.now());
-        
+        cnfProducto.getListCnfPaqueteDet().forEach(data -> {
+            cnfProducto.addCnfProductoContenido(data);
+        });
 
         CnfProducto cnfProductoResult = cnfProductoRepository.save(cnfProducto);
         if (file != null) {
             //String formattedString = cnfProducto.getFechaRegistro().format(YYYYMMDDHHMMSS_FORMATER);
-            cnfProducto.setRutaImagen(appConfig.getUrlBackend()  
-                    + appConfig.getFolderResources() + "/" + cnfProductoResult.getId() + "." +  "jpg");
-            storageService.store(file, cnfProductoResult.getId() + "." + "jpg");
+            cnfProductoResult.setRutaImagen(appConfig.getUrlBackend()
+                    + appConfig.getFolderResources() + "/" + cnfProductoResult.getCnfEmpresa().getNroDocumento() + "/" +cnfProductoResult.getId() + "." +  "jpg");
+            storageService.store(file, cnfProductoResult.getCnfEmpresa().getNroDocumento() + "/" + cnfProductoResult.getId() + "." + "jpg");
         }
         cnfProductoRepository.save(cnfProductoResult);
         return cnfProductoResult;

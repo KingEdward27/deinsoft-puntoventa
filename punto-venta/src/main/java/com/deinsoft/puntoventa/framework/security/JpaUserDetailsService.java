@@ -67,7 +67,7 @@ public class JpaUserDetailsService implements UserDetailsService {
                 if (roleUser.getEmpresa() != null && roleUser.getLocal() == null) {
                     authorities.add(new SimpleGrantedAuthority(roleUser.getSecRole().getName() 
                             + "|" + String.valueOf(roleUser.getEmpresa().getId()) + "|*" 
-                            + "|" + String.valueOf(roleUser.getEmpresa().getNombre())
+                            + "|" + String.valueOf(roleUser.getEmpresa().getDescripcion())
                             + "|*"));
                     totalAccess = true;
                     break;
@@ -76,8 +76,9 @@ public class JpaUserDetailsService implements UserDetailsService {
                     locales = locales + roleUser.getSecRole().getName()
                             + "|" + String.valueOf(roleUser.getEmpresa().getId())
                             + "|" + String.valueOf(roleUser.getLocal().getId())
-                            + "|" + String.valueOf(roleUser.getEmpresa().getNombre())
-                            + "|" + String.valueOf(roleUser.getLocal().getNombre());
+                            + "|" + String.valueOf(roleUser.getEmpresa().getDescripcion())
+                            + "|" + String.valueOf(roleUser.getLocal().getNombre())
+                            + ";";
                 }
             }
             if (!totalAccess) {

@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class SegRolServiceImpl extends CommonServiceImpl<SegRol, SegRolRepository> implements SegRolService {
+public class SegRolServiceImpl extends CommonServiceImpl<SegRol,Long, SegRolRepository> implements SegRolService {
 
     @Autowired
     SegRolRepository segRolRepository;

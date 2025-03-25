@@ -114,6 +114,10 @@ public class FileSystemStorageService implements StorageService {
             Path destinationFile = this.rootLocation.resolve(
                     Paths.get(name))
                     .normalize().toAbsolutePath();
+            File directory = destinationFile.toFile();
+            if (!directory.exists()) {
+                Files.createDirectories(destinationFile);
+            }
 //            if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath()) 
 //                    && !destinationFile.getParent().equals(Paths.get(this.rootLocation + "\temp"))) {
 //                // This is a security check
@@ -155,18 +159,36 @@ public class FileSystemStorageService implements StorageService {
     public byte[] loadAsBytes(Path resourcesFolder, String filename) {
         try {
             Path file = load(resourcesFolder, appConfig.getFileSystemBasePath() + "/" + filename);
-            Resource resource = new UrlResource(file.toUri()); 
-            if (resource.exists() || resource.isReadable()) {
-                return resource.getInputStream().readAllBytes();
+            Resource resource = new UrlResource(file.toUri());
+//            if (resource.exists() || resource.isReadable()) {
+//                return resource.getInputStream().readAllBytes();
+//            } else {
+//                throw new StorageFileNotFoundException(
+//                        "Could not read file: " + filename);
+//
+//            }
+            if (resource.exists() && resource.isReadable()) {
+                try (InputStream inputStream = resource.getInputStream()) {
+                    return readAllBytes(inputStream);
+                }
             } else {
-                throw new StorageFileNotFoundException(
-                        "Could not read file: " + filename);
-
+                throw new StorageFileNotFoundException("Could not read file: " + filename);
             }
         } catch (MalformedURLException e) {
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
         } catch (IOException ex) {
             throw new StorageFileNotFoundException("Could not read file: " + filename, ex);
+        }
+    }
+
+    private byte[] readAllBytes(InputStream inputStream) throws IOException {
+        byte[] buffer = new byte[8192];
+        int bytesRead;
+        try (java.io.ByteArrayOutputStream outputStream = new java.io.ByteArrayOutputStream()) {
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            return outputStream.toByteArray();
         }
     }
 

@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfZona;
 
 @Service
 @Transactional
-public interface CnfZonaService extends CommonService<CnfZona> {
+public interface CnfZonaService extends CommonService<CnfZona,Long> {
 
     public List<CnfZona> getAllCnfZona(CnfZona cnfZona);
 

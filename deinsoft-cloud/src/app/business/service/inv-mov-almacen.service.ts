@@ -60,5 +60,9 @@ export class InvMovAlmacenService {
   public getAllData2(arg1:any):Observable<any>{
     return this.http.get<InvMovAlmacen[]>(`${this.url}/get-all-inv-mov-almacen`,arg1);
   }
+
+  public getReport(form: any): Observable<InvMovAlmacen> {
+    return this.http.post<InvMovAlmacen>(this.url + '/get-report-inv-mov-almacen', form);
+  }
 }
 

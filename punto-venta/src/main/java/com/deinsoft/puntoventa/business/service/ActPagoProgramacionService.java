@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Service
 @Transactional
-public interface ActPagoProgramacionService extends CommonService<ActPagoProgramacion> {
+public interface ActPagoProgramacionService extends CommonService<ActPagoProgramacion,Long> {
 
     public List<ActPagoProgramacion> getAllActPagoProgramacion(ActPagoProgramacion actPagoProgramacion);
 

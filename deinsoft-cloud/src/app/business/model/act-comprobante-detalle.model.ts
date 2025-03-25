@@ -17,4 +17,6 @@ export class ActComprobanteDetalle {
 	cnfImpuestoCondicion: CnfImpuestoCondicion = new CnfImpuestoCondicion();
 	token?: string = "";
 	precioVenta!: number;
+	listActComprobanteDetalle: ActComprobanteDetalle[] = [];
+	index: number;
 };

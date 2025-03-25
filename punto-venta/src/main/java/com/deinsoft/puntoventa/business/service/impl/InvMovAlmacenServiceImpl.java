@@ -3,18 +3,15 @@ package com.deinsoft.puntoventa.business.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
+import com.deinsoft.puntoventa.business.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.deinsoft.puntoventa.business.model.InvMovAlmacen;
 import com.deinsoft.puntoventa.business.repository.InvMovAlmacenRepository;
 import com.deinsoft.puntoventa.business.service.InvMovAlmacenService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
-import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
-import com.deinsoft.puntoventa.business.model.InvAlmacenProducto;
-import com.deinsoft.puntoventa.business.model.InvMovAlmacenDet;
-import com.deinsoft.puntoventa.business.model.InvMovimientoProducto;
 import com.deinsoft.puntoventa.business.repository.CnfNumComprobanteRepository;
 import com.deinsoft.puntoventa.business.repository.InvAlmacenProductoRepository;
 import com.deinsoft.puntoventa.business.repository.InvMovAlmacenDetRepository;
@@ -25,7 +22,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
 @Transactional
-public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen, InvMovAlmacenRepository>
+public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen,Long, InvMovAlmacenRepository>
         implements InvMovAlmacenService {
 
     @Autowired
@@ -68,6 +65,7 @@ public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen, I
     @Override
     public InvMovAlmacen saveInvMovAlmacen(InvMovAlmacen invMovAlmacen) throws Exception {
         InvMovAlmacen invMovAlmacenResult = null;
+        if (invMovAlmacen.getCnfMaestro().getId() == 0) invMovAlmacen.setCnfMaestro(null);
         try {
             List<CnfNumComprobante> numComprobante = cnfNumComprobanteRepository.findByCnfTipoComprobanteIdAndCnfLocalId(
                     invMovAlmacen.getCnfTipoComprobante().getId(),
@@ -167,5 +165,11 @@ public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen, I
             invMovAlmacenDetRepository.deleteByInvMovAlmacen(invMovAlmacen);
             invMovAlmacenRepository.delete(invMovAlmacen);
         }
+    }
+
+    @Override
+    public List<InvMovAlmacen> getReportInvMovAlmacen(ParamBean paramBean) {
+        List<InvMovAlmacen> actComprobanteList = (List<InvMovAlmacen>) invMovAlmacenRepository.getReportInvMovAlmacen(paramBean, listRoles());
+        return actComprobanteList;
     }
 }

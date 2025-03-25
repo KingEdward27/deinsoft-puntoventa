@@ -1,7 +1,6 @@
 package com.deinsoft.puntoventa.business.service.impl;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,10 +40,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.codec.binary.Base64;
@@ -55,7 +50,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 @Transactional
-public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsuarioRepository> implements SegUsuarioService {
+public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario,Long, SegUsuarioRepository> implements SegUsuarioService {
 
     @Autowired
     SegUsuarioRepository segUsuarioRepository;
@@ -358,12 +353,25 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario, SegUsua
         byte[] encodedBytes = Base64.encodeBase64(cuerpo.getBytes(StandardCharsets.UTF_8));
 //        System.out.println("encodedBytes " + new String(encodedBytes));
 
+//        SendMailClient s = new SendMailClient(new EmailRequest(
+//                new String(encodedBytes), "", "Recuperación de contraseña", Map.of(
+//                    "name", "INIFACT","email", mailUser
+//                ), Arrays.asList(Map.of(
+//                    "name", usuarioRepo.getNombre(),"email", usuarioRepo.getEmail()
+//                )), null));
+        Map<String, String> sender = new HashMap<>();
+        sender.put("name", "INIFACT");
+        sender.put("email", mailUser);
+
+        Map<String, String> recipient = new HashMap<>();
+        recipient.put("name", usuarioRepo.getNombre());
+        recipient.put("email", usuarioRepo.getEmail());
+
+        List<Map<String, String>> recipients = Collections.singletonList(recipient);
+
         SendMailClient s = new SendMailClient(new EmailRequest(
-                new String(encodedBytes), "", "Recuperación de contraseña", Map.of(
-                    "name", "INIFACT","email", mailUser
-                ), Arrays.asList(Map.of(
-                    "name", usuarioRepo.getNombre(),"email", usuarioRepo.getEmail()
-                )), null));
+                new String(encodedBytes), "", "Recuperación de contraseña", sender, recipients, null
+        ));
         s.send();
     }
     

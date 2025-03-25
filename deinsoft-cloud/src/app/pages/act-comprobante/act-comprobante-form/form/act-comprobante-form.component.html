@@ -11,7 +11,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <form class="col-sm-12" style="padding-top: 6px;">
+                    <form  class="col-sm-12" style="padding-top: 6px;">
                         <div class="row">
                             <div class="col-lg-9 col-sm-12 col-xs-12">
                                 <div class="row">
@@ -22,7 +22,7 @@
                                     
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagVentaRapida === 0">
+                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagVentaRapida === 0 || this.listCnfLocal.length > 1 ">
                                         <div class="form-group-sm row">
                                             <label
                                                 class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_local'
@@ -116,6 +116,37 @@
                                                     name="serie" disabled
                                                     id="serie" name="serie" class="form-control col-sm-12 col-lg-12"
                                                     placeholder="Ingrese serie" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="model.cnfTipoComprobante.codigoSunat == '07'" class="col-lg-3 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label for="serieRef"
+                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.serieRef'
+                                                |
+                                                translate}} <span
+                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                            <div class="col-sm-12 col-lg-12">
+                                                <input type="text" 
+                                                    [(ngModel)]="model.serieRef" maxlength="4" 
+                                                    name="serieRef"
+                                                    id="serieRef" class="form-control col-sm-12 col-lg-12"
+                                                    placeholder="Ingrese serie de Referencia" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="model.cnfTipoComprobante.codigoSunat == '07'" class="col-lg-3 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label for="numeroRef"
+                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.numeroRef'
+                                                | translate}} <span
+                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                            <div class="col-sm-12 col-lg-12">
+                                                <input type="text" [(ngModel)]="model.numeroRef" maxlength="8"
+                                                    (focusout)="focusOutRef()"
+                                                    name="numeroRef" id="numeroRef"
+                                                    class="form-control col-sm-12 col-lg-12"
+                                                    placeholder="Ingrese número de Referencia"/>
                                             </div>
                                         </div>
                                     </div>
@@ -222,7 +253,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagVentaRapida === 0">
+                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagVentaRapida === 0 || this.listInvAlmacen.length > 1">
                                         <div class="form-group-sm row">
                                             <label
                                                 class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.inv_almacen'
@@ -355,9 +386,9 @@
                                                 <th class="text-nowrap">{{'webpagos.cnf_producto.nombre' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante_detalle.cnf_impuesto_condicion' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.cnf_producto.descripcion' | translate}}</th>
-                                                <th class="text-nowrap">{{'webpagos.act_comprobante_detalle.cantidad' | translate}}</th>
-                                                <th class="text-nowrap">{{'webpagos.act_comprobante_detalle.precio' | translate}}</th>
-                                                <th class="text-nowrap">{{'webpagos.act_comprobante_detalle.importe' | translate}}</th>
+                                                <th width="10%"class="text-nowrap">{{'webpagos.act_comprobante_detalle.cantidad' | translate}}</th>
+                                                <th width="10%"class="text-nowrap">{{'webpagos.act_comprobante_detalle.precio' | translate}}</th>
+                                                <th width="10%"class="text-nowrap">{{'webpagos.act_comprobante_detalle.importe' | translate}}</th>
                                                 <th width="1%" class="text-nowrap">{{'webpagos.actionsText' |
                                                     translate}}
                                                 </th>
@@ -380,16 +411,16 @@
                                                 </select></td>
                                                 <td><input type="text" 
                                                     [(ngModel)]="item.descripcion" 
-                                                    maxlength="14" name="descripcion"
+                                                    maxlength="100" name="descripcion_{{i}}"
                                                     class="form-control-sm col-sm-12 col-lg-12"
                                                     placeholder="Ingrese descripción" /></td>
                                                 <td width = "1%"><input type="number" 
                                                     [(ngModel)]="item.cantidad" 
                                                     maxlength="14" name="cantidad_{{i}}"
                                                     class="form-control-sm col-sm-12 col-lg-12 content-number"
-                                                    placeholder="Ingrese descripción"
+                                                    placeholder="Ingrese cantidad"
                                                     (input)="onChangeCantidad(item,$event.target.value)"/></td>
-                                                <td><input type="number" 
+                                                <td><input type="number"
                                                     [(ngModel)]="item.precio" (focus)="$event.target.select()" 
                                                     maxlength="14" name="precio_{{i}}"
                                                     class="form-control-sm col-sm-12 col-lg-12 content-number"
@@ -403,7 +434,7 @@
                                                 <td>
                                                     <div class="row">
                                                         <div class="col-sm-6 col-xs-6"><a
-                                                                (click)="removeItem(i)"
+                                                                (click)="removeItem(i,item)"
                                                                 style="cursor: pointer;" title="Cambiar estado"><i
                                                                     class="fa fa-trash fa-lg"></i></a></div>
                                                     </div>

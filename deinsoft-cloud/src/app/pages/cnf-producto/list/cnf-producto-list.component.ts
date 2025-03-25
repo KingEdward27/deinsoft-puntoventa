@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { CnfProducto } from '../cnf-producto.model';
-import { CnfProductoService } from '../cnf-producto.service';
 import { Router } from '@angular/router';
 import { UtilService } from '../../../services/util.service';
 import { AppService } from '../../../services/app.service';
+import { CnfProductoService } from '@/business/service/cnf-producto.service';
+import { CnfProducto } from '@/business/model/cnf-producto.model';
 @Component({
   selector: 'app-cnf-producto-list',
   templateUrl: './cnf-producto-list.component.html'

@@ -1,4 +1,3 @@
-
 <!-- Main content -->
 <section class="content">
     <!-- Default box -->
@@ -79,8 +78,8 @@
                                         {{item.nombre}}</option>
 
                                 </select>
-                                <div class="alert alert-danger col-sm-12 col-lg-6"
-                                    *ngIf="error?.cnfSubCategoria">{{error.cnfSubCategoria }}
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.cnfSubCategoria">
+                                    {{error.cnfSubCategoria }}
                                 </div>
                             </div>
                         </div>
@@ -99,8 +98,8 @@
                                         {{item.nombre}}</option>
 
                                 </select>
-                                <div class="alert alert-danger col-sm-12 col-lg-6"
-                                    *ngIf="error?.cnfMarca">{{error["cnfMarca.nombre"] }}</div>
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.cnfMarca">
+                                    {{error["cnfMarca.nombre"] }}</div>
                             </div>
                         </div>
                         <div class="form-group-sm row">
@@ -119,7 +118,7 @@
                             <label for="nombre"
                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.nombre' |
                                 translate}} <span
-                                style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                             <div class="col-sm-12 col-lg-9">
                                 <input type="text" [(ngModel)]="model.nombre" maxlength="100" name="nombre" id="nombre"
                                     name="nombre" class="form-control-sm col-sm-12 col-lg-6"
@@ -129,31 +128,33 @@
                             </div>
                         </div>
                         <div class="form-group-sm row">
-                            <label for="costo"
-                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.costo' |
+                            <label for="costo" class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.costo'
+                                |
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-9">
-                                <input type="number" [ngModel]="model.costo" maxlength="14" 
-                                    name="costo" 
+                                <input type="number" [ngModel]="model.costo" maxlength="14" name="costo"
                                     (ngModelChange)="model.costo = $event" id="costo"
-                                    (input)="onChangeCosto($event.target.value)" 
+                                    (input)="onChangeCosto($event.target.value)"
                                     class="form-control-sm col-sm-12 col-lg-6" onclick="this.select()"
                                     placeholder="Ingrese costo" />
-                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.costo">{{ error.costo }}</div>
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.costo">{{ error.costo
+                                    }}</div>
                             </div>
                         </div>
                         <div class="form-group-sm row">
                             <label for="porcentajeGanancia"
-                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.porcentaje_ganancia' |
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.porcentaje_ganancia'
+                                |
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-9">
-                                <input type="number" [(ngModel)]="model.porcentajeGanancia" placeholder='0.00' 
-                                maxlength="14" name="porcentajeGanancia" id="porcentajeGanancia"
-                                (ngModelChange)="model.porcentajeGanancia = $event"
-                                (input)="onChangePorcentaje($event.target.value)" onclick="this.select()"
+                                <input type="number" [(ngModel)]="model.porcentajeGanancia" placeholder='0.00'
+                                    maxlength="14" name="porcentajeGanancia" id="porcentajeGanancia"
+                                    (ngModelChange)="model.porcentajeGanancia = $event"
+                                    (input)="onChangePorcentaje($event.target.value)" onclick="this.select()"
                                     class="form-control-sm col-sm-12 col-lg-6"
                                     placeholder="Ingrese porcentaje de ganancia" />
-                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.porcentajeGanancia">{{ error.porcentajeGanancia }}</div>
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.porcentajeGanancia">{{
+                                    error.porcentajeGanancia }}</div>
                             </div>
                         </div>
                         <div class="form-group-sm row">
@@ -161,12 +162,11 @@
                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.precio' |
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-9">
-                                <input type="number" [ngModel]="model.precio"  placeholder='0.00'
-                                (ngModelChange)="model.precio = $event" 
-                                (input)="onChangePrecio($event.target.value)"
-                                maxlength="14" name="precio" id="precio"
-                                    name="precio" class="form-control-sm col-sm-12 col-lg-6" onclick="this.select()"
-                                    placeholder="Ingrese precio" />
+                                <input type="number" [ngModel]="model.precio" placeholder='0.00'
+                                    (ngModelChange)="model.precio = $event"
+                                    (input)="onChangePrecio($event.target.value)" maxlength="14" name="precio"
+                                    id="precio" name="precio" class="form-control-sm col-sm-12 col-lg-6"
+                                    onclick="this.select()" placeholder="Ingrese precio" />
                                 <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.precio">{{ error.precio
                                     }}</div>
                             </div>
@@ -179,7 +179,8 @@
                                 <input type="number" [(ngModel)]="model.stockMinimo" maxlength="14" id="stockMinimo"
                                     name="stockMinimo" class="form-control-sm col-sm-12 col-lg-6"
                                     placeholder="Ingrese stock minimo" />
-                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.stockMinimo">{{ error.stockMinimo
+                                <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.stockMinimo">{{
+                                    error.stockMinimo
                                     }}</div>
                             </div>
                         </div>
@@ -190,7 +191,7 @@
                             <div class="col-sm-12 col-lg-9">
                                 <div class="row">
                                     <input class="col-xs-10 col-sm-10 col-lg-6" type="file" id="file"
-                                        (change)="handleFileInput($event)" >
+                                        (change)="handleFileInput($event)">
                                 </div>
                                 <!-- <div class="row">
                                     <div class="col-sm-12 col-lg-9">
@@ -213,9 +214,9 @@
                                     <div class="col">
                                         <img [src]="model.rutaImagen" width="100px" height="100px" alt="">
                                     </div>
-                                </div>    
-                                
-                                
+                                </div>
+
+
                                 <!-- <input type="text" [(ngModel)]="model.rutaImagen" maxlength="100" name="rutaImagen"
                                     id="rutaImagen" name="rutaImagen" class="form-control-sm col-sm-12 col-lg-6"
                                     placeholder="Ingrese rutaImagen" />
@@ -235,7 +236,58 @@
                                     error.barcode }}</div>
                             </div>
                         </div>
-                        
+
+                        <div class="form-group-sm row">
+                            <label for="barcode"
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.cnf_paquete' |
+                                translate}}</label>
+                            <div class="col-sm-12 col-lg-9">
+                                <input class="form-control col-sm-12 col-lg-6"
+                                    placeholder="Ingrese descripción para buscar productos" type="text" tabindex="9"
+                                    [(ngModel)]="cnfProductoSearch" name="cnfProductoSearch" #input
+                                    [ngbTypeahead]="searchProduct" [resultTemplate]="rt" [inputFormatter]="formatter"
+                                    (selectItem)="onchangeProduct($event,input)" />
+                                <ng-template #rt let-r="result" let-t="term">
+                                    {{ r.nombre}} - {{ r.barcode}}
+                                </ng-template>
+
+                                <br>
+                                <table id="dtData"
+                                    class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
+                                    <thead>
+                                        <tr>
+                                            <th width="1%">Nro.</th>
+                                            <th class="text-nowrap">{{'webpagos.cnf_producto.nombre' | translate}}</th>
+                                            <th width="10%" class="text-nowrap">
+                                                {{'webpagos.act_comprobante_detalle.cantidad' | translate}}</th>
+                                            <th width="1%" class="text-nowrap">{{'webpagos.actionsText' |
+                                                translate}}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr *ngFor="let item of model.listCnfPaqueteDet; index as i" class="odd gradeX">
+                                            <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
+                                            <td>{{item.cnfProductoContenido.nombre}}</td>
+                                            <td width="1%"><input type="number" [(ngModel)]="item.cantidad"
+                                                    maxlength="14" name="cantidad_{{i}}"
+                                                    class="form-control-sm col-sm-12 col-lg-12 content-number"
+                                                    placeholder="Ingrese cantidad" /></td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-xs-6"><a (click)="removeItem(i)"
+                                                            style="cursor: pointer;" title="Cambiar estado"><i
+                                                                class="fa fa-trash fa-lg"></i></a></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
                         <div class="form-group row">
 
                             <div class="col-sm-12" style="padding-top: 20px;">

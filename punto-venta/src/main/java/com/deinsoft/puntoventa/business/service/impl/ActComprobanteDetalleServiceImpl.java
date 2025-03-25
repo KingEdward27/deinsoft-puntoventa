@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class ActComprobanteDetalleServiceImpl extends CommonServiceImpl<ActComprobanteDetalle,ActComprobanteDetalleRepository> implements ActComprobanteDetalleService  {
+public class ActComprobanteDetalleServiceImpl extends CommonServiceImpl<ActComprobanteDetalle,Long,ActComprobanteDetalleRepository> implements ActComprobanteDetalleService  {
 	@Autowired 
 	ActComprobanteDetalleRepository actComprobanteDetalleRepository;
 	

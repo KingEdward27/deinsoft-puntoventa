@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.ActCaja;
 
 @Service
 @Transactional
-public interface ActCajaService extends CommonService<ActCaja>{
+public interface ActCajaService extends CommonService<ActCaja,Long>{
 	
 	public List<ActCaja> getAllActCaja(ActCaja actCaja);
 	public ActCaja getActCaja(Long id);

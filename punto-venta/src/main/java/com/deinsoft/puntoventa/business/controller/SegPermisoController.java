@@ -88,7 +88,6 @@ public class SegPermisoController extends CommonController<SegPermiso, SegPermis
     
     @GetMapping(value = "/get-all-seg-permiso-by-seg-rol-name")
     public List<SegPermiso> getAllSegPermisoBySegRol(@Param("nombre") String nombre) {
-        
         List<SegPermiso> segPermisoList = segPermisoService.getAllSegPermisoBySegRolNombre(nombre);
         return segPermisoList;
     }

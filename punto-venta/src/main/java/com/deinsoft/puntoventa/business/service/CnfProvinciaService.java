@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfProvincia;
 
 @Service
 @Transactional
-public interface CnfProvinciaService extends CommonService<CnfProvincia>{
+public interface CnfProvinciaService extends CommonService<CnfProvincia,Long>{
 	
 	public List<CnfProvincia> getAllCnfProvincia(CnfProvincia cnfProvincia);
 	public CnfProvincia getCnfProvincia(Long id);

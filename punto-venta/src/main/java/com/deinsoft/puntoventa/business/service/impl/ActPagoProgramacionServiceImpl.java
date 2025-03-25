@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class ActPagoProgramacionServiceImpl
-        extends CommonServiceImpl<ActPagoProgramacion, ActPagoProgramacionRepository> implements ActPagoProgramacionService {
+        extends CommonServiceImpl<ActPagoProgramacion,Long, ActPagoProgramacionRepository> implements ActPagoProgramacionService {
 
     @Autowired
     ActPagoProgramacionRepository actPagoProgramacionRepository;

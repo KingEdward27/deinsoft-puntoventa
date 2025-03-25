@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class CnfUnidadMedidaServiceImpl extends CommonServiceImpl<CnfUnidadMedida,CnfUnidadMedidaRepository> implements CnfUnidadMedidaService  {
+public class CnfUnidadMedidaServiceImpl extends CommonServiceImpl<CnfUnidadMedida,Long,CnfUnidadMedidaRepository> implements CnfUnidadMedidaService  {
 	@Autowired 
 	CnfUnidadMedidaRepository cnfUnidadMedidaRepository;
 	

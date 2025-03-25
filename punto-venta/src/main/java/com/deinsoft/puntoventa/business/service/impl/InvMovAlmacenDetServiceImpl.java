@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class InvMovAlmacenDetServiceImpl extends CommonServiceImpl<InvMovAlmacenDet, InvMovAlmacenDetRepository> implements InvMovAlmacenDetService {
+public class InvMovAlmacenDetServiceImpl extends CommonServiceImpl<InvMovAlmacenDet,Long, InvMovAlmacenDetRepository> implements InvMovAlmacenDetService {
 
     @Autowired
     InvMovAlmacenDetRepository invMovAlmacenDetRepository;

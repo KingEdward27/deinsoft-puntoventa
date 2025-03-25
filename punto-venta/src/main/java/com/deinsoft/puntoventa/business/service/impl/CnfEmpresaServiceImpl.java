@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class CnfEmpresaServiceImpl extends CommonServiceImpl<CnfEmpresa, CnfEmpresaRepository> implements CnfEmpresaService {
+public class CnfEmpresaServiceImpl extends CommonServiceImpl<CnfEmpresa,Long, CnfEmpresaRepository> implements CnfEmpresaService {
 
     @Autowired
     CnfEmpresaRepository cnfEmpresaRepository;

@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 @Service
 @Transactional
-public interface InvMovimientoProductoService extends CommonService<InvMovimientoProducto> {
+public interface InvMovimientoProductoService extends CommonService<InvMovimientoProducto,Long> {
 
     public List<InvMovimientoProducto> getAllInvMovimientoProducto(InvMovimientoProducto invMovimientoProducto);
 

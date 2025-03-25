@@ -1,7 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CnfProducto } from '../cnf-producto.model';
-import { CnfProductoService } from '../cnf-producto.service';
 import Swal from 'sweetalert2';
 import { CnfUnidadMedida } from '../../../business/model/cnf-unidad-medida.model';
 import { CnfEmpresa } from '../../../business/model/cnf-empresa.model';
@@ -13,10 +11,14 @@ import { UtilService } from '../../../services/util.service';
 import { CnfSubCategoriaService } from '../../../business/service/cnf-sub-categoria.service';
 import { CnfMarcaService } from '../../../business/service/cnf-marca.service';
 import { AppService } from '../../../services/app.service';
-import { filter } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { MediaService } from '../media.service';
 import { HttpEventType } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { CnfProducto } from '@/business/model/cnf-producto.model';
+import { CnfProductoService } from '@/business/service/cnf-producto.service';
+import { CnfPaqueteProducto } from '@/business/model/cnf-paquete-producto.model';
 
 @Component({
   selector: 'app-cnf-producto-form',
@@ -61,6 +63,10 @@ export class CnfProductoFormComponent implements OnInit {
   fileProgessSize: any;
   uploadedMedia: Array<any> = [];
   loadingFile: boolean;
+  listCnfPaqueteDet: any;
+  searchFailed = false;
+  formatter = (x: { nombre: string }) => x.nombre;
+  cnfProductoSearch: any;
 
   constructor(private cnfProductoService: CnfProductoService,
     private router: Router,
@@ -75,6 +81,8 @@ export class CnfProductoFormComponent implements OnInit {
   ngOnInit(): void {
     this.isDataLoaded = false;
     this.loadData();
+    console.log(this.model);
+    
   }
   getBack() {
     this.router.navigate([this.redirect]);
@@ -277,6 +285,88 @@ export class CnfProductoFormComponent implements OnInit {
       console.log(this.model);
       this.model.porcentajeGanancia = (this.model.precio * 100 / this.model.costo ) - 100
       this.model.porcentajeGanancia = Math.round((this.model.porcentajeGanancia + Number.EPSILON) * 100) / 100;
+  }
+
+  // agregarCnfPaqueteDet(): void {
+  //   this.router.navigate(["/add-new-cnf-paquete-det", { idParent: this.model.id }]);
+  // }
+  // editarCnfPaqueteDet(CnfPaqueteDet: any): void {
+  //   this.router.navigate(["/add-new-cnf-paquete-det", { idParent: this.model.id, id: CnfPaqueteDet.id }]);
+  // }
+  // quitarCnfPaqueteDet(e: any): void {
+  //   if (!this.id) {
+  //     this.model.listCnfPaqueteDet = this.model.listCnfPaqueteDet.filter(item => item.id != e.id);
+  //   }
+  //   if (this.id) {
+  //     this.utilService.confirmDelete(e).then((result) => {
+  //       if (result) {
+  //         this.listCnfPaqueteDet.delete(e.id.toString()).subscribe(() => {
+  //           this.utilService.msgOkDelete();
+  //           this.loadData();
+  //         }, err => {
+  //           if (err.status === 500 && err.error.trace.includes("DataIntegrityViolationException")) {
+  //             this.utilService.msgProblemDelete();
+  //           }
+  //         });
+  //       }
+
+  //     });
+  //   }
+
+  // }
+
+  getListCnfProductAsObservable(term: any): Observable<any> {
+
+    if (term.length >= 2) {
+      let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];  
+      return this.cnfProductoService.getAllDataComboTypeHead(term, cnfEmpresa)
+        .pipe(
+          tap(() => this.searchFailed = false),
+          catchError((err: any) => {
+            console.log(err);
+            this.searchFailed = true;
+            return of([]);
+          })
+        );
+    } else {
+      return <any>[];
+    }
+
+  }
+  
+  searchProduct = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap(term => {
+        return this.getListCnfProductAsObservable(term);
+      })
+    )
+  
+  onchangeProduct(event: any, input: any) {
+    event.preventDefault();
+    console.log(event);
+    
+    let actComprobanteDetalle = new CnfPaqueteProducto();
+    // actComprobanteDetalle.cnfProductoContenido.nombre = event.item.nombre
+    actComprobanteDetalle.cnfProductoContenido = event.item
+    actComprobanteDetalle.cantidad = 1
+    console.log(this.model.listCnfPaqueteDet);
+    
+    this.model.listCnfPaqueteDet.push(actComprobanteDetalle);
+    console.log(this.model.listCnfPaqueteDet);
+    let contador = 0;
+    this.model.listCnfPaqueteDet.forEach(item => {
+      item.index = contador++;
+    });
+    input.value = '';
+
+
+  }
+
+  removeItem(index:any){
+    this.model.listCnfPaqueteDet.filter(e => e.index !== index);
+    this.model.listCnfPaqueteDet.splice(index, 1);
   }
 }
 

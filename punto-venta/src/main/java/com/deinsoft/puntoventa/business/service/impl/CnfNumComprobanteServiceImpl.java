@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.service.CnfNumComprobanteService;
 
 @Service
 @Transactional
-public class CnfNumComprobanteServiceImpl extends CommonServiceImpl<CnfNumComprobante, CnfNumComprobanteRepository> 
+public class CnfNumComprobanteServiceImpl extends CommonServiceImpl<CnfNumComprobante,Long, CnfNumComprobanteRepository>
         implements CnfNumComprobanteService {
 
     @Autowired

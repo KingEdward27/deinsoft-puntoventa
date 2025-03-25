@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.ActContratoMov;
 
 @Service
 @Transactional
-public interface ActContratoCorteService extends CommonService<ActContratoMov> {
+public interface ActContratoCorteService extends CommonService<ActContratoMov,Long> {
 
     public List<ActContratoMov> getAllActContratoCorte(ActContratoMov actContratoCorte);
 

@@ -68,7 +68,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
 @Transactional
-public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante, ActComprobanteRepository>
+public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,Long, ActComprobanteRepository>
         implements ActComprobanteService {
 
     @Autowired
@@ -753,7 +753,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         actComprobante.setCnfLocal(cnfLocalService.getCnfLocal(localId));
         actComprobante.setSerie(serie);
         actComprobante.setNumero(numero);
-        actComprobante.setFlagIsventa("2");
+        actComprobante.setFlagIsventa("1");
         List<ActComprobante> listExists = actComprobanteRepository.findByCnfEmpresaIdAndNumberCp(actComprobante);
         
         if (listExists.isEmpty()) {

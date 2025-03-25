@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class ActCajaTurnoServiceImpl extends CommonServiceImpl<ActCajaTurno, ActCajaTurnoRepository> 
+public class ActCajaTurnoServiceImpl extends CommonServiceImpl<ActCajaTurno,Long, ActCajaTurnoRepository>
         implements ActCajaTurnoService {
 
     @Autowired

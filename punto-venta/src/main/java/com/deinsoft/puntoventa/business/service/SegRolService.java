@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.SegRol;
 
 @Service
 @Transactional
-public interface SegRolService extends CommonService<SegRol>{
+public interface SegRolService extends CommonService<SegRol,Long>{
 	
 	public List<SegRol> getAllSegRol(SegRol segRol);
 	public SegRol getSegRol(Long id);

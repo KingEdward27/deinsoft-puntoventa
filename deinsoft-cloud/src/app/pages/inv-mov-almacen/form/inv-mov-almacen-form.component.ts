@@ -212,7 +212,6 @@ export class InvMovAlmacenForm2Component implements OnInit {
   }
   getListCnfTipoComprobante() {
     this.loadingCnfTipoComprobante = true;
-    console.log(this.chargingsb);
     return this.cnfTipoComprobanteService.getAllDataComboMovAlmacen().subscribe(data => {
       this.listCnfTipoComprobante = data;
       this.loadingCnfTipoComprobante = false;
@@ -229,7 +228,6 @@ export class InvMovAlmacenForm2Component implements OnInit {
   }
   getListInvAlmacen() {
     this.loadingInvAlmacen = true;
-    console.log(this.chargingsb);
     return this.invAlmacenService.getAllDataCombo().subscribe(data => {
       this.listInvAlmacen = data;
       this.loadingInvAlmacen = false;

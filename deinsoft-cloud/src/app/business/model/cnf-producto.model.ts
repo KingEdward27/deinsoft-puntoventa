@@ -3,13 +3,16 @@ import { CnfEmpresa } from "./cnf-empresa.model";
 import { CnfMarca } from "./cnf-marca.model";
 import { CnfSubCategoria } from "./cnf-sub-categoria.model";
 import { CnfUnidadMedida } from "./cnf-unidad-medida.model";
+import { CnfPaqueteProducto } from "./cnf-paquete-producto.model";
 
 export class CnfProducto {
 	id: number = 0;
 	codigo: string = "";
 	nombre: string = "";
+	costo: number;
 	precio!: number;
 	existencia!: number;
+	stockMinimo: number;
 	fechaRegistro!: dayjs.Dayjs;
 	rutaImagen: string = "";
 	flagEstado: string = "";
@@ -20,4 +23,6 @@ export class CnfProducto {
 	cnfSubCategoria: CnfSubCategoria = new CnfSubCategoria();
 	cnfMarca: CnfMarca = new CnfMarca();
 	token?: string = "";
+	listCnfPaqueteDet:CnfPaqueteProducto[] = [];
+	file:any;
 };

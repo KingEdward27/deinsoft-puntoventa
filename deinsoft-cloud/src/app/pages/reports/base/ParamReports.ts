@@ -9,8 +9,8 @@ import { CnfTipoComprobante } from '@/business/model/cnf-tipo-comprobante.model'
 import { InvAlmacen } from '@/business/model/inv-almacen.model';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import * as dayjs from 'dayjs';
-import { CnfProducto } from '../../cnf-producto/cnf-producto.model';
 import { CnfZona } from '../../../business/model/cnf-zona';
+import { CnfProducto } from '@/business/model/cnf-producto.model';
 
 export class GenericBean{
 	id:number = 0;

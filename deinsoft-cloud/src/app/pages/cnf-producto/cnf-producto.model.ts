@@ -4,8 +4,9 @@ import * as dayjs from 'dayjs';
 import { CnfEmpresa } from '../../business/model/cnf-empresa.model';
 import { CnfSubCategoria } from '../../business/model/cnf-sub-categoria.model';
 import { CnfMarca } from '../../business/model/cnf-marca.model';
+import { CnfPaqueteProducto } from '@/business/model/cnf-paquete-producto.model';
 
-export class CnfProducto {
+export class CnfProductosdd {
 	id: number = 0;
 	codigo: string = "";
 	nombre: string = "";
@@ -23,4 +24,6 @@ export class CnfProducto {
 	stockMinimo!: number;
 	token?: string = "";
 	file:any;
+
+	listCnfPaqueteDet:CnfPaqueteProducto[] = [];
 };

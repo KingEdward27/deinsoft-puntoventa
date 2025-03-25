@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfLocal;
 
 @Service
 @Transactional
-public interface CnfLocalService extends CommonService<CnfLocal> {
+public interface CnfLocalService extends CommonService<CnfLocal,Long> {
 
     public List<CnfLocal> getAllCnfLocal(CnfLocal cnfLocal);
 

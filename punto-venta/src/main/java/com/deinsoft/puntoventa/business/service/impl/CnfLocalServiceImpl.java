@@ -2,7 +2,9 @@ package com.deinsoft.puntoventa.business.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +16,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class CnfLocalServiceImpl extends CommonServiceImpl<CnfLocal, CnfLocalRepository> implements CnfLocalService {
+public class CnfLocalServiceImpl extends CommonServiceImpl<CnfLocal,Long, CnfLocalRepository> implements CnfLocalService {
 
     @Autowired
     CnfLocalRepository cnfLocalRepository;
@@ -44,7 +46,11 @@ public class CnfLocalServiceImpl extends CommonServiceImpl<CnfLocal, CnfLocalRep
     }
 
     public List<CnfLocal> getAllCnfLocalByCnfEmpresa(long id) {
-        List<CnfLocal> CnfLocalList = (List<CnfLocal>) cnfLocalRepository.findByCnfEmpresaId(id);
+        SecurityFilterDto f = listRoles();
+        List<CnfLocal> CnfLocalList = (List<CnfLocal>) cnfLocalRepository.findByCnfEmpresaId(id)
+                .stream().filter(item -> f.getLocalIds().stream().anyMatch(predicate ->
+                        predicate == item.getId()))
+                .collect(Collectors.toList());
         return CnfLocalList;
     }
 

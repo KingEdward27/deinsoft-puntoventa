@@ -1,0 +1,40 @@
+spring.datasource.url=jdbc:mysql://deinsoft:D3ins0ft123$@localhost:3306/dbpuntoventa
+#spring.datasource.url=jdbc:mysql://nuedus.com:3306/deinsoftcloud?user=deinsoftcloud&password=]eZ!n~?Ww{Bw
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.database-platform=org.hibernate.dialect.MariaDB103Dialect
+
+spring.datasource.hikari.maximum-pool-size=2
+spring.jpa.generate-ddl=true
+spring.jpa.hibernate.ddl-auto=update
+
+app.mysqlDatabase = dbpuntoventa
+spring.jackson.serialization.fail-on-empty-beans=false
+
+
+spring.servlet.multipart.max-file-size=256GB
+spring.servlet.multipart.max-request-size=256GB
+spring.servlet.multipart.enabled=true
+spring.mvc.pathmatch.matching-strategy=ant-path-matcher
+
+#app.staticResourcesPath = /home/site/resources/
+app.staticResourcesPath = /usr/deinsoft-cloud/resources
+#app.fileSystem.basePath = /home/site/DEFACT/
+app.fileSystem.basePath = /usr/deinsoft-cloud/
+app.config.url = http://66.29.149.124:8080/deinsoft-cloud/
+app.config.backend.resources = resources
+app.config.backend.url = http://66.29.149.124:8080/deinsoft-puntoventa/
+
+server.error.include-message=always
+spring.main.allow-circular-references=true
+springdoc.swagger-ui.path=/v3/swagger-ui.html
+
+spring.jpa.show-sql=false
+
+#mail
+
+app.config.mail.user = deinsoft.la@gmail.com
+app.config.mail.pass = iftojahetqlszvha
+app.config.mail.smtp.host = smtp.gmail.com
+app.config.mail.smtp.port = 465
+#app.config.mail.smtp.ssl = false
+app.config.mail.smtp.auth = true

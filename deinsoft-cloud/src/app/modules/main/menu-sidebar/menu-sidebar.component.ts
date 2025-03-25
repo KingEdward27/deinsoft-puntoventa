@@ -33,7 +33,7 @@ export class MenuSidebarComponent implements OnInit {
             this.classes = `${BASE_CLASSES} ${state.sidebarSkin}`;
         });
         this.user = this.appService.user;
-        console.log(this.user);
+        // console.log(this.user);
         this.perfil = this.user.profile.split("|")[0]
         this.empresa = this.user.profile.split("|")[3] == "*" ? "TODOS" : this.user.profile.split("|")[3]
         this.local = this.user.profile.split("|")[4] == "*" ? "TODOS" : this.user.profile.split("|")[4]

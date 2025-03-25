@@ -17,10 +17,10 @@
 
             <p>
                 <span>{{ user.name }}</span>
-                <!-- <small>
-                    <span>Member since&nbsp;</span>
-                    <span>{{ formatDate(user.createdAt) }}</span>
-                </small> -->
+                <small *ngFor="let item of perfil">
+                    <div>
+                        <span>{{ item }}</span></div>
+                </small>
             </p>
         </li>
         <!-- Menu Body -->

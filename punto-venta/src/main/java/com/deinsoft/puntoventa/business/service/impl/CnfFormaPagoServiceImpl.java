@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class CnfFormaPagoServiceImpl extends CommonServiceImpl<CnfFormaPago,CnfFormaPagoRepository> implements CnfFormaPagoService  {
+public class CnfFormaPagoServiceImpl extends CommonServiceImpl<CnfFormaPago,Long,CnfFormaPagoRepository> implements CnfFormaPagoService  {
 	@Autowired 
 	CnfFormaPagoRepository cnfFormaPagoRepository;
 	

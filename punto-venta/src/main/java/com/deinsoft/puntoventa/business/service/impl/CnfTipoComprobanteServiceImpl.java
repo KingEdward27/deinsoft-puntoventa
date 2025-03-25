@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class CnfTipoComprobanteServiceImpl extends CommonServiceImpl<CnfTipoComprobante, CnfTipoComprobanteRepository> implements CnfTipoComprobanteService {
+public class CnfTipoComprobanteServiceImpl extends CommonServiceImpl<CnfTipoComprobante,Long, CnfTipoComprobanteRepository> implements CnfTipoComprobanteService {
 
     @Autowired
     CnfTipoComprobanteRepository cnfTipoComprobanteRepository;
@@ -46,7 +46,7 @@ public class CnfTipoComprobanteServiceImpl extends CommonServiceImpl<CnfTipoComp
     }
     
     public List<CnfTipoComprobante> getAllCnfTipoComprobanteVentas() {
-        final List<String> list = Arrays.asList("BOL","FAC","NOT");
+        final List<String> list = Arrays.asList("BOL","FAC","NOT","NC");
         List<CnfTipoComprobante> cnfTipoComprobanteList = (List<CnfTipoComprobante>) cnfTipoComprobanteRepository.findAll()
                 .stream().filter(predicate -> list.stream().anyMatch(data -> 
                 {

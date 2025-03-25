@@ -3,6 +3,8 @@ package com.deinsoft.puntoventa.business.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.deinsoft.puntoventa.business.bean.ParamBean;
+import com.deinsoft.puntoventa.business.model.ActComprobante;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +16,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class InvAlmacenServiceImpl extends CommonServiceImpl<InvAlmacen,InvAlmacenRepository> implements InvAlmacenService  {
+public class InvAlmacenServiceImpl extends CommonServiceImpl<InvAlmacen,Long,InvAlmacenRepository> implements InvAlmacenService  {
 	@Autowired 
 	InvAlmacenRepository invAlmacenRepository;
 	
@@ -43,6 +45,8 @@ public class InvAlmacenServiceImpl extends CommonServiceImpl<InvAlmacen,InvAlmac
 		List<InvAlmacen> InvAlmacenList = (List<InvAlmacen>)invAlmacenRepository.findByCnfLocalId(id);
 		return InvAlmacenList;
 	}
+
+
 	@Override
 	public void delete(long id) {
 		InvAlmacen invAlmacen =null;

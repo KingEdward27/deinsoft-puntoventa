@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.SegPermiso;
 
 @Service
 @Transactional
-public interface SegPermisoService extends CommonService<SegPermiso> {
+public interface SegPermisoService extends CommonService<SegPermiso,Long> {
 
     public List<SegPermiso> getAllSegPermiso(SegPermiso segPermiso);
 

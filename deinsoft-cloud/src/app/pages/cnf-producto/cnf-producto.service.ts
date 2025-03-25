@@ -4,73 +4,73 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs/internal/Observable';
-import { CnfProducto } from './cnf-producto.model';
+import { CnfProductosdd } from './cnf-producto.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CnfProductoService {
+export class CnfProductoServiceasd {
   url: string = environment.apiUrl + '/api/business/cnf-producto';
   constructor(private http: HttpClient,
     private router: Router) {
   }
 
-  public getAllData(arg1: CnfProducto): Observable<any> {
-    let params = new HttpParams().set("codigo", arg1.codigo)
-      .set("cnfEmpresaId", arg1.cnfEmpresa.id)
-      .set("nombre", arg1.nombre)
-      .set("rutaImagen", arg1.rutaImagen)
-      .set("flagEstado", arg1.flagEstado)
-      .set("barcode", arg1.barcode)
-      ; return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto`, { params });
-  }
-  public getAllDataCombo(): Observable<any> {
-    return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-combo`);
-  }
-  public getAllByCnfUnidadMedidaId(id: number): Observable<any> {
-    let params = new HttpParams().set("id", id.toString());
-    return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-by-cnf-unidad-medida`, { params });
-  }
-  public getAllByCnfEmpresaId(id: number): Observable<any> {
-    let params = new HttpParams().set("id", id.toString());
-    return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-by-cnf-empresa`, { params });
-  }
-  public getAllByCnfSubCategoriaId(id: number): Observable<any> {
-    let params = new HttpParams().set("id", id.toString());
-    return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-by-cnf-sub-categoria`, { params });
-  }
-  public getAllByCnfMarcaId(id: number): Observable<any> {
-    let params = new HttpParams().set("id", id.toString());
-    return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-by-cnf-marca`, { params });
-  }
-  public getData(arg1: string): Observable<any> {
-    let params = new HttpParams().set("id", arg1)
-    return this.http.get<CnfProducto>(`${this.url}/get-cnf-producto`, { params });
-  }
-  public save(form: any, fileToUpload:any): Observable<CnfProducto> {
-    const formData: FormData = new FormData();
-    const mData = JSON.stringify(form);
-    formData.append('cnfProducto', mData);
-    if (fileToUpload) {
-      formData.append('file', fileToUpload, fileToUpload?.name);
-    }
+  // public getAllData(arg1: CnfProducto): Observable<any> {
+  //   let params = new HttpParams().set("codigo", arg1.codigo)
+  //     .set("cnfEmpresaId", arg1.cnfEmpresa.id)
+  //     .set("nombre", arg1.nombre)
+  //     .set("rutaImagen", arg1.rutaImagen)
+  //     .set("flagEstado", arg1.flagEstado)
+  //     .set("barcode", arg1.barcode)
+  //     ; return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto`, { params });
+  // }
+  // public getAllDataCombo(): Observable<any> {
+  //   return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-combo`);
+  // }
+  // public getAllByCnfUnidadMedidaId(id: number): Observable<any> {
+  //   let params = new HttpParams().set("id", id.toString());
+  //   return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-by-cnf-unidad-medida`, { params });
+  // }
+  // public getAllByCnfEmpresaId(id: number): Observable<any> {
+  //   let params = new HttpParams().set("id", id.toString());
+  //   return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-by-cnf-empresa`, { params });
+  // }
+  // public getAllByCnfSubCategoriaId(id: number): Observable<any> {
+  //   let params = new HttpParams().set("id", id.toString());
+  //   return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-by-cnf-sub-categoria`, { params });
+  // }
+  // public getAllByCnfMarcaId(id: number): Observable<any> {
+  //   let params = new HttpParams().set("id", id.toString());
+  //   return this.http.get<CnfProducto[]>(`${this.url}/get-all-cnf-producto-by-cnf-marca`, { params });
+  // }
+  // public getData(arg1: string): Observable<any> {
+  //   let params = new HttpParams().set("id", arg1)
+  //   return this.http.get<CnfProducto>(`${this.url}/get-cnf-producto`, { params });
+  // }
+  // public save(form: any, fileToUpload:any): Observable<CnfProducto> {
+  //   const formData: FormData = new FormData();
+  //   const mData = JSON.stringify(form);
+  //   formData.append('cnfProducto', mData);
+  //   if (fileToUpload) {
+  //     formData.append('file', fileToUpload, fileToUpload?.name);
+  //   }
     
-    return this.http.post<CnfProducto>(this.url + '/save-cnf-producto',formData);
-  }
-  public delete(arg1: string): Observable<HttpResponse<{}>> {
-    let params = new HttpParams().set("id", arg1);
-    return this.http.delete(this.url + '/delete-cnf-producto', { observe: 'response', params });
-  }
+  //   return this.http.post<CnfProducto>(this.url + '/save-cnf-producto',formData);
+  // }
+  // public delete(arg1: string): Observable<HttpResponse<{}>> {
+  //   let params = new HttpParams().set("id", arg1);
+  //   return this.http.delete(this.url + '/delete-cnf-producto', { observe: 'response', params });
+  // }
 
-  public postFile(fileToUpload: File): Observable<any> {
-    const endpoint = this.url + '/upload';
-    const formData: FormData = new FormData();
-    formData.append('file', fileToUpload, fileToUpload.name);
-    return this.http.post(endpoint, formData, { headers: {}, reportProgress: true, observe: 'events' })
+  // public postFile(fileToUpload: File): Observable<any> {
+  //   const endpoint = this.url + '/upload';
+  //   const formData: FormData = new FormData();
+  //   formData.append('file', fileToUpload, fileToUpload.name);
+  //   return this.http.post(endpoint, formData, { headers: {}, reportProgress: true, observe: 'events' })
 
-  }
-  public getVideoPathFromResources(nameVideo: string,sizeVideo: string): Observable<string> {
-    return this.http.get(`${this.url}/get-ope-video-path?fileName=${nameVideo}&fileSize=${sizeVideo}`, {responseType: 'text'});
-  }
+  // }
+  // public getVideoPathFromResources(nameVideo: string,sizeVideo: string): Observable<string> {
+  //   return this.http.get(`${this.url}/get-ope-video-path?fileName=${nameVideo}&fileSize=${sizeVideo}`, {responseType: 'text'});
+  // }
 }
 

@@ -128,6 +128,7 @@ public class Impresion {
             parametros.put("pAnticipo", Formatos.df.format(0));
             parametros.put("idTipoDoc", tipoDocSunat == null ? "00" : tipoDocSunat);
             parametros.put("isTicket", isTicket);
+            parametros.put("pRutaLogo", "\\DESKTOP-LSKBFJB\\videos-local\\10703942381\\8.jpg");
 //            parametros.put("psummary", "NOTA: Una vez retirada la prenda no hay lugar a reclamo. "
 //                    + "Pasado 30 dias de no retirar su ropa esta sera rematada "
 //                    + "para recuperar los gastos del servicio dado."
@@ -330,6 +331,8 @@ public class Impresion {
             parametros.put("pAnticipo", Formatos.df.format(0));
             parametros.put("idTipoDoc", tipoDocSunat == null ? "00" : tipoDocSunat);
             parametros.put("isTicket", isTicket);
+
+//            parametros.put("pRutaLogo", "http://localhost:8084/deinsoft-puntoventa/resources/10703942381/8.jpg");
 //            parametros.put("psummary", "NOTA: Una vez retirada la prenda no hay lugar a reclamo. "
 //                    + "Pasado 30 dias de no retirar su ropa esta sera rematada "
 //                    + "para recuperar los gastos del servicio dado."

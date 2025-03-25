@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperacion, ActCajaOperacionRepository> implements ActCajaOperacionService {
+public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperacion,Long, ActCajaOperacionRepository> implements ActCajaOperacionService {
 
     @Autowired
     ActCajaOperacionRepository actCajaOperacionRepository;

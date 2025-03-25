@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
 
 @Service
 @Transactional
-public interface SegUsuarioService extends CommonService<SegUsuario> {
+public interface SegUsuarioService extends CommonService<SegUsuario,Long> {
 
     public List<SegUsuario> getAllSegUsuario(SegUsuario segUsuario);
 

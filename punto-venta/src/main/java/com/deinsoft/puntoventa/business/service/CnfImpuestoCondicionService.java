@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfImpuestoCondicion;
 
 @Service
 @Transactional
-public interface CnfImpuestoCondicionService extends CommonService<CnfImpuestoCondicion>{
+public interface CnfImpuestoCondicionService extends CommonService<CnfImpuestoCondicion,Long>{
 	
 	public List<CnfImpuestoCondicion> getAllCnfImpuestoCondicion(CnfImpuestoCondicion cnfImpuestoCondicion);
 	public CnfImpuestoCondicion getCnfImpuestoCondicion(Long id);

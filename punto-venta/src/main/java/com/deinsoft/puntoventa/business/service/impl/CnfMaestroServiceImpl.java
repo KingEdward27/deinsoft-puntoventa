@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.framework.util.Util;
 
 @Service
 @Transactional
-public class CnfMaestroServiceImpl extends CommonServiceImpl<CnfMaestro, CnfMaestroRepository> 
+public class CnfMaestroServiceImpl extends CommonServiceImpl<CnfMaestro,Long, CnfMaestroRepository>
         implements CnfMaestroService {
 
     @Autowired

@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfPais;
 
 @Service
 @Transactional
-public interface CnfPaisService extends CommonService<CnfPais>{
+public interface CnfPaisService extends CommonService<CnfPais,Long>{
 	
 	public List<CnfPais> getAllCnfPais(CnfPais cnfPais);
 	public CnfPais getCnfPais(Long id);

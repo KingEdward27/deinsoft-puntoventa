@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Service
 @Transactional
-public interface ActOrdenService extends CommonService<ActOrden> {
+public interface ActOrdenService extends CommonService<ActOrden,Long> {
 
     public List<ActOrden> getAllActOrden(ActOrden actOrden);
 

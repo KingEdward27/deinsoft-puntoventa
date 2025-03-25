@@ -12,13 +12,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.sun.xml.bind.v2.model.core.ID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-public class CommonServiceImpl<E, R extends PagingAndSortingRepository<E, Long>> implements CommonService<E> {
+public class CommonServiceImpl<E,ID, R extends PagingAndSortingRepository<E, ID>> implements CommonService<E, ID> {
 
     @Autowired
     protected R repository;
@@ -40,7 +41,7 @@ public class CommonServiceImpl<E, R extends PagingAndSortingRepository<E, Long>>
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<E> findById(Long id) {
+    public Optional<E> findById(ID id) {
         return repository.findById(id);
     }
 
@@ -52,7 +53,7 @@ public class CommonServiceImpl<E, R extends PagingAndSortingRepository<E, Long>>
 
     @Override
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(ID id) {
         repository.deleteById(id);
     }
 

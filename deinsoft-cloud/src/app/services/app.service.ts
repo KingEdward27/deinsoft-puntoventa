@@ -11,10 +11,10 @@ const helper = new JwtHelperService();
 })
 export class AppService {
     public user: any = null;
-    
+
     constructor(private router: Router, private toastr: ToastrService,
         private auth: AuthenticationService, private segPermisoService: SegPermisoService) {
-        }
+    }
 
     async loginByAuth({ email, password }) {
         try {
@@ -26,14 +26,13 @@ export class AppService {
         } catch (error) {
             if (error.code = 403) {
                 this.toastr.error("Usuario o contraeña incorrecta");
-            } else
-            {
+            } else {
                 this.toastr.error(error.message);
             }
         }
     }
 
-    async registerByAuth({email, password}) {
+    async registerByAuth({ email, password }) {
         try {
             const token = "";//await Gatekeeper.registerByAuth(email, password);
             localStorage.setItem('token', token);
@@ -87,17 +86,27 @@ export class AppService {
     //         this.toastr.error(error.message);
     //     }
     // }
-    getMenu(){
+    getMenu() {
         let tokenDecrypt = JSON.parse(localStorage.getItem('menu'));
         return tokenDecrypt
     }
     async setMenu() {
         let tokenDecrypt = helper.decodeToken(localStorage.getItem('token'));
-        
+
         this.user = tokenDecrypt.user
         this.user.profile = tokenDecrypt.authorities[0].authority;
-        let rolName = this.user.profile.split("|")[0]
-        
+        let rolName = "";
+
+        if (this.user.profile.split(";").length > 1) {
+            let arrayPerfiles = this.user.profile.split(";");
+            arrayPerfiles.forEach(element => {
+                rolName = rolName + element.split("|")[0] + ","
+            });
+        } else {
+            rolName = this.user.profile.split("|")[0]
+        }
+
+
         this.user.menu = []
         this.user.menu.push({
             nombre: 'Dashboard',
@@ -106,32 +115,34 @@ export class AppService {
         })
         let menu = await this.segPermisoService.getAllBySegRolNombre(rolName)
         let menu2 = []
-        
+
         menu.forEach(element => {
-            
-            
+
+
             if (element.segMenu.children?.length > 0) {
-                    menu2.push({nombre:element.segMenu.nombre,
-                        icon:element.segMenu.icon,
-                        children:element.segMenu.children})
-                
+                menu2.push({
+                    nombre: element.segMenu.nombre,
+                    icon: element.segMenu.icon,
+                    children: element.segMenu.children
+                })
+
             }
-            
+
             // {
-                //             nombre: 'Administración',
-                //             icon: "fa-user-shield",
-                //             children: [
-                //                 { nombre: 'Región', path: ['/region'] },
-                //                 { nombre: 'Provincia', path: ['/provincia'] },
-                //                 { nombre: 'Distrito', path: ['/distrito'] },
-                //                 { nombre: 'Tipo de documento de identidad', path: ['/tipo-documento'] },
-                //                 { nombre: 'Moneda', path: ['/moneda'] },
-                //                 { nombre: 'Empresa', path: ['/empresa'] },
-                //                 { nombre: 'Unidad Medida', path: ['/unidadmedida'] }
-                //             ]
-                //         }
+            //             nombre: 'Administración',
+            //             icon: "fa-user-shield",
+            //             children: [
+            //                 { nombre: 'Región', path: ['/region'] },
+            //                 { nombre: 'Provincia', path: ['/provincia'] },
+            //                 { nombre: 'Distrito', path: ['/distrito'] },
+            //                 { nombre: 'Tipo de documento de identidad', path: ['/tipo-documento'] },
+            //                 { nombre: 'Moneda', path: ['/moneda'] },
+            //                 { nombre: 'Empresa', path: ['/empresa'] },
+            //                 { nombre: 'Unidad Medida', path: ['/unidadmedida'] }
+            //             ]
+            //         }
         });
-        
+
         localStorage.setItem('menu', JSON.stringify(menu2));
         // .subscribe(data => {
         //     this.user.menu = data
@@ -148,7 +159,7 @@ export class AppService {
         } catch (error) {
             this.logout();
             throw error;
-            
+
         }
     }
     getUser() {
@@ -158,7 +169,7 @@ export class AppService {
         } catch (error) {
             this.logout();
             throw error;
-            
+
         }
     }
     logout() {

@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
-public interface ActContratoService extends CommonService<ActContrato> {
+public interface ActContratoService extends CommonService<ActContrato,Long> {
 
     public List<ActContrato> getAllActContrato(ActContrato actContrato);
 

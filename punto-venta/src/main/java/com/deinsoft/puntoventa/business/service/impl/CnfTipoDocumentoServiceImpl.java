@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class CnfTipoDocumentoServiceImpl extends CommonServiceImpl<CnfTipoDocumento,CnfTipoDocumentoRepository> implements CnfTipoDocumentoService  {
+public class CnfTipoDocumentoServiceImpl extends CommonServiceImpl<CnfTipoDocumento,Long,CnfTipoDocumentoRepository> implements CnfTipoDocumentoService  {
 	@Autowired 
 	CnfTipoDocumentoRepository cnfTipoDocumentoRepository;
 	

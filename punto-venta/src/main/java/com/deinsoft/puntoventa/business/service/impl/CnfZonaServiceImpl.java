@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class CnfZonaServiceImpl extends CommonServiceImpl<CnfZona, CnfZonaRepository> implements CnfZonaService {
+public class CnfZonaServiceImpl extends CommonServiceImpl<CnfZona,Long, CnfZonaRepository> implements CnfZonaService {
 
     @Autowired
     CnfZonaRepository cnfZonaRepository;

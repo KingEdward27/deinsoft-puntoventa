@@ -61,12 +61,12 @@ public interface ActComprobanteRepository extends JpaRepository<ActComprobante, 
             @Param("securityFilterDto") SecurityFilterDto securityFilterDto);
     
     @Query(value = "select p from actComprobante p "
-            + "where p.cnfLocal.cnfEmpresa.id =  ?1 and month(fecha) = ?2 and flagEstado = '2' and flagIsventa = '1'")
-    List<ActComprobante> findByCnfEmpresaIdAndMonth(long id, int month);
+            + "where p.cnfLocal.cnfEmpresa.id =  ?1 and year(fecha) = ?2 and month(fecha) = ?3 and flagEstado = '2' and flagIsventa = '1'")
+    List<ActComprobante> findByCnfEmpresaIdAndMonth(long id, int year, int month);
     
     @Query(value = "select p from actComprobante p "
             + "where p.cnfLocal.cnfEmpresa.id =  :#{#actComprobante.cnfLocal.cnfEmpresa.id} "
-            + "and serie = :#{#actComprobante.serie} and CAST(p.numero AS int) = CAST(:#{#actComprobante.numero} AS int) "
+            + "and UPPER(serie) = UPPER(:#{#actComprobante.serie}) and CAST(p.numero AS int) = CAST(:#{#actComprobante.numero} AS int) "
             + "and flagIsventa = :#{#actComprobante.flagIsventa}")
     List<ActComprobante> findByCnfEmpresaIdAndNumberCp(@Param("actComprobante") ActComprobante actComprobante);
     

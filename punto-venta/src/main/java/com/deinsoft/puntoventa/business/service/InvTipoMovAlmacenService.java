@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.InvTipoMovAlmacen;
 
 @Service
 @Transactional
-public interface InvTipoMovAlmacenService extends CommonService<InvTipoMovAlmacen> {
+public interface InvTipoMovAlmacenService extends CommonService<InvTipoMovAlmacen,Long> {
 
     public List<InvTipoMovAlmacen> getAllInvTipoMovAlmacen(InvTipoMovAlmacen invTipoMovAlmacen);
 

@@ -8,7 +8,7 @@ import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
 
 @Service
 @Transactional
-public interface CnfNumComprobanteService extends CommonService<CnfNumComprobante> {
+public interface CnfNumComprobanteService extends CommonService<CnfNumComprobante,Long> {
 
     public List<CnfNumComprobante> getAllCnfNumComprobante(CnfNumComprobante cnfNumComprobante);
 

@@ -76,14 +76,14 @@ export class ActComprobanteFormComponent implements OnInit {
   cnfMoneda: CnfMoneda = new CnfMoneda();
   loadingCnfMoneda: boolean = false;
   selectDefaultCnfLocal: any = { id: 0, nombre: "- Seleccione -" }; 
-  listCnfLocal: any;
+  listCnfLocal: any = [];
   cnfLocal: CnfLocal = new CnfLocal();
   loadingCnfLocal: boolean = false;
   selectDefaultCnfTipoComprobante: any = { id: 0, nombre: "- Seleccione -" }; 
   listCnfTipoComprobante: any;
   cnfTipoComprobante: CnfTipoComprobante = new CnfTipoComprobante();
   loadingCnfTipoComprobante: boolean = false;
-  selectDefaultInvAlmacen: any = { id: 0, nombre: "- Seleccione -" }; listInvAlmacen: any;
+  selectDefaultInvAlmacen: any = { id: 0, nombre: "- Seleccione -" }; listInvAlmacen: any = [];
   invAlmacen: InvAlmacen = new InvAlmacen();
   loadingInvAlmacen: boolean = false;
   listActComprobanteDetalle: any;
@@ -240,6 +240,11 @@ export class ActComprobanteFormComponent implements OnInit {
     this.model.descuento = 0
     this.model.igv = Math.round((this.model.total - this.model.subtotal + Number.EPSILON) * 100) / 100
     this.model.listActComprobanteDetalle.push(actComprobanteDetalle);
+    console.log(this.model.listActComprobanteDetalle);
+    let contador = 0;
+    this.model.listActComprobanteDetalle.forEach(item => {
+      item.index = contador++;
+    });
     input.value = '';
   }
   agregarActComprobanteDetalle(): void {
@@ -506,6 +511,7 @@ export class ActComprobanteFormComponent implements OnInit {
   getListInvAlmacen() {
     this.loadingInvAlmacen = true;
     console.log(this.chargingsb);
+    this.loadSerie();
     return this.invAlmacenService.getAllByCnfLocalId(this.model.cnfLocal.id).subscribe(data => {
       this.listInvAlmacen = data;
       this.loadingInvAlmacen = false;
@@ -516,7 +522,6 @@ export class ActComprobanteFormComponent implements OnInit {
       }
       
     })
-
   }
   compareInvAlmacen(a1: InvAlmacen, a2: InvAlmacen): boolean {
     if (a1 === undefined && a2 === undefined) {
@@ -526,6 +531,12 @@ export class ActComprobanteFormComponent implements OnInit {
     return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
       ? false : a1.id === a2.id;
   }
+
+  onChangeDescripcion(item: any, value: any) {
+    console.log(item,value);
+    item.descripcion = item.nombre;
+  }
+
   onChangeCantidad(item: any, value: any) {
     item.importe = value * item.precio;
     item.afectacionIgv
@@ -554,6 +565,11 @@ export class ActComprobanteFormComponent implements OnInit {
     return this.cnfNumComprobanteService
       .getDataByCnfTipoComprobanteIdAndCnfLocalId(this.model.cnfTipoComprobante.id.toString()
         , this.model.cnfLocal.id.toString()).subscribe(data => {
+          console.log(data);
+          
+          if (this.model.cnfTipoComprobante.id != 0 && data.length == 0) {
+            this.utilService.msgWarning("Problemas de configuración","No se encontró serie configurada para el tipo de comprobante y local seleccionados")
+          }
           this.model.serie = data[0].serie
         })
   }
@@ -695,8 +711,14 @@ export class ActComprobanteFormComponent implements OnInit {
   //   this.model.descuento = 0
   //   this.model.igv = Math.round((this.model.total - this.model.subtotal  + Number.EPSILON) * 100) / 100
   // }
-  removeItem(index:any){
-    this.model.listActComprobanteDetalle.splice(index, 1)
+  removeItem(index:any,item:any){
+    //this.model.listActComprobanteDetalle = this.model.listActComprobanteDetalle.filter(e => e.index !== index);
+    //this.model.listActComprobanteDetalle.splice(index, 1)
+    // let index = this.model.listActComprobanteDetalle.findIndex(d => d.index=== p_index); 
+    // console.log(index);
+    
+    this.model.listActComprobanteDetalle.filter(e => e.index !== index);
+    this.model.listActComprobanteDetalle.splice(index, 1);
     this.updateTotals()
   }
   addNewCnfMestro() {
@@ -736,7 +758,31 @@ searchCnfMaestro = (text$: Observable<string>) =>
       return this.getListCnfMestroAsObservable(term);
     })
   )
+  focusOutRef() {
+    console.log(this.model.cnfLocal.id);
+    
+    this.actComprobanteService.getDataByCp(this.model.cnfLocal.id, this.model.serieRef, this.model.numeroRef).subscribe(data => {
+      if (!data) {
+        this.utilService.msgProblemNoItems();
+      } else {
+        
+        this.model.cnfMaestro = data.cnfMaestro;
+        this.model.subtotal = data.subtotal * -1;
+        this.model.igv = data.igv * -1;
+        this.model.total = data.total * -1;
+        this.model.cnfFormaPago = data.cnfFormaPago;
+        this.model.listActComprobanteDetalle = data.listActComprobanteDetalle;
+        this.model.listActComprobanteDetalle.forEach(element => {
+          element.id = 0;
+        });
+        console.log(this.model);
+        this.isDataLoaded = true;
+        //this.titulo = 'Editar ' + this.nombreModel;
+      }
+      
+    });
 
+  }
   // onEnter(){
     
     

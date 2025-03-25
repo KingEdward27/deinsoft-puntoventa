@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfUnidadMedida;
 
 @Service
 @Transactional
-public interface CnfUnidadMedidaService extends CommonService<CnfUnidadMedida>{
+public interface CnfUnidadMedidaService extends CommonService<CnfUnidadMedida,Long>{
 	
 	public List<CnfUnidadMedida> getAllCnfUnidadMedida(CnfUnidadMedida cnfUnidadMedida);
 	public CnfUnidadMedida getCnfUnidadMedida(Long id);

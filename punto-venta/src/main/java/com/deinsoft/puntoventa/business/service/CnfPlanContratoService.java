@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfPlanContrato;
 
 @Service
 @Transactional
-public interface CnfPlanContratoService extends CommonService<CnfPlanContrato> {
+public interface CnfPlanContratoService extends CommonService<CnfPlanContrato,Long> {
 
     public List<CnfPlanContrato> getAllCnfPlanContrato(CnfPlanContrato cnfPlanContrato);
 

@@ -90,6 +90,7 @@ import { InvAlmacenFormComponent } from '@pages/inv-almacen/inv-almacen-form';
 import { ActOrdenFormComponent } from '@pages/act-orden/form/act-orden-form.component';
 import { ActOrdenListComponent } from '@pages/act-orden/list/act-orden-list.component';
 import { SegUsuarioFormPasswordComponent } from '@pages/security/seg-usuario/form-password/seg-usuario-form-password.component';
+import { AddNewCnfPaqueteDetComponent } from '@pages/cnf-producto/add-new-cnf-paquete-det/add-new-cnf-paquete-det.component';
 const routes: Routes = [
     {
         path: '',
@@ -197,7 +198,9 @@ const routes: Routes = [
             {path: 'report-contable',component: ActComprobanteReportContableFormComponent},
             {path: 'list-orden',component: ActOrdenListComponent},
             {path: 'orden',component: ActOrdenFormComponent},
-            {path: 'change-password',component: SegUsuarioFormPasswordComponent}
+            {path: 'change-password',component: SegUsuarioFormPasswordComponent},
+            {path: 'add-new-cnf-paquete-det/:id',component: AddNewCnfPaqueteDetComponent},
+            
         ]
     },
     {

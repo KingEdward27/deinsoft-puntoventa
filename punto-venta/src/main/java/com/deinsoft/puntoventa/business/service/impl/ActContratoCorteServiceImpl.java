@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 
 @Service
 @Transactional
-public class ActContratoCorteServiceImpl extends CommonServiceImpl<ActContratoMov, ActContratoCorteRepository> implements ActContratoCorteService {
+public class ActContratoCorteServiceImpl extends CommonServiceImpl<ActContratoMov,Long, ActContratoCorteRepository> implements ActContratoCorteService {
 
     @Autowired
     ActContratoCorteRepository actContratoCorteRepository;

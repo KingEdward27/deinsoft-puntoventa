@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class SegPermisoServiceImpl extends CommonServiceImpl<SegPermiso, SegPermisoRepository> implements SegPermisoService {
+public class SegPermisoServiceImpl extends CommonServiceImpl<SegPermiso,Long, SegPermisoRepository> implements SegPermisoService {
 
     @Autowired
     SegPermisoRepository segPermisoRepository;

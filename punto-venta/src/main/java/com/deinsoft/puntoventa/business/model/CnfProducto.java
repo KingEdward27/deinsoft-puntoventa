@@ -11,6 +11,8 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.Set;
+
 import org.springframework.web.multipart.MultipartFile;
 
 @Entity(name = "cnfProducto")
@@ -102,7 +104,16 @@ public class CnfProducto implements Serializable {
     
     @Transient
     private long cnfEmpresaId;
-    
+
+
+    @OneToMany(mappedBy = "cnfProducto", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnoreProperties(value = {"cnfProducto"}, allowSetters = true)
+    private Set<CnfPaqueteProducto> listCnfPaqueteDet;
+
+    public void addCnfProductoContenido(CnfPaqueteProducto item) {
+        item.setCnfProducto(this);
+    }
+
     public long getId() {
         return id;
     }
@@ -252,4 +263,11 @@ public class CnfProducto implements Serializable {
         this.stockMinimo = stockMinimo;
     }
 
+    public Set<CnfPaqueteProducto> getListCnfPaqueteDet() {
+        return listCnfPaqueteDet;
+    }
+
+    public void setListCnfPaqueteDet(Set<CnfPaqueteProducto> listCnfPaqueteDet) {
+        this.listCnfPaqueteDet = listCnfPaqueteDet;
+    }
 }

@@ -339,9 +339,10 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     public void verifyPlan(ActComprobante actComprobante, ActContrato actContrato) throws Exception {
         if (actComprobante != null) {
+            int year = actComprobante.getFecha().getYear();
             int month = actComprobante.getFecha().getMonthValue();
             List<ActComprobante> listVentas = actComprobanteRepository.findByCnfEmpresaIdAndMonth(
-                    actComprobante.getCnfLocal().getCnfEmpresa().getId(), month);
+                    actComprobante.getCnfLocal().getCnfEmpresa().getId(),year, month);
             Double sumVentas = listVentas.stream().mapToDouble(o -> o.getTotal().doubleValue()).sum();
             if (actComprobante.getCnfLocal().getCnfEmpresa().getPlan() == 1
                     && (listVentas.size() >= 10 || sumVentas.compareTo(10000d) >= 0)) {

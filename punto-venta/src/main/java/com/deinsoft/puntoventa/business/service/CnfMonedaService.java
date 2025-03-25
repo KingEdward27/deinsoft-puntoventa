@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfMoneda;
 
 @Service
 @Transactional
-public interface CnfMonedaService extends CommonService<CnfMoneda>{
+public interface CnfMonedaService extends CommonService<CnfMoneda,Long>{
 	
 	public List<CnfMoneda> getAllCnfMoneda(CnfMoneda cnfMoneda);
 	public CnfMoneda getCnfMoneda(Long id);

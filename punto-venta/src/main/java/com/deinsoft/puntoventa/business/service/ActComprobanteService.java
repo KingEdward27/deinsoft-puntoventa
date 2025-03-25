@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Service
 @Transactional
-public interface ActComprobanteService extends CommonService<ActComprobante> {
+public interface ActComprobanteService extends CommonService<ActComprobante,Long> {
 
     public List<ActComprobante> getAllActComprobante(ActComprobante actComprobante);
 

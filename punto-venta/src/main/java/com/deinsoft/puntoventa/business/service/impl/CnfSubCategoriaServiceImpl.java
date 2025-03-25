@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class CnfSubCategoriaServiceImpl extends CommonServiceImpl<CnfSubCategoria,CnfSubCategoriaRepository> implements CnfSubCategoriaService  {
+public class CnfSubCategoriaServiceImpl extends CommonServiceImpl<CnfSubCategoria,Long,CnfSubCategoriaRepository> implements CnfSubCategoriaService  {
 	@Autowired 
 	CnfSubCategoriaRepository cnfSubCategoriaRepository;
 	

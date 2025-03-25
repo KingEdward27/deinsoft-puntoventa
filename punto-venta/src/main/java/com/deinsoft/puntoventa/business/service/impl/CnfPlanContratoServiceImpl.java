@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.service.CnfPlanContratoService;
 
 @Service
 @Transactional
-public class CnfPlanContratoServiceImpl extends CommonServiceImpl<CnfPlanContrato,CnfPlanContratoRepository> implements CnfPlanContratoService  {
+public class CnfPlanContratoServiceImpl extends CommonServiceImpl<CnfPlanContrato,Long,CnfPlanContratoRepository> implements CnfPlanContratoService  {
 	@Autowired 
 	CnfPlanContratoRepository cnfPlanContratoRepository;
 	

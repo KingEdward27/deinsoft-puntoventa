@@ -43,6 +43,7 @@
 	<parameter name="idTipoDoc" class="java.lang.String"/>
 	<parameter name="tipoDocFooter" class="java.lang.String"/>
 	<parameter name="ptelefono" class="java.lang.String"/>
+	<parameter name="pRutaLogo" class="java.lang.String"/>
 	<field name="cantidad" class="java.lang.String"/>
 	<field name="nro" class="java.lang.String"/>
 	<field name="um" class="java.lang.String"/>
@@ -62,14 +63,14 @@
 				<reportElement x="400" y="0" width="155" height="79" uuid="9d27b836-0705-46f1-b566-c931e721d768"/>
 			</rectangle>
 			<textField>
-				<reportElement x="1" y="10" width="359" height="24" uuid="ff55e809-d171-4c19-9871-2eba19c430f9"/>
+				<reportElement x="110" y="10" width="283" height="24" uuid="ff55e809-d171-4c19-9871-2eba19c430f9"/>
 				<textElement textAlignment="Center">
 					<font fontName="SansSerif" size="13" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{razon_social}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1" y="34" width="359" height="20" uuid="37230b67-2af3-410a-95cf-1c583543675d"/>
+				<reportElement x="110" y="34" width="283" height="20" uuid="37230b67-2af3-410a-95cf-1c583543675d"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{direccion}]]></textFieldExpression>
 			</textField>
@@ -95,10 +96,14 @@
 				<textFieldExpression><![CDATA[$P{tipodoc}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="78" y="55" width="197" height="16" uuid="ff767b94-f290-47d6-ab6d-e15c034561ff"/>
+				<reportElement x="110" y="55" width="283" height="16" uuid="ff767b94-f290-47d6-ab6d-e15c034561ff"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{ptelefono}]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="110" height="79" uuid="7aa85d73-8044-4311-a17d-23c893196eaf"/>
+				<imageExpression><![CDATA[$P{pRutaLogo}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>

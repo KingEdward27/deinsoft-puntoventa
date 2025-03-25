@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfCategoria;
 
 @Service
 @Transactional
-public interface CnfCategoriaService extends CommonService<CnfCategoria> {
+public interface CnfCategoriaService extends CommonService<CnfCategoria,Long> {
 
     public List<CnfCategoria> getAllCnfCategoria(CnfCategoria cnfCategoria);
 

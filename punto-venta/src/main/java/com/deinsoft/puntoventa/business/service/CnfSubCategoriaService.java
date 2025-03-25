@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfSubCategoria;
 
 @Service
 @Transactional
-public interface CnfSubCategoriaService extends CommonService<CnfSubCategoria>{
+public interface CnfSubCategoriaService extends CommonService<CnfSubCategoria,Long>{
 	
 	public List<CnfSubCategoria> getAllCnfSubCategoria(CnfSubCategoria cnfSubCategoria);
 	public CnfSubCategoria getCnfSubCategoria(Long id);

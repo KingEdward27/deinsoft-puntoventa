@@ -14,7 +14,7 @@ import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
 
 @Service
 @Transactional
-public class SegMenuServiceImpl extends CommonServiceImpl<SegMenu, SegMenuRepository> implements SegMenuService {
+public class SegMenuServiceImpl extends CommonServiceImpl<SegMenu,Long, SegMenuRepository> implements SegMenuService {
 
     @Autowired
     SegMenuRepository segMenuRepository;

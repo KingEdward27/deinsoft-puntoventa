@@ -9,7 +9,7 @@ import com.deinsoft.puntoventa.business.model.CnfTipoDocumento;
 
 @Service
 @Transactional
-public interface CnfTipoDocumentoService extends CommonService<CnfTipoDocumento>{
+public interface CnfTipoDocumentoService extends CommonService<CnfTipoDocumento,Long>{
 	
 	public List<CnfTipoDocumento> getAllCnfTipoDocumento(CnfTipoDocumento cnfTipoDocumento);
 	public CnfTipoDocumento getCnfTipoDocumento(Long id);
