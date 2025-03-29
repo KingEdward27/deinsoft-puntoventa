@@ -160,7 +160,8 @@
                         <div class="form-group-sm row">
                             <label for="precio"
                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.precio' |
-                                translate}}</label>
+                                translate}} <span
+                                style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                             <div class="col-sm-12 col-lg-9">
                                 <input type="number" [ngModel]="model.precio" placeholder='0.00'
                                     (ngModelChange)="model.precio = $event"
@@ -276,7 +277,7 @@
                                                     placeholder="Ingrese cantidad" /></td>
                                             <td>
                                                 <div class="row">
-                                                    <div class="col-sm-6 col-xs-6"><a (click)="removeItem(i)"
+                                                    <div class="col-sm-6 col-xs-6"><a (click)="removeItem(i,item)"
                                                             style="cursor: pointer;" title="Cambiar estado"><i
                                                                 class="fa fa-trash fa-lg"></i></a></div>
                                                 </div>

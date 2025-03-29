@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/seg-menu")
-public class SegMenuController extends CommonController<SegMenu, Long, SegMenuService> {
+public class SegMenuController extends CommonController<SegMenu, SegMenuService> {
 
     private static final Logger logger = LoggerFactory.getLogger(SegMenuController.class);
 

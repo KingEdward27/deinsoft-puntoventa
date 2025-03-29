@@ -76,7 +76,8 @@ export class InvMovAlmacenFormComponent implements OnInit {
   selectDefaultCnfMoneda: any = { id: 0, nombre: "- Seleccione -" }; listCnfMoneda: any;
   cnfMoneda: CnfMoneda = new CnfMoneda();
   loadingCnfMoneda: boolean = false;
-  selectDefaultCnfLocal: any = { id: 0, nombre: "- Seleccione -" }; listCnfLocal: any;
+  selectDefaultCnfLocal: any = { id: 0, nombre: "- Seleccione -" }; 
+  listCnfLocal: any;
   cnfLocal: CnfLocal = new CnfLocal();
   loadingCnfLocal: boolean = false;
   selectDefaultCnfTipoComprobante: any = { id: 0, nombre: "- Seleccione -" }; listCnfTipoComprobante: any;
@@ -94,6 +95,12 @@ export class InvMovAlmacenFormComponent implements OnInit {
   isSave: boolean = false;
   public modelOrig: InvMovAlmacen = new InvMovAlmacen();
   cnfProducto: any;
+
+  selectDefaultCnfLocalDestino: any = { id: 0, nombre: "- Seleccione -" }; 
+  listCnfLocalDestino: any;
+  selectDefaultInvAlmacenDestino: any = { id: 0, nombre: "- Seleccione -" }; 
+  listInvAlmacenDestino: any;
+
   formatter = (x: { nombre: string }) => x.nombre;
   formatterCnfMaestro = (x: CnfMaestro ) => (x.apellidoPaterno + ' '+x.apellidoMaterno+ ' '+x.nombres).trim();
 
@@ -330,17 +337,20 @@ export class InvMovAlmacenFormComponent implements OnInit {
     if(cnfEmpresa == '*') {
       return this.cnfLocalService.getAllDataCombo().subscribe(data => {
         this.listCnfLocal = data;
+        this.listCnfLocalDestino = data;
         this.loadingCnfLocal = false;
       })
     }else{
       return this.cnfLocalService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
         this.listCnfLocal = data;
+        this.listCnfLocalDestino = data;
         this.loadingCnfLocal = false;
 
         
         if(this.listCnfLocal.length == 1) {
           this.cnfLocalService.getData(this.listCnfLocal[0].id).subscribe(data => {
             this.model.cnfLocal = data
+
             this.getListInvAlmacen()
             
           })
@@ -355,6 +365,14 @@ export class InvMovAlmacenFormComponent implements OnInit {
 
   }
   compareCnfLocal(a1: CnfLocal, a2: CnfLocal): boolean {
+    if (a1 === undefined && a2 === undefined) {
+      return true;
+    }
+
+    return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
+      ? false : a1.id === a2.id;
+  }
+  compareCnfLocalDestino(a1: CnfLocal, a2: CnfLocal): boolean {
     if (a1 === undefined && a2 === undefined) {
       return true;
     }
@@ -394,7 +412,30 @@ export class InvMovAlmacenFormComponent implements OnInit {
     })
 
   }
+
+  getListInvAlmacenDestino() {
+    this.loadingInvAlmacen = true;
+    return this.invAlmacenService.getAllByCnfLocalId(this.model.cnfLocalDestino.id).subscribe(data => {
+      this.listInvAlmacenDestino = data;
+      this.loadingInvAlmacen = false;
+      if(this.listInvAlmacenDestino.length == 1){
+        this.invAlmacenService.getData(this.listInvAlmacenDestino[0].id).subscribe(data => {
+          this.model.invAlmacenDestino = data;
+        })
+      }
+      
+    })
+
+  }
   compareInvAlmacen(a1: InvAlmacen, a2: InvAlmacen): boolean {
+    if (a1 === undefined && a2 === undefined) {
+      return true;
+    }
+
+    return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
+      ? false : a1.id === a2.id;
+  }
+  compareInvAlmacenDestino(a1: InvAlmacen, a2: InvAlmacen): boolean {
     if (a1 === undefined && a2 === undefined) {
       return true;
     }

@@ -136,6 +136,7 @@ export class CommonReportFormComponent implements OnInit {
   public modalRef!: NgbModalRef;
   listData: any;
   titleExport: any;
+  subTitleExport: any;
   datablesSettings: any
   indexInputs: any;
   datablesSettingsWithInputs: any;
@@ -147,11 +148,8 @@ export class CommonReportFormComponent implements OnInit {
 
   constructor(public deps: MyBaseComponentDependences) {
   }
-  ngOnInit(): void {
-    this.isDataLoaded = false;
-    this.loadData();
-    this.model.fechaDesde = this.deps.dateAdapter.toModel(this.deps.ngbCalendar.getToday())!;
-    this.model.fechaHasta = this.deps.dateAdapter.toModel(this.deps.ngbCalendar.getToday())!;
+
+  refreshDatatabaleSettings(){
     let lang = localStorage.getItem('lang');
     this.datablesSettings = {
       deferRender: true,
@@ -165,6 +163,7 @@ export class CommonReportFormComponent implements OnInit {
       buttons: [{
         extend: 'excel',
         title: this.titleExport,
+        messageTop: this.subTitleExport,
         text: '<i class="fa fa-file-excel"></i>&nbsp; XLS',
         exportOptions: {
           columns: ':visible'
@@ -173,12 +172,14 @@ export class CommonReportFormComponent implements OnInit {
       {
         extend: 'pdf',
         title: this.titleExport,
+        messageTop: this.subTitleExport,
         text: ' <i class="fa fa-file-pdf"></i>&nbsp; PDF',
         orientation: 'landscape'
       },
       {
         extend: 'csv',
         title: this.titleExport,
+        messageTop: this.subTitleExport,
         text: '<i class="fa fa-file-excel"></i>&nbsp; CSV',
         exportOptions: {
           columns: ':visible'
@@ -262,6 +263,13 @@ export class CommonReportFormComponent implements OnInit {
         // }
       }
     }
+  }
+  ngOnInit(): void {
+    this.isDataLoaded = false;
+    this.loadData();
+    this.model.fechaDesde = this.deps.dateAdapter.toModel(this.deps.ngbCalendar.getToday())!;
+    this.model.fechaHasta = this.deps.dateAdapter.toModel(this.deps.ngbCalendar.getToday())!;
+    this.refreshDatatabaleSettings();
   }
   // getBack() {
   //   this.router.navigate([this.redirect]);

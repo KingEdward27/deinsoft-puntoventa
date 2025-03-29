@@ -4,6 +4,7 @@ import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import java.util.Optional;
 
+import com.deinsoft.puntoventa.business.dto.InvMovimientoProductoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +19,13 @@ import com.deinsoft.puntoventa.business.model.InvAlmacenProducto;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class InvMovimientoProductoServiceImpl 
-        extends CommonServiceImpl<InvMovimientoProducto,Long, InvMovimientoProductoRepository> implements InvMovimientoProductoService {
+        extends CommonServiceImpl<InvMovimientoProducto,Long, InvMovimientoProductoRepository>
+        implements InvMovimientoProductoService {
 
     @Autowired
     InvMovimientoProductoRepository invMovimientoProductoRepository;
@@ -78,21 +81,46 @@ public class InvMovimientoProductoServiceImpl
     }
     @Override
     @Transactional
-    public List<InvMovimientoProducto> getReportInvMovimientoProducto(ParamBean paramBean) {
+    public List<InvMovimientoProductoDTO> getReportInvMovimientoProducto(ParamBean paramBean) {
         
-        List<InvMovimientoProducto> list = (List<InvMovimientoProducto>) 
-                invMovimientoProductoRepository.getReportInvMovimientoProducto(paramBean);
+        List<InvMovimientoProductoDTO> list = invMovimientoProductoRepository.getReportInvMovimientoProducto(paramBean)
+                        .stream()
+                        .map(data -> {
+                            String tipo;
+                            if (data.getActComprobante() != null) {
+                                tipo = data.getActComprobante().getFlagIsventa().equals("1") ? "Venta" : "Compra";
+                            } else if (data.getInvMovAlmacen() != null) {
+                                tipo = data.getInvMovAlmacen().getInvTipoMovAlmacen().getNaturaleza().equals("1") ? "Movimiento de ingreso" : "Movimiento de salida";
+                            } else {
+                                tipo = "";
+                            }
+                            return InvMovimientoProductoDTO.builder()
+                                    .local(data.getInvAlmacen().getCnfLocal().getNombre())
+                                    .almacen(data.getInvAlmacen().getNombre())
+                                    .producto(data.getCnfProducto().getNombre())
+                                    .cantidad(data.getCantidad())
+                                    .tipoMovimiento(tipo)
+                                    .valor(data.getValor())
+                                    .simboloMoneda(data.getInvAlmacen()
+                                        .getCnfLocal().getCnfEmpresa().getCnfMoneda().getSimbolo())
+                                    .forDiscount((data.getActComprobante() != null
+                                                    && data.getActComprobante().getFlagIsventa().equals("1"))
+                                            || (data.getInvMovAlmacen() != null
+                                                    && data.getInvMovAlmacen().getInvTipoMovAlmacen().getNaturaleza().equals("-1")))
+                                    .build();
+                        })
+                        .collect(Collectors.toList());;
         BigDecimal costo = BigDecimal.ZERO;
         BigDecimal costoTotal = BigDecimal.ZERO;
-        BigDecimal cantidad = BigDecimal.ZERO;
-        for (InvMovimientoProducto invMovimientoProducto : list) {
+        BigDecimal cantidadTotal = BigDecimal.ZERO;
+        for (InvMovimientoProductoDTO invMovimientoProducto : list) {
             
-            cantidad = cantidad.add(invMovimientoProducto.getCantidad());
+            cantidadTotal = cantidadTotal.add(invMovimientoProducto.getCantidad());
             costoTotal = costoTotal.add(invMovimientoProducto.getCantidad().multiply(invMovimientoProducto.getValor()));
-            if (cantidad.compareTo(BigDecimal.ZERO) == 0) {
+            if (cantidadTotal.compareTo(BigDecimal.ZERO) == 0) {
                 costoTotal = BigDecimal.ZERO;
             } else {
-                costo = costoTotal.divide(cantidad, 2, RoundingMode.HALF_UP);
+                costo = costoTotal.divide(cantidadTotal, 2, RoundingMode.HALF_UP);
             }
             
 //            costo = invMovimientoProducto.getActComprobante()
@@ -100,7 +128,24 @@ public class InvMovimientoProductoServiceImpl
 //                    .filter(predicate -> predicate.getCnfProducto().getId() == invMovimientoProducto.getCnfProducto().getId())
 //                    .findFirst().orElse(new ActComprobanteDetalle()).getCnfProducto().getCosto();
 //            costoTotal = costoTotal.add(invMovimientoProducto.getCantidad().multiply(costo));
-            invMovimientoProducto.setCant(cantidad);
+
+//            if (invMovimientoProducto.getSimboloMoneda() == null) {
+//                invMovimientoProducto.setSimboloMoneda(invMovimientoProducto.getInvAlmacen()
+//                        .getCnfLocal().getCnfEmpresa().getCnfMoneda().getSimbolo());
+//            }
+            if (invMovimientoProducto.isForDiscount()) {
+                invMovimientoProducto.setCantidadDescuento(invMovimientoProducto.getCantidad());
+                invMovimientoProducto.setValorDescuento(invMovimientoProducto.getValor());
+
+                invMovimientoProducto.setCantidad(BigDecimal.ZERO);
+                invMovimientoProducto.setValor(BigDecimal.ZERO);
+            } else {
+                invMovimientoProducto.setCantidadDescuento(BigDecimal.ZERO);
+                invMovimientoProducto.setValorDescuento(BigDecimal.ZERO);
+
+                invMovimientoProducto.setCantidad(invMovimientoProducto.getCantidad());
+            }
+            invMovimientoProducto.setCantidadTotal(cantidadTotal);
             invMovimientoProducto.setCostoTotal(costoTotal);
             invMovimientoProducto.setCosto(costo);
         }

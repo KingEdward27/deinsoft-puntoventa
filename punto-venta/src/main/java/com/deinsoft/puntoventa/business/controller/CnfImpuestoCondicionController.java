@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.CnfImpuestoCondicionService;
 
 @RestController
 @RequestMapping("/api/business/cnf-impuesto-condicion")
-public class CnfImpuestoCondicionController extends CommonController<CnfImpuestoCondicion, CnfImpuestoCondicionService>{
+public class CnfImpuestoCondicionController extends CommonController<CnfImpuestoCondicion, Long, CnfImpuestoCondicionService>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(CnfImpuestoCondicionController.class);
 	

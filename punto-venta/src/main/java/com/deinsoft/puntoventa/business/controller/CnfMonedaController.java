@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.CnfMonedaService;
 
 @RestController
 @RequestMapping("/api/business/cnf-moneda")
-public class CnfMonedaController extends CommonController<CnfMoneda, CnfMonedaService>{
+public class CnfMonedaController extends CommonController<CnfMoneda, Long, CnfMonedaService>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(CnfMonedaController.class);
 	

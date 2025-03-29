@@ -2,6 +2,8 @@ package com.deinsoft.puntoventa.business.service;
 
 import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
+
+import com.deinsoft.puntoventa.business.dto.InvMovimientoProductoDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.deinsoft.puntoventa.business.commons.service.CommonService;
@@ -30,7 +32,7 @@ public interface InvMovimientoProductoService extends CommonService<InvMovimient
 
     public void delete(long id);
     
-    public List<InvMovimientoProducto> getReportInvMovimientoProducto(ParamBean paramBean);
+    public List<InvMovimientoProductoDTO> getReportInvMovimientoProducto(ParamBean paramBean);
     
     public BigDecimal getSaldoReportInvMovimientoProducto(ParamBean paramBean);
 }

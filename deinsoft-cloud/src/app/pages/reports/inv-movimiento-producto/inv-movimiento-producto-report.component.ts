@@ -120,9 +120,16 @@ export class InvMovimientoProductoReportFormComponent extends CommonReportFormCo
     if (this.model.invAlmacen.id == 0) {
       this.deps.utilService.msgWarning("No puede continuar","Debe seleccionar el almacén")
       return
+    }if (this.model.cnfProducto.id == 0) {
+      this.deps.utilService.msgWarning("No puede continuar","Debe seleccionar el producto")
+      return
     }
     this.deps.invMovimientoProductoService.getReport(this.model).subscribe(data => {
       
+      this.subTitleExport = "EMPRESA: " + this.model.cnfLocal.cnfEmpresa.nombre 
+      + "\nLOCAL: " + this.model.cnfLocal.nombre 
+      + "\nALMACEN: " + this.model.invAlmacen.nombre;
+      this.refreshDatatabaleSettings();
       this.listData = data;
       this.loadingCnfMaestro = false;
       setTimeout(() => {
@@ -130,17 +137,25 @@ export class InvMovimientoProductoReportFormComponent extends CommonReportFormCo
       }, 1);
       this.dataTable?.destroy();
       this.totalCantidad = 0
+      this.total = 0;
       this.listData.forEach(element => {
-        this.totalCantidad = this.totalCantidad + element.cantidad 
+        this.totalCantidad = this.totalCantidad + element.cantidad + element.cantidadDescuento 
       });
       this.deps.invMovimientoProductoService.getSaldoInicial(this.model).subscribe(data => {
         console.log(data);
         
         this.saldoInicial = data;
-        this.total = data
+        this.total = this.total + this.saldoInicial 
+
         this.listData.forEach(element => {
-          this.total = this.total + this.saldoInicial 
-          + (element.cantidad * (element.valor?element.valor:0))
+          console.log(element.valor,element.cantidadDescuento,element.valorDescuento,element.cantidad,element.valor);
+          
+          if (element.valor == 0) {
+            this.total = this.total + (element.cantidadDescuento * (element.valorDescuento))
+          } else{
+            this.total = this.total + (element.cantidad * (element.valor))
+          }
+          
         });
       })
       

@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.CnfRegionService;
 
 @RestController
 @RequestMapping("/api/business/cnf-region")
-public class CnfRegionController extends CommonController<CnfRegion, Long, CnfRegionService>{
+public class CnfRegionController extends CommonController<CnfRegion, CnfRegionService>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(CnfRegionController.class);
 	

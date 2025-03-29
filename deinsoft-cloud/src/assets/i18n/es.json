@@ -342,7 +342,8 @@
       "id": "ID",
       "inv_almacen": "Almacén",
       "cnf_producto":"Producto",
-      "cantidad": "Cantidad"
+      "cantidad": "Cantidad",
+      "tipo": "Tipo de Movimiento"
     },
     "cnf_forma_pago_detalle": {
       "home": {
@@ -507,7 +508,9 @@
       "fechaHasta":"Fecha fin",
       "fecha_vencimiento":"Fecha vencimiento",
       "inv_tipo_mov_almacen":"Tipo de movimiento",
-      "inv_mov_almacen_det":"Productos"
+      "inv_mov_almacen_det":"Productos",
+      "cnf_local_destino":"Local destino",
+      "inv_almacen_destino":"Almacén Destino"
     },
     "inv_mov_almacen_det": {
       "home": {

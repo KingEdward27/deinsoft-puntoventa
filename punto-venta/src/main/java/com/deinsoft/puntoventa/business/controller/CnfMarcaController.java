@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.CnfMarcaService;
 
 @RestController
 @RequestMapping("/api/business/cnf-marca")
-public class CnfMarcaController extends CommonController<CnfMarca, CnfMarcaService>{
+public class CnfMarcaController extends CommonController<CnfMarca, Long, CnfMarcaService>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(CnfMarcaController.class);
 	

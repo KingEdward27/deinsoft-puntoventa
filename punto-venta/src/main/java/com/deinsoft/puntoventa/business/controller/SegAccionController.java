@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.SegAccionService;
 
 @RestController
 @RequestMapping("/api/business/seg-accion")
-public class SegAccionController extends CommonController<SegAccion, SegAccionService> {
+public class SegAccionController extends CommonController<SegAccion, Long, SegAccionService> {
 
     private static final Logger logger = LoggerFactory.getLogger(SegAccionController.class);
 

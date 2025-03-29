@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.ActComprobanteDetalleService;
 
 @RestController
 @RequestMapping("/api/business/act-comprobante-detalle")
-public class ActComprobanteDetalleController extends CommonController<ActComprobanteDetalle, ActComprobanteDetalleService>{
+public class ActComprobanteDetalleController extends CommonController<ActComprobanteDetalle, Long, ActComprobanteDetalleService>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(ActComprobanteDetalleController.class);
 	

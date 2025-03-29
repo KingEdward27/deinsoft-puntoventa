@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/cnf-empresa")
-public class CnfEmpresaController extends CommonController<CnfEmpresa, CnfEmpresaService> {
+public class CnfEmpresaController extends CommonController<CnfEmpresa, Long, CnfEmpresaService> {
 
     private static final Logger logger = LoggerFactory.getLogger(CnfEmpresaController.class);
 

@@ -35,6 +35,8 @@ import { ActComprobante } from '@pages/act-comprobante/act-comprobante.model';
 import { ActComprobanteService } from '@pages/act-comprobante/act-comprobante.service';
 import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
 import { CommonReportFormComponent, MyBaseComponentDependences } from '@pages/reports/base/common-report.component';
+import { ActPagoModalComponent } from '@pages/act-pago/act-pago-modal/act-pago-modal.component';
+import { ActPagoDetalle } from '@/business/model/act-pago-detalle.model';
 
 
 
@@ -181,6 +183,85 @@ export class ActPagoProgramacionCompraListFormComponent extends CommonReportForm
     }
     
 
+  }
+  async preSave() {
+    if(!this.listData || this.listData?.length == 0){
+      this.deps.utilService.msgProblemNoItems();
+      return;
+    }
+    // if(!this.total || this.total == 0){
+    //   Swal.fire('Problema para continuar', `Debe ingresar un monto a pagar`, 'error');
+    //   return;
+    // }
+    let error;
+    // this.listData.forEach((element: any) => {
+    //   if(element.amtToPay == 0){
+    //     this.deps.utilService.msgProblemItemsCero();
+    //     error = true;
+    //   }
+    // });
+    let items = this.listData.filter(data => data.amtToPay > 0);
+
+    let itemsActComprobante = this.listData.filter(data => data.amtToPay > 0 && data.actComprobante);
+
+    let itemsActContrato = this.listData.filter(data => data.amtToPay > 0 && data.actContrato);
+    if (items.length == 0) {
+      this.deps.utilService.msgProblemNoItems();
+      return;
+    }
+    if (itemsActComprobante.length > 0 && itemsActContrato.length > 0) {
+      this.deps.utilService.msgHTTP400WithMessage("No puede hacer el pago de contratos y ventas en un solo comprobante");
+      return;
+    }
+    if(!error){
+      this.modalRef = this.deps.modalService.open(ActPagoModalComponent, {
+        size: 'lg',
+        });
+        let list : any[] = [];
+        this.total = 0;
+        await this.listData.forEach(element => {
+          if (element.amtToPay > 0) {
+             let actPagoDetalle = new ActPagoDetalle();
+             actPagoDetalle.montoDeuda = element.monto;
+             actPagoDetalle.monto = (element.amtToPay > actPagoDetalle.montoDeuda? actPagoDetalle.montoDeuda: element.amtToPay);
+             actPagoDetalle.actPagoProgramacion = element;
+             this.modalRef.componentInstance.model.cnfMaestro = element.actContrato?element.actContrato.cnfMaestro : element.actComprobante.cnfMaestro;
+             this.total = this.total + actPagoDetalle.monto;
+             
+             list.push(actPagoDetalle);
+          }
+        });
+        this.modalRef.componentInstance.model.listActPagoDetalle = list;
+        this.modalRef.componentInstance.model.subtotal = this.total / 1.18;
+        this.modalRef.componentInstance.model.igv = this.total - this.modalRef.componentInstance.model.subtotal;
+        this.modalRef.componentInstance.model.total = this.total;
+      ;
+      // this.modalRef.componentInstance.id = m.id;
+      this.modalRef.closed.subscribe(result => {
+        this.deps.router.navigate(["/cuentas-pagar"]);
+        // this.model.cnfBpartner = 
+      })
+    }
+    
+
+  }
+  onKeyAmtToPay (event: any) {
+    if (event.key == "Enter") { 
+      this.preSave();
+    }
+  }
+  onSelectRow ($event:any, item: any) {
+    if ($event.srcElement.cellIndex) {
+      if (item.amtToPay == 0 || !item.amtToPay) {
+        item.amtToPay = item.montoPendiente;
+      } else {
+        item.amtToPay = 0;
+      }
+    } else {
+      $event.target.select();
+    }
+    
+     
   }
 }
 

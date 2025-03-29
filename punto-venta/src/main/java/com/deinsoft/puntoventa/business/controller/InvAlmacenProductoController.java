@@ -18,7 +18,7 @@ import com.deinsoft.puntoventa.business.service.InvAlmacenProductoService;
 
 @RestController
 @RequestMapping("/api/business/inv-almacen-producto")
-public class InvAlmacenProductoController extends CommonController<InvAlmacenProducto, InvAlmacenProductoService> {
+public class InvAlmacenProductoController extends CommonController<InvAlmacenProducto, Long, InvAlmacenProductoService> {
 
     private static final Logger logger = LoggerFactory.getLogger(InvAlmacenProductoController.class);
 

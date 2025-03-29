@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/seg-usuario")
-public class SegUsuarioController extends CommonController<SegUsuario, SegUsuarioService> {
+public class SegUsuarioController extends CommonController<SegUsuario, Long, SegUsuarioService> {
 
     private static final Logger logger = LoggerFactory.getLogger(SegUsuarioController.class);
 

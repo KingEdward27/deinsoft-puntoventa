@@ -115,7 +115,10 @@ export class ActComprobanteReportFormComponent extends CommonReportFormComponent
     this.model.flagEstado = '2';
     this.total = 0
     return this.deps.actComprobanteService.getReport(this.model).subscribe(data => {
-      
+      this.subTitleExport = "EMPRESA: " + this.model.cnfLocal.cnfEmpresa.nombre 
+      + "\nLOCAL: " + this.model.cnfLocal.nombre 
+      + "\nALMACEN: " + this.model.invAlmacen.nombre;
+      this.refreshDatatabaleSettings();
       this.listData = data;
       this.listData = this.listData.filter(data => this.model.flagEnvioPse == "-1" || (this.model.flagEnvioPse != "-1" && data.envioPseFlag == this.model.flagEnvioPse))
       this.loadingCnfMaestro = false;

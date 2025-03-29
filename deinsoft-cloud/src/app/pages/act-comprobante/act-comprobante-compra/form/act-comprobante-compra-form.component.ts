@@ -73,13 +73,13 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   selectDefaultCnfMoneda: any = { id: 0, nombre: "- Seleccione -" }; listCnfMoneda: any;
   cnfMoneda: CnfMoneda = new CnfMoneda();
   loadingCnfMoneda: boolean = false;
-  selectDefaultCnfLocal: any = { id: 0, nombre: "- Seleccione -" }; listCnfLocal: any;
+  selectDefaultCnfLocal: any = { id: 0, nombre: "- Seleccione -" }; listCnfLocal: any = [];
   cnfLocal: CnfLocal = new CnfLocal();
   loadingCnfLocal: boolean = false;
   selectDefaultCnfTipoComprobante: any = { id: 0, nombre: "- Seleccione -" }; listCnfTipoComprobante: any;
   cnfTipoComprobante: CnfTipoComprobante = new CnfTipoComprobante();
   loadingCnfTipoComprobante: boolean = false;
-  selectDefaultInvAlmacen: any = { id: 0, nombre: "- Seleccione -" }; listInvAlmacen: any;
+  selectDefaultInvAlmacen: any = { id: 0, nombre: "- Seleccione -" }; listInvAlmacen: any = [];
   invAlmacen: InvAlmacen = new InvAlmacen();
   loadingInvAlmacen: boolean = false;
   listActComprobanteDetalle: any;
@@ -203,16 +203,13 @@ export class ActComprobanteCompraFormComponent implements OnInit {
       debounceTime(200),
       distinctUntilChanged(),
       switchMap(term => {
-        console.log("esg");
-        console.log(term);
-
         return this.getListCnfProductAsObservable(term);
       })
     )
   onchangeProduct(event: any, input: any) {
     event.preventDefault();
-    console.log(event.item);
-    console.log(input.value);
+    // console.log(event.item);
+    // console.log(input.value);
     let actComprobanteDetalle = new ActComprobanteDetalle();
     actComprobanteDetalle.cnfProducto = event.item
     actComprobanteDetalle.descripcion = event.item.nombre
@@ -231,12 +228,12 @@ export class ActComprobanteCompraFormComponent implements OnInit {
     this.model.descuento = 0
     this.model.igv = Math.round((this.model.total - this.model.subtotal + Number.EPSILON) * 100) / 100
     console.log(actComprobanteDetalle);
+    this.model.listActComprobanteDetalle.push(actComprobanteDetalle);
 
     let contador = 0;
     this.model.listActComprobanteDetalle.forEach(item => {
       item.index = contador++;
     });
-    this.model.listActComprobanteDetalle.push(actComprobanteDetalle);
     input.value = '';
   }
   agregarActComprobanteDetalle(): void {
@@ -358,7 +355,6 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   }
   getListCnfFormaPago() {
     this.loadingCnfFormaPago = true;
-    console.log(this.chargingsb);
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
     if (cnfEmpresa == '*') {
       return this.cnfFormaPagoService.getAllDataCombo().subscribe(data => {
@@ -460,9 +456,10 @@ export class ActComprobanteCompraFormComponent implements OnInit {
   }
   getListInvAlmacen() {
     this.loadingInvAlmacen = true;
-    console.log(this.chargingsb);
     return this.invAlmacenService.getAllByCnfLocalId(this.model.cnfLocal.id).subscribe(data => {
       this.listInvAlmacen = data;
+      console.log(this.listInvAlmacen);
+      
       this.loadingInvAlmacen = false;
       if (this.listInvAlmacen.length == 1) {
         this.invAlmacenService.getData(this.listInvAlmacen[0].id).subscribe(data => {
@@ -551,6 +548,9 @@ export class ActComprobanteCompraFormComponent implements OnInit {
       })
     )
 
+  trackByFn(index: number, option: any) {
+      return `${index}___${option.index}`;
+    }
   // focusOutRef() {
   //   console.log(this.model.cnfLocal.id);
     

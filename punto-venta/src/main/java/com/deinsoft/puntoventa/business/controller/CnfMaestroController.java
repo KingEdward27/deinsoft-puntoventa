@@ -23,7 +23,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 @RequestMapping("/api/business/cnf-maestro")
-public class CnfMaestroController extends CommonController<CnfMaestro, CnfMaestroService> {
+public class CnfMaestroController extends CommonController<CnfMaestro, Long, CnfMaestroService> {
 
     private static final Logger logger = LoggerFactory.getLogger(CnfMaestroController.class);
 

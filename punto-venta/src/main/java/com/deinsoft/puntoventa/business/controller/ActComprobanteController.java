@@ -42,7 +42,7 @@ import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping("/api/business/act-comprobante")
-public class ActComprobanteController extends CommonController<ActComprobante, ActComprobanteService> {
+public class ActComprobanteController extends CommonController<ActComprobante, Long, ActComprobanteService> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActComprobanteController.class);
 

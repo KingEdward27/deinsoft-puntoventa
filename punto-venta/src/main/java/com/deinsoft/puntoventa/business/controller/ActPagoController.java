@@ -30,7 +30,7 @@ import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping("/api/business/act-pago")
-public class ActPagoController extends CommonController<ActPago, ActPagoService> {
+public class ActPagoController extends CommonController<ActPago, Long, ActPagoService> {
 
     private static final Logger logger = LoggerFactory.getLogger(ActPagoController.class);
 

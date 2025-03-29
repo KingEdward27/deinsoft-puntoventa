@@ -19,7 +19,7 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/seg-permiso")
-public class SegPermisoController extends CommonController<SegPermiso, SegPermisoService> {
+public class SegPermisoController extends CommonController<SegPermiso, Long, SegPermisoService> {
 
     private static final Logger logger = LoggerFactory.getLogger(SegPermisoController.class);
 

@@ -5,11 +5,14 @@ import javax.validation.constraints.*;
 import java.time.*;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
+
 import javax.validation.Valid;
 import java.math.BigDecimal;
 
 @Entity(name = "invMovimientoProducto")
 @Table(name = "inv_movimiento_producto")
+@Data
 public class InvMovimientoProducto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,106 +59,16 @@ public class InvMovimientoProducto implements Serializable {
     
     @Transient
     private BigDecimal costoTotal;
-    
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    @Transient
+    private BigDecimal cantidadDescuento;
 
-    public LocalDate getFecha() {
-        return fecha;
-    }
+    @Transient
+    private BigDecimal valorDescuento;
+    @Transient
+    private BigDecimal totalDescuento;
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    public LocalDateTime getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    public void setFechaRegistro(LocalDateTime fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
-
-    public BigDecimal getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(BigDecimal cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public InvAlmacen getInvAlmacen() {
-        return invAlmacen;
-    }
-
-    public void setInvAlmacen(InvAlmacen invAlmacen) {
-        this.invAlmacen = invAlmacen;
-    }
-
-    public CnfProducto getCnfProducto() {
-        return cnfProducto;
-    }
-
-    public void setCnfProducto(CnfProducto cnfProducto) {
-        this.cnfProducto = cnfProducto;
-    }
-
-    public ActComprobante getActComprobante() {
-        return actComprobante;
-    }
-
-    public void setActComprobante(ActComprobante actComprobante) {
-        this.actComprobante = actComprobante;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
-    public InvMovAlmacen getInvMovAlmacen() {
-        return invMovAlmacen;
-    }
-
-    public void setInvMovAlmacen(InvMovAlmacen invMovAlmacen) {
-        this.invMovAlmacen = invMovAlmacen;
-    }
-
-    public BigDecimal getCostoTotal() {
-        return costoTotal;
-    }
-
-    public void setCostoTotal(BigDecimal costoTotal) {
-        this.costoTotal = costoTotal;
-    }
-
-    public BigDecimal getCant() {
-        return cant;
-    }
-
-    public void setCant(BigDecimal cant) {
-        this.cant = cant;
-    }
-
-    public BigDecimal getCosto() {
-        return costo;
-    }
-
-    public void setCosto(BigDecimal costo) {
-        this.costo = costo;
-    }
-
-    @Override
-    public String toString() {
-        return "invMovimientoProducto [id=" + id + ", actComprobante=" + (actComprobante != null ? actComprobante : "") + ", invAlmacen=" + (invAlmacen != null ? invAlmacen : "") + ", cnfProducto=" + (cnfProducto != null ? cnfProducto : "") + ", fecha=" + fecha + ", fechaRegistro=" + fechaRegistro + ", cantidad=" + cantidad + "]";
-    }
+    @Transient
+    private String simboloMoneda;
 
 }

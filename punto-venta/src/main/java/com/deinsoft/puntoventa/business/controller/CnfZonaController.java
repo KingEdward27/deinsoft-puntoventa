@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.CnfZonaService;
 
 @RestController
 @RequestMapping("/api/business/cnf-zona")
-public class CnfZonaController extends CommonController<CnfZona, CnfZonaService> {
+public class CnfZonaController extends CommonController<CnfZona, Long, CnfZonaService> {
 
     private static final Logger logger = LoggerFactory.getLogger(CnfZonaController.class);
 

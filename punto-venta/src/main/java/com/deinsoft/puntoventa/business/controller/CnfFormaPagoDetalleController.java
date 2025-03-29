@@ -15,7 +15,7 @@ import com.deinsoft.puntoventa.business.model.CnfFormaPagoDetalle;
 import com.deinsoft.puntoventa.business.service.CnfFormaPagoDetalleService;
 
 @RestController
-public class CnfFormaPagoDetalleController extends CommonController<CnfFormaPagoDetalle, CnfFormaPagoDetalleService>{
+public class CnfFormaPagoDetalleController extends CommonController<CnfFormaPagoDetalle, Long, CnfFormaPagoDetalleService>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(CnfFormaPagoDetalleController.class);
 	

@@ -105,7 +105,7 @@ export class InvAlmacenReportFormComponent extends CommonReportFormComponent imp
   }
   ngOnInit(): void {
     this.isDataLoaded = false;
-    this.titleExport = "Reporte de Ventas"
+    this.titleExport = "Reporte de Stock Valorizado"
     super.ngOnInit();
     //this.getListData();
   }
@@ -113,7 +113,10 @@ export class InvAlmacenReportFormComponent extends CommonReportFormComponent imp
     this.model.flagIsventa = '1';
     this.total = 0
     return this.deps.invAlmacenProductoService.getReport(this.model).subscribe(data => {
-      
+      this.subTitleExport = "EMPRESA: " + this.model.cnfLocal.cnfEmpresa.nombre 
+      + "\nLOCAL: " + this.model.cnfLocal.nombre 
+      + "\nALMACEN: " + this.model.invAlmacen.nombre;
+      this.refreshDatatabaleSettings();
       this.listData = data;
       this.loadingCnfMaestro = false;
       setTimeout(() => {

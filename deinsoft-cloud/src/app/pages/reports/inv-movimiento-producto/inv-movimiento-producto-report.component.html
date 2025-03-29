@@ -164,7 +164,7 @@
                                         class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <td style="font-weight: bold;" colspan="4">Producto</td>
+                                                <td style="font-weight: bold;" colspan="5">Producto</td>
                                                 <td style="font-weight: bold;" colspan="3">Ingreso</td>
                                                 <td style="font-weight: bold;" colspan="3">Salida</td>
                                                 <td style="font-weight: bold;" colspan="3">Saldo</td>
@@ -177,6 +177,8 @@
                                                     translate}}</th>
                                                 <th class="text-nowrap">
                                                     {{'webpagos.inv_almacen_producto.cnf_producto' | translate}}</th>
+                                                <th class="text-nowrap">
+                                                    {{'webpagos.inv_almacen_producto.tipo' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.inv_almacen_producto.cantidad' |
                                                     translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.cnf_producto.costo' |
@@ -196,35 +198,36 @@
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.total' | translate}}
                                                 </th>
                                             </tr>
-                                            <tr><td colspan="13" style="font-weight: bold;">Saldo Anterior al {{model.fechaDesde}}: {{saldoInicial | number:'1.2-2'}}</td></tr>
+                                            <tr><td colspan="14" style="font-weight: bold;">Saldo Anterior al {{model.fechaDesde}}: {{saldoInicial | number:'1.2-2'}}</td></tr>
                                         </thead>
                                         <tbody>
                                             
                                             
                                             <tr *ngFor="let item of listData; index as i" class="odd gradeX">
                                                 <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
-                                                <td>{{item.invAlmacen.cnfLocal.nombre}}</td>
-                                                <td>{{item.invAlmacen.nombre}}</td>
-                                                <td>{{item.cnfProducto.nombre}}</td>
-                                                <td class="content-number">{{item.actComprobante.flagIsventa == '2'? item.cantidad : ''}}</td>
-                                                <td class="content-number">{{(item.actComprobante.flagIsventa == '2'? item.actComprobante.cnfMoneda.simbolo +' '+ ((item.valor?item.valor:0) | number:'1.2-2') : '') }}</td>
-                                                <td class="content-number">{{(item.actComprobante.flagIsventa == '2'? (item.cantidad * (item.valor?item.valor:0)) : '') | number:'1.2-2'}}</td>
+                                                <td>{{item.local}}</td>
+                                                <td>{{item.almacen}}</td>
+                                                <td>{{item.producto}}</td>
+                                                <td>{{item.tipoMovimiento}}</td>
+                                                <td class="content-number">{{item.cantidad}}</td>
+                                                <td class="content-number">{{item.simboloMoneda +' '+ ((item.valor?item.valor:0) | number:'1.2-2') }}</td>
+                                                <td class="content-number">{{(item.cantidad * (item.valor?item.valor:0))  | number:'1.2-2'}}</td>
                                                 
-                                                <td class="content-number">{{item.actComprobante.flagIsventa == '1'? item.cantidad : ''}}</td>
-                                                <td class="content-number">{{(item.actComprobante.flagIsventa == '1'? item.actComprobante.cnfMoneda.simbolo +' '+ ((item.valor?item.valor:0) | number:'1.2-2') : '') }}</td>
-                                                <td class="content-number">{{(item.actComprobante.flagIsventa == '1'? (item.cantidad * (item.valor?item.valor:0)) : '') | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{ item.cantidadDescuento}}</td>
+                                                <td class="content-number">{{item.simboloMoneda +' '+ ((item.valorDescuento?item.valorDescuento:0) | number:'1.2-2')  }}</td>
+                                                <td class="content-number">{{(item.cantidadDescuento * (item.valorDescuento?item.valorDescuento:0))  | number:'1.2-2'}}</td>
                                                 
-                                                <td class="content-number">{{item.cant}}</td>
-                                                <td class="content-number">{{item.actComprobante.cnfMoneda.simbolo}} {{(item.costo) | number:'1.2-2'}}</td>
-                                                <td class="content-number">{{item.actComprobante.cnfMoneda.simbolo}} {{(item.costoTotal) | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{item.cantidadTotal}}</td>
+                                                <td class="content-number">{{item.simboloMoneda}} {{(item.costo) | number:'1.2-2'}}</td>
+                                                <td class="content-number">{{item.simboloMoneda}} {{(item.costoTotal) | number:'1.2-2'}}</td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan = "10">Total:</td>
+                                                <td colspan = "11">Total:</td>
                                                 <td class="content-number">{{totalCantidad| number:'1.2-2'}}</td>
                                                 <td class="content-number"></td>
-                                                <td class="content-number">{{(listData?listData[0]:null)?.actComprobante.cnfMoneda.simbolo}} {{(total| number:'1.2-2')}}</td>
+                                                <td class="content-number">{{(listData?listData[0]:null)?.simboloMoneda}} {{(total| number:'1.2-2')}}</td>
                                             </tr>
                                         </tfoot>
                                     </table>

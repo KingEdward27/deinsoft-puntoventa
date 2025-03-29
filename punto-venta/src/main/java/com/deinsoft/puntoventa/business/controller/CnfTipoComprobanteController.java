@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.CnfTipoComprobanteService;
 
 @RestController
 @RequestMapping("/api/business/cnf-tipo-comprobante")
-public class CnfTipoComprobanteController extends CommonController<CnfTipoComprobante, CnfTipoComprobanteService>{
+public class CnfTipoComprobanteController extends CommonController<CnfTipoComprobante, Long, CnfTipoComprobanteService>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(CnfTipoComprobanteController.class);
 	

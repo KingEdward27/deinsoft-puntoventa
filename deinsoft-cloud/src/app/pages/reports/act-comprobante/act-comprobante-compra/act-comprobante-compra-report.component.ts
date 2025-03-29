@@ -105,7 +105,7 @@ export class ActComprobanteCompraReportFormComponent extends CommonReportFormCom
   }
   ngOnInit(): void {
     this.isDataLoaded = false;
-    this.titleExport = "Reporte de Ventas"
+    this.titleExport = "Reporte de Compras"
     super.ngOnInit();
     //this.getListData();
   }
@@ -113,6 +113,12 @@ export class ActComprobanteCompraReportFormComponent extends CommonReportFormCom
     this.model.flagIsventa = '2';
     this.total = 0
     return this.deps.actComprobanteService.getReport(this.model).subscribe(data => {
+
+      this.subTitleExport = "EMPRESA: " + this.model.cnfLocal.cnfEmpresa.nombre 
+      + "\nLOCAL: " + this.model.cnfLocal.nombre 
+      + "\nALMACEN: " + this.model.invAlmacen.nombre;
+      this.refreshDatatabaleSettings();
+      
       this.listData = data;
       this.loadingCnfMaestro = false;
       this.dataTable?.destroy();

@@ -18,7 +18,7 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/act-contrato-corte")
-public class ActContratoCorteController extends CommonController<ActContratoMov, ActContratoCorteService> {
+public class ActContratoCorteController extends CommonController<ActContratoMov, Long, ActContratoCorteService> {
 
     private static final Logger logger = LoggerFactory.getLogger(ActContratoCorteController.class);
 

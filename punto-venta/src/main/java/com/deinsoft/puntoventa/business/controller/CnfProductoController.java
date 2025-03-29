@@ -34,7 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/business/cnf-producto")
-public class CnfProductoController extends CommonController<CnfProducto, CnfProductoService> {
+public class CnfProductoController extends CommonController<CnfProducto, Long, CnfProductoService> {
 
     private static final Logger logger = LoggerFactory.getLogger(CnfProductoController.class);
 

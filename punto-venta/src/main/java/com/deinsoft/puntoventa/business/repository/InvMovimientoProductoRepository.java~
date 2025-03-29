@@ -40,8 +40,7 @@ public interface InvMovimientoProductoRepository extends JpaRepository<InvMovimi
     @Query(value = "select p from invMovimientoProducto p "
             + "where (:#{#paramBean.cnfLocal.id} = 0l or p.invAlmacen.cnfLocal.id = :#{#paramBean.cnfLocal.id}) "
             + "and (:#{#paramBean.invAlmacen.id} = 0l or p.invAlmacen.id = :#{#paramBean.invAlmacen.id}) "
-            + "and (p.fecha < :#{#paramBean.fechaDesde}) "
-            + "and (p.cnfProducto.id = :#{#paramBean.cnfProducto.id})")
+            + "and (p.fecha < :#{#paramBean.fechaDesde})")
     List<InvMovimientoProducto> getSaldoReportInvMovimientoProducto(@Param("paramBean") ParamBean paramBean);
     
     void deleteByActComprobante(ActComprobante actComprobante);

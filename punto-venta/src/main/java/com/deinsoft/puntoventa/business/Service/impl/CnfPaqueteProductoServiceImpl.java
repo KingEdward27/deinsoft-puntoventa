@@ -27,11 +27,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class CnfPaqueteProductoServiceImpl extends CommonServiceImpl<CnfPaqueteProducto, String, CnfPaqueteProductoRepository>
+public class CnfPaqueteProductoServiceImpl extends CommonServiceImpl<CnfPaqueteProducto, UUID, CnfPaqueteProductoRepository>
         implements CnfPaqueteProductoService {
 
     @Autowired
@@ -51,7 +52,7 @@ public class CnfPaqueteProductoServiceImpl extends CommonServiceImpl<CnfPaqueteP
 
     public CnfPaqueteProducto getCnfPaqueteProducto(String id) throws Exception {
         CnfPaqueteProducto cnfProducto = null;
-        Optional<CnfPaqueteProducto> cnfProductoOptional = cnfProductoRepository.findById(id);
+        Optional<CnfPaqueteProducto> cnfProductoOptional = cnfProductoRepository.findById(UUID.fromString(id));
         if (cnfProductoOptional.isPresent()) {
             cnfProducto = cnfProductoOptional.get();
             SecurityFilterDto f = listRoles();
@@ -80,7 +81,7 @@ public class CnfPaqueteProductoServiceImpl extends CommonServiceImpl<CnfPaqueteP
     @Override
     public void delete(String id) {
         CnfPaqueteProducto cnfProducto = null;
-        Optional<CnfPaqueteProducto> cnfProductoOptional = cnfProductoRepository.findById(id);
+        Optional<CnfPaqueteProducto> cnfProductoOptional = cnfProductoRepository.findById(UUID.fromString(id));
 
         if (cnfProductoOptional.isPresent()) {
             cnfProducto = cnfProductoOptional.get();

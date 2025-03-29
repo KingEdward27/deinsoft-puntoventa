@@ -93,6 +93,7 @@ export class CnfEmpresaForm2Component implements OnInit{
     this.prop.columnsForm[10].listData.push([0, "NO"]);
     this.prop.columnsForm[10].listData.push([1, "SI"]);
 
+    this.prop.columnsForm[12].listData.push([0, "Ninguno"]);
     this.prop.columnsForm[12].listData.push([1, "Promedio Ponderado"]);
     this.prop.columnsForm[12].listData.push([2, "Último costo"]);
 

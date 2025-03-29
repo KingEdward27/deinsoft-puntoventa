@@ -19,6 +19,7 @@ import { Observable, of } from 'rxjs';
 import { CnfProducto } from '@/business/model/cnf-producto.model';
 import { CnfProductoService } from '@/business/service/cnf-producto.service';
 import { CnfPaqueteProducto } from '@/business/model/cnf-paquete-producto.model';
+import { CnfPaqueteProductoService } from '../../../business/service/cnf-paquete-producto.service';
 
 @Component({
   selector: 'app-cnf-producto-form',
@@ -76,7 +77,7 @@ export class CnfProductoFormComponent implements OnInit {
     private cnfSubCategoriaService: CnfSubCategoriaService,
     private cnfMarcaService: CnfMarcaService,
     private route: ActivatedRoute,private appService:AppService,
-    private mediaService: MediaService) {
+    private mediaService: MediaService, private cnfPaqueteProductoService: CnfPaqueteProductoService) {
   }
   ngOnInit(): void {
     this.isDataLoaded = false;
@@ -180,10 +181,10 @@ export class CnfProductoFormComponent implements OnInit {
       this.isOk = true;
       this.utilService.msgOkSave();
       this.router.navigate([this.redirect]);
+
     }, err => {
       if (err.status === 422) {
         this.error = err.error;
-        console.log(this.error);
       }
     });
   }
@@ -364,9 +365,22 @@ export class CnfProductoFormComponent implements OnInit {
 
   }
 
-  removeItem(index:any){
-    this.model.listCnfPaqueteDet.filter(e => e.index !== index);
-    this.model.listCnfPaqueteDet.splice(index, 1);
+  removeItem(index:any,item:any){
+    if (this.model.id) {
+      this.utilService.confirmDelete(item.id).then((result) => { 
+        if(result){
+          this.cnfPaqueteProductoService.delete(item.id).subscribe(() => {
+            this.utilService.msgOkDelete();
+            this.model.listCnfPaqueteDet.filter(e => e.index !== index);
+            this.model.listCnfPaqueteDet.splice(index, 1);
+          });
+        }
+        
+      });
+    } else {
+      this.model.listCnfPaqueteDet.filter(e => e.index !== index);
+      this.model.listCnfPaqueteDet.splice(index, 1);
+    }
   }
 }
 

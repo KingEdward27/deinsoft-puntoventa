@@ -1,21 +1,3 @@
-<!-- Content Header (Page header) -->
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>{{'webpagos.inv_mov_almacen.home.title'| translate}}</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:;" translate="webpagos.adminModule"></a></li>
-                    <li class="breadcrumb-item active">{{'webpagos.inv_mov_almacen.home.title'| translate}}</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-    <!-- /.container-fluid -->
-</section>
 
 <!-- Main content -->
 <section class="content">
@@ -49,6 +31,30 @@
                                     
                                 </div>
                                 <div class="row">
+                                    <div class="col-lg-6 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label
+                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.inv_tipo_mov_almacen' | translate}} <span *ngIf="loadingInvTipoMovAlmacen"
+                                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                            <div class="col-sm-12 col-lg-12">
+                                                <select name="model.invTipoMovAlmacen" [compareWith]="compareInvTipoMovAlmacen"
+                                                    [(ngModel)]="model.invTipoMovAlmacen"
+                                                    class="form-control col-sm-12 col-lg-12">
+                                                    <option *ngIf="loadingInvTipoMovAlmacen" [ngValue]="0"
+                                                        selected="selected">
+                                                        Cargando...</option>
+                                                    <option *ngIf="!loadingInvTipoMovAlmacen"
+                                                        [ngValue]="selectDefaultInvTipoMovAlmacen">
+                                                        {{selectDefaultCnfFormaPago.nombre}}</option>
+                                                    <option *ngFor="let item of listInvTipoMovAlmacen; index as i;"
+                                                        [ngValue]="item">{{item.nombre}}
+                                                    </option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-3 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label
@@ -60,7 +66,7 @@
                                             <div class="col-sm-12 col-lg-12">
                                                 <select name="model.cnfLocal" [compareWith]="compareCnfLocal"
                                                     [(ngModel)]="model.cnfLocal"
-                                                    class="form-control-sm col-sm-12 col-lg-12"
+                                                    class="form-control col-sm-12 col-lg-12"
                                                     (change)="getListInvAlmacen()">
                                                     <option *ngIf="loadingCnfLocal" [ngValue]="0" selected="selected">
                                                         Cargando...</option>
@@ -85,9 +91,9 @@
                                                 translate}} <span
                                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="input-group input-group-sm">
+                                                <div class="input-group  input-group-md">
                                                     <input placeholder="dd/mm/yyyy"
-                                                        class="form-control-sm-dp col-xs-10 col-sm-10 col-md-10 col-lg-8"
+                                                        class="form-control col-xs-10 col-sm-10 col-md-10 col-lg-11"
                                                         id="fecha" name="model.fecha" maxlength="200"
                                                         [(ngModel)]="model.fecha" ngbDatepicker #dfecha="ngbDatepicker">
                                                     <div class="input-group-append">
@@ -114,7 +120,7 @@
                                                 <select name="model.cnfTipoComprobante"
                                                     [compareWith]="compareCnfTipoComprobante"
                                                     [(ngModel)]="model.cnfTipoComprobante"
-                                                    class="form-control-sm col-sm-12 col-lg-12"
+                                                    class="form-control col-sm-12 col-lg-12"
                                                     (change)="loadSerie()">
                                                     <option *ngIf="loadingCnfTipoComprobante" [ngValue]="0"
                                                         selected="selected">Cargando...
@@ -142,7 +148,7 @@
                                                 <input type="text" 
                                                     [(ngModel)]="model.serie" maxlength="4" 
                                                     name="serie"
-                                                    id="serie" name="serie" class="form-control-sm col-sm-12 col-lg-12"
+                                                    id="serie" name="serie" class="form-control col-sm-12 col-lg-12"
                                                     placeholder="Ingrese serie" disabled />
                                             </div>
                                         </div>
@@ -156,13 +162,13 @@
                                             <div class="col-sm-12 col-lg-12">
                                                 <input type="text" [(ngModel)]="model.numero" maxlength="8"
                                                     name="numero" id="numero" name="numero"
-                                                    class="form-control-sm col-sm-12 col-lg-12"
+                                                    class="form-control col-sm-12 col-lg-12"
                                                     placeholder="Número generado" readonly = "readonly" disabled />
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <div class="col-lg-6 col-sm-12 col-xs-12">
+                                    <!-- <div class="col-lg-6 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label
                                                 class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.cnf_maestro'
@@ -170,14 +176,6 @@
                                                 translate}} <span *ngIf="loadingCnfMaestro"
                                                     class="spinner-border spinner-border-sm mr-1"></span></label>
                                             <div class="col-sm-12 col-lg-12">
-                                                <!-- <ng-select [items]="listCnfMaestro" class="col-sm-12 col-lg-6" 
-                                                        name="selectedCnfMaestro"
-                                                        bindLabel="name"
-                                                        role="listbox"
-                                                        placeholder = "- Seleccione -"
-                                                        [(ngModel)]="selectedCnfMaestro"
-                                                        [clearable] = "false">
-                                                </ng-select> -->
                                                 <input class="form-control-sm col-sm-12 col-lg-10"  type="text"
                                                     [(ngModel)]="model.cnfMaestro"  
                                                     name="model.cnfMaestro"
@@ -193,46 +191,10 @@
                                                     style="cursor: pointer;" (click)="addNewCnfMestro()"
                                                     title="agregar"></a>
                                                 
-                                                <!-- <select name="model.cnfMaestro" [compareWith]="compareCnfMaestro"
-                                                    [(ngModel)]="model.cnfMaestro"
-                                                    class="form-control-sm col-sm-12 col-lg-12">
-                                                    <option *ngIf="loadingCnfMaestro" [ngValue]="0" selected="selected">
-                                                        Cargando...</option>
-                                                    <option *ngIf="!loadingCnfMaestro"
-                                                        [ngValue]="selectDefaultCnfMaestro">
-                                                        {{selectDefaultCnfMaestro.nombre}}</option>
-                                                    <option *ngFor="let item of listCnfMaestro; index as i;"
-                                                        [ngValue]="item">{{item.apellidoPaterno + ' ' +item.nombres}}
-                                                    </option>
-
-                                                </select> -->
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-12 col-xs-12">
-                                        <div class="form-group-sm row">
-                                            <label
-                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.inv_tipo_mov_almacen' | translate}} <span *ngIf="loadingInvTipoMovAlmacen"
-                                                    class="spinner-border spinner-border-sm mr-1"></span><span
-                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
-                                            <div class="col-sm-12 col-lg-12">
-                                                <select name="model.invTipoMovAlmacen" [compareWith]="compareInvTipoMovAlmacen"
-                                                    [(ngModel)]="model.invTipoMovAlmacen"
-                                                    class="form-control-sm col-sm-12 col-lg-12">
-                                                    <option *ngIf="loadingInvTipoMovAlmacen" [ngValue]="0"
-                                                        selected="selected">
-                                                        Cargando...</option>
-                                                    <option *ngIf="!loadingInvTipoMovAlmacen"
-                                                        [ngValue]="selectDefaultInvTipoMovAlmacen">
-                                                        {{selectDefaultCnfFormaPago.nombre}}</option>
-                                                    <option *ngFor="let item of listInvTipoMovAlmacen; index as i;"
-                                                        [ngValue]="item">{{item.nombre}}
-                                                    </option>
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </div> -->
+                                    
 
                                     
                                     <div class="col-lg-3 col-sm-12 col-xs-12">
@@ -246,13 +208,66 @@
                                             <div class="col-sm-12 col-lg-12">
                                                 <select name="model.invAlmacen" [compareWith]="compareInvAlmacen"
                                                     [(ngModel)]="model.invAlmacen"
-                                                    class="form-control-sm col-sm-12 col-lg-12">
+                                                    class="form-control col-sm-12 col-lg-12">
                                                     <option *ngIf="loadingInvAlmacen" [ngValue]="0" selected="selected">
                                                         Cargando...</option>
                                                     <option *ngIf="!loadingInvAlmacen"
                                                         [ngValue]="selectDefaultInvAlmacen">
                                                         {{selectDefaultInvAlmacen.nombre}}</option>
                                                     <option *ngFor="let item of listInvAlmacen; index as i;"
+                                                        [ngValue]="item">{{item.nombre}}
+                                                    </option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12 col-xs-12">
+                                        
+                                        <div class="form-group-sm row" *ngIf="this.model.invTipoMovAlmacen.naturaleza == '2'">
+                                            <label
+                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.cnf_local_destino'
+                                                |
+                                                translate}} <span *ngIf="loadingCnfLocal"
+                                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                            <div class="col-sm-12 col-lg-12">
+                                                <select name="model.cnfLocalDestino" [compareWith]="compareCnfLocalDestino"
+                                                    [(ngModel)]="model.cnfLocalDestino"
+                                                    class="form-control col-sm-12 col-lg-12"
+                                                    (change)="getListInvAlmacenDestino()">
+                                                    <option *ngIf="loadingCnfLocal" [ngValue]="0" selected="selected">
+                                                        Cargando...</option>
+                                                    <option *ngIf="!loadingCnfLocal" [ngValue]="selectDefaultCnfLocalDestino">
+                                                        {{selectDefaultCnfLocal.nombre}}</option>
+                                                    <option *ngFor="let item of listCnfLocalDestino; index as i;"
+                                                        [ngValue]="item">
+                                                        {{item.nombre}}
+                                                    </option>
+
+                                                </select>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row" *ngIf="this.model.invTipoMovAlmacen.naturaleza == '2'">
+                                            <label
+                                                class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.inv_almacen_destino'
+                                                |
+                                                translate}} <span *ngIf="loadingInvAlmacen"
+                                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                            <div class="col-sm-12 col-lg-12">
+                                                <select name="model.invAlmacenDestino" [compareWith]="compareInvAlmacenDestino"
+                                                    [(ngModel)]="model.invAlmacenDestino"
+                                                    class="form-control col-sm-12 col-lg-12">
+                                                    <option *ngIf="loadingInvAlmacen" [ngValue]="0" selected="selected">
+                                                        Cargando...</option>
+                                                    <option *ngIf="!loadingInvAlmacen"
+                                                        [ngValue]="selectDefaultInvAlmacenDestino">
+                                                        {{selectDefaultInvAlmacen.nombre}}</option>
+                                                    <option *ngFor="let item of listInvAlmacenDestino; index as i;"
                                                         [ngValue]="item">{{item.nombre}}
                                                     </option>
 
@@ -269,7 +284,7 @@
                                             <div class="col-sm-12 col-lg-12">
                                                 <input type="text" [(ngModel)]="model.observacion" maxlength="100"
                                                     name="observacion" id="observacion" name="observacion"
-                                                    class="form-control-sm col-sm-12 col-lg-12"
+                                                    class="form-control col-sm-12 col-lg-12"
                                                     placeholder="Ingrese observacion" />
                                             </div>
                                         </div>
@@ -280,7 +295,7 @@
 
                             </div>
                             <div class="col-lg-3 col-sm-12 col-xs-12 align-middle">
-                                <div class="form-group-sm row">
+                                <div class="form-group-sm row totales">
                                     <label for="total"
                                         class="col-lg-6 col-sm-12 col-form-label">{{'webpagos.inv_mov_almacen.total'
                                         |
@@ -327,7 +342,7 @@
                             <div class="form-group-sm row col-12 mb-2">
                                 <label class="col-sm-12 col-lg-2 col-form-label">
                                     {{'webpagos.inv_mov_almacen_det.cnf_producto' | translate}}</label>
-                                    <input autofocus class="form-control-sm col-sm-12 col-lg-6"  type="text"
+                                    <input autofocus class="form-control col-sm-12 col-lg-6"  type="text"
                                     [(ngModel)]="cnfProducto"  
                                     name="cnfProducto"
                                     #input 
@@ -343,7 +358,7 @@
                             </div>
                             <div class="col-sm-12 col-lg-12">
                                 <div >
-                                    <table id="dtData"
+                                    <table id="dtDataMovAlmacenform"
                                         class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
                                         <thead>
                                             <tr>

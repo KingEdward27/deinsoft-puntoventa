@@ -416,7 +416,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                 if (!item.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
                     InvAlmacenProducto invBalance
                             = invAlmacenProductoRepository.findByCnfProductoIdAndInvAlmacenId(
-                                    item.getCnfProducto().getId(), actInvoice.getInvAlmacen().getId());
+                                    item.getCnfProducto().getId(), actInvoice.getInvAlmacen().getId()).stream().findFirst().orElse(null);
                     if (invBalance != null) {
                         BigDecimal currentQty = invBalance.getCantidad();
                         if (actInvoice.getFlagIsventa().equals("1")) {
@@ -477,28 +477,40 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         LocalDate dueDate = actComprobante.getFecha();
         List<CnfFormaPagoDetalle> list = cnfFormaPagoDetalleRepository.findByCnfFormaPagoId(
                 actComprobante.getCnfFormaPago().getId());
+        if (actComprobante.getCnfFormaPago().getTipo() != 1 && list.size() == 0) {
+            throw new BusinessException("Si el tipo de pago es diferente de CONTADO, debe registrar al menos una programación de forma de pago");
+        }
         if (!list.isEmpty()) {
-            if (actComprobante.getCnfFormaPago().getTipo() == 1) {
+
+            if (actComprobante.getCnfFormaPago().getTipo() == 2) {
                 for (CnfFormaPagoDetalle cnfFormaPagoDetalle : list) {
                     ActPagoProgramacion p = new ActPagoProgramacion();
                     p.setFecha(actComprobante.getFecha());
                     p.setActComprobante(actComprobante);
 
                     if (cnfFormaPagoDetalle.getModoDiaVencimiento() != null
-                            && cnfFormaPagoDetalle.getModoDiaVencimiento() != 0) {
+                            && cnfFormaPagoDetalle.getModoDiaVencimiento() != 0 && cnfFormaPagoDetalle.getModoMonto() != null) {
                         p.setFechaVencimiento(actComprobante.getFecha()
                                 .plusDays(cnfFormaPagoDetalle.getModoDiaVencimiento()));
                         p.setMonto(cnfFormaPagoDetalle.getModoMonto());
                         p.setMontoPendiente(cnfFormaPagoDetalle.getModoMonto());
                     } else if (cnfFormaPagoDetalle.getModoPorcentaje() != null
-                            && cnfFormaPagoDetalle.getModoPorcentaje() != null) {
+                            && cnfFormaPagoDetalle.getModoDiasIntervalo() != null) {
                         p.setFechaVencimiento(actComprobante.getFecha()
                                 .plusDays(cnfFormaPagoDetalle.getModoDiasIntervalo()));
                         //actPayment.setTotalamt(actInvoice.getGrandtotal()
                         //				.multiply(cnfTendertypeSchedule.getPercent().divide(new BigDecimal(100))))
                         p.setMonto(actComprobante.getTotal().multiply(cnfFormaPagoDetalle.getModoPorcentaje().divide(new BigDecimal(100))));
 
-                    } else {
+                    } else if (cnfFormaPagoDetalle.getModoPorcentaje() != null
+                            && cnfFormaPagoDetalle.getModoDiaVencimiento() != null) {
+
+                        p.setFechaVencimiento(
+                                actComprobante.getFecha().withDayOfMonth(actComprobante.getFecha().lengthOfMonth())
+                                        .plusMonths(1));
+                        p.setMonto(actComprobante.getTotal().multiply(cnfFormaPagoDetalle.getModoPorcentaje().divide(new BigDecimal(100))));
+
+                    }  else {
                         if (pending.compareTo(cnfFormaPagoDetalle.getModoMonto()) == -1) {
                             p.setMonto(pending);
                         }
@@ -517,7 +529,7 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
                     actPayment.setMontoPendiente(actPayment.getMonto());
                     actPagoProgramacionRepository.save(actPayment);
                 }
-            } else if (actComprobante.getCnfFormaPago().getTipo() == 2) {
+            } else if (actComprobante.getCnfFormaPago().getTipo() == 3) {
                 if (list.size() > 1) {
                     throw new Exception("Forma de pago cíclica no debe tener mas de un registro");
                 }

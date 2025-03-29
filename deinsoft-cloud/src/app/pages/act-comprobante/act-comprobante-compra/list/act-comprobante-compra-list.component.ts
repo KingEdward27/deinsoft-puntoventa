@@ -15,6 +15,7 @@ import { CustomAdapter, CustomDateParserFormatter } from '@/base/util/CustomDate
 import { ActComprobante } from '@pages/act-comprobante/act-comprobante.model';
 import { MessageModalComponent } from '@pages/act-comprobante/modal/message-modal.component';
 import { CommonReportFormComponent, MyBaseComponentDependences } from '@pages/reports/base/common-report.component';
+import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 
 
 
@@ -94,7 +95,7 @@ export class ActComprobanteCompraListFormComponent extends CommonReportFormCompo
       this.listData = data;
       this.loadingCnfMaestro = false;
       setTimeout(() => {
-        this.dataTable = $('#dtData').DataTable(this.datablesSettings);
+        this.dataTable = $('#dtDataListCompras').DataTable(this.datablesSettings);
       }, 1);
       this.dataTable?.destroy();
       console.log(data);

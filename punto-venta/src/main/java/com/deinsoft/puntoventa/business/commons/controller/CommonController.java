@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 
-public class CommonController<E, S extends CommonService<E>> {
+public class CommonController<E, ID,S extends CommonService<E, ID>> {
 
     @Autowired
     protected S service;

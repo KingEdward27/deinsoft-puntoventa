@@ -48,8 +48,9 @@ export class CnfFormaPagoComponent extends GenericListComponent implements OnIni
     super.baseEndpoint = this.baseEndpoint;
     let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
     this.prop.columnsForm[1].listData.push([0, "- Seleccione -"]);
-    this.prop.columnsForm[1].listData.push([1, "Hasta el monto"]);
-    this.prop.columnsForm[1].listData.push([2, "Valor fijo repetitivo"]); 
+    this.prop.columnsForm[1].listData.push([1, "Contado"]);
+    this.prop.columnsForm[1].listData.push([2, "Credito Hasta el monto"]);
+    this.prop.columnsForm[1].listData.push([3, "Credito Valor fijo repetitivo"]); 
     this.prop.conditions.push({"columnName":"cnf_forma_pago.cnf_empresa_id","value":cnfEmpresa});
     this.prop.preSave.push({columnForm:"cnf_empresa_id",value:cnfEmpresa});
     super.properties = this.prop;

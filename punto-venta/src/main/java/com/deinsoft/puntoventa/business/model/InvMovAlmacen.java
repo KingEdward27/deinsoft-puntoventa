@@ -5,12 +5,15 @@ import javax.validation.constraints.*;
 import java.time.*;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
+
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity(name = "invMovAlmacen")
 @Table(name = "inv_mov_almacen")
+@Data
 public class InvMovAlmacen implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -85,167 +88,15 @@ public class InvMovAlmacen implements Serializable {
     @OneToOne
     @JoinColumn(name = "seg_usuario_id")
     private SegUsuario segUsuario;
+
+    @OneToOne
+    @JoinColumn(name = "inv_almacen_destino_id")
+    private InvAlmacen invAlmacenDestino;
+
     
     public void addInvMovAlmacenDet(InvMovAlmacenDet item) {
         item.setInvMovAlmacen(this);
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getSerie() {
-        return serie;
-    }
-
-    public void setSerie(String serie) {
-        this.serie = serie;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public String getNumeroRef() {
-        return numeroRef;
-    }
-
-    public void setNumeroRef(String numeroRef) {
-        this.numeroRef = numeroRef;
-    }
-
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
-
-    public BigDecimal getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(BigDecimal subtotal) {
-        this.subtotal = subtotal;
-    }
-
-    public BigDecimal getIgv() {
-        return igv;
-    }
-
-    public void setIgv(BigDecimal igv) {
-        this.igv = igv;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-
-    public LocalDateTime getFechareg() {
-        return fechareg;
-    }
-
-    public void setFechareg(LocalDateTime fechareg) {
-        this.fechareg = fechareg;
-    }
-
-
-    public String getFlagEstado() {
-        return flagEstado;
-    }
-
-    public void setFlagEstado(String flagEstado) {
-        this.flagEstado = flagEstado;
-    }
-
-    public InvTipoMovAlmacen getInvTipoMovAlmacen() {
-        return invTipoMovAlmacen;
-    }
-
-    public void setInvTipoMovAlmacen(InvTipoMovAlmacen invTipoMovAlmacen) {
-        this.invTipoMovAlmacen = invTipoMovAlmacen;
-    }
-
-    public CnfMaestro getCnfMaestro() {
-        return cnfMaestro;
-    }
-
-    public void setCnfMaestro(CnfMaestro cnfMaestro) {
-        this.cnfMaestro = cnfMaestro;
-    }
-
-    public CnfLocal getCnfLocal() {
-        return cnfLocal;
-    }
-
-    public void setCnfLocal(CnfLocal cnfLocal) {
-        this.cnfLocal = cnfLocal;
-    }
-
-    public CnfTipoComprobante getCnfTipoComprobante() {
-        return cnfTipoComprobante;
-    }
-
-    public void setCnfTipoComprobante(CnfTipoComprobante cnfTipoComprobante) {
-        this.cnfTipoComprobante = cnfTipoComprobante;
-    }
-
-    public InvAlmacen getInvAlmacen() {
-        return invAlmacen;
-    }
-
-    public void setInvAlmacen(InvAlmacen invAlmacen) {
-        this.invAlmacen = invAlmacen;
-    }
-
-    public Set<InvMovAlmacenDet> getListInvMovAlmacenDet() {
-        return listInvMovAlmacenDet;
-    }
-
-    public void setListInvMovAlmacenDet(Set<InvMovAlmacenDet> listInvMovAlmacenDet) {
-        this.listInvMovAlmacenDet = listInvMovAlmacenDet;
-    }
-
-    public SegUsuario getSegUsuario() {
-        return segUsuario;
-    }
-
-    public void setSegUsuario(SegUsuario segUsuario) {
-        this.segUsuario = segUsuario;
-    }
-
-    @Override
-    public String toString() {
-        return "invMovAlmacen [id=" + id + ", cnfLocal=" + (cnfLocal != null ? cnfLocal : "") 
-                + ", cnfMaestro=" + (cnfMaestro != null ? cnfMaestro : "") 
-                + ", cnfTipoComprobante=" + (cnfTipoComprobante != null ? cnfTipoComprobante : "") 
-                + ", invAlmacen=" + (invAlmacen != null ? invAlmacen : "") + ", invTipoMovAlmacen=" 
-                + (invTipoMovAlmacen != null ? invTipoMovAlmacen : "") + ", segUsuario=" 
-//                + (segUsuario != null ? segUsuario : "") + ", serie=" + serie + ", numero=" 
-                + numero + ", numeroRef=" + numeroRef + ", fecha=" + fecha + ", observacion=" 
-                + observacion + ", subtotal=" + subtotal + ", igv=" + igv + ", total=" + total 
-                + ", fechareg=" + fechareg + ", flagEstado=" + flagEstado + "]";
-    }
 
 }

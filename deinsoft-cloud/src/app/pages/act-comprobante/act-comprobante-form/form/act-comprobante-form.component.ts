@@ -531,12 +531,6 @@ export class ActComprobanteFormComponent implements OnInit {
     return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
       ? false : a1.id === a2.id;
   }
-
-  onChangeDescripcion(item: any, value: any) {
-    console.log(item,value);
-    item.descripcion = item.nombre;
-  }
-
   onChangeCantidad(item: any, value: any) {
     item.importe = value * item.precio;
     item.afectacionIgv
@@ -782,6 +776,10 @@ searchCnfMaestro = (text$: Observable<string>) =>
       
     });
 
+  }
+
+  trackByFn(index: number, option: any) {
+    return `${index}___${option.index}`;
   }
   // onEnter(){
     

@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.CnfPlanContratoService;
 
 @RestController
 @RequestMapping("/api/business/cnf-plan-contrato")
-public class CnfPlanContratoController extends CommonController<CnfPlanContrato, CnfPlanContratoService> {
+public class CnfPlanContratoController extends CommonController<CnfPlanContrato, Long, CnfPlanContratoService> {
 
     private static final Logger logger = LoggerFactory.getLogger(CnfPlanContratoController.class);
 

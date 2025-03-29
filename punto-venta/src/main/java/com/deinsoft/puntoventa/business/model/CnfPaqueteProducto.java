@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
@@ -33,7 +34,7 @@ public class CnfPaqueteProducto {
     private CnfProducto cnfProductoContenido;
 
     @Column(name = "cantidad")
-    private Float cantidad;
+    private BigDecimal cantidad;
 
 
 

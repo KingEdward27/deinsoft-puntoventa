@@ -3,8 +3,6 @@ package com.deinsoft.puntoventa.business.controller;
 import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-
-import com.deinsoft.puntoventa.business.dto.InvMovimientoProductoDTO;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -77,9 +75,9 @@ public class InvMovimientoProductoController extends CommonController<InvMovimie
         return invMovimientoProductoList;
     }
     @PostMapping(value = "/get-report-inv-movimiento-producto")
-    public List<InvMovimientoProductoDTO> getReportActComprobante(@RequestBody ParamBean paramBean) {
+    public List<InvMovimientoProducto> getReportActComprobante(@RequestBody ParamBean paramBean) {
         logger.info("getAllActComprobante received: " + paramBean.toString());
-        List<InvMovimientoProductoDTO> list = invMovimientoProductoService.getReportInvMovimientoProducto(paramBean);
+        List<InvMovimientoProducto> list = invMovimientoProductoService.getReportInvMovimientoProducto(paramBean);
         return list;
     }
     @PostMapping(value = "/get-saldo-inv-movimiento-producto")

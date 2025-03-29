@@ -17,7 +17,7 @@ import com.deinsoft.puntoventa.business.service.ActCajaService;
 
 @RestController
 @RequestMapping("/api/business/act-caja")
-public class ActCajaController extends CommonController<ActCaja, Long, ActCajaService> {
+public class ActCajaController extends CommonController<ActCaja, ActCajaService> {
 
     private static final Logger logger = LoggerFactory.getLogger(ActCajaController.class);
 

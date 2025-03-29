@@ -40,7 +40,7 @@ public class CnfProducto implements Serializable {
     @Column(name = "costo", length = 14, nullable = true)
     private BigDecimal costo;
     
-    @Column(name = "precio", length = 14, nullable = true)
+    @Column(name = "precio", length = 14, nullable = false)
     private BigDecimal precio;
 
     @Column(name = "existencia", length = 14, nullable = true)

@@ -21,7 +21,7 @@ import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/business/act-pago-programacion")
-public class ActPagoProgramacionController extends CommonController<ActPagoProgramacion, ActPagoProgramacionService> {
+public class ActPagoProgramacionController extends CommonController<ActPagoProgramacion, Long, ActPagoProgramacionService> {
 
     private static final Logger logger = LoggerFactory.getLogger(ActPagoProgramacionController.class);
 

@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/inv-mov-almacen")
-public class InvMovAlmacenController extends CommonController<InvMovAlmacen, InvMovAlmacenService> {
+public class InvMovAlmacenController extends CommonController<InvMovAlmacen, Long, InvMovAlmacenService> {
 
     private static final Logger logger = LoggerFactory.getLogger(InvMovAlmacenController.class);
 

@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.SegRolService;
 
 @RestController
 @RequestMapping("/api/business/seg-rol")
-public class SegRolController extends CommonController<SegRol, SegRolService> {
+public class SegRolController extends CommonController<SegRol, Long, SegRolService> {
 
     private static final Logger logger = LoggerFactory.getLogger(SegRolController.class);
 

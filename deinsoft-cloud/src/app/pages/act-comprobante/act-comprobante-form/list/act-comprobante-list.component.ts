@@ -95,7 +95,7 @@ export class ActComprobanteListFormComponent extends CommonReportFormComponent i
       this.listData = data;
       this.loadingCnfMaestro = false;
       setTimeout(() => {
-        this.dataTable = $('#dtData').DataTable(this.datablesSettings);
+        this.dataTable = $('#dtDataListVentas').DataTable(this.datablesSettings);
       }, 1);
       this.dataTable?.destroy();
       console.log(data);

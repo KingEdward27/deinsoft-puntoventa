@@ -39,7 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/business/act-contrato")
-public class ActContratoController extends CommonController<ActContrato, Long, ActContratoService> {
+public class ActContratoController extends CommonController<ActContrato, ActContratoService> {
 
     private static final Logger logger = LoggerFactory.getLogger(ActContratoController.class);
 

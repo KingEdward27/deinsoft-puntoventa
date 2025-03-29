@@ -320,7 +320,7 @@ public class ActOrdenServiceImpl extends CommonServiceImpl<ActOrden,Long, ActOrd
                 if (!item.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
                     InvAlmacenProducto invBalance
                             = invAlmacenProductoRepository.findByCnfProductoIdAndInvAlmacenId(
-                                    item.getCnfProducto().getId(), actInvoice.getInvAlmacen().getId());
+                                    item.getCnfProducto().getId(), actInvoice.getInvAlmacen().getId()).stream().findFirst().orElse(null);
                     if (invBalance != null) {
                         BigDecimal currentQty = invBalance.getCantidad();
                         if (actInvoice.getFlagIsventa().equals("1")) {

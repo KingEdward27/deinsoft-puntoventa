@@ -42,7 +42,7 @@ import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping("/api/business/act-orden")
-public class ActOrdenController extends CommonController<ActOrden, ActOrdenService> {
+public class ActOrdenController extends CommonController<ActOrden, Long, ActOrdenService> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActOrdenController.class);
 

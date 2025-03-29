@@ -31,7 +31,7 @@
                                     
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagCompraRapida === 0">
+                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagCompraRapida === 0 || this.listCnfLocal.length > 1 ">
                                         <div class="form-group-sm row">
                                             <label
                                                 class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_local'
@@ -274,7 +274,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagCompraRapida === 0">
+                                    <div class="col-lg-3 col-sm-12 col-xs-12" *ngIf="empresaPrincipal.flagCompraRapida === 0 || this.listInvAlmacen.length > 1">
                                         <div class="form-group-sm row">
                                             <label
                                                 class="col-lg-12 col-sm-12 col-form-label">{{'webpagos.act_comprobante.inv_almacen'
@@ -399,7 +399,7 @@
                             </div>
                             <div class="col-sm-12 col-lg-12">
                                 <div >
-                                    <table id="dtData"
+                                    <table id="dtDataCompras"
                                         class="col-xl-12 col-lg-12 col-sm-12 table table-sm table-striped table-bordered table-td-valign-middle">
                                         <thead>
                                             <tr>
@@ -419,7 +419,7 @@
                                         </thead>
                                         <tbody>
 
-                                            <tr *ngFor="let item of model.listActComprobanteDetalle; index as i"
+                                            <tr *ngFor="let item of model.listActComprobanteDetalle; index as i; trackBy: trackByFn"
                                                 class="odd gradeX">
                                                 <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
                                                 <td>{{item.descripcion}}</td>
@@ -441,7 +441,7 @@
                                                     [(ngModel)]="item.cantidad" 
                                                     maxlength="14" name="cantidad_{{i}}"
                                                     class="form-control-sm col-sm-12 col-lg-12 content-number"
-                                                    placeholder="Ingrese descripción"
+                                                    placeholder="Ingrese cantidad"
                                                     (input)="onChangeCantidad(item,$event.target.value)"/></td>
                                                 <td><input type="number" 
                                                     [(ngModel)]="item.precio" 

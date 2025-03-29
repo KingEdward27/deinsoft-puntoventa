@@ -88,6 +88,8 @@ public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen,Lo
             cnfNumComprobanteRepository.save(cnfNumComprobante);
 
             //update stock and register product movement
+
+//            validate(invMovAlmacen);
             invAlmacenProductoService.registerProductMovementAndUpdateStock(null, invMovAlmacen);
 
         } catch (Exception e) {

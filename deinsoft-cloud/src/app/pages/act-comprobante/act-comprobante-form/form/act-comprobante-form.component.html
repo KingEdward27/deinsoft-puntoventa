@@ -396,7 +396,7 @@
                                         </thead>
                                         <tbody>
 
-                                            <tr *ngFor="let item of model.listActComprobanteDetalle; index as i"
+                                            <tr *ngFor="let item of model.listActComprobanteDetalle; index as i; trackBy: trackByFn"
                                                 class="odd gradeX">
                                                 <td width="1%" class="f-w-600 text-inverse">{{i+1}}</td>
                                                 <td>{{item.descripcion}}</td>
@@ -409,7 +409,7 @@
                                                     <option *ngFor="let item of listImpuestoCondicion; index as i;" [ngValue]="item">{{item.nombre}}</option>
 
                                                 </select></td>
-                                                <td><input type="text" 
+                                                <td><input type="text" #ctrl="ngModel"
                                                     [(ngModel)]="item.descripcion" 
                                                     maxlength="100" name="descripcion_{{i}}"
                                                     class="form-control-sm col-sm-12 col-lg-12"

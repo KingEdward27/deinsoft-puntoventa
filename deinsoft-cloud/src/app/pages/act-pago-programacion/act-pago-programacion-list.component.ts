@@ -102,8 +102,8 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
     let month = new Date().getMonth()+1;
     let day = new Date(year, month, 0).getDate();
     
-    this.model.fechaVencimiento  = this.deps.dateAdapter
-    .toModel({year: year, month: month, day: day}).toString();
+    // this.model.fechaVencimiento  = this.deps.dateAdapter
+    // .toModel({year: year, month: month, day: day}).toString();
 }
   getListData() {
     if (!this.model.cnfMaestro.id) {
@@ -236,14 +236,6 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
         this.deps.router.navigate(["/cuentas-cobrar"]);
         // this.model.cnfBpartner = 
       })
-      // this.deps.actPagoService.saveFromList(this.listData).subscribe(m => {
-      //   console.log(m);
-      //   this.isOk = true;
-      //   this.deps.utilService.msgOkSave();
-      //   window.location.reload();
-      // }, err => {
-      //   console.log(err);
-      // });
     }
     
 

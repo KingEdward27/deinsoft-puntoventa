@@ -327,12 +327,11 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato,Long, 
     }
 
     private void saveActPagoProgramacionOrCajaOperacion(ActContrato actContrato) throws Exception {
-//        BigDecimal pending = actContrato.getTotal();
+
         LocalDate dueDate = actContrato.getFecha();
-//        List<CnfFormaPagoDetalle> list = cnfFormaPagoDetalleRepository.findByCnfFormaPagoId(
-//                actContrato.getCnfFormaPago().getId());
-//        if (!list.isEmpty()) {
-        if (actContrato.getCnfFormaPago().getTipo() == 1) {
+
+        if (actContrato.getCnfFormaPago().getTipo() == 2) {
+            throw new BusinessException("La forma de pago no se encuentra configurada, consulte con ADMIN TI");
 //                for (CnfFormaPagoDetalle cnfFormaPagoDetalle : list) {
 //                    ActPagoProgramacion p = new ActPagoProgramacion();
 //                    p.setActContrato(actContrato);
@@ -372,7 +371,7 @@ public class ActContratoServiceImpl extends CommonServiceImpl<ActContrato,Long, 
 //                    actPagoProgramacionRepository.save(actPayment);
 //                }
             //colegios?
-        } else if (actContrato.getCnfFormaPago().getTipo() == 2) {
+        } else if (actContrato.getCnfFormaPago().getTipo() == 3) {
 //                if (list.size() > 1) {
 //                    throw new Exception("Forma de pago cíclica no debe tener mas de un registro");
 //                }

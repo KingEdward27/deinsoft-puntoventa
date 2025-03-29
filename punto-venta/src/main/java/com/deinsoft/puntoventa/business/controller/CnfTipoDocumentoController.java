@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.CnfTipoDocumentoService;
 
 @RestController
 @RequestMapping("/api/business/cnf-tipo-documento")
-public class CnfTipoDocumentoController extends CommonController<CnfTipoDocumento, CnfTipoDocumentoService>{
+public class CnfTipoDocumentoController extends CommonController<CnfTipoDocumento, Long, CnfTipoDocumentoService>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(CnfTipoDocumentoController.class);
 	

@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.CnfSubCategoriaService;
 
 @RestController
 @RequestMapping("/api/business/cnf-sub-categoria")
-public class CnfSubCategoriaController extends CommonController<CnfSubCategoria, CnfSubCategoriaService>{
+public class CnfSubCategoriaController extends CommonController<CnfSubCategoria, Long, CnfSubCategoriaService>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(CnfSubCategoriaController.class);
 	

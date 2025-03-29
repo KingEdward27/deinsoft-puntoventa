@@ -708,9 +708,7 @@ public class Impresion {
                     : datosVenta.getSerie() + "-" + String.format("%08d", Integer.parseInt(String.valueOf(datosVenta.getNumero()))));
 
             parametros.put("ruc_dniCliente", datosVenta.getCnfMaestro().getNroDoc());
-            parametros.put("nombreCliente", datosVenta.getCnfMaestro().getApellidoPaterno() + " "
-                    + datosVenta.getCnfMaestro().getApellidoMaterno() + " "
-                    + datosVenta.getCnfMaestro().getNombres());
+            parametros.put("nombreCliente", datosVenta.getCnfMaestro().getRazonSocial());
             parametros.put("direccionCliente", datosVenta.getCnfMaestro().getDireccion());
 
             parametros.put("pFechaEmision", datosVenta.getFecha().format(YYYYMMDD_FORMATER));

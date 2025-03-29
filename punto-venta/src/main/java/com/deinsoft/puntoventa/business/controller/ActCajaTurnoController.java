@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/business/act-caja-turno")
-public class ActCajaTurnoController extends CommonController<ActCajaTurno, ActCajaTurnoService> {
+public class ActCajaTurnoController extends CommonController<ActCajaTurno, Long, ActCajaTurnoService> {
 
     private static final Logger logger = LoggerFactory.getLogger(ActCajaTurnoController.class);
 

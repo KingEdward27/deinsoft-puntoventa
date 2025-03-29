@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.CnfFormaPagoService;
 
 @RestController
 @RequestMapping("/api/business/cnf-forma-pago")
-public class CnfFormaPagoController extends CommonController<CnfFormaPago, CnfFormaPagoService>{
+public class CnfFormaPagoController extends CommonController<CnfFormaPago, Long, CnfFormaPagoService>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(CnfFormaPagoController.class);
 	

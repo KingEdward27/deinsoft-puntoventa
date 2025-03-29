@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.CnfPaisService;
 
 @RestController
 @RequestMapping("/api/business/cnf-pais")
-public class CnfPaisController extends CommonController<CnfPais, CnfPaisService>{
+public class CnfPaisController extends CommonController<CnfPais, Long, CnfPaisService>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(CnfPaisController.class);
 	

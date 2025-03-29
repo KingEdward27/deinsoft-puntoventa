@@ -26,4 +26,6 @@ export class InvMovAlmacen {
 	invAlmacen: InvAlmacen = new InvAlmacen();
 	listInvMovAlmacenDet: InvMovAlmacenDet[] = [];
 	token?: string = "";
+	cnfLocalDestino: CnfLocal = new CnfLocal();
+	invAlmacenDestino: InvAlmacen = new InvAlmacen();
 };

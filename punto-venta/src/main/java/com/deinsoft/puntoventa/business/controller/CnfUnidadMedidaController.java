@@ -16,7 +16,7 @@ import com.deinsoft.puntoventa.business.service.CnfUnidadMedidaService;
 
 @RestController
 @RequestMapping("/api/business/cnf-unidad-medida")
-public class CnfUnidadMedidaController extends CommonController<CnfUnidadMedida, CnfUnidadMedidaService>{
+public class CnfUnidadMedidaController extends CommonController<CnfUnidadMedida, Long, CnfUnidadMedidaService>{
 	
 	private static final Logger logger = LoggerFactory.getLogger(CnfUnidadMedidaController.class);
 	
