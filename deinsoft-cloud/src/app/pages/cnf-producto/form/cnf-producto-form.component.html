@@ -225,6 +225,8 @@
                                     error.rutaImagen }}</div> -->
                             </div>
                         </div>
+                        
+                        
                         <div class="form-group-sm row">
                             <label for="barcode"
                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.barcode' |
@@ -237,8 +239,12 @@
                                     error.barcode }}</div>
                             </div>
                         </div>
-
-                        <div class="form-group-sm row">
+                        <div class="form-group-sm row" *ngIf="this.model.id">
+                            <app-checkbox (valueChange)="changeView($event)">
+                            ¿Es paquete?
+                            </app-checkbox>
+                        </div>
+                        <div class="form-group-sm row" *ngIf="this.model.id && seeAll">
                             <label for="barcode"
                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.cnf_producto.cnf_paquete' |
                                 translate}}</label>

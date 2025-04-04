@@ -59,4 +59,9 @@ public class ActCajaController extends CommonController<ActCaja, Long, ActCajaSe
         List<ActCaja> list = actCajaService.getAllActCajaByCnfEmpresa(id);
         return list;
     }
+    @GetMapping(value = "/get-all-act-caja-by-cnf-local")
+    public List<ActCaja> getAllActCajaByCnfLocal(@Param("id") Long id, @Param("localId") Long localId) {
+        List<ActCaja> list = actCajaService.getAllActCajaByCnfLocal(id,localId);
+        return list;
+    }
 }

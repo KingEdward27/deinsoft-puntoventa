@@ -470,6 +470,9 @@ export class InvMovAlmacenFormComponent implements OnInit {
     return this.cnfNumComprobanteService
       .getDataByCnfTipoComprobanteIdAndCnfLocalId(this.model.cnfTipoComprobante.id.toString()
         , this.model.cnfLocal.id.toString()).subscribe(data => {
+          if (this.model.cnfTipoComprobante.id != 0 && data.length == 0) {
+            this.utilService.msgWarning("Problemas de configuración","No se encontró serie configurada para el tipo de comprobante y local seleccionados")
+          }
           this.model.serie = data[0].serie
         })
   }

@@ -59,10 +59,10 @@ export class InvMovAlmacenListComponent extends CommonReportFormComponent implem
 
   }
   eliminar(e: InvMovAlmacen) {
-    this.deps.utilService.confirmDelete(e).then((result) => {
+    this.deps.utilService.confirmOperation(e).then((result) => {
       if (result) {
         this.deps.invMovAlmacenService.delete(e.id.toString()).subscribe(() => {
-          this.deps.utilService.msgOkDelete();
+          this.deps.utilService.msgOkOperation();
           this.getListData();
         }, err => {
           if (err.status === 500 && err.error.trace.includes("DataIntegrityViolationException")) {

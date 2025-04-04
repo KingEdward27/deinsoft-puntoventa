@@ -151,10 +151,13 @@
                                 <td>{{item.estado == '0'?'CERRADO':'APERTURADO'}}</td>
                                 <td>
                                     <div class="row row2">
-                                        <div class="col-sm-6 col-xs-6 text-right"><a class="fas fa-edit"
+                                        <div class="col-sm-4 col-xs-4 text-right"><a class="fas fa-edit"
                                                 (click)="editar(item)" style="cursor: pointer;"
                                                 title="Cerra caja"></a></div>
-                                        <div class="col-sm-6 col-xs-6"><a (click)="eliminar(item)"
+                                        <div class="col-lg-4 col-sm-4 col-xs-4"><a (click)="printTicketChild(item)"
+                                                    class="fa fa-print fa-md" style="cursor: pointer;"
+                                                    title="Imprimir"></a></div>        
+                                        <div class="col-sm-4 col-xs-4"><a (click)="eliminar(item)"
                                                 style="cursor: pointer;"
                                                 title="{{'webpagos.btnDelete' | translate}}"><i
                                                     class="fa fa-trash fa-lg"></i></a></div>

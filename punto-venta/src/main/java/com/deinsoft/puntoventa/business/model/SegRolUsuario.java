@@ -31,6 +31,7 @@ public class SegRolUsuario implements Serializable {
     @Column(name = "seg_rol_usuario_id", nullable = false, unique = true)
     private long id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "seg_usuario_id")
     private SegUsuario segUsuario;

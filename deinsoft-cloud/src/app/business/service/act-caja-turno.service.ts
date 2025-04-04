@@ -40,5 +40,11 @@ export class ActCajaTurnoService {
   public getReport(form: any): Observable<ActCajaTurno> {
     return this.http.post<ActCajaTurno>(this.url + '/get-report-act-caja-turno', form);
   }
+  public getReportCierre(arg1: number): Observable<ActCajaTurno> {
+    let params = new HttpParams().set("id",arg1.toString());
+    console.log(arg1);
+    
+    return this.http.get<ActCajaTurno>(`${this.url}/get-cierre-act-caja-turno`,{params});
+  }
 }
 

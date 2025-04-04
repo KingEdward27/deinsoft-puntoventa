@@ -1,5 +1,6 @@
 
 import { ActComprobanteDetalle } from '@/business/model/act-comprobante-detalle.model';
+import { ActMedioPagoDetalle } from '@/business/model/act-medio-pago-detalle.model';
 import { CnfFormaPago } from '@/business/model/cnf-forma-pago.model';
 import { CnfLocal } from '@/business/model/cnf-local.model';
 import { CnfMaestro } from '@/business/model/cnf-maestro.model';
@@ -36,6 +37,7 @@ export class ActComprobante {
 	cnfTipoComprobante: CnfTipoComprobante = new CnfTipoComprobante();
 	invAlmacen: InvAlmacen = new InvAlmacen();
 	listActComprobanteDetalle: ActComprobanteDetalle[] = [];
+	listActMedioPagoDetalle: ActMedioPagoDetalle[] = [];
 	token?: string = "";
 	showDetail:boolean = false;
 	

@@ -185,7 +185,7 @@
                                 <th class="text-nowrap">{{'webpagos.inv_mov_almacen.inv_tipo_mov_almacen' | translate}}
                                 </th>
                                 <th class="text-nowrap">{{'webpagos.inv_mov_almacen.inv_almacen' | translate}}</th>
-                                <th class="text-nowrap">{{'webpagos.inv_mov_almacen.cnf_maestro' | translate}}</th>
+                                <!-- <th class="text-nowrap">{{'webpagos.inv_mov_almacen.cnf_maestro' | translate}}</th> -->
                                 <th class="text-nowrap">{{'webpagos.inv_mov_almacen.serie' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.inv_mov_almacen.numero' | translate}}</th>
                                 <th class="text-nowrap">{{'webpagos.inv_mov_almacen.fechareg' | translate}}</th>
@@ -193,7 +193,7 @@
                                 <th class="text-nowrap">{{'webpagos.inv_mov_almacen.flag_estado' | translate}}</th>
                                 
                                 
-                                <th class="text-nowrap">adfsdgsd</th>
+                                <th class="text-nowrap">Acciones</th>
                             </tr>
                         </thead>
                         <!-- <tr>
@@ -230,22 +230,24 @@
                                 <td>{{item.cnfTipoComprobante?.nombre}}</td>
                                 <td>{{item.invTipoMovAlmacen?.nombre}}</td>
                                 <td>{{item.invAlmacen?.nombre}}</td>
-                                <td>{{item.cnfMaestro?.nombre}}</td>
+                                <!-- <td>{{item.cnfMaestro?.nombre}}</td> -->
                                 <td>{{item.serie}}</td>
                                 <td>{{item.numero}}</td>
                                 <td>{{item.fechareg}}</td>
-                                <td>{{item.total}}</td>
+                                <td class="content-number">{{item.cnfLocal.cnfEmpresa.cnfMoneda.simbolo + ' ' + (item.total | number:'1.2-2')}}</td>
                                 <td>{{item.flagEstado=='1'?"Activo":"Anulado"}}</td>
                                 
                                 <td>
                                     <div class="row row2">
-                                        <div class="col-sm-6 col-xs-6 text-right"><a class="fas fa-edit"
+                                        <!-- <div class="col-sm-6 col-xs-6 text-right"><a class="fas fa-edit"
                                                 (click)="editar(item)" style="cursor: pointer;"
-                                                title="{{'webpagos.btnEdit' | translate}}"></a></div>
-                                        <div class="col-sm-6 col-xs-6"><a (click)="eliminar(item)"
-                                                style="cursor: pointer;"
-                                                title="{{'webpagos.btnDelete' | translate}}"><i
-                                                    class="fa fa-trash fa-lg"></i></a></div>
+                                                title="{{'webpagos.btnEdit' | translate}}"></a></div> -->
+                                        
+                                        <div *ngIf="item.flagEstado == '1' || item.flagEstado == '2'" class="col-lg-3 col-sm-6 col-xs-6"><a 
+                                                    class="fas fa-ban fa-md" 
+                                                    style="cursor: pointer;"
+                                                        title="Anular" (click) = "eliminar(item)"><i
+                                        ></i></a></div>            
                                     </div>
                                 </td>
                             </tr>

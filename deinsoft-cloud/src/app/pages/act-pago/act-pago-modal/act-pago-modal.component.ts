@@ -126,6 +126,14 @@ export class ActPagoModalComponent implements OnInit {
         // this.utilService.msgOkSave();
         // window.location.reload();
       }, err => {
+        this.error = []
+        console.log(err.error);
+
+        for (var prop in err.error) {
+          // console.log("Key:" + prop);
+          // console.log("Value:" + err.error[prop]);
+          this.error.push(err.error[prop])
+        }
         console.log(err);
       });
   }
@@ -205,6 +213,9 @@ export class ActPagoModalComponent implements OnInit {
     return this.cnfNumComprobanteService
       .getDataByCnfTipoComprobanteIdAndCnfLocalId(this.model.cnfTipoComprobante.id.toString()
         , this.model.cnfLocal.id.toString()).subscribe(data => {
+          if (this.model.cnfTipoComprobante.id != 0 && data.length == 0) {
+            this.utilService.msgWarning("Problemas de configuración","No se encontró serie configurada para el tipo de comprobante y local seleccionados")
+          }
           this.model.serie = data[0].serie
         })
   }

@@ -37,5 +37,9 @@ export class ActCajaService {
     let params = new HttpParams().set("id",id.toString());
     return this.http.get<ActCaja[]>(`${this.url}/get-all-act-caja-by-cnf-empresa`,{params});
   } 
+  public getAllByCnfLocalId(id:number,localId:number):Observable<any>{
+    let params = new HttpParams().set("id",id?.toString()).set("localId",localId?.toString());
+    return this.http.get<ActCaja[]>(`${this.url}/get-all-act-caja-by-cnf-local`,{params});
+  } 
 }
 

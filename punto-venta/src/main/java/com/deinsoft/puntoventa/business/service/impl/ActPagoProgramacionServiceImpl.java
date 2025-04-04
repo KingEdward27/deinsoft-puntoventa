@@ -107,7 +107,8 @@ public class ActPagoProgramacionServiceImpl
                         .filter(item -> (item.getActContrato() != null
                         ? item.getActContrato().getCnfLocal().getId()
                         : item.getActComprobante().getCnfLocal().getId()) == cnfLocalId)
-                        .filter(predicate -> (onlyPendientes && predicate.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0) || !onlyPendientes)
+                        .filter(predicate -> (onlyPendientes && predicate.getMontoPendiente().compareTo(BigDecimal.ZERO) > 0)
+                                || !onlyPendientes)
                         .map(data -> {
                             if (data.getFechaVencimiento().compareTo(LocalDate.now()) >= 0) {
                                 data.setColor("yellow");
@@ -118,7 +119,8 @@ public class ActPagoProgramacionServiceImpl
                                     data.setColor("green");
                                 }
                             }
-                            data.setMes(data.getFechaVencimiento().getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase());
+                            data.setMes(data.getFechaVencimiento().getMonth().getDisplayName(TextStyle.FULL,
+                                    new Locale("es", "ES")).toUpperCase());
 
                             ActPago actPago
                                     = actPagoList.stream()

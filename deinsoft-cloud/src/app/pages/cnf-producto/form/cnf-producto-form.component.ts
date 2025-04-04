@@ -68,6 +68,7 @@ export class CnfProductoFormComponent implements OnInit {
   searchFailed = false;
   formatter = (x: { nombre: string }) => x.nombre;
   cnfProductoSearch: any;
+  seeAll:boolean = true;
 
   constructor(private cnfProductoService: CnfProductoService,
     private router: Router,
@@ -107,11 +108,16 @@ export class CnfProductoFormComponent implements OnInit {
             this.model.cnfMarca = this.selectDefaultCnfMarca;
           }
           this.isDataLoaded = true;
-          
+          if (this.model.listCnfPaqueteDet.length>0) {
+            this.seeAll = true;
+          } else {
+            
+            this.changeView(null);
+          }
           //this.titulo = 'Editar ' + this.nombreModel;
         });
       }
-
+      
     })
 
   }
@@ -381,6 +387,10 @@ export class CnfProductoFormComponent implements OnInit {
       this.model.listCnfPaqueteDet.filter(e => e.index !== index);
       this.model.listCnfPaqueteDet.splice(index, 1);
     }
+  }
+  changeView(event:any){
+    
+    this.seeAll = !this.seeAll;
   }
 }
 

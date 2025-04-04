@@ -151,12 +151,15 @@ export class GenericFormComponent extends CommonService implements OnInit {
       }
       this.id = this.properties.id;
       if (element.type != 'input' && element.type != 'date') {
-        if (this.properties.id == 0) {
-          if (element.loadState == 1 && element.columnName != element.relatedBy) {
-            let condition = ""
+        let condition = ""
             element.filters?.forEach((elementFilter: any) => {
               condition = condition + elementFilter.columnName + " = " + elementFilter.value + " and"
             })
+        if (this.properties.id == 0) {
+
+          
+          if (element.loadState == 1 && element.columnName != element.relatedBy) {
+            
             condition = condition.substring(0, condition.length - 4);
             super.getListComboByTableName(element.tableName, element.columnName, condition).subscribe(data => {
               data.push([0, "- Seleccione -"]);
@@ -173,7 +176,9 @@ export class GenericFormComponent extends CommonService implements OnInit {
           }
         } else {
           if (element.loadState == 1 && element.columnName != element.relatedBy) {
-            super.getListComboByTableName(element.tableName, element.columnName, "").subscribe(data => {
+            
+            condition = condition.substring(0, condition.length - 4);
+            super.getListComboByTableName(element.tableName, element.columnName, condition).subscribe(data => {
               console.log(data);
               data.push([0, "- Seleccione -"]);
               data.sort();
@@ -276,10 +281,16 @@ export class GenericFormComponent extends CommonService implements OnInit {
       if (element.tableName == tableName) {
         this.properties.columnsForm = element.columnsForm;
         this.properties.tableName = element.tableNameDetail
+        element.preSave.forEach(element2 => {
+          this.properties.preSave.push(element2)
+        });
       }
     });
 
+    
     this.properties.id = 0
+    console.log(this.properties);
+    
     localStorage.setItem("properties", JSON.stringify(this.properties));
     this.router.navigate(["/generic-child-form"]);
   }

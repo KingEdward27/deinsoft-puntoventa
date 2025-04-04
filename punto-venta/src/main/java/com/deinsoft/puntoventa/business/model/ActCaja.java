@@ -5,11 +5,14 @@ import javax.validation.constraints.*;
 import java.time.*;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
+
 import javax.validation.Valid;
 import java.math.BigDecimal;
 
 @Entity(name = "actCaja")
 @Table(name = "act_caja")
+@Data
 public class ActCaja implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,42 +35,12 @@ public class ActCaja implements Serializable {
     @Valid
     @JoinColumn(name = "cnf_empresa_id")
     private CnfEmpresa cnfEmpresa;
-    
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    @Valid
+    @OneToOne
+    @JoinColumn(name = "cnf_local_id")
+    private CnfLocal cnfLocal;
 
-    public String getNombre() {
-        return nombre;
-    }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public CnfEmpresa getCnfEmpresa() {
-        return cnfEmpresa;
-    }
-
-    public void setCnfEmpresa(CnfEmpresa cnfEmpresa) {
-        this.cnfEmpresa = cnfEmpresa;
-    }
-
-    @Override
-    public String toString() {
-        return "actCaja [id=" + id + ", nombre=" + nombre + ", estado=" + estado + "]";
-    }
 
 }

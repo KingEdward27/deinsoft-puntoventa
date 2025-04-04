@@ -36,6 +36,8 @@ import { ActComprobante } from '../../act-comprobante.model';
 import { ActComprobanteService } from '../../act-comprobante.service';
 import { MessageModalComponent } from '../../modal/message-modal.component';
 import { Location } from '@angular/common';
+import { ActPagoComprobanteModalComponent } from '../act-pago-comprobante-modal/act-pago-comprobante-modal.component';
+import { ActMedioPagoDetalle } from '@/business/model/act-medio-pago-detalle.model';
 
 
 
@@ -135,11 +137,11 @@ export class ActComprobanteFormComponent implements OnInit {
     // $(document).on('click', '#a4', function () {
     //   this.a4();
     // });
-    this.loadData();
     console.log(this.appService.getUser());
     
     let empresaPrincipal = this.appService.getUser().empresaPrincipal
     this.empresaPrincipal = empresaPrincipal
+    this.loadData();
     
     // $(document).on("keyup", function(event) {
     //   if (event.enter) {
@@ -157,6 +159,11 @@ export class ActComprobanteFormComponent implements OnInit {
     this.getListCnfMoneda();
     this.getListCnfLocal();
     this.getListCnfTipoComprobante();
+    console.log(this.empresaPrincipal.flagVentaRapida);
+    
+    if (this.empresaPrincipal.flagVentaRapida === 1) {
+      this.getDefaultClient();
+    }
     // this.getListInvAlmacen();
     this.getListImpuestoCondicion();
     console.log(this.listCnfLocal);
@@ -191,6 +198,18 @@ export class ActComprobanteFormComponent implements OnInit {
 
     })
 
+  }
+
+  getDefaultClient(){
+    let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+    this.cnfMaestroService.getAllDataComboTypeHead("",cnfEmpresa).subscribe(data => {
+      console.log(data);
+      
+      this.model.cnfMaestro = data.filter(data => data.nroDoc == '00000000')[0];
+      console.log(this.model.cnfMaestro);
+      
+      //this.titulo = 'Editar ' + this.nombreModel;
+    });
   }
   getListCnfProductAsObservable(term: any): Observable<any> {
 
@@ -275,8 +294,11 @@ export class ActComprobanteFormComponent implements OnInit {
     }
     this.updateTotals()
   }
-  save() {
-    console.log(this.model);
+
+
+  async preSave(){
+    
+    
     if (this.model.id > 0 && this.model.flagEstado != "1") {
       this.utilService.msgHTTP400WithMessage("No pude hacer modificaciones. La compra no está en estado Registrado");
       return;
@@ -287,75 +309,66 @@ export class ActComprobanteFormComponent implements OnInit {
       this.error.push("Debe agregar productos y servicios al comprobante")
       return;
     }
-    this.actComprobanteService.save(this.model).subscribe(m => {
-      console.log(m);
-      this.model.id = m.id
-      this.model.numero = m.numero;
-
-      this.modalRef = this.modalService.open(MessageModalComponent);
-      this.modalRef.componentInstance.message = "Documento " + m.serie + " - " + m.numero + " generado correctamente";
-      this.modalRef.componentInstance.id = m.id;
-      this.modalRef.closed.subscribe(result => {
-        this.router.navigate(["/venta"]);
-        // this.model.cnfBpartner = 
-      })
-      // this.modalRef.componentInstance.cnfBpartner.subscribe((receivedEntry:CnfBpartner) => {
-      //   console.log(receivedEntry);
-      //   this.getListCnfBpartner()
-      //   this.model.cnfBpartner = receivedEntry
-      // })
-
-      // let rows = [
-      //   {
-      //     columns: [{ type: "a", id: "ticket", value: "Ticket", icon: "fa fa-arrow-circle-left", action: "" },
-      //     { type: "a", id: "a4", value: "A4", icon: "fa fa-arrow-circle-left", action: "" }]
-      //   }
-      // ];
-      // var onBtnClicked = (btnId) => {
-      //   this.ticketChild();
-      // };
-      // Swal.fire({
-      //   title: "asdasd",
-      //   icon: "success",
-      //   html: '<div class="table-responsive">' +
-      //   '<div class="col-sm-12" style="padding-top: 6px;">' +
-      //   '<button (click)="ticketChild()" >wa</button>' +
-      //   '</div>' +
-      //   '</div>',
-      //   showCloseButton: true,
-      //   allowOutsideClick: false,
-      //   showConfirmButton: true,
-
-      //   confirmButtonText:
-      //     '<div ><i class="fa fa-check" ></i> Aceptar</div>',
-
-      // })
-
-      // this.msgConfirmSaveWithButtons(
-      //   "Documento " + m.serie + " - " + m.numero + " generado correctamente",
-      //   "success",
-      //   rows).then((result) => {
-      //     console.log(result);
-
-      //     this.router.navigate(["/venta"]);
-      //   });
-
-    }, err => {
-      if (err.status === 422) {
-        this.error = []
-        console.log(err.error);
-
-        for (var prop in err.error) {
-          // console.log("Key:" + prop);
-          // console.log("Value:" + err.error[prop]);
-          this.error.push(err.error[prop])
+    if (this.model.cnfFormaPago.tipo == '1') {
+      this.actComprobanteService.validate(this.model).subscribe(data => {
+        console.log(data);
+        this.modalRef = this.modalService.open(ActPagoComprobanteModalComponent, {
+          size: 'lg',
+          });
+          this.modalRef.componentInstance.model = this.model;
+        ;
+        this.modalRef.closed.subscribe(result => {
+          console.log(result);
+          
+        })
+      }, err => {
+        if (err.status === 422) {
+          this.error = []
+          console.log(err.error);
+  
+          for (var prop in err.error) {
+            this.error.push(err.error[prop])
+          }
         }
-        // this.error.Results.forEach(element => {
-        //   this.error = this.error + element + "/n"
-        // })
-        // console.log(this.error);
+      });
+    } else {
+      this.save();
+    }
+    
+
+    
+  }
+  save() {
+    
+    this.utilService.confirmOperation("¿Esta seguro de continuar con la venta?").then((result) => {
+      if (result) {
+        this.actComprobanteService.save(this.model).subscribe(m => {
+          console.log(m);
+          this.model.id = m.id
+          this.model.numero = m.numero;
+    
+          this.modalRef = this.modalService.open(MessageModalComponent);
+          this.modalRef.componentInstance.message = "Documento " + m.serie + " - " + m.numero + " generado correctamente";
+          this.modalRef.componentInstance.id = m.id;
+          this.modalRef.closed.subscribe(result => {
+            this.router.navigate(["/venta"]);
+          })
+    
+        }, err => {
+          if (err.status === 422) {
+            this.error = []
+            console.log(err.error);
+    
+            for (var prop in err.error) {
+              this.error.push(err.error[prop])
+            }
+          }
+        });
       }
+
     });
+
+    
   }
   compareActComprobante(a1: ActComprobante, a2: ActComprobante): boolean {
     if (a1 === undefined && a2 === undefined) {
@@ -719,7 +732,6 @@ export class ActComprobanteFormComponent implements OnInit {
     this.modalRef = this.modalService.open(CnfMaestroFormModalComponent);
     this.modalRef.closed.subscribe(result => {
       this.getListCnfMaestro();
-      // this.model.cnfBpartner = 
     })
     this.modalRef.componentInstance.cnfMaestro.subscribe((receivedEntry:CnfMaestro) => {
       this.getListCnfMaestro()

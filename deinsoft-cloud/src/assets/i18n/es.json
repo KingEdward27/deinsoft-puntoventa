@@ -55,7 +55,7 @@
       "flag_compra_rapida": "Compra rápida?",
       "flag_venta_rapida": "Venta rápida?",
       "cnf_moneda":"Moneda principal",
-      "tipo_costo_inventario":"Tipo de costro de inventario"
+      "tipo_costo_inventario":"Tipo de costo de inventario"
     },
     "cnf_moneda": {
       "home": {
@@ -164,6 +164,17 @@
       "nombre": "Forma de pago",
       "cnf_forma_pago_detalle":"Programación de formas de pago",
       "tipo": "Tipo"
+    },
+    "cnf_medio_pago": {
+      "home": {
+        "title": "Tipo de Comprobante",
+        "subTitleForm": " Mantenimiento de Centro de Costo",
+        "subTitleList": " Listado de Centros de Costo"
+      },
+      "id": "ID",
+      "nombre": "Medio de pago",
+      "cnf_forma_pago_detalle":"Programación de formas de pago",
+      "monto":"Monto"
     },
     "act_comprobante": {
       "home": {

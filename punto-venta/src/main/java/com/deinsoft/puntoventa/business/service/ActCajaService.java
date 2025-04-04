@@ -18,4 +18,6 @@ public interface ActCajaService extends CommonService<ActCaja,Long>{
 	public void delete(long id);
         
         public List<ActCaja> getAllActCajaByCnfEmpresa(long id);
+
+	public List<ActCaja> getAllActCajaByCnfLocal(long id, long localId);
 }

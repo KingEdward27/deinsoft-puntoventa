@@ -101,6 +101,11 @@ export class ActComprobanteReportFormComponent extends CommonReportFormComponent
   listData: any;
   total:number;
   detailed:boolean;
+  totalcp:number;
+  pendientes:number;
+  enviados:number;
+  rechazados:number;
+  totalNoCp:number;
   constructor(public deps: MyBaseComponentDependences) {
     super(deps);
   }
@@ -122,6 +127,24 @@ export class ActComprobanteReportFormComponent extends CommonReportFormComponent
       this.listData = data;
       this.listData = this.listData.filter(data => this.model.flagEnvioPse == "-1" || (this.model.flagEnvioPse != "-1" && data.envioPseFlag == this.model.flagEnvioPse))
       this.loadingCnfMaestro = false;
+
+      let pendientes = this.listData.filter(data => data.indSituacion !== '03' && data.estado == '1')
+      
+      
+      if (pendientes.length > 0) {
+        this.error = "Hay comprobantes pendientes de envío o rechazados (Cantidad: "+pendientes.length+"). Consultar con Administrador TI"
+      }
+
+      // if(this.indSituacion === 2 || this.indSituacion === 3){
+      //   this.listData = this.listData.filter(data => data.indSituacion === "0" + this.indSituacion)
+      // } else if (this.indSituacion !== 0) {
+      //   this.listData = this.listData.filter(data => data.indSituacion !== "02" && data.indSituacion !== "03" )
+      // }
+      this.totalcp = this.listData.length;
+      this.enviados = this.listData.filter(data => data.envioPseFlag === "2")?.length;
+      this.rechazados = this.listData.filter(data => data.envioPseFlag === "0")?.length;
+      
+      this.totalNoCp = this.listData.filter(data => data.envioPseFlag === "")?.length;
       setTimeout(() => {
         this.dataTable = $('#dtDataVentas').DataTable(this.datablesSettings);
       }, 1);

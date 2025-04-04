@@ -2,32 +2,15 @@ package com.deinsoft.puntoventa.business.service.impl;
 
 import java.util.*;
 
+import com.deinsoft.puntoventa.business.model.*;
+import com.deinsoft.puntoventa.business.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.deinsoft.puntoventa.business.model.SegUsuario;
 import com.deinsoft.puntoventa.business.repository.SegUsuarioRepository;
-import com.deinsoft.puntoventa.business.service.SegUsuarioService;
 import com.deinsoft.puntoventa.business.commons.service.CommonServiceImpl;
-import com.deinsoft.puntoventa.business.model.CnfEmpresa;
-import com.deinsoft.puntoventa.business.model.CnfLocal;
-import com.deinsoft.puntoventa.business.model.CnfNumComprobante;
-import com.deinsoft.puntoventa.business.model.CnfTipoComprobante;
-import com.deinsoft.puntoventa.business.model.CnfTipoDocumento;
-import com.deinsoft.puntoventa.business.model.InvAlmacen;
-import com.deinsoft.puntoventa.business.model.SegRol;
-import com.deinsoft.puntoventa.business.model.SegRolUsuario;
 import com.deinsoft.puntoventa.business.repository.SegRolUsuarioRepository;
-import com.deinsoft.puntoventa.business.service.BusinessService;
-import com.deinsoft.puntoventa.business.service.CnfEmpresaService;
-import com.deinsoft.puntoventa.business.service.CnfLocalService;
-import com.deinsoft.puntoventa.business.service.CnfMonedaService;
-import com.deinsoft.puntoventa.business.service.CnfNumComprobanteService;
-import com.deinsoft.puntoventa.business.service.CnfTipoComprobanteService;
-import com.deinsoft.puntoventa.business.service.CnfTipoDocumentoService;
-import com.deinsoft.puntoventa.business.service.InvAlmacenService;
-import com.deinsoft.puntoventa.business.service.SegRolService;
 import com.deinsoft.puntoventa.framework.util.Util;
 import com.deinsoft.puntoventa.util.Constantes;
 import com.deinsoft.puntoventa.util.MailBean;
@@ -42,6 +25,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,7 +60,8 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario,Long, Se
     
     @Autowired
     CnfMonedaService cnfMonedaService;
-    
+    @Autowired
+    CnfMaestroService cnfMaestroService;
     @Value("${app.config.url}")
     private String url;
     
@@ -104,7 +90,9 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario,Long, Se
     BusinessService businessService;
     
     public List<SegUsuario> getAllSegUsuario(SegUsuario segUsuario) {
-        List<SegUsuario> segUsuarioList = (List<SegUsuario>) segUsuarioRepository.getAllSegUsuario(segUsuario.getNombre().toUpperCase(), segUsuario.getEmail().toUpperCase(), segUsuario.getPassword().toUpperCase());
+        List<SegUsuario> segUsuarioList = (List<SegUsuario>) segUsuarioRepository.getAllSegUsuario(
+                segUsuario.getNombre().toUpperCase(), segUsuario.getEmail().toUpperCase(),
+                segUsuario.getPassword().toUpperCase());
         return segUsuarioList;
     }
 
@@ -137,7 +125,28 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario,Long, Se
             segUsuarioRepository.delete(segUsuario);
         }
     }
-    
+
+    public List<SegUsuario> getAllSegUsuarioByEmpresa() {
+        List<SegUsuario> segUsuarioList = (List<SegUsuario>) segUsuarioRepository.getAllSegUsuarioByEmpresa(
+                listRoles());
+        return segUsuarioList;
+    }
+
+    public List<SegUsuario> getAllSegUsuarioByEmpresaAndLocalId(long localId) {
+        List<SegUsuario> segUsuarioList = (List<SegUsuario>) segUsuarioRepository.getAllSegUsuarioByEmpresa(
+                listRoles());
+        segUsuarioList = segUsuarioList.stream()
+                //.filter(data -> data.getListSegRolUsuario() != null)
+                .filter(data -> {
+                            List<SegRolUsuario> listRoless = segRolUsuarioRepository.findBySegUsuarioId(data.getId());
+                            return listRoless.stream().anyMatch(
+                                            predicate -> predicate.getLocal() == null || predicate.getLocal() != null
+                                                    && predicate.getLocal().getId() == localId);
+                })
+                .collect(Collectors.toList());
+        return segUsuarioList;
+    }
+
     @Override
     @Transactional
     public SegUsuario registerNewUser(SegUsuario segUsuario) throws Exception {
@@ -178,7 +187,11 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario,Long, Se
         CnfTipoDocumento tipoDoc = cnfTipoDocumentoService.getAllCnfTipoDocumento().stream()
                 .filter(predicate -> predicate.getCodigoSunat().equals("6"))
                 .findFirst().orElse(null);
-        
+
+        CnfTipoDocumento tipoDocDni = cnfTipoDocumentoService.getAllCnfTipoDocumento().stream()
+                .filter(predicate -> predicate.getCodigoSunat().equals("1"))
+                .findFirst().orElse(null);
+
         CnfEmpresa empresa = new CnfEmpresa();
         empresa.setCnfTipoDocumento(tipoDoc);
         empresa.setNroDocumento(segUsuario.getRucEmpresa());
@@ -186,8 +199,10 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario,Long, Se
         empresa.setDescripcion(mapRuc.get("nombre").toString());
         empresa.setPerfilEmpresa(segUsuario.getPerfilEmpresa());
         empresa.setPlan(1);
-        empresa.setEstado("1");
+        empresa.setEstado(Constantes.COD_ESTADO_ACTIVO);
         empresa.setFechaRegistro(LocalDateTime.now());
+        empresa.setFlagVentaRapida(1);
+        empresa.setFlagCompraRapida(1);
         empresa.setCnfMoneda(cnfMonedaService.getAllCnfMoneda().stream()
                 .filter(predicate -> predicate.getCodigo().equals("PEN")).findFirst().orElse(null));
         CnfEmpresa empresaResult = cnfEmpresaService.saveCnfEmpresa(empresa);
@@ -202,14 +217,23 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario,Long, Se
         almacen.setNombre("ALMACEN PRINCIPAL");
         almacen.setFlagEstado("1");
         invAlmacenService.save(almacen);
-         
+
+        CnfMaestro cnfMaestro = new CnfMaestro();
+        cnfMaestro.setCnfEmpresa(empresaResult);
+        cnfMaestro.setCnfTipoDocumento(tipoDocDni);
+        cnfMaestro.setNroDoc("00000000");
+        cnfMaestro.setRazonSocial("PUBLICO EN GENERAL");
+        cnfMaestro.setFlagEstado("1");
+        cnfMaestroService.save(cnfMaestro);
+
         SegUsuario newSegUsuario = new SegUsuario();
         newSegUsuario.setCnfEmpresa(empresaResult);
         newSegUsuario.setEmail(segUsuario.getEmail());
         newSegUsuario.setNombre(segUsuario.getEmail().split("@")[0]);
         newSegUsuario.setPassword(passwordEncoder.encode(segUsuario.getPassword()));
         SegUsuario segUsuarioResult = save(newSegUsuario);
-        
+
+
         //grabar rousuario
         SegRol rolUser = segRolService.getAllSegRol().stream()
                 .filter(predicate -> predicate.getNombre().equals("ROLE_ADMIN"))

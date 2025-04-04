@@ -60,7 +60,8 @@ public class InvMovimientoProductoServiceImpl
     }
 
     public List<InvMovimientoProducto> getAllInvMovimientoProductoByCnfProducto(long id,long idAlmacen) {
-        List<InvMovimientoProducto> InvMovimientoProductoList = (List<InvMovimientoProducto>) invMovimientoProductoRepository.findByCnfProductoId(id,idAlmacen);
+        List<InvMovimientoProducto> InvMovimientoProductoList = (List<InvMovimientoProducto>) invMovimientoProductoRepository
+                .findByCnfProductoIdAndInvAlmacenId(id,idAlmacen);
         return InvMovimientoProductoList;
     }
 

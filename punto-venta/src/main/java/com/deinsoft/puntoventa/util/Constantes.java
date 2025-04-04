@@ -4,7 +4,10 @@
  */
 package com.deinsoft.puntoventa.util;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  *
@@ -33,10 +36,16 @@ public class Constantes {
     
     public static DateTimeFormatter YYYYMM_FORMATER = DateTimeFormatter.ofPattern("yyyyMM");
     public static DateTimeFormatter DDMMYYYY_FORMATER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    public static DecimalFormat FORMAT_NUMBER = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.US));
     
     public static final String MSG_NO_AUTHORIZED = "No tiene acceso a ver esta página";
     public static final String MSG_NO_EXISTS_ITEM = "Item no existe";
     public static final String COD_ESTADO_ACTIVO = "1";
+    public static final String COD_ESTADO_ANULADO = "0";
+
+    public static final String FLAG_IS_VENTA = "1";
+    public static final String FLAG_IS_COMPRA = "2";
     public static final String COD_DEFAULT_SERIE_COMPROBANTE_CONTRATO = "CN01";
     public static final String COD_TIPO_COMPROBANTE_CONTRATO = "CNT";
 }

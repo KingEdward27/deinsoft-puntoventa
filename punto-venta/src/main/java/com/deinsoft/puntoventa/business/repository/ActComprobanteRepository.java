@@ -53,6 +53,7 @@ public interface ActComprobanteRepository extends JpaRepository<ActComprobante, 
             //+ "and p.cnfLocal.cnfEmpresa.id = :#{#paramBean.cnfEmpresa.id} "
             + "and (p.flagIsventa = :#{#paramBean.flagIsventa}) "
             + "and (:#{#paramBean.invAlmacen.id} = 0l or p.invAlmacen.id = :#{#paramBean.invAlmacen.id}) "
+            + "and (:#{#paramBean.cnfTipoComprobante.id} = 0l or p.cnfTipoComprobante.id = :#{#paramBean.cnfTipoComprobante.id}) "
             + "and (:#{#paramBean.cnfMaestro.id} = 0l or p.cnfMaestro.id = :#{#paramBean.cnfMaestro.id}) "
             + "and (p.fecha between :#{#paramBean.fechaDesde} and :#{#paramBean.fechaHasta}) "
             + "and (:#{#paramBean.flagEstado} = '-1' or p.flagEstado = :#{#paramBean.flagEstado}) "

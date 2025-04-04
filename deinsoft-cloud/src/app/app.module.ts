@@ -141,6 +141,8 @@ import { ActOrdenFormComponent } from '@pages/act-orden/form/act-orden-form.comp
 import { ActOrdenListComponent } from '@pages/act-orden/list/act-orden-list.component';
 import { SegUsuarioFormPasswordComponent } from '@pages/security/seg-usuario/form-password/seg-usuario-form-password.component';
 import { AddNewCnfPaqueteDetComponent } from '@pages/cnf-producto/add-new-cnf-paquete-det/add-new-cnf-paquete-det.component';
+import { CnfMedioPagoComponent } from '@pages/cnf-medio-pago/cnf-medio-pago';
+import { ActPagoComprobanteModalComponent } from '@pages/act-comprobante/act-comprobante-form/act-pago-comprobante-modal/act-pago-comprobante-modal.component';
 
 @NgModule({
     declarations: [
@@ -265,7 +267,9 @@ import { AddNewCnfPaqueteDetComponent } from '@pages/cnf-producto/add-new-cnf-pa
         TermsComponent,
         UploadComponent,
         SegUsuarioFormPasswordComponent,
-        AddNewCnfPaqueteDetComponent
+        AddNewCnfPaqueteDetComponent,
+        CnfMedioPagoComponent,
+        ActPagoComprobanteModalComponent
     ],
     imports: [
         BrowserModule,

@@ -66,6 +66,10 @@ export class ActComprobanteService {
   public save(form: any): Observable<ActComprobante> {
     return this.http.post<ActComprobante>(this.url + '/save-act-comprobante', form);
   }
+
+  public validate(form: any): Observable<ActComprobante> {
+    return this.http.post<ActComprobante>(this.url + '/pre-save-act-comprobante', form);
+  }
   public saveCompra(form: any): Observable<ActComprobante> {
     return this.http.post<ActComprobante>(this.url + '/save-act-comprobante-compra', form);
   }

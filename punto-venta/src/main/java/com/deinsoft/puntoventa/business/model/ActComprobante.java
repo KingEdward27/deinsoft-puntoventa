@@ -8,14 +8,17 @@ import com.fasterxml.jackson.annotation.*;
 import java.lang.reflect.Field;
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
 @Entity(name = "actComprobante")
 @Table(name = "act_comprobante")
+@Getter
+@Setter
 public class ActComprobante implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -147,247 +150,20 @@ public class ActComprobante implements Serializable {
     @Size(max = 8)
     @Column(name = "numero_ref", length = 8, nullable = false)
     private String numeroRef;
-    
+
+
+    @OneToMany(mappedBy = "actComprobante", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,
+            CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnoreProperties(value = {"actComprobante"}, allowSetters = true)
+    private List<ActMedioPagoDetalle> listActMedioPagoDetalle;
+
     public void addActComprobanteDetalle(ActComprobanteDetalle item) {
         item.setActComprobante(this);
     }
-
-    public long getId() {
-        return id;
+    public void addActMedioPagoDetalle(ActMedioPagoDetalle item) {
+        item.setActComprobante(this);
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getSerie() {
-        return serie;
-    }
-
-    public void setSerie(String serie) {
-        this.serie = serie;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public LocalDateTime getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    public void setFechaRegistro(LocalDateTime fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
-
-    public BigDecimal getBillete() {
-        return billete;
-    }
-
-    public void setBillete(BigDecimal billete) {
-        this.billete = billete;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-
-    public BigDecimal getVuelto() {
-        return vuelto;
-    }
-
-    public void setVuelto(BigDecimal vuelto) {
-        this.vuelto = vuelto;
-    }
-
-    public BigDecimal getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(BigDecimal descuento) {
-        this.descuento = descuento;
-    }
-
-    public BigDecimal getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(BigDecimal subtotal) {
-        this.subtotal = subtotal;
-    }
-
-    public BigDecimal getIgv() {
-        return igv;
-    }
-
-    public void setIgv(BigDecimal igv) {
-        this.igv = igv;
-    }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
-
-    public String getFlagEstado() {
-        return flagEstado;
-    }
-
-    public void setFlagEstado(String flagEstado) {
-        this.flagEstado = flagEstado;
-    }
-
-    public String getFlagIsventa() {
-        return flagIsventa;
-    }
-
-    public void setFlagIsventa(String flagIsventa) {
-        this.flagIsventa = flagIsventa;
-    }
-
-    public String getEnvioPseFlag() {
-        return envioPseFlag;
-    }
-
-    public void setEnvioPseFlag(String envioPseFlag) {
-        this.envioPseFlag = envioPseFlag;
-    }
-
-    public String getEnvioPseMensaje() {
-        return envioPseMensaje;
-    }
-
-    public void setEnvioPseMensaje(String envioPseMensaje) {
-        this.envioPseMensaje = envioPseMensaje;
-    }
-
-    public String getXmlhash() {
-        return xmlhash;
-    }
-
-    public void setXmlhash(String xmlhash) {
-        this.xmlhash = xmlhash;
-    }
-
-    public String getCodigoqr() {
-        return codigoqr;
-    }
-
-    public void setCodigoqr(String codigoqr) {
-        this.codigoqr = codigoqr;
-    }
-
-    public String getNumTicket() {
-        return numTicket;
-    }
-
-    public void setNumTicket(String numTicket) {
-        this.numTicket = numTicket;
-    }
-
-    public CnfMaestro getCnfMaestro() {
-        return cnfMaestro;
-    }
-
-    public void setCnfMaestro(CnfMaestro cnfMaestro) {
-        this.cnfMaestro = cnfMaestro;
-    }
-
-    public CnfFormaPago getCnfFormaPago() {
-        return cnfFormaPago;
-    }
-
-    public void setCnfFormaPago(CnfFormaPago cnfFormaPago) {
-        this.cnfFormaPago = cnfFormaPago;
-    }
-
-    public CnfMoneda getCnfMoneda() {
-        return cnfMoneda;
-    }
-
-    public void setCnfMoneda(CnfMoneda cnfMoneda) {
-        this.cnfMoneda = cnfMoneda;
-    }
-
-    public CnfLocal getCnfLocal() {
-        return cnfLocal;
-    }
-
-    public void setCnfLocal(CnfLocal cnfLocal) {
-        this.cnfLocal = cnfLocal;
-    }
-
-    public CnfTipoComprobante getCnfTipoComprobante() {
-        return cnfTipoComprobante;
-    }
-
-    public void setCnfTipoComprobante(CnfTipoComprobante cnfTipoComprobante) {
-        this.cnfTipoComprobante = cnfTipoComprobante;
-    }
-
-    public InvAlmacen getInvAlmacen() {
-        return invAlmacen;
-    }
-
-    public void setInvAlmacen(InvAlmacen invAlmacen) {
-        this.invAlmacen = invAlmacen;
-    }
-
-    public Set<ActComprobanteDetalle> getListActComprobanteDetalle() {
-        return listActComprobanteDetalle;
-    }
-
-    public void setListActComprobanteDetalle(Set<ActComprobanteDetalle> listActComprobanteDetalle) {
-        this.listActComprobanteDetalle = listActComprobanteDetalle;
-    }
-
-    public SegUsuario getSegUsuario() {
-        return segUsuario;
-    }
-
-    public void setSegUsuario(SegUsuario segUsuario) {
-        this.segUsuario = segUsuario;
-    }
-
-    public String getSerieRef() {
-        return serieRef;
-    }
-
-    public void setSerieRef(String serieRef) {
-        this.serieRef = serieRef;
-    }
-
-    public String getNumeroRef() {
-        return numeroRef;
-    }
-
-    public void setNumeroRef(String numeroRef) {
-        this.numeroRef = numeroRef;
-    }
-
-    @Override
-    public String toString() {
-        return "actComprobante [id=" + id  + ", cnfLocal=" + (cnfLocal != null ? cnfLocal : "") + ", invAlmacen=" + (invAlmacen != null ? invAlmacen : "") + ", cnfMaestro=" + (cnfMaestro != null ? cnfMaestro : "") + ", cnfTipoComprobante=" + (cnfTipoComprobante != null ? cnfTipoComprobante : "") + ", cnfFormaPago=" + (cnfFormaPago != null ? cnfFormaPago : "") + ", cnfMoneda=" + (cnfMoneda != null ? cnfMoneda : "") + ", fecha=" + fecha + ", serie=" + serie + ", numero=" + numero + ", fechaRegistro=" + fechaRegistro + ", billete=" + billete + ", total=" + total + ", vuelto=" + vuelto + ", descuento=" + descuento + ", subtotal=" + subtotal + ", igv=" + igv + ", observacion=" + observacion + ", flagEstado=" + flagEstado + ", flagIsventa=" + flagIsventa + ", envioPseFlag=" + envioPseFlag + ", envioPseMensaje=" + envioPseMensaje + ", xmlhash=" + xmlhash + ", codigoqr=" + codigoqr + ", numTicket=" + numTicket + "]";
-    }
     public static Map<String, Object> toMap(ActComprobante object, String[] visibles) {
         Map<String, Object> map = new HashMap<>();
         try {

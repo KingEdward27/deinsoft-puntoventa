@@ -25,13 +25,38 @@
                     <form class="col-sm-12" style="padding-top: 6px;">
                         
                         <div class="form-group-sm row">
+                            <label
+                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_local'
+                                |
+                                translate}} <span *ngIf="loadingCnfLocal"
+                                    class="spinner-border spinner-border-sm mr-1"></span><span
+                                    style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                            <div class="col-sm-12 col-lg-9">
+                                <select name="model.actCaja.cnfLocal" [compareWith]="compareCnfLocal"
+                                    [(ngModel)]="model.actCaja.cnfLocal"
+                                    class="form-control col-sm-12 col-lg-6"
+                                    (change)="getDataByLocal()">
+                                    <option *ngIf="loadingCnfLocal" [ngValue]="0" selected="selected">
+                                        Cargando...</option>
+                                    <option *ngIf="!loadingCnfLocal" [ngValue]="selectDefaultCnfLocal">
+                                        {{selectDefaultCnfLocal.nombre}}</option>
+                                    <option *ngFor="let item of listCnfLocal; index as i;"
+                                        [ngValue]="item">
+                                        {{item.nombre}}
+                                    </option>
+
+                                </select>
+                                
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
                             <label class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_caja_turno.act_caja' |
                                 translate}} <span *ngIf="loadingActCaja"
                                     class="spinner-border spinner-border-sm mr-1"></span><span
                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                             <div class="col-sm-12 col-lg-9">
                                 <select name="model.actCaja" [compareWith]="compareActCaja"
-                                    [(ngModel)]="model.actCaja" [disabled]="id" class="form-control-sm col-sm-12 col-lg-6">
+                                    [(ngModel)]="model.actCaja" [disabled]="id" class="form-control col-sm-12 col-lg-6">
                                     <option *ngIf="loadingActCaja" [ngValue]="0" selected="selected">Cargando...
                                     </option>
                                     <option *ngIf="!loadingActCaja" [ngValue]="selectDefaultActCaja">
@@ -51,7 +76,7 @@
                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                             <div class="col-sm-12 col-lg-9">
                                 <select name="model.segUsuario" [compareWith]="compareSegUsuario"
-                                    [(ngModel)]="model.segUsuario" [disabled]="id" class="form-control-sm col-sm-12 col-lg-6">
+                                    [(ngModel)]="model.segUsuario" [disabled]="id" class="form-control col-sm-12 col-lg-6">
                                     <option *ngIf="loadingSegUsuario" [ngValue]="0" selected="selected">Cargando...
                                     </option>
                                     <option *ngIf="!loadingSegUsuario" [ngValue]="selectDefaultSegUsuario">
@@ -71,7 +96,7 @@
                             <div class="col-sm-12 col-lg-9">
                                 <input type="text" [(ngModel)]="model.fechaApertura" maxlength="200"
                                     name="fechaApertura" id="fechaApertura" name="fechaApertura"
-                                    class="form-control-sm col-sm-12 col-lg-6" disabled placeholder="Ingrese fechaApertura" />
+                                    class="form-control col-sm-12 col-lg-6" disabled placeholder="Ingrese fechaApertura" />
                                 <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.fechaApertura">{{
                                     error.fechaApertura }}</div>
                             </div>
@@ -83,7 +108,7 @@
                             <div class="col-sm-12 col-lg-9">
                                 <input type="number" [(ngModel)]="model.montoApertura" maxlength="200"
                                     name="montoApertura" id="montoApertura" name="montoApertura"
-                                    class="form-control-sm col-sm-12 col-lg-6" [disabled]="id" placeholder="Ingrese montoApertura" />
+                                    class="form-control col-sm-12 col-lg-6" [disabled]="id" placeholder="Ingrese montoApertura" />
                                 <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.montoApertura">{{
                                     error.montoApertura }}</div>
                             </div>
@@ -94,7 +119,7 @@
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-9">
                                 <input type="text" [(ngModel)]="model.fechaCierre" maxlength="200" name="fechaCierre"
-                                    id="fechaCierre" name="fechaCierre" class="form-control-sm col-sm-12 col-lg-6"
+                                    id="fechaCierre" name="fechaCierre" class="form-control col-sm-12 col-lg-6"
                                     placeholder="Ingrese fechaCierre" disabled/>
                                 <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.fechaCierre">{{
                                     error.fechaCierre }}</div>
@@ -107,7 +132,7 @@
                             <div class="col-sm-12 col-lg-9">
                                 <input type="number" [(ngModel)]="model.montoCierre" maxlength="200"
                                     name="montoCierre" id="montoCierre"
-                                    class="form-control-sm col-sm-12 col-lg-6" placeholder="Ingrese montoCierre" />
+                                    class="form-control col-sm-12 col-lg-6" placeholder="Ingrese montoCierre" />
                                 <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.montoCierre">{{
                                     error.montoCierre }}</div>
                             </div>

@@ -15,7 +15,7 @@ public interface ActCajaTurnoRepository extends JpaRepository<ActCajaTurno, Long
     @Query(value = "select p from actCajaTurno p "
             + "where upper(p.estado) like %?1% "
             + "and p.actCaja.cnfEmpresa.id = :#{#securityFilterDto.empresaId}")
-    List<ActCajaTurno> getAllActCajaTurno(String estado,@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
+    List<ActCajaTurno> getAllActCajaTurno(String estado, @Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 
     @Query(value = "select p from actCajaTurno p "
             + "where p.segUsuario.id = :id "
@@ -31,7 +31,10 @@ public interface ActCajaTurnoRepository extends JpaRepository<ActCajaTurno, Long
             + "or (p.fechaCierre is null or "
             + "(p.fechaCierre is not null and DATE(p.fechaCierre) "
             + "between DATE(:#{#paramBean.fechaDesde}) and DATE(:#{#paramBean.fechaHasta})))) "
-            + "and p.actCaja.cnfEmpresa.id = :#{#paramBean.cnfLocal.cnfEmpresa.id}")
-    List<ActCajaTurno> getReportActCajaTurno(@Param("paramBean") ParamBean paramBean);
+            + "and p.actCaja.cnfEmpresa.id = :#{#securityFilterDto.empresaId} "
+            + "and (:#{#paramBean.cnfLocal.id} = 0l or p.actCaja.cnfLocal.id = :#{#paramBean.cnfLocal.id}) "
+            + "and p.actCaja.cnfLocal.id in :#{#securityFilterDto.localIds} ")
+    List<ActCajaTurno> getReportActCajaTurno(@Param("paramBean") ParamBean paramBean,
+                                             @Param("securityFilterDto") SecurityFilterDto securityFilterDto);
     
 }

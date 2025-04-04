@@ -268,11 +268,13 @@ table>thead {
 }
 .state2,
 .stategreen {
-  background: rgb(59, 139, 63);
+
+  background: rgb(38, 107, 36);
   border: 2px solid #535353;
   color: #fff;
+  padding-left: 1em;
+  padding-right: 1em;
   border-radius: .25rem;
-  text-align: center;
 }
 
 .stateblue {
@@ -289,6 +291,8 @@ table>thead {
   border: 2px solid #535353;
   color: #fff;
   border-radius: .25rem;
+  padding-left: 1em;
+  padding-right: 1em;
   text-align: center;
 }
 
@@ -409,4 +413,26 @@ hr {
   font-weight: bold;
   color: #da603c;
   font-family: Berlin Sans FB !important;
+}
+
+.comprobante-title {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.comprobante-number {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.comprobante-aceptados {
+  color: green;
+}
+
+.comprobante-excepcion,
+.comprobante-rechazados {
+  color: lightgray;
 }

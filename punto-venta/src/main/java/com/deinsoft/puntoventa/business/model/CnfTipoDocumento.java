@@ -87,11 +87,5 @@ public class CnfTipoDocumento implements Serializable {
         this.value = value;
     }
 
-    @Override
-    public String toString() {
-        return "cnfTipoDocumento [id=" + id + ", abreviatura=" + abreviatura + ", nombre="
-                + nombre + ", codigoSunat=" + codigoSunat + ", flagEstado="
-                + flagEstado + ", value=" + value + "]";
-    }
 
 }

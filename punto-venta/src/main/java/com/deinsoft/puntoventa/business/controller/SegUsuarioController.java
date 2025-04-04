@@ -42,9 +42,15 @@ public class SegUsuarioController extends CommonController<SegUsuario, Long, Seg
         return super.crear(segUsuario, result);
     }
 
-    @GetMapping(value = "/get-all-seg-usuario-combo")
-    public List<SegUsuario> getAllSegUsuario() {
-        List<SegUsuario> segUsuarioList = segUsuarioService.getAllSegUsuario();
+    @GetMapping(value = "/get-all-seg-usuario-combo-by-empresa")
+    public List<SegUsuario> getAllSegUsuarioByEmpresa() {
+        List<SegUsuario> segUsuarioList = segUsuarioService.getAllSegUsuarioByEmpresa();
+        return segUsuarioList;
+    }
+
+    @GetMapping(value = "/get-all-seg-usuario-combo-by-local")
+    public List<SegUsuario> getAllSegUsuarioByEmpresa(@Param("localId") Long localId) {
+        List<SegUsuario> segUsuarioList = segUsuarioService.getAllSegUsuarioByEmpresaAndLocalId(localId);
         return segUsuarioList;
     }
 
@@ -68,5 +74,11 @@ public class SegUsuarioController extends CommonController<SegUsuario, Long, Seg
     @PostMapping(value = "/recover-password")
     public ResponseEntity<?> recoverPasswordUsuario(@RequestBody SegUsuario segUsuario) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED).body(segUsuarioService.recoverPassword(segUsuario));
+    }
+
+    @GetMapping(value = "/get-all-seg-usuario-combo")
+    public List<SegUsuario> getAllSegUsuario() {
+        List<SegUsuario> segUsuarioList = segUsuarioService.getAllSegUsuario();
+        return segUsuarioList;
     }
 }

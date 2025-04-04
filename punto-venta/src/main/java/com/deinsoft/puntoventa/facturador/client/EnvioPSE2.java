@@ -109,6 +109,7 @@ public class EnvioPSE2 {
             servicio.setNumero_ref("");
             servicio.setMonto_ref(Formatos.df.format(0));
             servicio.setFecha_ref("");
+            servicio.setIs_venta(datosVenta.getFlagIsventa());
 //            servicio.setIncluir_pdf(ConfiguracionADN.Datos().get(0).getFlagPDF().equals("1")?"true":"false");
 //            servicio.setIncluir_xml(ConfiguracionADN.Datos().get(0).getFlagXML().equals("1")?"true":"false");
             List<Detalle> listaItemsEnvio = new ArrayList<Detalle>();

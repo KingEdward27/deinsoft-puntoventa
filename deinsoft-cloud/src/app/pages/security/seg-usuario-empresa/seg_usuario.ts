@@ -51,9 +51,11 @@ export class SegUsuarioEmpresaComponent extends GenericListComponent implements 
     
     let cnfEmpresa = user.profile.split("|")[1];
     this.prop.conditions.push({"columnName":"seg_usuario.cnf_empresa_id","value":cnfEmpresa});
-    this.prop.childTables[0].preSave.push({columnForm:"cnf_empresa.cnf_empresa_id",value:cnfEmpresa});
+    this.prop.childTables[0].preSave.push({columnForm:"cnf_empresa_id",value:cnfEmpresa});
     this.prop.childTables[0].columnsForm[1].filters.push({"columnName":"cnf_local.cnf_empresa_id","value":cnfEmpresa});
     this.prop.preSave.push({columnForm:"cnf_empresa_id", "value":cnfEmpresa})
+    this.prop.preSave.push({columnForm:"estado", "value":"1"})
+    this.prop.preSave.push({columnForm:"flag_recover_password", "value":"0"})
     super.properties = this.prop;
     console.log(this.prop);
     super.ngOnInit();

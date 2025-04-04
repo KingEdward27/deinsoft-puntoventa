@@ -111,9 +111,9 @@ public class ActComprobanteController extends CommonController<ActComprobante, L
         return ResponseEntity.status(HttpStatus.CREATED).body(actComprobanteResult);
     }
 
-    @PostMapping(value = "/save-act-comprobante-compra")
-    public ResponseEntity<?> saveActComprobanteCompra
-        (@Valid @RequestBody ActComprobante actComprobante, BindingResult result, HttpServletRequest request) throws  Exception{
+    @PostMapping(value = "/pre-save-act-comprobante")
+    public ResponseEntity<?> preSaveActComprobante
+        (@Valid @RequestBody ActComprobante actComprobante, BindingResult result) throws  Exception{
         if (result.hasErrors()) {
             return this.validar(result);
         }
@@ -133,13 +133,11 @@ public class ActComprobanteController extends CommonController<ActComprobante, L
         if(!errores.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errores);
         }
-        SegUsuario segUsuario = auth.getLoggedUserdata();
-        actComprobante.setSegUsuario(segUsuario);
-        ActComprobante actComprobanteResult = actComprobanteService.saveActComprobanteCompra(actComprobante);
-        
-        
-        return ResponseEntity.status(HttpStatus.CREATED).body(actComprobanteResult);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
+
+
     @GetMapping(value = "/get-all-act-comprobante-combo")
     public List<ActComprobante> getAllActComprobante() {
         List<ActComprobante> actComprobanteList = actComprobanteService.getAllActComprobante();

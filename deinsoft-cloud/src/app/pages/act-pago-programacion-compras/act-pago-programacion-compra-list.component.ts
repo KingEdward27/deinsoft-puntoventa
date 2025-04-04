@@ -225,6 +225,7 @@ export class ActPagoProgramacionCompraListFormComponent extends CommonReportForm
              actPagoDetalle.montoDeuda = element.monto;
              actPagoDetalle.monto = (element.amtToPay > actPagoDetalle.montoDeuda? actPagoDetalle.montoDeuda: element.amtToPay);
              actPagoDetalle.actPagoProgramacion = element;
+             this.modalRef.componentInstance.model.cnfLocal = element.actContrato?element.actContrato.cnfLocal : element.actComprobante.cnfLocal;
              this.modalRef.componentInstance.model.cnfMaestro = element.actContrato?element.actContrato.cnfMaestro : element.actComprobante.cnfMaestro;
              this.total = this.total + actPagoDetalle.monto;
              

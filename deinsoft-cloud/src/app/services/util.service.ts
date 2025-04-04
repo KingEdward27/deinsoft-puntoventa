@@ -372,6 +372,10 @@ export class UtilService {
   msgOkSave() {
     Swal.fire('Registro', `Grabado con éxito`, 'success');
   }
+  msgError(error:any) {
+    Swal.fire('Error', error, 'error');
+  }
+  
   msgConfirmSaveWithButtons(title: string, icon: any, lines: any) {
     let html: string = "";
     console.log(lines);

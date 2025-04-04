@@ -53,6 +53,9 @@ public class CnfMaestroServiceImpl extends CommonServiceImpl<CnfMaestro,Long, Cn
             else if(Util.isNullOrEmpty(cnfMaestro.getNroDoc())) {
                 cnfMaestro.setNroDoc("00000000");
             }
+            if (cnfMaestro.getId() == 1) {
+                throw new Exception("No puede editar los datos de este cliente");
+            }
         }
         CnfMaestro cnfMaestroResult = cnfMaestroRepository.save(cnfMaestro);
         

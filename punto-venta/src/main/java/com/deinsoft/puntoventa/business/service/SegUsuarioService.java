@@ -15,6 +15,9 @@ public interface SegUsuarioService extends CommonService<SegUsuario,Long> {
 
     public List<SegUsuario> getAllSegUsuario(SegUsuario segUsuario);
 
+    public List<SegUsuario> getAllSegUsuarioByEmpresa();
+    public List<SegUsuario> getAllSegUsuarioByEmpresaAndLocalId(long localId);
+
     public SegUsuario getSegUsuario(Long id);
 
     public SegUsuario saveSegUsuario(SegUsuario segUsuario);

@@ -63,7 +63,8 @@ export class SegUsuarioComponent extends GenericListComponent implements OnInit{
     //this.prop.childTables[0].conditions.push({"columnName":"cnf_empresa.cnf_empresa_id","value":cnfEmpresa});
     //this.prop.childTables[0].columnsForm[1].filters.push({"columnName":"cnf_empresa.cnf_empresa_id","value":cnfEmpresa});
     // this.prop.childTables[0].columnsForm[2].filters.push({"columnName":"cnf_local.cnf_empresa_id","value":cnfEmpresa});
-    //this.prop.preSave.push({columnForm:"cnf_empresa_id", "value":cnfEmpresa})
+    this.prop.preSave.push({columnForm:"estado", "value":"1"})
+    this.prop.preSave.push({columnForm:"flag_recover_password", "value":"0"})
     super.properties = this.prop;
     console.log(this.prop);
     super.ngOnInit();

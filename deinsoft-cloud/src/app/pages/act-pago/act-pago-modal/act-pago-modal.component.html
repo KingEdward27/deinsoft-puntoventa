@@ -33,7 +33,7 @@
                                             <div class="col-sm-12 col-lg-8">
                                                 <select name="model.cnfLocal" [compareWith]="compareCnfLocal"
                                                     [(ngModel)]="model.cnfLocal"
-                                                    class="form-control-sm col-sm-12 col-lg-8">
+                                                    class="form-control-sm col-sm-12 col-lg-8" readonly = "readonly" disabled >
                                                     <option *ngIf="loadingCnfLocal" [ngValue]="0" selected="selected">
                                                         Cargando...</option>
                                                     <option *ngIf="!loadingCnfLocal" [ngValue]="selectDefaultCnfLocal">

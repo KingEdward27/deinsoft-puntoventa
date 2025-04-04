@@ -5,5 +5,6 @@ export class CnfFormaPago {
 	nombre: string = "";
 	flagEstado: string = "";
 	cnfEmpresa: CnfEmpresa = new CnfEmpresa();
+	tipo:string = "";
 	token?: string = "";
 };

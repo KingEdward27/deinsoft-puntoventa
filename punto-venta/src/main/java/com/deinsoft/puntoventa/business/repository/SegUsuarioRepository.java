@@ -2,6 +2,7 @@ package com.deinsoft.puntoventa.business.repository;
 
 import java.util.List;
 
+import com.deinsoft.puntoventa.business.dto.SecurityFilterDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +18,8 @@ public interface SegUsuarioRepository extends JpaRepository<SegUsuario, Long> {
     List<SegUsuario> findByNombre(String nombre);
     
     List<SegUsuario> findByEmail(String email);
+
+    @Query(value = "select p from segUsuario p "
+            + "where p.cnfEmpresa.id = :#{#securityFilterDto.empresaId}")
+    List<SegUsuario> getAllSegUsuarioByEmpresa(@Param("securityFilterDto") SecurityFilterDto securityFilterDto);
 }

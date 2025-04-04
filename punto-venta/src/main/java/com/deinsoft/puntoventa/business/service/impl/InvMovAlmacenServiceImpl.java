@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.deinsoft.puntoventa.business.bean.ParamBean;
 import com.deinsoft.puntoventa.business.model.*;
+import com.deinsoft.puntoventa.util.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +67,7 @@ public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen,Lo
     public InvMovAlmacen saveInvMovAlmacen(InvMovAlmacen invMovAlmacen) throws Exception {
         InvMovAlmacen invMovAlmacenResult = null;
         if (invMovAlmacen.getCnfMaestro().getId() == 0) invMovAlmacen.setCnfMaestro(null);
+        if (invMovAlmacen.getInvAlmacenDestino().getId() == 0) invMovAlmacen.setInvAlmacenDestino(null);
         try {
             List<CnfNumComprobante> numComprobante = cnfNumComprobanteRepository.findByCnfTipoComprobanteIdAndCnfLocalId(
                     invMovAlmacen.getCnfTipoComprobante().getId(),
@@ -146,26 +148,30 @@ public class InvMovAlmacenServiceImpl extends CommonServiceImpl<InvMovAlmacen,Lo
         if (invMovAlmacenOptional.isPresent()) {
 
             invMovAlmacen = invMovAlmacenOptional.get();
+            invMovAlmacen.setFlagEstado(Constantes.COD_ESTADO_ANULADO);
+            invMovAlmacenRepository.save(invMovAlmacen);
+            invAlmacenProductoService.registerProductMovementAndUpdateStock(null, invMovAlmacen);
 
-            for (InvMovAlmacenDet data : invMovAlmacen.getListInvMovAlmacenDet()) {
-                List<InvAlmacenProducto> list
-                    = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
-
-                if (list.size() > 1) {
-                    throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
-                }
-                if (list.size() > 0) {
-                    InvAlmacenProducto stock = list.get(0);
-                    stock.setCnfProducto(data.getCnfProducto());
-                    stock.setInvAlmacen(invMovAlmacen.getInvAlmacen());
-                    stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
-                    invAlmacenProductoRepository.save(stock);
-                }
-                
-            }
-            invMovimientoProductoRepository.deleteByInvMovAlmacen(invMovAlmacen);
-            invMovAlmacenDetRepository.deleteByInvMovAlmacen(invMovAlmacen);
-            invMovAlmacenRepository.delete(invMovAlmacen);
+//            for (InvMovAlmacenDet data : invMovAlmacen.getListInvMovAlmacenDet()) {
+//                List<InvAlmacenProducto> list
+//                    = invAlmacenProductoRepository.findByCnfProductoIdAndInvAlmacenId(data.getCnfProducto().getId()
+//                        ,invMovAlmacen.getInvAlmacen().getId());
+//
+//                if (list.size() > 1) {
+//                    throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
+//                }
+//                if (list.size() > 0) {
+//                    InvAlmacenProducto stock = list.get(0);
+//                    stock.setCnfProducto(data.getCnfProducto());
+//                    stock.setInvAlmacen(invMovAlmacen.getInvAlmacen());
+//                    stock.setCantidad(stock.getCantidad().subtract(data.getCantidad()));
+//                    invAlmacenProductoRepository.save(stock);
+//                }
+//
+//            }
+//            invMovimientoProductoRepository.deleteByInvMovAlmacen(invMovAlmacen);
+//            invMovAlmacenDetRepository.deleteByInvMovAlmacen(invMovAlmacen);
+//            invMovAlmacenRepository.delete(invMovAlmacen);
         }
     }
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.deinsoft.puntoventa.business.model.*;
+import com.deinsoft.puntoventa.util.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,36 +92,14 @@ public class InvAlmacenProductoServiceImpl
             invMovimientoProductoRepository.deleteByActComprobante(actComprobante);
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
                 if (!data.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
-//                    if (data.getPrecioVenta() == null) {
-//                        data.setPrecioVenta(data.getPrecio());
-//                    }
 
-
-                    //actualizar stock almacen
-                    InvAlmacenProducto stock;
-//                    boolean isForAddStock = false;
-//                    if (actComprobante.getFlagIsventa().equals("1") && actComprobante.getCnfTipoComprobante().getCodigoSunat().equals("07")) {
-//                        isForAddStock = true;
-//                    }
-//                    if (!actComprobante.getFlagIsventa().equals("1") && !actComprobante.getCnfTipoComprobante().getCodigoSunat().equals("07")) {
-//                        isForAddStock = true;
-//                    }
                     boolean isForAddStock = (actComprobante.getFlagIsventa().equals("1") && actComprobante.getCnfTipoComprobante().getCodigoSunat().equals("07"))
                             || (!actComprobante.getFlagIsventa().equals("1") && !actComprobante.getCnfTipoComprobante().getCodigoSunat().equals("07"));
 
                     CnfProducto cnfProducto = cnfProductoRepository.getById(data.getCnfProducto().getId());
 
-                    updateStock(actComprobante, null, data.getCantidad(),data.getPrecioVenta(),data.getPrecio(), isForAddStock,
-                            cnfProducto, BigDecimal.ONE);
-
-                    if (!cnfProducto.getListCnfPaqueteDet().isEmpty()) {
-                        cnfProducto.getListCnfPaqueteDet().forEach(paqueteProducto -> {
-                            updateStock(actComprobante, null, data.getCantidad(),data.getPrecioVenta(),data.getPrecio(), isForAddStock,
-                                    paqueteProducto.getCnfProductoContenido(), paqueteProducto.getCantidad());
-
-                        });
-
-                    }
+                    callUpdateStockAndPackageContent(actComprobante, invMovAlmacen,actComprobante.getInvAlmacen(), isForAddStock,data.getCantidad(),
+                            data.getPrecioVenta(),data.getPrecio(),cnfProducto);
 
 
                 }
@@ -131,68 +110,26 @@ public class InvAlmacenProductoServiceImpl
             invMovimientoProductoRepository.deleteByInvMovAlmacen(invMovAlmacen);
             invMovAlmacen.getListInvMovAlmacenDet().forEach(data -> {
                 if (!data.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
-
-
+                    boolean isActive = data.getInvMovAlmacen().getFlagEstado().equals(Constantes.COD_ESTADO_ACTIVO);
                     if (data.getInvMovAlmacen().getInvTipoMovAlmacen().getNaturaleza().equals("2")) {
+
                         //SALIDA
-                        callUpdateStockAndPackageContent(actComprobante, invMovAlmacen, false,data);
+                        callUpdateStockAndPackageContent(actComprobante, invMovAlmacen, invMovAlmacen.getInvAlmacen(),
+                                !isActive,data.getCantidad()
+                                ,null,data.getPrecio(),data.getCnfProducto());
                         //ENTRADA
-                        callUpdateStockAndPackageContent(actComprobante, invMovAlmacen, true, data);
-//                        updateStock(null,invMovAlmacen, data.getCantidad(),null,
-//                                data.getPrecio(), true, data.getCnfProducto(), BigDecimal.ONE);
-//
-//                        if (!data.getCnfProducto().getListCnfPaqueteDet().isEmpty()) {
-//                            data.getCnfProducto().getListCnfPaqueteDet().forEach(paqueteProducto -> {
-//                                updateStock(actComprobante, null, data.getCantidad(), null,data.getPrecio(), true,
-//                                        paqueteProducto.getCnfProductoContenido(), paqueteProducto.getCantidad());
-//
-//                            });
-//
-//                        }
+                        callUpdateStockAndPackageContent(actComprobante, invMovAlmacen, invMovAlmacen.getInvAlmacenDestino(), isActive,data.getCantidad(),
+                                null,data.getPrecio(),data.getCnfProducto());
 
                     }
                     else {
 
                         boolean isForAddStock = !data.getInvMovAlmacen().getInvTipoMovAlmacen().getNaturaleza().equals("-1");
-                        callUpdateStockAndPackageContent(actComprobante, invMovAlmacen, isForAddStock, data);
+                        if (isActive) isForAddStock = !isForAddStock;
+                        callUpdateStockAndPackageContent(actComprobante, invMovAlmacen, invMovAlmacen.getInvAlmacen(), isForAddStock,data.getCantidad(),
+                                null,data.getPrecio(),data.getCnfProducto());
                     }
 
-//                    List<InvAlmacenProducto> list
-//                            = invAlmacenProductoRepository.findByCnfProductoId(data.getCnfProducto().getId());
-//                    if (list.size() > 1) {
-//                        throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
-//                    }
-//                    if (list.isEmpty() && data.getInvMovAlmacen().getInvTipoMovAlmacen().getNaturaleza().equals("-1")) {
-//                        throw new RuntimeException("No existe stock para el almacen y producto seleccionados");
-//                    }
-//
-//
-//                    InvAlmacenProducto invAlmacenProducto = list.stream().findFirst().orElse(null);
-//                    if (invAlmacenProducto == null) {
-//                        invAlmacenProducto = new InvAlmacenProducto();
-//                        invAlmacenProducto.setCantidad(BigDecimal.ZERO);
-//                    }
-//                    if (isForAddStock) {
-//                        invAlmacenProducto.setCantidad(invAlmacenProducto.getCantidad()
-//                                .add(data.getCantidad().multiply(BigDecimal.ONE)));
-//
-//                    } else {
-//                        invAlmacenProducto.setCantidad(invAlmacenProducto.getCantidad().multiply(BigDecimal.ONE)
-//                                .subtract(data.getCantidad().multiply(BigDecimal.ONE)));
-//                    }
-//
-//                    invAlmacenProducto.setCnfProducto(data.getCnfProducto());
-//                    invAlmacenProducto.setInvAlmacen(invMovAlmacen.getInvAlmacen());
-//                    invAlmacenProductoRepository.save(invAlmacenProducto);
-//
-//                    InvMovimientoProducto mov = new InvMovimientoProducto();
-//                    mov.setCnfProducto(data.getCnfProducto());
-//                    mov.setInvAlmacen(invMovAlmacen.getInvAlmacen());
-//                    mov.setFecha(invMovAlmacen.getFecha());
-//                    mov.setFechaRegistro(LocalDateTime.now());
-//                    mov.setCantidad(data.getCantidad().multiply(!isForAddStock ? BigDecimal.valueOf(-1) : BigDecimal.ZERO));
-//                    mov.setValor(data.getPrecio());
-//                    invMovimientoProductoRepository.save(mov);
                 }
 
             });
@@ -200,13 +137,21 @@ public class InvAlmacenProductoServiceImpl
 
     }
 
-    private void callUpdateStockAndPackageContent(ActComprobante actComprobante, InvMovAlmacen invMovAlmacen, boolean isForAddStock, InvMovAlmacenDet data) {
-        updateStock(null, invMovAlmacen, data.getCantidad(),null,
-                data.getPrecio(), isForAddStock, data.getCnfProducto(), BigDecimal.ONE);
+    private void callUpdateStockAndPackageContent(ActComprobante actComprobante, InvMovAlmacen invMovAlmacen,
+                                                  InvAlmacen invAlmacen,
+                                                  boolean isForAddStock,
+                                                  BigDecimal cantidadMov,
+                                                  BigDecimal precioVentaMov,
+                                                  BigDecimal precioMov,
+                                                  CnfProducto producto) {
+        updateStock(actComprobante, invMovAlmacen, invAlmacen, cantidadMov,null,
+                precioMov, isForAddStock, producto, BigDecimal.ONE);
 
-        if (!data.getCnfProducto().getListCnfPaqueteDet().isEmpty()) {
-            data.getCnfProducto().getListCnfPaqueteDet().forEach(paqueteProducto -> {
-                updateStock(actComprobante, null, data.getCantidad(), null, data.getPrecio(), isForAddStock,
+        if (!producto.getListCnfPaqueteDet().isEmpty()) {
+            producto.getListCnfPaqueteDet().forEach(paqueteProducto -> {
+                updateStock(actComprobante, invMovAlmacen,invAlmacen
+                        , cantidadMov, precioVentaMov,
+                        precioMov, isForAddStock,
                         paqueteProducto.getCnfProductoContenido(), paqueteProducto.getCantidad());
 
             });
@@ -232,6 +177,7 @@ public class InvAlmacenProductoServiceImpl
 
     private void updateStock(ActComprobante actComprobante,
                              InvMovAlmacen invMovAlmacen,
+                             InvAlmacen invAlmacen,
                              BigDecimal cantidadMov,
                              BigDecimal precioVentaMov,
                              BigDecimal precioMov,
@@ -239,21 +185,21 @@ public class InvAlmacenProductoServiceImpl
                              CnfProducto producto,
                              BigDecimal cantidadToMultiply) {
 
-        Long almacenId;
-        if (actComprobante != null) {
-            almacenId = actComprobante.getInvAlmacen().getId();
-        } else {
-            almacenId = invMovAlmacen.getInvAlmacen().getId();
-        }
+//        Long almacenId;
+//        if (actComprobante != null) {
+//            almacenId = actComprobante.getInvAlmacen().getId();
+//        } else {
+//            almacenId = invMovAlmacen.getInvAlmacen().getId();
+//        }
         CnfProducto cnfProducto = cnfProductoRepository.getById(producto.getId());
         List<InvAlmacenProducto> list
-                = invAlmacenProductoRepository.findByCnfProductoIdAndInvAlmacenId(cnfProducto.getId(),almacenId);
+                = invAlmacenProductoRepository.findByCnfProductoIdAndInvAlmacenId(cnfProducto.getId(),invAlmacen.getId());
 
         InvAlmacenProducto invAlmacenProducto = list.stream().findFirst().orElse(null);
         if (list.size() > 1) {
             throw new RuntimeException("No existe un único registro para el almacen y producto seleccionados");
         }
-        if (!isForAddStock && (list.size() == 0 || invAlmacenProducto.getCantidad().compareTo(cantidadMov) <= 0)) {
+        if (!isForAddStock && (list.size() == 0 || invAlmacenProducto.getCantidad().compareTo(cantidadMov) < 0)) {
             throw new RuntimeException("No existe stock para el almacen y producto seleccionados");
         }
         if (invAlmacenProducto == null) {
@@ -272,12 +218,12 @@ public class InvAlmacenProductoServiceImpl
 
         InvMovimientoProducto mov = new InvMovimientoProducto();
         if (actComprobante != null) {
-            invAlmacenProducto.setInvAlmacen(actComprobante.getInvAlmacen());
-            mov.setInvAlmacen(actComprobante.getInvAlmacen());
+            invAlmacenProducto.setInvAlmacen(invAlmacen);
+            mov.setInvAlmacen(invAlmacen);
             mov.setFecha(actComprobante.getFecha());
         } else {
-            invAlmacenProducto.setInvAlmacen(invMovAlmacen.getInvAlmacen());
-            mov.setInvAlmacen(invMovAlmacen.getInvAlmacen());
+            invAlmacenProducto.setInvAlmacen(invAlmacen);
+            mov.setInvAlmacen(invAlmacen);
             mov.setFecha(invMovAlmacen.getFecha());
         }
 
@@ -294,7 +240,7 @@ public class InvAlmacenProductoServiceImpl
 
         if (isForAddStock & actComprobante != null) {
             List<InvMovimientoProducto> listMovs
-                    = (List<InvMovimientoProducto>) invMovimientoProductoRepository.findByCnfProductoId(
+                    = (List<InvMovimientoProducto>) invMovimientoProductoRepository.findByCnfProductoIdAndInvAlmacenId(
                     producto.getId(), actComprobante.getInvAlmacen().getId());
             BigDecimal costo = BigDecimal.ZERO;
             BigDecimal costoTotal = BigDecimal.ZERO;

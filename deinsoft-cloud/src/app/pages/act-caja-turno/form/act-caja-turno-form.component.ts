@@ -14,6 +14,8 @@ import { AppService } from '@services/app.service';
 import dayjs from 'dayjs';
 import { CustomDateParserFormatter } from '@/base/util/CustomDate';
 import { ActCajaOperacionService } from '@/business/service/act-caja-operacion.service';
+import { CnfLocalService } from '@/business/service/cnf-local.service';
+import { CnfLocal } from '@/business/model/cnf-local.model';
 
 @Component({
   selector: 'app-act-caja-turno-form',
@@ -45,7 +47,9 @@ export class ActCajaTurnoFormComponent implements OnInit {
   listActCaja: any;
   actCaja: SegUsuario = new SegUsuario();
   loadingActCaja: boolean = false;
-
+  selectDefaultCnfLocal: any = { id: 0, nombre: "- Seleccione -" }; 
+  listCnfLocal: any = [];
+  loadingCnfLocal: boolean = false;
   protected redirect: string = "/act-caja-turno";
   selectedOption: any;
   passwordRepeat: any;
@@ -56,6 +60,7 @@ export class ActCajaTurnoFormComponent implements OnInit {
     private segUsuarioService: SegUsuarioService,
     private actCajaService:ActCajaService,
     private route: ActivatedRoute,
+    private cnfLocalService: CnfLocalService,
     private ngbCalendar: NgbCalendar,
     private dateAdapter: NgbDateAdapter<dayjs.Dayjs>,
     private appService:AppService,
@@ -84,8 +89,8 @@ export class ActCajaTurnoFormComponent implements OnInit {
     + ":" + this.leftPad(date.getSeconds().toString(),2,'0') :''
   }
   loadData() {
-    this.getListActCaja();
-    this.getListSegUsuario();
+    this.getListCnfLocal();
+    
     return this.route.paramMap.subscribe(params => {
       this.id = params.get('id')!;
       console.log(this.id);
@@ -99,11 +104,10 @@ export class ActCajaTurnoFormComponent implements OnInit {
           this.isDataLoaded = true;
           this.model.fechaCierre = this.formatDateAndTime(new Date())
           //this.titulo = 'Editar ' + this.nombreModel;
-
           let total = this.model.montoApertura
           this.actCajaOperacionService.getAllByActCajaTurnoId(this.id).subscribe(data =>{
             console.log(data);
-            
+            this.getDataByLocal();
             data.forEach(element => {
               if(element.flagIngreso == '1') {
                 total = total + element.monto
@@ -152,11 +156,11 @@ export class ActCajaTurnoFormComponent implements OnInit {
         this.loadingActCaja = false;
       })
     }else{
-      return this.actCajaService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
-        this.listActCaja = data;
-        this.loadingActCaja = false;
-      })
-    }
+      return this.actCajaService.getAllByCnfLocalId(cnfEmpresa,this.model.actCaja.cnfLocal.id).subscribe(data => {
+          this.listActCaja = data;
+          this.loadingActCaja = false;
+        })
+      }
   }
   compareActCaja(a1: ActCaja, a2: ActCaja): boolean {
     if (a1 === undefined && a2 === undefined) {
@@ -170,12 +174,54 @@ export class ActCajaTurnoFormComponent implements OnInit {
     this.loadingSegUsuario = true;
     let user = this.appService.getProfile()
     let cnfEmpresa = user.profile.split("|")[1];
-    return this.segUsuarioService.getAllDataCombo().subscribe(data => {
-      this.listSegUsuario = data.filter(item => item.id == user.id);
-      this.loadingSegUsuario = false;
-    })
+      return this.segUsuarioService.getAllDataByEmpresaAndLocal(this.model.actCaja.cnfLocal.id).subscribe(data => {
+        this.listSegUsuario = data;
+        this.loadingSegUsuario = false;
+      })
   }
   compareSegUsuario(a1: SegUsuario, a2: SegUsuario): boolean {
+    if (a1 === undefined && a2 === undefined) {
+      return true;
+    }
+
+    return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
+      ? false : a1.id === a2.id;
+  }
+
+  getListCnfLocal() {
+    this.loadingCnfLocal = true;
+    let user = this.appService.getProfile();
+    let cnfEmpresa = this.appService.getProfile().profile.split("|")[1];
+    if(cnfEmpresa == '*') {
+      return this.cnfLocalService.getAllDataCombo().subscribe(data => {
+        this.listCnfLocal = data;
+        this.loadingCnfLocal = false;
+      })
+    }else{
+      return this.cnfLocalService.getAllByCnfEmpresaId(cnfEmpresa).subscribe(data => {
+        this.listCnfLocal = data;
+        this.loadingCnfLocal = false;
+
+        
+        if(this.listCnfLocal.length == 1) {
+          this.cnfLocalService.getData(this.listCnfLocal[0].id).subscribe(data => {
+            this.model.actCaja.cnfLocal = data
+            this.getDataByLocal();
+            
+          })
+        }
+      })
+    }
+    
+
+  }
+
+  getDataByLocal(){
+    this.getListActCaja();
+    this.getListSegUsuario();
+
+  }
+  compareCnfLocal(a1: CnfLocal, a2: CnfLocal): boolean {
     if (a1 === undefined && a2 === undefined) {
       return true;
     }

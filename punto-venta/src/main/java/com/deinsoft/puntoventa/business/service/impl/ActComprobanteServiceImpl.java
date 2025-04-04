@@ -206,6 +206,9 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
                 actComprobante.addActComprobanteDetalle(data);
             });
+            actComprobante.getListActMedioPagoDetalle().forEach(data -> {
+                actComprobante.addActMedioPagoDetalle(data);
+            });
             actComprobanteResult = actComprobanteRepository.save(actComprobante);
             if (actComprobante.getId() != 0) {
                 if (actComprobanteResult.getCnfLocal().getCnfEmpresa().getFlagVentaRapida() == 1) {
@@ -270,21 +273,20 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
         List<ActCajaTurno> actCajaTurno = actCajaTurnoRepository.findBySegUsuarioId
         (auth.getLoggedUserdata().getId(), listRoles());
         actCajaTurno = actCajaTurno.stream()
-                .filter(item -> item.getEstado().equals("1"))
+                .filter(item -> item.getEstado().equals(Constantes.COD_ESTADO_ACTIVO))
                 .collect(Collectors.toList());
         if (actCajaTurno.isEmpty()) {
             throw new Exception("El usuario no tiene caja aperturada");
         }
 
         saveActPagoProgramacionOrCajaOperacion(actComprobante, actCajaTurno,
-                actComprobante.getFlagIsventa().equals("1") ? true : false);
+                actComprobante.getFlagIsventa().equals(Constantes.FLAG_IS_VENTA) ? false : true);
 
         actComprobante.setFlagEstado("2");
         ActComprobante actComprobanteDb = actComprobanteRepository.save(actComprobante);
 
         //send to sunat
-        if (actComprobanteDb.getCnfTipoComprobante().getFlagElectronico().equals("1")
-                && actComprobanteDb.getFlagIsventa().equals("1")) {
+        if (actComprobanteDb.getCnfTipoComprobante().getFlagElectronico().equals("1")) {
             RespuestaPSE respuestaPSE = sendApi(actComprobanteDb.getId());
         }
 

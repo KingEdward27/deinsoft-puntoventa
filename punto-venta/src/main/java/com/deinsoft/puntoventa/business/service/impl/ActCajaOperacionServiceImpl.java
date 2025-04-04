@@ -97,34 +97,34 @@ public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperac
 
     @Override
     public List<ActCajaOperacion> getReportActCajaOperacion(ParamBean paramBean) {
-        List<ActCajaOperacion> actCajaOperacionList = (List<ActCajaOperacion>) actCajaOperacionRepository.getReportActCajaOperacion(paramBean);
+        List<ActCajaOperacion> actCajaOperacionList = (List<ActCajaOperacion>) actCajaOperacionRepository.getReportActCajaOperacion(paramBean,listRoles());
         CnfLocal cnfLocal = cnfLocalRepository.getById(paramBean.getCnfLocal().getId());
         return actCajaOperacionList.stream()
-                .filter(predicate -> {
-                    System.out.println(predicate.toString());
-                    if (paramBean.getCnfLocal().getId() == 0) {
-                        return true;
-                    } else {
-                        if (predicate.getActComprobante() != null && predicate.getActComprobante().getCnfLocal().getId() == paramBean.getCnfLocal().getId()) {
-                            return true;
-                        } else if (predicate.getActPago() != null) {
-                            return predicate.getActPago().getListActPagoDetalle().stream().anyMatch(data -> {
-                                if (data.getActPagoProgramacion().getActComprobante() != null) {
-                                    return data.getActPagoProgramacion().getActComprobante().getCnfLocal().getId() == paramBean.getCnfLocal().getId();
-                                }
-                                if (data.getActPagoProgramacion().getActContrato() != null) {
-                                    return data.getActPagoProgramacion().getActContrato().getCnfLocal().getId() == paramBean.getCnfLocal().getId();
-                                }
-                                return false;
-                            });
-                        } else if (predicate.getActComprobante()== null && predicate.getActPago() == null 
-                                && predicate.getActCajaTurno().getActCaja().getCnfEmpresa().getId() == cnfLocal.getCnfEmpresa().getId()) {
-                            System.out.println(predicate.toString());
-                            return true;
-                        }
-                        return false;
-                    }
-                })
+//                .filter(predicate -> {
+//                    System.out.println(predicate.toString());
+//                    if (paramBean.getCnfLocal().getId() == 0) {
+//                        return true;
+//                    } else {
+//                        if (predicate.getActComprobante() != null && predicate.getActComprobante().getCnfLocal().getId() == paramBean.getCnfLocal().getId()) {
+//                            return true;
+//                        } else if (predicate.getActPago() != null) {
+//                            return predicate.getActPago().getListActPagoDetalle().stream().anyMatch(data -> {
+//                                if (data.getActPagoProgramacion().getActComprobante() != null) {
+//                                    return data.getActPagoProgramacion().getActComprobante().getCnfLocal().getId() == paramBean.getCnfLocal().getId();
+//                                }
+//                                if (data.getActPagoProgramacion().getActContrato() != null) {
+//                                    return data.getActPagoProgramacion().getActContrato().getCnfLocal().getId() == paramBean.getCnfLocal().getId();
+//                                }
+//                                return false;
+//                            });
+//                        } else if (predicate.getActComprobante()== null && predicate.getActPago() == null
+//                                && predicate.getActCajaTurno().getActCaja().getCnfEmpresa().getId() == cnfLocal.getCnfEmpresa().getId()) {
+//                            System.out.println(predicate.toString());
+//                            return true;
+//                        }
+//                        return false;
+//                    }
+//                })
                 .filter(predicate -> {
                     if (paramBean.getCnfMaestro().getId() == 0) {
                         return true;
@@ -151,4 +151,14 @@ public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperac
                 })
                 .collect(Collectors.toList());
     }
+//    public List<ActCajaOperacion> getReportByActCajaTurno(long id) {
+//        getAllActCajaOperacionByActPago(id).stream()
+//                .collect(Collectors.groupingBy(item -> {
+//                    if (item.getActComprobante() != null) {
+//                        return item.getActComprobante().getCnfFormaPago().getNombre();
+//                    }
+//                    return 0L;
+//                        },
+//                        Collectors.summingDouble(mapper -> mapper.getMonto().floatValue())));
+//    }
 }

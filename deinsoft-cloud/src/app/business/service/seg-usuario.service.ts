@@ -45,5 +45,13 @@ export class SegUsuarioService {
   public recoverPassword(form:any): Observable<SegUsuario>{
     return this.http.post<SegUsuario>(this.url+'/recover-password',form); 
   }
+  public getAllDataComboByEmpresa():Observable<any>{
+;    return this.http.get<SegUsuario[]>(`${this.url}/get-all-seg-usuario-combo-by-empresa`);
+  }
+
+  public getAllDataByEmpresaAndLocal(localId:number):Observable<any>{
+    let params = new HttpParams().set("localId",localId.toString());
+;    return this.http.get<SegUsuario[]>(`${this.url}/get-all-seg-usuario-combo-by-local`,{params});
+  }
 }
 

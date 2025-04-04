@@ -91,7 +91,7 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
     this.titleExport = "Lista de Cuentas x Cobrar/x Pagar"
     
 
-    this.selectThisMonth();
+    //this.selectThisMonth();
     // this.model.fechaVencimiento 
     // = this.deps.dateAdapter.toModel(this.deps.ngbCalendar.getToday()).toString();
     super.ngOnInit();

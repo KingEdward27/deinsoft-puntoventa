@@ -347,7 +347,7 @@
                                                 </a>
                                             </div>
                                             <div *ngIf="option === '1'" class="col-xl-6 col-lg-6 col-md-12" style="margin-left: 20x;">
-                                                <button class="btn btn-primary col-12" (keyup.enter)= "save()" (click)="save()" data-toggle="modal" tabindex="10">
+                                                <button class="btn btn-primary col-12" (keyup.enter)= "preSave()" (click)="preSave()" data-toggle="modal" tabindex="10">
                                                     <i [ngClass]="id ? 'fa fa-pen' : 'fa fa-plus'"></i> {{ id ?
                                                     ('webpagos.btnEdit' | translate):('webpagos.btnSave' | translate) }}
                                                     </button>

@@ -53,6 +53,8 @@ public class Cabecera {
     private List<Detalle> lista;
 
     private List<Tributo> listaTax;
+
+    private String is_venta;
     
     public List<Detalle> getLista() {
         return lista;
@@ -316,6 +318,14 @@ public class Cabecera {
 
     public void setListaTax(List<Tributo> listaTax) {
         this.listaTax = listaTax;
+    }
+
+    public String getIs_venta() {
+        return is_venta;
+    }
+
+    public void setIs_venta(String is_venta) {
+        this.is_venta = is_venta;
     }
 
     public Cabecera() {

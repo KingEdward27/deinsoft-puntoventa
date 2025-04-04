@@ -54,7 +54,12 @@ public class ActCajaServiceImpl extends CommonServiceImpl<ActCaja,Long, ActCajaR
         }
     }
     public List<ActCaja> getAllActCajaByCnfEmpresa(long id) {
-        List<ActCaja> CnfLocalList = (List<ActCaja>) actCajaRepository.findByCnfEmpresaId(id);
+        List<ActCaja> CnfLocalList = (List<ActCaja>) actCajaRepository.findByCnfEmpresaId(id,listRoles());
+        return CnfLocalList;
+    }
+
+    public List<ActCaja> getAllActCajaByCnfLocal(long id, long localId) {
+        List<ActCaja> CnfLocalList = (List<ActCaja>) actCajaRepository.findByCnfEmpresaIdAndLocalId(id,localId);
         return CnfLocalList;
     }
 }

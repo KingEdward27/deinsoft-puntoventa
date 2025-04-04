@@ -75,6 +75,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
                                     <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label for="numero"
@@ -144,26 +145,109 @@
                                     <div class="col-lg-12 col-sm-12 col-xs-12">
                                         <div class="form-group-sm row">
                                             <label
+                                                class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.cnf_tipo_comprobante'
+                                                |
+                                                translate}} <span *ngIf="loadingCnfTipoComprobante"
+                                                    class="spinner-border spinner-border-sm mr-1"></span></label>
+                                            <div class="col-sm-12 col-lg-9">
+                                                <select name="model.cnfTipoComprobante" [compareWith]="compareCnfTipoComprobante"
+                                                    [(ngModel)]="model.cnfTipoComprobante"
+                                                    class="form-control-sm col-sm-12 col-lg-6">
+                                                    <option *ngIf="loadingCnfTipoComprobante" [ngValue]="0" selected="selected">
+                                                        Cargando...</option>
+                                                    <option *ngIf="!loadingCnfTipoComprobante"
+                                                        [ngValue]="selectDefaultCnfTipoComprobante">
+                                                        {{selectDefaultCnfTipoComprobante.nombre}}</option>
+                                                    <option *ngFor="let item of listCnfTipoComprobante; index as i;"
+                                                        [ngValue]="item">{{item.nombre}}
+                                                    </option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                                        <div class="form-group-sm row">
+                                            <label
                                                 class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_comprobante.flag_estado'
                                                 |
                                                 translate}} </label>
                                             <div class="col-sm-12 col-lg-9">
                                                 <select name="model.flagEnvioPse" [compareWith]="comparePerfil"
                                                     [(ngModel)]="model.flagEnvioPse" class="form-control-sm col-sm-12 col-lg-6">
-                                                    <option [ngValue]="2">Enviado a SUNAT</option>
                                                     <option [ngValue]="-1">Todos</option>
+                                                    <option [ngValue]="2">Enviado a SUNAT</option>
                                                     <option [ngValue]="0">Rechazado</option>
                                                 </select>
     
                                             </div>
                                         </div>
                                     </div>
-
+                                    
                                 </div>
                             </div>
 
                         </div>
 
+                        <!-- <div class="col-lg-12 col-sm-12 col-xs-12 pt-2 row" *ngIf="listData && listData.length > 0" style="margin:auto">
+                            <div class="col-xl-4 col-lg-4 col-sm-12">
+                                <table class="col-sm-12 col-12 table table-sm text-center table-striped table-bordered table-td-valign-middle table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th style="padding: 0px 10px 0px 10px;">Enviados</th>
+                                            <th style="padding: 0px 10px 0px 10px;">Rechazados</th>
+                                            <th style="width: 40%;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><a class="stategreen">{{enviados}}</a></td>
+                                            <td><a class="statered">{{rechazados}}</a></td>
+                                            <td><a style="font-weight: bold;">{{totalcp}}</a></td>
+                                        </tr>
+                                    </tbody>
+                                
+                                </table>
+                            </div>
+                            <div class="alert alert-warning col-sm-12 col-lg-8 p-1" style="font-weight: bold; font-size: 18px;" *ngIf="error"><i class="fa fa-exclamation"></i> {{error}}</div>   
+                        </div> -->
+                        <div class="form-group row">
+                                        <div class="col-lg-3 col-sm-12">
+                                            <div class="card">
+                                                <div class="comprobante-title">Comprobantes aceptados por SUNAT</div>
+                                                <div class="comprobante-number comprobante-aceptados">{{enviados}}</div>
+                                            </div>
+                                            
+                                        </div>
+                                        <!-- <div class="col-lg-4 col-sm-12">
+                                            <div class="card">
+                                                <div class="comprobante-title">Comprobantes con excepción por SUNAT</div>
+                                                <div class="comprobante-number comprobante-excepcion">0</div>
+                                            </div>
+                                            
+                                        </div> -->
+                                        <div class="col-lg-3 col-sm-12">
+                                            <div class="card">
+                                                <div class="comprobante-title">Comprobantes rechazados por SUNAT</div>
+                                                <div class="comprobante-number comprobante-rechazados">{{rechazados}}</div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-lg-3 col-sm-12">
+                                            <div class="card">
+                                                <div class="comprobante-title">Comprobantes que no aplican envío</div>
+                                                <div class="comprobante-number comprobante-rechazados">{{totalNoCp}}</div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-lg-3 col-sm-12">
+                                            <div class="card">
+                                                <div class="comprobante-title">Total Comprobantes</div>
+                                                <div class="comprobante-number comprobante-aceptados">{{totalcp}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        
                         <div class="form-group row">
                             <div class="col-sm-12" style="padding-top: 20px;">
                                 <div class="row justify-content-center">
@@ -198,6 +282,8 @@
                                                     translate}}</th>
                                                 <th class="text-nowrap">
                                                     {{'webpagos.act_comprobante.cnf_tipo_comprobante' | translate}}</th>
+                                                <th class="text-nowrap">
+                                                        {{'webpagos.act_comprobante.cnf_forma_pago' | translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.act_comprobante.numero' |
                                                     translate}}</th>
                                                 <th class="text-nowrap">{{'webpagos.cnf_maestro.nro_doc' | translate}}</th>
@@ -219,6 +305,7 @@
                                                     <td>{{item.cnfLocal.nombre}}</td>
                                                     <td>{{item.invAlmacen.nombre}}</td>
                                                     <td>{{item.cnfTipoComprobante.nombre}}</td>
+                                                    <td>{{item.cnfFormaPago.nombre}}</td>
                                                     <td>{{item.serie + '-' +item.numero}}</td>
                                                     <td>{{item.cnfMaestro.nroDoc}}
                                                     <td>{{item.cnfMaestro.razonSocial}}
@@ -257,6 +344,7 @@
                                             <tr>
                                                 <td colspan = "10">Total:</td>
                                                 <td class="content-number">{{(listData?listData[0]:null)?.cnfMoneda.simbolo}} {{total| number:'1.2-2'}}</td>
+                                                <td colspan = "10"></td>
                                             </tr>
                                         </tfoot>
                                     </table>

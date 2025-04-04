@@ -7,6 +7,9 @@ import { ActCajaTurnoService } from '@/business/service/act-caja-turno.service';
 import { CommonReportFormComponent, MyBaseComponentDependences } from '../../reports/base/common-report.component';
 import { NgbDateParserFormatter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { CustomAdapter, CustomDateParserFormatter } from '../../../base/util/CustomDate';
+import { data } from 'jquery';
+import { CommonService } from '@/base/services/common.service';
+import { UpdateParam } from '@/base/components/model/UpdateParam';
 @Component({
   selector: 'app-act-caja-turno-list',
   templateUrl: './act-caja-turno-list.component.html',
@@ -23,7 +26,8 @@ export class ActCajaTurnoListComponent extends CommonReportFormComponent impleme
   nameSearch: string = "";
   modelSearch: ActCajaTurno = new ActCajaTurno();
   dataTable!: DataTables.Api;
-  constructor(private actCajaTurnoService: ActCajaTurnoService, public deps: MyBaseComponentDependences) {
+  business:string = 'act-caja-turno'
+  constructor(private actCajaTurnoService: ActCajaTurnoService, public deps: MyBaseComponentDependences,private commonService: CommonService) {
     super(deps);
   }
   ngOnInit(): void {
@@ -85,4 +89,57 @@ export class ActCajaTurnoListComponent extends CommonReportFormComponent impleme
 
     });
   }
+  // print(item: any) {
+  //   console.log(item);
+    
+  //   this.actCajaTurnoService.getReportCierre(item.id).subscribe(data => {
+      
+  //     console.log(data);
+      
+  //   });
+  // }
+  printTicketChild(item: any){
+    let myMap = new Map();
+    myMap.set("id", item.id);
+    myMap.set("tipo", 2);
+    let mp = new UpdateParam();
+    const convMapDetail: any = {};
+    myMap.forEach((val: string, key: string) => {
+      convMapDetail[key] = val;
+    });
+    console.log(convMapDetail);
+    mp.map = convMapDetail;
+    this.commonService.updateParam = mp;
+    
+    this.commonService.genericPostRequest("/api/business/"+this.business+"/get-cierre-act-caja-turno", mp, 'blob').subscribe(data => {
+      console.log(data);
+      if (data.type != 'application/json') {
+        var contentType = 'application/pdf';
+        var extension = "pdf";
+
+        if (data.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+          contentType = data.type;
+          extension = "xlsx";
+        }
+        const blob = new Blob([data], { type: contentType });
+        this.generateAttachment("cierre_caja",blob, extension);
+      }
+
+    });
+    // console.log("enviando a imprimir: ",this.properties.listData);
+  }
+
+  // generateAttachment(blob: Blob, extension: string) {
+  //   const data = window.URL.createObjectURL(blob);
+  //   const link = document.createElement('a');
+  //   link.href = data;
+  //   link.download = "report." + extension;
+  //   link.dispatchEvent(new MouseEvent('click', {
+  //     bubbles: true, cancelable: true, view: window
+  //   }));
+  //   setTimeout(() => {
+  //     window.URL.revokeObjectURL(data);
+  //     link.remove
+  //   }, 100);
+  // }
 }
