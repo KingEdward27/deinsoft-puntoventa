@@ -111,6 +111,36 @@ public class ActComprobanteController extends CommonController<ActComprobante, L
         return ResponseEntity.status(HttpStatus.CREATED).body(actComprobanteResult);
     }
 
+    @PostMapping(value = "/save-act-comprobante-compra")
+    public ResponseEntity<?> saveActComprobanteCompra
+            (@Valid @RequestBody ActComprobante actComprobante, BindingResult result, HttpServletRequest request) throws  Exception{
+        if (result.hasErrors()) {
+            return this.validar(result);
+        }
+        Map<String, Object> errores = new HashMap<>();
+        if(actComprobante.getCnfMaestro().getId() == 0){
+            errores.put("cnfMaestro", " Debe seleccionar al proveedor");
+        }
+        if(actComprobante.getCnfFormaPago().getId() == 0){
+            errores.put("cnfFormaPago", " Debe seleccionar la forma de pago");
+        }
+        if(actComprobante.getCnfMoneda().getId() == 0){
+            errores.put("cnfMoneda", " Debe seleccionar la moneda");
+        }
+        if(actComprobante.getCnfLocal().getId() == 0){
+            errores.put("cnfLocal", " Debe seleccionar el Local");
+        }
+        if(!errores.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errores);
+        }
+        SegUsuario segUsuario = auth.getLoggedUserdata();
+        actComprobante.setSegUsuario(segUsuario);
+        ActComprobante actComprobanteResult = actComprobanteService.saveActComprobanteCompra(actComprobante);
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(actComprobanteResult);
+    }
+
     @PostMapping(value = "/pre-save-act-comprobante")
     public ResponseEntity<?> preSaveActComprobante
         (@Valid @RequestBody ActComprobante actComprobante, BindingResult result) throws  Exception{
@@ -273,6 +303,25 @@ public class ActComprobanteController extends CommonController<ActComprobante, L
         return ResponseEntity.status(HttpStatus.CREATED).headers(headers).contentType(mediaType).body("Ocurrió un error comunicandose con el api facturador");
         
     }
+
+    @PostMapping(value = "/send-to-print")
+    public ResponseEntity<?> sendToPrint(@RequestBody UpdateParam param) throws ParseException, Exception {
+        HttpHeaders headers = new HttpHeaders();
+        MediaType mediaType = MediaType.APPLICATION_PDF;
+        Map<String, Object> map = param.getMap();
+        String id = map.get("id").toString();
+        try {
+            actComprobanteService.sendToPrint(new Long(id));
+            return ResponseEntity.noContent().build();
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
+
+        }
+
+
+    }
+
     @PostMapping(value = "/generateSireTxt")
     public ResponseEntity<?> generateTxt(@RequestBody ParamBean paramBean, HttpServletResponse response) throws Exception {
         GeneratedFile data = null;

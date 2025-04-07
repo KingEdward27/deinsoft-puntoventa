@@ -14,12 +14,17 @@
 
                     <div class="col-sm-12" style="padding-top: 20px;">
                         <div class="row justify-content-center">
-                            <div class="col-lg-6  col-sm-6 col-xs-5" style="margin-left: 50x;">
+                            <div class="col-lg-4  col-sm-12 col-xs-12">
+                                <button (click) = "ticketChild2()" class="btn btn-outline-secondary col-12">
+                                    <i class="fa fa-file-pdf"></i> {{'webpagos.btnTicket2' | translate }}
+                                </button>
+                            </div>
+                            <div class="col-lg-4  col-sm-12 col-xs-12" >
                                 <button (click) = "ticketChild()" class="btn btn-outline-secondary col-12">
                                     <i class="fa fa-file-pdf"></i> {{'webpagos.btnTicket' | translate }}
                                 </button>
                             </div>
-                            <div class="col-lg-6 col-sm-6 col-xs-5" style="margin-left: 20x;">
+                            <div class="col-lg-4 col-sm-12 col-xs-12">
                                 <button (click) = "a4()" class="btn btn-outline-secondary col-12">
                                     <i class="fa fa-file-pdf"></i> {{ 'webpagos.btnA4' | translate }}
                                 </button>

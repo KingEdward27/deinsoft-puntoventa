@@ -18,13 +18,15 @@ export class CnfLocalComponent extends GenericListComponent implements OnInit{
     "title": "Locales",
     "columnsList":[{tableName: "cnf_local", columnName:"nombre",filterType:"text"},
                    {tableName: "cnf_local", columnName:"direccion",filterType:"text"},
-                   {tableName: "cnf_empresa",columnName:"nombre",filterType:"none"}],
+                   {tableName: "cnf_empresa",columnName:"nombre",filterType:"none"},
+                   {tableName: "cnf_local",columnName:"impresora_nombre",filterType:"none"}],
     //"columnsList":["name","address","cnf_company.name","cnf_district.name"],
     "foreignTables":[{"tableName":"cnf_empresa","idValue":"cnf_empresa_id"}],
     "columnsForm":[{tableName: "cnf_empresa", "columnName":"nombre","type":"select",
                     loadState : 1,relatedBy:"cnf_empresa_id",filters:[]},
                    {tableName: "cnf_local", columnName:"nombre",type:"input"},
-                   {tableName: "cnf_local", columnName:"direccion",type:"input"}
+                   {tableName: "cnf_local", columnName:"direccion",type:"input"},
+                   {tableName: "cnf_local", columnName:"impresora_nombre",type:"input"}
                    
            ],
     //filters sería para filtros adicionales

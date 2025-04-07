@@ -43,7 +43,7 @@ public interface ActComprobanteService extends CommonService<ActComprobante,Long
     
     public List<ActComprobante> getReportActComprobante(ParamBean paramBean);
     
-    public String invalidate(long id)  throws Exception;
+    public String invalidate(long id) throws Exception;
     
     void validate(long id) throws Exception;
     
@@ -54,6 +54,7 @@ public interface ActComprobanteService extends CommonService<ActComprobante,Long
     List<ReporteContableDto> getListaReporteContable (Long cnfLocalId);
     
     RespuestaPSE sendApi(long id);
+    void sendToPrint(long id) throws Exception;
     
     public Map<String, Object> getDashboardActComprobantes(ParamBean param);
     

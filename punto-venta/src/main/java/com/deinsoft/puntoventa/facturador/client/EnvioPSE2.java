@@ -12,6 +12,7 @@ package com.deinsoft.puntoventa.facturador.client;
 //import entidades.Detalle_Venta;
 //import entidades.Formatos;
 //import facturacionelectronica.util.Constantes;
+import com.deinsoft.puntoventa.business.exception.BusinessException;
 import com.deinsoft.puntoventa.business.model.ActComprobante;
 import com.deinsoft.puntoventa.business.model.ActComprobanteDetalle;
 import com.deinsoft.puntoventa.framework.util.Formatos;
@@ -357,6 +358,57 @@ public class EnvioPSE2 {
 //            System.out.println(Util.exceptionToString(e));
             e.printStackTrace();
            return new RespuestaPSE("003", "Error inesperado: "+e.getMessage());
+        }
+    }
+    public String print(String jsonBody) {
+        boolean result = false;
+        String respuesta = null;
+        System.out.println("jsonBody: "+jsonBody);
+        try {
+            URL url = new URL(this.url);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Accept", "application/json");
+//            conn.setRequestProperty("Authorization", this.token);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.connect();
+
+            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+            writer.write(jsonBody);
+            writer.close();
+
+            BufferedReader br = null;
+            if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
+                br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+                result = true;
+            } else {
+                br = new BufferedReader(new InputStreamReader((conn.getErrorStream())));
+                result = false;
+            }
+            String output, jsonString = "";
+            System.out.println("output is-----------------");
+
+            while ((output = br.readLine()) != null) {
+                System.out.println(output);
+                jsonString = jsonString + output;
+            }
+            respuesta = jsonString;
+
+            return respuesta;
+        } catch (ConnectException e) {
+//            System.out.println(Util.exceptionToString(e));
+            e.printStackTrace();
+            throw new BusinessException("Error de conexión: "+e.getMessage());
+        }catch (IOException e) {
+//            System.out.println(Util.exceptionToString(e));
+            e.printStackTrace();
+            throw new BusinessException("Error en lectura de archivos: "+e.getMessage());
+        }catch (Exception e) {
+//            System.out.println(Util.exceptionToString(e));
+            e.printStackTrace();
+            throw new BusinessException("Error inesperado: "+e.getMessage());
         }
     }
 }

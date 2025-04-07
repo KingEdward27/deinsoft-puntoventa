@@ -281,7 +281,7 @@ export class GenericFormComponent extends CommonService implements OnInit {
       if (element.tableName == tableName) {
         this.properties.columnsForm = element.columnsForm;
         this.properties.tableName = element.tableNameDetail
-        element.preSave.forEach(element2 => {
+        element.preSave?.forEach(element2 => {
           this.properties.preSave.push(element2)
         });
       }

@@ -22,6 +22,7 @@ export class UserComponent implements OnInit {
         this.empresa = this.user.profile.split("|")[3] == "*" ? "TODOS" : this.user.profile.split("|")[3]
         if (this.user.profile.split("|")[4] == "*" ) {
             this.local = "TODOS"
+            this.perfil.push(this.user.profile.split("|")[0] + "|" + "TODOS LOS LOCALES" )
         } else {
             if (this.user.profile.split(";").length > 1){
                 let arrayLocales = this.user.profile.split(";");
@@ -29,7 +30,7 @@ export class UserComponent implements OnInit {
                     this.perfil.push(element.split("|")[4] + "|"+ element.split("|")[0])
                 });
             } else{
-                this.perfil.push(this.user.profile.split("|")[4] + "|" + this.user.profile.split("|")[0])
+                this.perfil.push(this.user.profile.split("|")[0] + "|" + this.user.profile.split("|")[4] )
             }
         }
         // console.log("asd: ", this.user);

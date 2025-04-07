@@ -88,6 +88,9 @@ public class ActPagoServiceImpl extends CommonServiceImpl<ActPago,Long, ActPagoR
         if (actCajaTurno.isEmpty()) {
             throw new Exception("El usuario no tiene caja aperturada");
         }
+        if (actPago.getCnfTipoComprobante().getFlagElectronico().equals("1")) {
+            throw new Exception("No puede generar comprobantes electrónicos en esta opción");
+        }
         CnfLocal local;
         if (actPago.getListActPagoDetalle().iterator().next()
                 .getActPagoProgramacion().getActContrato() != null) {

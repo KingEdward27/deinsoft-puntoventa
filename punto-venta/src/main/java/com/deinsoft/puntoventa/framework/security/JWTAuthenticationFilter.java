@@ -88,7 +88,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         LOGGER.info("expirationDate: " + expirationDate);
         String username = ((UserDetails) auth.getPrincipal()).getUsername();
         SecUser usuario = secUserRepository.findByName(username); 
-        usuario.setEmpresaPrincipal(usuario.getListSecRoleUser().stream().findFirst().orElse(new SecRoleUser()) .getEmpresa());
+        usuario.setEmpresaPrincipal(usuario.getListSecRoleUser().stream().findFirst()
+                .orElse(new SecRoleUser()) .getEmpresa());
         usuario.setPassword(null);
         
 //        ActCajaTurno caja = actCajaTurnoRepository.findBySegUsuarioId(usuario.getId())

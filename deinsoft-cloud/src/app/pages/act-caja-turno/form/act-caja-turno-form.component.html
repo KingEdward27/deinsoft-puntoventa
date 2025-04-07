@@ -20,8 +20,6 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <h4 style="border-bottom: solid 1px;padding-bottom: 6px;">{{'webpagos.register' | translate}} -
-                        {{'webpagos.act_caja_turno.home.title' | translate}}</h4>
                     <form class="col-sm-12" style="padding-top: 6px;">
                         
                         <div class="form-group-sm row">
@@ -32,7 +30,7 @@
                                     class="spinner-border spinner-border-sm mr-1"></span><span
                                     style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
                             <div class="col-sm-12 col-lg-9">
-                                <select name="model.actCaja.cnfLocal" [compareWith]="compareCnfLocal"
+                                <select name="model.actCaja.cnfLocal" [disabled]="id" [compareWith]="compareCnfLocal"
                                     [(ngModel)]="model.actCaja.cnfLocal"
                                     class="form-control col-sm-12 col-lg-6"
                                     (change)="getDataByLocal()">
@@ -131,7 +129,7 @@
                                 translate}}</label>
                             <div class="col-sm-12 col-lg-9">
                                 <input type="number" [(ngModel)]="model.montoCierre" maxlength="200"
-                                    name="montoCierre" id="montoCierre"
+                                    name="montoCierre" [disabled]="id" id="montoCierre"
                                     class="form-control col-sm-12 col-lg-6" placeholder="Ingrese montoCierre" />
                                 <div class="alert alert-danger col-sm-12 col-lg-6" *ngIf="error?.montoCierre">{{
                                     error.montoCierre }}</div>

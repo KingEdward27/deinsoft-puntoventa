@@ -59,7 +59,9 @@ public class ActCajaOperacionServiceImpl extends CommonServiceImpl<ActCajaOperac
                 throw new Exception("No puede editar esta operación");
             }
         }
-        
+        if (!actCajaOperacion.getFlagIngreso().equals("2")) {
+            throw new Exception("Su empresa solo permite registrar egresos en esta operación");
+        }
         ActCajaOperacion actCajaOperacionResult = actCajaOperacionRepository.save(actCajaOperacion);
         return actCajaOperacionResult;
     }

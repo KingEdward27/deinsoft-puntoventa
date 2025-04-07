@@ -38,5 +38,5 @@ public interface CnfMaestroRepository extends JpaRepository<CnfMaestro, Long> {
     )
     List<CnfMaestro> getAllCnfMestroTypeHead(@Param("nombre") String nombre);
     
-    CnfMaestro findByNroDoc(String nroDoc);
+    CnfMaestro findByNroDocAndCnfEmpresaId(String nroDoc,Long empresaId);
 }

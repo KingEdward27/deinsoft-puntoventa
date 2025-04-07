@@ -205,6 +205,7 @@ public class SegUsuarioServiceImpl extends CommonServiceImpl<SegUsuario,Long, Se
         empresa.setFlagCompraRapida(1);
         empresa.setCnfMoneda(cnfMonedaService.getAllCnfMoneda().stream()
                 .filter(predicate -> predicate.getCodigo().equals("PEN")).findFirst().orElse(null));
+        empresa.setTipoCostoInventario(Short.parseShort("2"));
         CnfEmpresa empresaResult = cnfEmpresaService.saveCnfEmpresa(empresa);
         
         CnfLocal local = new CnfLocal();

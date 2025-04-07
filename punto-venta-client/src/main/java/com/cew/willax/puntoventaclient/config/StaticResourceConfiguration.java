@@ -1,0 +1,41 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.cew.willax.puntoventaclient.config;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+/**
+ *
+ * @author user
+ */
+@Configuration
+public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
+
+ private static final Logger LOG = LoggerFactory.getLogger(StaticResourceConfiguration.class);
+
+ @Value("${static.path}")
+ private String staticPath;
+
+ @Override
+ public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
+    if(staticPath != null) {
+        LOG.info("Serving static content from " + staticPath);
+        registry.addResourceHandler("/**").addResourceLocations("file:" + staticPath).setOptimizeLocations(true);
+    }
+ }
+
+ // see https://stackoverflow.com/questions/27381781/java-spring-boot-how-to-map-my-my-app-root-to-index-html
+// @Override
+// public void addViewControllers(ViewControllerRegistry registry) {
+//    registry.addViewController("/").setViewName("redirect:/index.html");
+// }
+}

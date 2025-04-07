@@ -1,0 +1,42 @@
+package com.deinsoft.puntoventa.business.model;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import java.io.Serializable;
+import javax.validation.Valid;
+
+@Entity(name = "cnfLocal")
+@Table(name = "cnf_local")
+@Getter
+@Setter
+public class CnfLocal implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cnf_local_id", nullable = false, unique = true)
+    private long id;
+
+    @Size(max = 100)
+    @Column(name = "nombre", length = 100, nullable = true)
+    private String nombre;
+
+    @Size(max = 100)
+    @Column(name = "direccion", length = 100, nullable = true)
+    private String direccion;
+
+    @Size(max = 200)
+    @Column(name = "impresora_nombre", length = 200, nullable = true)
+    private String impresoraNombre;
+
+    @NotNull
+    @Valid
+    @OneToOne
+    @JoinColumn(name = "cnf_empresa_id")
+    private CnfEmpresa cnfEmpresa;
+
+}

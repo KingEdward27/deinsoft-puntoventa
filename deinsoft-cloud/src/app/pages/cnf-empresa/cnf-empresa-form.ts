@@ -1,4 +1,5 @@
 import { GenericListComponent } from '@/base/components/generic-list/generic-list.component';
+import { UpdateParam } from '@/base/components/model/UpdateParam';
 import { CommonService } from '@/base/services/common.service';
 import { HttpClient } from '@angular/common/http';
 import { Component,OnInit} from '@angular/core';
@@ -35,9 +36,15 @@ export class CnfEmpresaForm2Component implements OnInit{
                 listData:[],hidden:false},
                 {tableName: "cnf_moneda", "columnName":"nombre","type":"select",
                 loadState : 1,relatedBy:"cnf_moneda_id"},
-                {tableName: "cnf_empresa",columnName:"tipo_costo_inventario",
-                 "type":"select",loadState : 1, relatedBy :"tipo_costo_inventario",
-                 listData:[]}
+                // {tableName: "cnf_empresa",columnName:"tipo_costo_inventario",
+                //  "type":"select",loadState : 1, relatedBy :"tipo_costo_inventario",
+                //  listData:[]},
+                //  {tableName: "cnf_empresa",columnName:"configuracion_facturacion",type:"select",loadState : 1, relatedBy :"configuracion_facturacion",
+                //   listData:[],hidden:false},
+                //  {tableName: "cnf_empresa",columnName:"usuario_sol",type:"input"},
+                //  {tableName: "cnf_empresa",columnName:"clave_sol",type:"password"},
+                //  {tableName: "cnf_empresa",columnName:"cert_name",type:"input"},
+                //  {tableName: "cnf_empresa",columnName:"cert_pass",type:"password"}
         ],
     //filters sería para filtros adicionales
     "conditions":[],
@@ -57,6 +64,23 @@ export class CnfEmpresaForm2Component implements OnInit{
     return true;
   }
   onPreSave = (): boolean => {
+    // let myMap = new Map();
+    // myMap.set("id", this.id);
+    // myMap.set("tipo", 2);
+    // let mp = new UpdateParam();
+    // const convMapDetail: any = {};
+    // myMap.forEach((val: string, key: string) => {
+    //   convMapDetail[key] = val;
+    // });
+    // console.log(convMapDetail);
+    // mp.map = convMapDetail;
+    // this._commonService.updateParam = mp;
+    // this._commonService.genericPostRequest("/api/business/cnf-empresa/registerFacturador", mp, 'blob').subscribe(data => {
+    //   console.log(data);
+    //   return true;
+    // }, err => {
+    //   return false;
+    // });
     return true;
   }
   onChangeTipoDoc = () => {
@@ -93,9 +117,11 @@ export class CnfEmpresaForm2Component implements OnInit{
     this.prop.columnsForm[10].listData.push([0, "NO"]);
     this.prop.columnsForm[10].listData.push([1, "SI"]);
 
-    this.prop.columnsForm[12].listData.push([0, "Ninguno"]);
-    this.prop.columnsForm[12].listData.push([1, "Promedio Ponderado"]);
-    this.prop.columnsForm[12].listData.push([2, "Último costo"]);
+    // this.prop.columnsForm[12].listData.push([1, "Promedio Ponderado"]);
+    // this.prop.columnsForm[12].listData.push([2, "Último costo"]);
+
+    this.prop.columnsForm[13].listData.push([0, "NO"]);
+    this.prop.columnsForm[13].listData.push([1, "SI"]);
 
     this.prop.conditions.push({"columnName":"cnf_empresa.cnf_empresa_id","value":cnfEmpresa});
     this.prop.preSave.push({columnForm:"cnf_empresa.cnf_empresa_id",value:cnfEmpresa});

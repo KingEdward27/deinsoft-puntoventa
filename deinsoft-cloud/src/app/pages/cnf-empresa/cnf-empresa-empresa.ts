@@ -47,7 +47,12 @@ export class CnfEmpresaEmpresaComponent extends GenericListComponent implements 
                    loadState : 1,relatedBy:"cnf_moneda_id"},
                    {tableName: "cnf_empresa",columnName:"tipo_costo_inventario",
                     "type":"select",loadState : 1, relatedBy :"tipo_costo_inventario",
-                    listData:[]}
+                    listData:[]},
+                    {tableName: "cnf_empresa",columnName:"configuracion_facturacion",type:"checkbox"},
+                    {tableName: "cnf_empresa",columnName:"usuario_sol",type:"input"},
+                    {tableName: "cnf_empresa",columnName:"clave_sol",type:"password"},
+                    {tableName: "cnf_empresa",columnName:"cert_name",type:"input"},
+                    {tableName: "cnf_empresa",columnName:"cert_pass",type:"password"}
            ],
     //filters sería para filtros adicionales
     "conditions":[],

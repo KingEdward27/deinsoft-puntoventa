@@ -29,9 +29,11 @@ public class InvMovimientoProducto implements Serializable {
     @Column(name = "fecha_registro", length = 0, nullable = true)
     private LocalDateTime fechaRegistro;
 
+    @NotNull
     @Column(name = "cantidad", length = 18, nullable = true)
     private BigDecimal cantidad;
 
+    @NotNull
     @Column(name = "valor", length = 18, nullable = true)
     private BigDecimal valor;
     

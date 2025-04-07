@@ -91,6 +91,7 @@ public class InvAlmacenProductoServiceImpl
         if (actComprobante != null) {
             invMovimientoProductoRepository.deleteByActComprobante(actComprobante);
             actComprobante.getListActComprobanteDetalle().forEach(data -> {
+
                 if (!data.getCnfProducto().getCnfUnidadMedida().getCodigoSunat().equals("ZZ")) {
 
                     boolean isForAddStock = (actComprobante.getFlagIsventa().equals("1") && actComprobante.getCnfTipoComprobante().getCodigoSunat().equals("07"))
@@ -125,7 +126,7 @@ public class InvAlmacenProductoServiceImpl
                     else {
 
                         boolean isForAddStock = !data.getInvMovAlmacen().getInvTipoMovAlmacen().getNaturaleza().equals("-1");
-                        if (isActive) isForAddStock = !isForAddStock;
+                        if (!isActive) isForAddStock = !isForAddStock;
                         callUpdateStockAndPackageContent(actComprobante, invMovAlmacen, invMovAlmacen.getInvAlmacen(), isForAddStock,data.getCantidad(),
                                 null,data.getPrecio(),data.getCnfProducto());
                     }
@@ -235,13 +236,18 @@ public class InvAlmacenProductoServiceImpl
         mov.setFechaRegistro(LocalDateTime.now());
         mov.setCantidad(cantidadMov.multiply(cantidadToMultiply).multiply(!isForAddStock ?
                 BigDecimal.valueOf(-1) : BigDecimal.ONE));
-        mov.setValor(!isForAddStock ? cnfProducto.getCosto() : precioMov);
+        if (invMovAlmacen != null) {
+            mov.setValor(precioMov);
+
+        } else {
+            mov.setValor(!isForAddStock ? cnfProducto.getCosto() : precioMov);
+        }
         invMovimientoProductoRepository.save(mov);
 
-        if (isForAddStock & actComprobante != null) {
+        if (isForAddStock) {
             List<InvMovimientoProducto> listMovs
                     = (List<InvMovimientoProducto>) invMovimientoProductoRepository.findByCnfProductoIdAndInvAlmacenId(
-                    producto.getId(), actComprobante.getInvAlmacen().getId());
+                    producto.getId(), invAlmacen.getId());
             BigDecimal costo = BigDecimal.ZERO;
             BigDecimal costoTotal = BigDecimal.ZERO;
             BigDecimal cantidad = BigDecimal.ZERO;
@@ -256,18 +262,18 @@ public class InvAlmacenProductoServiceImpl
                 costo = costoTotal.divide(cantidad, 2, RoundingMode.HALF_UP);
                 //actualizar precio, metodo promedio ponerado, proxima configuracion de empresa
                 cnfProducto.setCosto(costo);
-                cnfProducto.setPrecio(precioVentaMov);
-            } else if (cnfProducto.getCnfEmpresa().getTipoCostoInventario() == 2) {
+//                cnfProducto.setPrecio(precioVentaMov);
+            } else if (cnfProducto.getCnfEmpresa().getTipoCostoInventario() == 2 ) {
                 costo = precioMov;
                 cnfProducto.setCosto(precioMov);
             }
             if (cnfProducto.getCnfEmpresa().getTipoCostoInventario() == 1
                     || cnfProducto.getCnfEmpresa().getTipoCostoInventario() == 2) {
-                cnfProducto.setPrecio(precioVentaMov);
-                BigDecimal gananciaPorcentaje
-                        = precioVentaMov.divide(costo, 2, RoundingMode.HALF_UP)
-                        .multiply(new BigDecimal("100.00")).subtract(new BigDecimal("100.00"));
-                cnfProducto.setPorcentajeGanancia(gananciaPorcentaje.floatValue());
+//                cnfProducto.setPrecio(precioVentaMov);
+//                BigDecimal gananciaPorcentaje
+//                        = precioVentaMov.divide(costo, 2, RoundingMode.HALF_UP)
+//                        .multiply(new BigDecimal("100.00")).subtract(new BigDecimal("100.00"));
+//                cnfProducto.setPorcentajeGanancia(gananciaPorcentaje.floatValue());
                 cnfProductoRepository.save(cnfProducto);
             }
 

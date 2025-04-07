@@ -33,6 +33,7 @@
     "searchFor":"Buscar por",
     "noRows":"No se encontraron registros",
     "btnTicket":"Ticket",
+    "btnTicket2":"Impresora",
     "btnA4":"A4",
     "messages":{
       "errorSearchActInvoice":"Debe ingresar el Nro. de serie y el Nro. de documento para buscar"
@@ -55,7 +56,12 @@
       "flag_compra_rapida": "Compra rápida?",
       "flag_venta_rapida": "Venta rápida?",
       "cnf_moneda":"Moneda principal",
-      "tipo_costo_inventario":"Tipo de costo de inventario"
+      "tipo_costo_inventario":"Tipo de costo de inventario",
+      "configuracion_facturacion":"Configuración facturación electrónica",
+      "usuario_sol":"Usario sol deconexión a sunat",
+      "clave_sol":"Clave sol de conexión a sunat",
+      "cert_name":"Nombre del certificado",
+      "cert_pass":"Clave del certificado"
     },
     "cnf_moneda": {
       "home": {
@@ -118,7 +124,8 @@
       },
       "id": "ID",
       "nombre": "Nombre local",
-      "direccion": "Dirección"
+      "direccion": "Dirección",
+      "impresora_nombre": "Impresora"
     },
     "cnf_tipo_comprobante": {
       "home": {
@@ -533,7 +540,8 @@
       "cantidad": "Cantidad",
       "precio": "Precio",
       "importe":"Importe",
-      "cnf_producto":"Producto"
+      "cnf_producto":"Producto",
+      "costo":"Costo"
     },
     "act_contrato": {
       "home": {

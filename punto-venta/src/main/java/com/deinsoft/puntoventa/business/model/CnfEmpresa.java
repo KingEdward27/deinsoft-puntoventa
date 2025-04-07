@@ -7,6 +7,10 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -96,7 +100,22 @@ public class CnfEmpresa implements Serializable {
     @ColumnDefault("1")
     @Column(name = "tipo_costo_inventario", length = 1, nullable = false)
     private short tipoCostoInventario;
-    
+
+    @ColumnDefault("0")
+    @Column(name = "configuracion_facturacion", length = 1, nullable = false)
+    private short configuracionFacturacion;
+    @Column(name = "usuario_sol", length = 100, nullable = true)
+    private String usuarioSol;
+
+    @Column(name = "clave_sol", length = 100, nullable = true)
+    private String claveSol;
+
+    @Column(name = "cert_name", length = 100, nullable = true)
+    private String certName;
+
+    @Column(name = "cert_pass", length = 100, nullable = true)
+    private String certPass;
+
     public long getId() {
         return id;
     }
@@ -169,22 +188,6 @@ public class CnfEmpresa implements Serializable {
         this.token = token;
     }
 
-    public CnfTipoDocumento getCnfTipoDocumento() {
-        return cnfTipoDocumento;
-    }
-
-    public void setCnfTipoDocumento(CnfTipoDocumento cnfTipoDocumento) {
-        this.cnfTipoDocumento = cnfTipoDocumento;
-    }
-
-    public CnfDistrito getCnfDistrito() {
-        return cnfDistrito;
-    }
-
-    public void setCnfDistrito(CnfDistrito cnfDistrito) {
-        this.cnfDistrito = cnfDistrito;
-    }
-
     public String getRutaPse() {
         return rutaPse;
     }
@@ -199,6 +202,22 @@ public class CnfEmpresa implements Serializable {
 
     public void setPerfilEmpresa(Integer perfilEmpresa) {
         this.perfilEmpresa = perfilEmpresa;
+    }
+
+    public CnfTipoDocumento getCnfTipoDocumento() {
+        return cnfTipoDocumento;
+    }
+
+    public void setCnfTipoDocumento(CnfTipoDocumento cnfTipoDocumento) {
+        this.cnfTipoDocumento = cnfTipoDocumento;
+    }
+
+    public CnfDistrito getCnfDistrito() {
+        return cnfDistrito;
+    }
+
+    public void setCnfDistrito(CnfDistrito cnfDistrito) {
+        this.cnfDistrito = cnfDistrito;
     }
 
     public int getFlagCompraRapida() {
@@ -233,6 +252,18 @@ public class CnfEmpresa implements Serializable {
         this.plan = plan;
     }
 
+    public LocalDateTime getFechaCambioPlan() {
+        return fechaCambioPlan;
+    }
+
+    public void setFechaCambioPlan(LocalDateTime fechaCambioPlan) {
+        this.fechaCambioPlan = fechaCambioPlan;
+    }
+
+//    public LocalDateTime getFechaRegistro() {
+//        return fechaRegistro;
+//    }
+
     public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
@@ -245,17 +276,43 @@ public class CnfEmpresa implements Serializable {
         this.tipoCostoInventario = tipoCostoInventario;
     }
 
-    @Override
-    public String toString() {
-        return "cnfEmpresa [id=" + id + ", cnfDistrito=" + (cnfDistrito != null ? cnfDistrito : "") + ", cnfTipoDocumento=" + (cnfTipoDocumento != null ? cnfTipoDocumento : "") + ", nombre=" + nombre + ", descripcion=" + descripcion + ", nroDocumento=" + nroDocumento + ", direccion=" + direccion + ", telefono=" + telefono + ", empresacol=" + empresacol + ", estado=" + estado + ", token=" + token + "]";
+    public short getConfiguracionFacturacion() {
+        return configuracionFacturacion;
     }
 
-    public LocalDateTime getFechaCambioPlan() {
-        return fechaCambioPlan;
+    public void setConfiguracionFacturacion(short configuracionFacturacion) {
+        this.configuracionFacturacion = configuracionFacturacion;
     }
 
-    public void setFechaCambioPlan(LocalDateTime fechaCambioPlan) {
-        this.fechaCambioPlan = fechaCambioPlan;
+    public String getUsuarioSol() {
+        return usuarioSol;
     }
 
+    public void setUsuarioSol(String usuarioSol) {
+        this.usuarioSol = usuarioSol;
+    }
+
+    public String getClaveSol() {
+        return claveSol;
+    }
+
+    public void setClaveSol(String claveSol) {
+        this.claveSol = claveSol;
+    }
+
+    public String getCertName() {
+        return certName;
+    }
+
+    public void setCertName(String certName) {
+        this.certName = certName;
+    }
+
+    public String getCertPass() {
+        return certPass;
+    }
+
+    public void setCertPass(String certPass) {
+        this.certPass = certPass;
+    }
 }

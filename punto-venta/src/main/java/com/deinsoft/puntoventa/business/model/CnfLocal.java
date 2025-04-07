@@ -24,6 +24,10 @@ public class CnfLocal implements Serializable {
     @Column(name = "direccion", length = 100, nullable = true)
     private String direccion;
 
+    @Size(max = 200)
+    @Column(name = "impresora_nombre", length = 200, nullable = true)
+    private String impresoraNombre;
+
     @NotNull
     @Valid
     @OneToOne
@@ -33,12 +37,12 @@ public class CnfLocal implements Serializable {
     public CnfLocal() {
     }
 
-    
+
     public CnfLocal(long id) {
         this.id = id;
     }
 
-    
+
     public long getId() {
         return id;
     }
@@ -61,6 +65,14 @@ public class CnfLocal implements Serializable {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public String getImpresoraNombre() {
+        return impresoraNombre;
+    }
+
+    public void setImpresoraNombre(String impresoraNombre) {
+        this.impresoraNombre = impresoraNombre;
     }
 
     public CnfEmpresa getCnfEmpresa() {

@@ -47,6 +47,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.crypto.BadPaddingException;
@@ -479,5 +480,11 @@ public class Util {
         random.nextBytes(bytes);
         Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
         return encoder.encodeToString(bytes);
+    }
+    public static String mapToJson(Map<String, Object> map) {
+
+        return map.entrySet().stream()
+                .map(e -> String.format("\t\"%s\":\"%s\"", e.getKey(), e.getValue()))
+                .collect(Collectors.joining(",\n", "{\n", "\n}"));
     }
 }

@@ -128,13 +128,15 @@ export class ActPagoModalComponent implements OnInit {
       }, err => {
         this.error = []
         console.log(err.error);
-
-        for (var prop in err.error) {
-          // console.log("Key:" + prop);
-          // console.log("Value:" + err.error[prop]);
-          this.error.push(err.error[prop])
+        if (err.status === 422) {
+          for (var prop in err.error) {
+            // console.log("Key:" + prop);
+            // console.log("Value:" + err.error[prop]);
+            this.error.push(err.error[prop])
+          }
+          console.log(err);
         }
-        console.log(err);
+        
       });
   }
   getListCnfLocal() {

@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 // import { CustomAdapter, CustomDateParserFormatter } from 'src/app/util/CustomDate';
 import { NgbActiveModal, NgbCalendar, NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'environments/environment';
+import { UtilService } from '../../../services/util.service';
 
 
 
@@ -25,7 +26,7 @@ export class MessageModalComponent implements OnInit {
   @Output() result: EventEmitter<any> = new EventEmitter();
   public id = 0;
   business:string = 'act-comprobante'
-  constructor(public activeModal: NgbActiveModal,private commonService: CommonService) {
+  constructor(public activeModal: NgbActiveModal,private commonService: CommonService,private utilService: UtilService) {
     this.commonService.baseEndpoint = environment.apiUrl;
   }
   ngOnInit(): void {
@@ -60,6 +61,28 @@ export class MessageModalComponent implements OnInit {
   save(){
     this.result.emit(this.listDetail);
     this.activeModal.close();
+  }
+  ticketChild2(){
+    let myMap = new Map();
+    myMap.set("id", this.id);
+    myMap.set("tipo", 2);
+    let mp = new UpdateParam();
+    const convMapDetail: any = {};
+    myMap.forEach((val: string, key: string) => {
+      convMapDetail[key] = val;
+    });
+    console.log(convMapDetail);
+    mp.map = convMapDetail;
+    this.commonService.updateParam = mp;
+    
+    this.commonService.genericPostRequest("/api/business/"+this.business+"/send-to-print", mp, 'text').subscribe(data => {
+      console.log(data);
+    }, err => {
+      console.log(err);
+      
+      this.utilService.msgError(err.error);
+    });
+    // console.log("enviando a imprimir: ",this.properties.listData);
   }
   ticketChild(){
     let myMap = new Map();

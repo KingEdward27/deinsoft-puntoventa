@@ -221,8 +221,8 @@ export class InvMovAlmacenFormComponent implements OnInit {
     let actComprobanteDetalle = new InvMovAlmacenDet();
     actComprobanteDetalle.cnfProducto = event.item
     actComprobanteDetalle.cantidad = 1
-    actComprobanteDetalle.precio = event.item.precio
-    actComprobanteDetalle.importe = event.item.precio
+    actComprobanteDetalle.precio = event.item.costo
+    actComprobanteDetalle.importe = event.item.costo
 
     this.model.total = Math.round((this.model.total + event.item.precio + Number.EPSILON) * 100) / 100;
     this.model.subtotal = Math.round((this.model.total / 1.18 + Number.EPSILON) * 100) / 100;

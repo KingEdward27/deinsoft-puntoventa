@@ -6,6 +6,9 @@ import com.deinsoft.puntoventa.business.bean.ParamBean;
 import java.util.List;
 import java.util.Optional;
 
+import com.deinsoft.puntoventa.util.Impresion;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -292,48 +295,62 @@ public class ActComprobanteServiceImpl extends CommonServiceImpl<ActComprobante,
 
     }
 
-    @Override
     public RespuestaPSE sendApi(long id) {
-        RespuestaPSE result = null;
+            RespuestaPSE result = null;
 
-        ActComprobante actComprobante = getActComprobante(id);
-//        Map<String,Object> local = (Map<String,Object>)mapVenta.get("cnf_local");
-//        Map<String,Object> empresa = (Map<String,Object>)local.get("cnf_empresa");
-        String ruta = actComprobante.getCnfLocal().getCnfEmpresa().getRutaPse();
-        String token = actComprobante.getCnfLocal().getCnfEmpresa().getToken();
-//        if (ruta == null) throw new RuntimeException ("Ruta PSE no configurado");
-//        if (token == null) throw new RuntimeException ("token PSE no configurado");
-        EnvioPSE2 envioPSE = new EnvioPSE2(ruta, token);
-        String jsonBody = envioPSE.paramToJson(actComprobante);
-        RespuestaPSE resultEnvioPSE = envioPSE.envioJsonPSE(jsonBody);
+            ActComprobante actComprobante = getActComprobante(id);
+            String ruta = actComprobante.getCnfLocal().getCnfEmpresa().getRutaPse();
+            String token = actComprobante.getCnfLocal().getCnfEmpresa().getToken();
+            EnvioPSE2 envioPSE = new EnvioPSE2(ruta, token);
+            String jsonBody = envioPSE.paramToJson(actComprobante);
+            RespuestaPSE resultEnvioPSE = envioPSE.envioJsonPSE(jsonBody);
 
 //        if (resultEnvioPSE.isResult()) {
-        result = resultEnvioPSE;
+            result = resultEnvioPSE;
 //        }
-        if (resultEnvioPSE.isResult()) {
-            actComprobante.setEnvioPseFlag("2");
-            actComprobante.setEnvioPseMensaje("Enviado a PSE");
-            actComprobante.setNumTicket(resultEnvioPSE.getId());
-            actComprobante.setCodigoqr(resultEnvioPSE.getCodigoQR());
-            actComprobante.setXmlhash(resultEnvioPSE.getXmlHash());
+            if (resultEnvioPSE.isResult()) {
+                actComprobante.setEnvioPseFlag("2");
+                actComprobante.setEnvioPseMensaje("Enviado a PSE");
+                actComprobante.setNumTicket(resultEnvioPSE.getId());
+                actComprobante.setCodigoqr(resultEnvioPSE.getCodigoQR());
+                actComprobante.setXmlhash(resultEnvioPSE.getXmlHash());
 //            map.put("envio_pse_flag", "1");
 //            map.put("envio_pse_mensaje", "Recibido correctamente");
 //            map.put("num_ticket", resultEnvioPSE.getId());
 //            map.put("codigoqr", resultEnvioPSE.getCodigoQR());
 //            map.put("xmlhash", resultEnvioPSE.getXmlHash());
-        } else {
-            actComprobante.setEnvioPseFlag("0");
-            actComprobante.setEnvioPseMensaje(resultEnvioPSE.getErrCode() + "-" + resultEnvioPSE.getErrMessage());
+            } else {
+                actComprobante.setEnvioPseFlag("0");
+                actComprobante.setEnvioPseMensaje(resultEnvioPSE.getErrCode() + "-" + resultEnvioPSE.getErrMessage());
 //            map.put("envio_pse_flag", "0");
 //            map.put("envio_pse_mensaje", resultEnvioPSE.getErrCode() + "-" + resultEnvioPSE.getErrMessage());
-        }
-//        JsonData json = new JsonData();
-//        json.setTableName(tableName);
-//        json.setFilters(map);
-//        json.setId(id);
-        save(actComprobante);
-        return result;
+            }
+            save(actComprobante);
+            return result;
     }
+
+    @Override
+    public void sendToPrint(long id) throws Exception {
+        RespuestaPSE result = null;
+
+        ActComprobante actComprobante = getActComprobante(id);
+        String ruta = "http://localhost:7979/punto-venta-client/api/v1/print/ticket";
+        String token = actComprobante.getCnfLocal().getCnfEmpresa().getToken();
+        EnvioPSE2 envioPSE = new EnvioPSE2(ruta, token);
+        ObjectMapper mapper = new ObjectMapper();
+        var map = Impresion.toMap(actComprobante, true, 2);
+        if (Util.isNullOrEmpty(actComprobante.getCnfLocal().getImpresoraNombre())){
+            throw new BusinessException("Impresora del local no registrada");
+        }
+
+        map.put("impresora_nombre", actComprobante.getCnfLocal().getImpresoraNombre());
+        //String jsonBody = Util.mapToJson(Impresion.toMap(actComprobante, true, 2));
+        String jsonBody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
+        envioPSE.print(jsonBody);
+
+    }
+
+
 
     public List<ActComprobante> getAllActComprobante() {
         List<ActComprobante> actComprobanteList = (List<ActComprobante>) actComprobanteRepository.findAll();

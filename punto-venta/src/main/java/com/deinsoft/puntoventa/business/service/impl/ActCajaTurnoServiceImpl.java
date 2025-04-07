@@ -335,9 +335,9 @@ public class ActCajaTurnoServiceImpl extends CommonServiceImpl<ActCajaTurno,Long
             contentTicket.add(PDFContent.builder()
                     .type(PDFContentType.TEXT)
                     .text("TOTAL: " + Constantes.FORMAT_NUMBER.format(total))
-                    .fontSize(10)
+                    .fontSize(14)
                     .fontWeight("bold")
-                    .alignment("left").build());
+                    .alignment("right").build());
 
 //            FileOutputStream fos = new FileOutputStream("ticket.pdf");
             ByteArrayOutputStream output = new ByteArrayOutputStream();

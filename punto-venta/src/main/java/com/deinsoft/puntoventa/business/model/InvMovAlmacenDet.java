@@ -22,6 +22,7 @@ public class InvMovAlmacenDet implements Serializable {
     @Column(name = "cantidad", length = 15, nullable = true)
     private BigDecimal cantidad;
 
+    @NotNull
     @Column(name = "precio", length = 15, nullable = true)
     private BigDecimal precio;
 

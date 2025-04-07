@@ -93,10 +93,6 @@ export class ActCajaOperacionFormComponent implements OnInit {
 
   }
   public save(): void {
-    // if (!this.model.flagIngreso) {
-    //   this.utilService.msgWarning("","Debe seleccionar el tipo de operación");
-    //   return;
-    // }
     // if (!this.model.fecha) {
     //   this.utilService.msgWarning("","Debe ingresar la fecha");
     //   return;
