@@ -92,6 +92,7 @@ import { ActOrdenListComponent } from '@pages/act-orden/list/act-orden-list.comp
 import { SegUsuarioFormPasswordComponent } from '@pages/security/seg-usuario/form-password/seg-usuario-form-password.component';
 import { AddNewCnfPaqueteDetComponent } from '@pages/cnf-producto/add-new-cnf-paquete-det/add-new-cnf-paquete-det.component';
 import { CnfMedioPagoComponent } from '@pages/cnf-medio-pago/cnf-medio-pago';
+import { ActPagoProgramacionCompraReportComponent } from '@pages/reports/act-pago-programacion-compra/act-pago-programacion-compra-report.component';
 const routes: Routes = [
     {
         path: '',
@@ -202,6 +203,8 @@ const routes: Routes = [
             {path: 'change-password',component: SegUsuarioFormPasswordComponent},
             {path: 'add-new-cnf-paquete-det/:id',component: AddNewCnfPaqueteDetComponent},
             {path: 'medio-pago',component: CnfMedioPagoComponent},
+            {path: 'rpt-pago-programacion-compra',component: ActPagoProgramacionCompraReportComponent},
+
             
         ]
     },

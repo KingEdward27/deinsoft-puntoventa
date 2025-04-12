@@ -26,4 +26,6 @@ public interface CnfTipoComprobanteService extends CommonService<CnfTipoComproba
     public List<CnfTipoComprobante> getAllCnfTipoComprobanteContrato();
 
     public void delete(long id);
+
+    public List<CnfTipoComprobante> getAllCnfTipoComprobantePagos();
 }

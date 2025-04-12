@@ -32,6 +32,7 @@ public interface ActCajaTurnoRepository extends JpaRepository<ActCajaTurno, Long
             + "(p.fechaCierre is not null and DATE(p.fechaCierre) "
             + "between DATE(:#{#paramBean.fechaDesde}) and DATE(:#{#paramBean.fechaHasta})))) "
             + "and p.actCaja.cnfEmpresa.id = :#{#securityFilterDto.empresaId} "
+            + "and (:#{#paramBean.actCaja.id} = 0l or p.actCaja.id = :#{#paramBean.actCaja.id}) "
             + "and (:#{#paramBean.cnfLocal.id} = 0l or p.actCaja.cnfLocal.id = :#{#paramBean.cnfLocal.id}) "
             + "and p.actCaja.cnfLocal.id in :#{#securityFilterDto.localIds} ")
     List<ActCajaTurno> getReportActCajaTurno(@Param("paramBean") ParamBean paramBean,

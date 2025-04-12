@@ -143,6 +143,7 @@ import { SegUsuarioFormPasswordComponent } from '@pages/security/seg-usuario/for
 import { AddNewCnfPaqueteDetComponent } from '@pages/cnf-producto/add-new-cnf-paquete-det/add-new-cnf-paquete-det.component';
 import { CnfMedioPagoComponent } from '@pages/cnf-medio-pago/cnf-medio-pago';
 import { ActPagoComprobanteModalComponent } from '@pages/act-comprobante/act-comprobante-form/act-pago-comprobante-modal/act-pago-comprobante-modal.component';
+import { ActPagoProgramacionCompraReportComponent } from '@pages/reports/act-pago-programacion-compra/act-pago-programacion-compra-report.component';
 
 @NgModule({
     declarations: [
@@ -269,7 +270,8 @@ import { ActPagoComprobanteModalComponent } from '@pages/act-comprobante/act-com
         SegUsuarioFormPasswordComponent,
         AddNewCnfPaqueteDetComponent,
         CnfMedioPagoComponent,
-        ActPagoComprobanteModalComponent
+        ActPagoComprobanteModalComponent,
+        ActPagoProgramacionCompraReportComponent
     ],
     imports: [
         BrowserModule,

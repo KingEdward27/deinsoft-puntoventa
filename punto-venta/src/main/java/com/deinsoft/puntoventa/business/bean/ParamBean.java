@@ -4,16 +4,7 @@
  */
 package com.deinsoft.puntoventa.business.bean;
 
-import com.deinsoft.puntoventa.business.model.CnfCategoria;
-import com.deinsoft.puntoventa.business.model.CnfEmpresa;
-import com.deinsoft.puntoventa.business.model.CnfFormaPago;
-import com.deinsoft.puntoventa.business.model.CnfLocal;
-import com.deinsoft.puntoventa.business.model.CnfMaestro;
-import com.deinsoft.puntoventa.business.model.CnfMoneda;
-import com.deinsoft.puntoventa.business.model.CnfProducto;
-import com.deinsoft.puntoventa.business.model.CnfTipoComprobante;
-import com.deinsoft.puntoventa.business.model.CnfZona;
-import com.deinsoft.puntoventa.business.model.InvAlmacen;
+import com.deinsoft.puntoventa.business.model.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -68,7 +59,8 @@ public class ParamBean {
     
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate fechaVencimiento;
-    
+
+    private ActCaja actCaja;
     public ParamBean() {
     }
 
@@ -208,6 +200,12 @@ public class ParamBean {
     public void setPeriodo(String periodo) {
         this.periodo = periodo;
     }
-    
-    
+
+    public ActCaja getActCaja() {
+        return actCaja;
+    }
+
+    public void setActCaja(ActCaja actCaja) {
+        this.actCaja = actCaja;
+    }
 }

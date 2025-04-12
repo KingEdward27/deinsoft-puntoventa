@@ -88,7 +88,7 @@ public class ActPagoProgramacionServiceImpl
     }
 
     public List<ActPagoProgramacion> getAllActPagoProgramacionByCnfMaestro(long id, LocalDate fechaVencimiento,
-                                                                           long cnfLocalId, boolean onlyPendientes,String isVenta) {
+                                                                           long cnfLocalId, boolean onlyPendientes) {
         
         SecurityFilterDto sec = listRoles();
         List<ActPagoProgramacion> actPagoProgramacionList
@@ -102,7 +102,7 @@ public class ActPagoProgramacionServiceImpl
                         .filter(item -> {
                             System.out.println("getActComprobante " + item.toString());
                             return (item.getActComprobante() != null
-                                    && item.getActComprobante().getFlagIsventa().equals(isVenta))
+                                    && item.getActComprobante().getFlagIsventa().equals("1"))
                                     || item.getActComprobante() == null;
                         })
                         .filter(item -> (item.getActContrato() != null

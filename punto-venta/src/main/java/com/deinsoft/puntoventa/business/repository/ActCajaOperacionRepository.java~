@@ -33,7 +33,6 @@ public interface ActCajaOperacionRepository extends JpaRepository<ActCajaOperaci
     @Query(value = "select p from actCajaOperacion p "
             + "where (p.fecha between :#{#paramBean.fechaDesde} and :#{#paramBean.fechaHasta}) "
             + "and (:#{#paramBean.cnfLocal.id} = 0l or p.actCajaTurno.actCaja.cnfLocal.id = :#{#paramBean.cnfLocal.id}) "
-            + "and (:#{#paramBean.actCaja.id} = 0l or p.actCajaTurno.actCaja.id = :#{#paramBean.actCaja.id}) "
             + "and p.actCajaTurno.actCaja.cnfEmpresa.id = :#{#securityFilterDto.empresaId} "
             + "and p.actCajaTurno.actCaja.cnfLocal.id in :#{#securityFilterDto.localIds}")
     List<ActCajaOperacion> getReportActCajaOperacion(@Param("paramBean") ParamBean paramBean,@Param("securityFilterDto") SecurityFilterDto securityFilterDto);

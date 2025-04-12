@@ -69,10 +69,11 @@ public class ActPagoProgramacionController extends CommonController<ActPagoProgr
     public List<ActPagoProgramacion> getAllActPagoProgramacionByCnfMaestro(@Param("id") Long id,
             @Param("fechaVencimiento") String fechaVencimiento,
             @Param("cnfLocalId") long cnfLocalId,
-            @Param("onlyPendientes") boolean onlyPendientes) {
+            @Param("onlyPendientes") boolean onlyPendientes,
+            @Param("isVenta") String isVenta) {
        LocalDate date = getDateFromString(fechaVencimiento);
         List<ActPagoProgramacion> actPagoProgramacionList 
-                = actPagoProgramacionService.getAllActPagoProgramacionByCnfMaestro(id, date, cnfLocalId, onlyPendientes);
+                = actPagoProgramacionService.getAllActPagoProgramacionByCnfMaestro(id, date, cnfLocalId, onlyPendientes,isVenta);
         return actPagoProgramacionList;
     }
     @GetMapping(value = "/get-all-act-pago-programacion-compra-by-cnf-maestro")

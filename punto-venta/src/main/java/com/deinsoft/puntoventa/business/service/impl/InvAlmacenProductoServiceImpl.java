@@ -20,6 +20,7 @@ import com.deinsoft.puntoventa.business.repository.InvMovimientoProductoReposito
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -82,7 +83,9 @@ public class InvAlmacenProductoServiceImpl
 
     @Override
     public List<InvAlmacenProducto> getReportInvAlmacen(ParamBean paramBean) {
-        List<InvAlmacenProducto> list = (List<InvAlmacenProducto>) invAlmacenProductoRepository.getReportInvAlmacen(paramBean, listRoles());
+        List<InvAlmacenProducto> list = (List<InvAlmacenProducto>) invAlmacenProductoRepository.getReportInvAlmacen(paramBean, listRoles())
+                .stream().filter(predicate -> predicate.getCnfProducto().getListCnfPaqueteDet().isEmpty())
+                .collect(Collectors.toList());
         return list;
     }
 

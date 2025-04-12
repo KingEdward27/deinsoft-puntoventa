@@ -45,5 +45,8 @@ export class CnfTipoComprobanteService {
     let params = new HttpParams().set("id",arg1);
     return this.http.delete(this.url+'/delete-cnf-tipo-comprobante', { observe: 'response' ,params}); 
   }
+  public getAllDataComboPagos():Observable<any>{
+    return this.http.get<CnfTipoComprobante[]>(`${this.url}/get-all-cnf-tipo-comprobante-combo-pago`);
+  }
 }
 

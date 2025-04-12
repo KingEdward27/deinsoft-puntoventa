@@ -19,15 +19,15 @@ import { CommonReportFormComponent, MyBaseComponentDependences } from '@pages/re
 
 
 @Component({
-  selector: 'app-act-pago-programacion-report',
-  templateUrl: './act-pago-programacion-report.component.html',
+  selector: 'app-act-pago-programacion-compra-report',
+  templateUrl: './act-pago-programacion-compra-report.component.html',
   providers: [
     { provide: NgbDateAdapter, useClass: CustomAdapter },
     { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
     MyBaseComponentDependences
   ]
 })
-export class ActPagoProgramacionReportComponent extends CommonReportFormComponent implements OnInit {
+export class ActPagoProgramacionCompraReportComponent extends CommonReportFormComponent implements OnInit {
 
   //generic variables
   error: any;
@@ -99,8 +99,8 @@ export class ActPagoProgramacionReportComponent extends CommonReportFormComponen
     let month = new Date().getMonth()+1;
     let day = new Date(year, month, 0).getDate();
     
-    this.model.fechaVencimiento  = this.deps.dateAdapter
-    .toModel({year: year, month: month, day: day}).toString();
+    // this.model.fechaVencimiento  = this.deps.dateAdapter
+    // .toModel({year: year, month: month, day: day}).toString();
   }
   getListData() {
     this.model.flagIsventa = '1';
@@ -109,7 +109,7 @@ export class ActPagoProgramacionReportComponent extends CommonReportFormComponen
     this.indexInputs = [8]
     this.model.fechaVencimiento = this.model.fechaVencimiento?this.model.fechaVencimiento:''
     return this.deps.actPagoProgramacionService
-    .getAllByCnfMaestroId(this.model.cnfMaestro.id,this.model.fechaVencimiento, this.model.cnfLocal.id, false,"1").subscribe(data => {
+    .getAllByCnfMaestroId(this.model.cnfMaestro.id,this.model.fechaVencimiento, this.model.cnfLocal.id, false,"2").subscribe(data => {
       this.listData = data;
       this.loadingCnfMaestro = false;
       this.dataTable?.destroy();

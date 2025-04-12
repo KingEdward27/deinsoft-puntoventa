@@ -86,6 +86,7 @@ public class InvMovimientoProductoServiceImpl
         
         List<InvMovimientoProductoDTO> list = invMovimientoProductoRepository.getReportInvMovimientoProducto(paramBean)
                         .stream()
+                        .filter(predicate -> predicate.getCnfProducto().getListCnfPaqueteDet().isEmpty())
                         .map(data -> {
                             String tipo;
                             if (data.getActComprobante() != null) {
@@ -155,7 +156,9 @@ public class InvMovimientoProductoServiceImpl
     @Override
     public BigDecimal getSaldoReportInvMovimientoProducto(ParamBean paramBean) {
         List<InvMovimientoProducto> list = (List<InvMovimientoProducto>) 
-                invMovimientoProductoRepository.getSaldoReportInvMovimientoProducto(paramBean);
+                invMovimientoProductoRepository.getSaldoReportInvMovimientoProducto(paramBean)
+                        .stream().filter(predicate -> predicate.getCnfProducto().getListCnfPaqueteDet().isEmpty())
+                        .collect(Collectors.toList());
         BigDecimal saldoInicial = BigDecimal.ZERO;
         
         for (InvMovimientoProducto invMovimientoProducto : list) {

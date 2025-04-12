@@ -36,12 +36,13 @@ export class ActPagoProgramacionService {
     let params = new HttpParams().set("id",arg1);
     return this.http.delete(this.url+'/delete-act-pago-programacion', { observe: 'response' ,params}); 
   }
-  public getAllByCnfMaestroId(id:number,fecha:any,cnfLocalId:any, onlyPendientes: any):Observable<any>{
+  public getAllByCnfMaestroId(id:number,fecha:any,cnfLocalId:any, onlyPendientes: any,isVenta:any):Observable<any>{
     let params = new HttpParams()
     .set("id",id?.toString())
     .set("fechaVencimiento",fecha)
     .set("cnfLocalId",cnfLocalId)
-    .set("onlyPendientes",onlyPendientes);
+    .set("onlyPendientes",onlyPendientes)
+    .set("isVenta",isVenta);
     return this.http.get<ActPagoProgramacion[]>(`${this.url}/get-all-act-pago-programacion-by-cnf-maestro`,{params});
   } 
   public getAllCompraByCnfMaestroId(id:number,fecha:any):Observable<any>{

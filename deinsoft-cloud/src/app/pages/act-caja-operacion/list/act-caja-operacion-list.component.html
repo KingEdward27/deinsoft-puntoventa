@@ -35,7 +35,8 @@
                                         <div class="col-sm-12 col-lg-9">
                                             <select name="model.cnfLocal" [compareWith]="compareCnfLocal"
                                                 [(ngModel)]="model.cnfLocal"
-                                                class="form-control-sm col-sm-12 col-lg-6">
+                                                class="form-control-sm col-sm-12 col-lg-6"
+                                                (change)="getListActCaja()">
                                                 <option *ngIf="loadingCnfLocal" [ngValue]="0" selected="selected">
                                                     Cargando...</option>
                                                 <option *ngIf="!loadingCnfLocal" [ngValue]="selectDefaultCnfLocal">
@@ -117,6 +118,29 @@
                                     </div>
                                 </div>
 
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group-sm row">
+                                        <label class="col-lg-3 col-sm-12 col-form-label">{{'webpagos.act_caja_turno.act_caja' |
+                                            translate}} <span *ngIf="loadingActCaja"
+                                                class="spinner-border spinner-border-sm mr-1"></span><span
+                                                style="color: red;font-size: 16px !important;font-weight: bold;">*</span></label>
+                                        <div class="col-sm-12 col-lg-9">
+                                            <select name="model.actCaja" [compareWith]="compareActCaja"
+                                                [(ngModel)]="model.actCaja" class="form-control-sm col-sm-12 col-lg-6">
+                                                <option *ngIf="loadingActCaja" [ngValue]="0" selected="selected">Cargando...
+                                                </option>
+                                                <option *ngIf="!loadingActCaja" [ngValue]="selectDefaultActCaja">
+                                                    {{selectDefaultActCaja.nombre}}</option>
+                                                <option *ngFor="let item of listActCaja; index as i;" [ngValue]="item">
+                                                    {{item.nombre}}</option>
+            
+                                            </select>
+                                            <div class="alert alert-danger col-sm-12 col-lg-6"
+                                                *ngIf="error?['actCaja']:false">{{error["actCaja"] }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
 
                             </div>
                         </div>

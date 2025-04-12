@@ -10,6 +10,7 @@ import { CustomAdapter, CustomDateParserFormatter } from '../../../base/util/Cus
 import { data } from 'jquery';
 import { CommonService } from '@/base/services/common.service';
 import { UpdateParam } from '@/base/components/model/UpdateParam';
+import { ActCaja } from '@/business/model/act-caja.model';
 @Component({
   selector: 'app-act-caja-turno-list',
   templateUrl: './act-caja-turno-list.component.html',
@@ -64,6 +65,8 @@ export class ActCajaTurnoListComponent extends CommonReportFormComponent impleme
       console.log(data);
     })
   }
+
+
   editar(e: ActCajaTurno) {
     if (this.deps.utilService.validateDeactivate(e)) {
       if (e.estado == '0') {
@@ -129,6 +132,14 @@ export class ActCajaTurnoListComponent extends CommonReportFormComponent impleme
     // console.log("enviando a imprimir: ",this.properties.listData);
   }
 
+  compareActCaja(a1: ActCaja, a2: ActCaja): boolean {
+    if (a1 === undefined && a2 === undefined) {
+      return true;
+    }
+
+    return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
+      ? false : a1.id === a2.id;
+  }
   // generateAttachment(blob: Blob, extension: string) {
   //   const data = window.URL.createObjectURL(blob);
   //   const link = document.createElement('a');

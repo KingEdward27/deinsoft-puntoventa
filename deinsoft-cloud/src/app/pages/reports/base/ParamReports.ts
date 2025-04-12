@@ -11,6 +11,7 @@ import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import * as dayjs from 'dayjs';
 import { CnfZona } from '../../../business/model/cnf-zona';
 import { CnfProducto } from '@/business/model/cnf-producto.model';
+import { ActCaja } from '@/business/model/act-caja.model';
 
 export class GenericBean{
 	id:number = 0;
@@ -32,7 +33,7 @@ export class ParamBean {
 	cnfCategoria:CnfCategoria = new CnfCategoria();
 	cnfProducto:CnfProducto = new CnfProducto();
 	direccion: string;;
-	
+	actCaja: ActCaja = new ActCaja();
 	cnfZona:CnfZona = new CnfZona();
 	flagEstado: string = '-1';
 	flagEnvioPse: string = '-1';

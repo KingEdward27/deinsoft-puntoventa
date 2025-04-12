@@ -116,7 +116,7 @@ export class ActPagoProgramacionListFormComponent extends CommonReportFormCompon
     this.indexInputs = [8]
     this.model.fechaVencimiento = this.model.fechaVencimiento?this.model.fechaVencimiento:''
     return this.deps.actPagoProgramacionService
-    .getAllByCnfMaestroId(this.model.cnfMaestro.id,this.model.fechaVencimiento,this.model.cnfLocal.id, true).subscribe(data => {
+    .getAllByCnfMaestroId(this.model.cnfMaestro.id,this.model.fechaVencimiento,this.model.cnfLocal.id, true,"1").subscribe(data => {
       this.listData = data;
       this.loadingCnfMaestro = false;
       // setTimeout(() => {

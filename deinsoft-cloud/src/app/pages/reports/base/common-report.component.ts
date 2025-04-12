@@ -46,6 +46,8 @@ import { ActCajaOperacionService } from '../../../business/service/act-caja-oper
 import { CnfZonaService } from '../../../business/service/cnf-zona.service';
 import { ActContratoService } from '@pages/act-contrato/act-contrato.service';
 import { ActOrdenService } from '@pages/act-orden/act-orden.service';
+import { ActCaja } from '@/business/model/act-caja.model';
+import { ActCajaService } from '@/business/service/act-caja.service';
 
 @Injectable()
 export class MyBaseComponentDependences {
@@ -77,7 +79,8 @@ export class MyBaseComponentDependences {
     public actCajaOperacionService: ActCajaOperacionService,
     public cnfCategoriaService: CnfCategoriaService,
     public invMovAlmacenService: InvMovAlmacenService,
-    public cnfZonaService: CnfZonaService
+    public cnfZonaService: CnfZonaService,
+    public actCajaService: ActCajaService
   ) { }
 }
 @Directive()
@@ -100,10 +103,12 @@ export class CommonReportFormComponent implements OnInit {
   selectDefaultActComprobante: any = { id: 0, nombre: "- Seleccione -" }; listActComprobante: any;
   actComprobante: ActComprobante = new ActComprobante();
   loadingActComprobante: boolean = false;
-  selectDefaultCnfMaestro: any = { id: 0, nombre: "- Seleccione -" }; listCnfMaestro: any;
+  selectDefaultCnfMaestro: any = { id: 0, nombre: "- Seleccione -" }; 
+  listCnfMaestro: any;
   cnfMaestro: CnfMaestro = new CnfMaestro();
   loadingCnfMaestro: boolean = false;
-  selectDefaultCnfFormaPago: any = { id: 0, nombre: "- Seleccione -" }; listCnfFormaPago: any;
+  selectDefaultCnfFormaPago: any = { id: 0, nombre: "- Seleccione -" }; 
+  listCnfFormaPago: any;
   cnfFormaPago: CnfFormaPago = new CnfFormaPago();
   loadingCnfFormaPago: boolean = false;
   selectDefaultCnfMoneda: any = { id: 0, nombre: "- Seleccione -" }; listCnfMoneda: any;
@@ -145,6 +150,11 @@ export class CommonReportFormComponent implements OnInit {
   listCnfCategoria: any;
   cnfCategoria: CnfCategoria = new CnfCategoria();
   loadingCnfCategoria: boolean = false;
+
+  selectDefaultActCaja: any = { id: 0, nombre: "- Seleccione -" }; 
+  listActCaja: any;
+  actCaja: ActCaja = new ActCaja();
+  loadingActCaja: boolean = false;
 
   constructor(public deps: MyBaseComponentDependences) {
   }
@@ -302,6 +312,24 @@ export class CommonReportFormComponent implements OnInit {
     }
 
   }
+
+  getListActCaja() {
+    this.loadingActCaja = true;
+    let user = this.deps.appService.getProfile()
+    let cnfEmpresa = user.profile.split("|")[1];
+    if(cnfEmpresa == '*') {
+      return this.deps.actCajaService.getAllDataCombo().subscribe(data => {
+        this.listActCaja = data;
+        this.loadingActCaja = false;
+      })
+    }else{
+      return this.deps.actCajaService.getAllByCnfLocalId(cnfEmpresa,this.model.cnfLocal.id).subscribe(data => {
+          this.listActCaja = data;
+          this.loadingActCaja = false;
+        })
+      }
+  }
+
   searchProduct = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
@@ -436,7 +464,7 @@ export class CommonReportFormComponent implements OnInit {
           this.deps.cnfLocalService.getData(this.listCnfLocal[0].id).subscribe(data => {
             this.model.cnfLocal = data
             this.getListInvAlmacen()
-
+            this.getListActCaja()
           })
           // this.model.cnfLocal.id = this.listCnfLocal[0].id;
           // if (this.listInvAlmacen.length == 1){
@@ -719,5 +747,15 @@ searchCnfZona = (text$: Observable<string>) =>
       return this.getListCnfZonaAsObservable(term);
     })
   )
+
+  compareActCaja(a1: ActCaja, a2: ActCaja): boolean {
+    if (a1 === undefined && a2 === undefined) {
+      return true;
+    }
+
+    return (a1 === null || a2 === null || a1 === undefined || a2 === undefined)
+      ? false : a1.id === a2.id;
+  }
 }
+
 

@@ -61,6 +61,12 @@ public class CnfTipoComprobanteController extends CommonController<CnfTipoCompro
 		List<CnfTipoComprobante> cnfTipoComprobanteList = cnfTipoComprobanteService.getAllCnfTipoComprobanteContrato();
 		return cnfTipoComprobanteList;
 	}
+
+	@GetMapping(value="/get-all-cnf-tipo-comprobante-combo-pago")
+	public List<CnfTipoComprobante> getAllCnfTipoComprobantePago() {
+		List<CnfTipoComprobante> cnfTipoComprobanteList = cnfTipoComprobanteService.getAllCnfTipoComprobantePagos();
+		return cnfTipoComprobanteList;
+	}
 	@DeleteMapping("/delete-cnf-tipo-comprobante")
 	public ResponseEntity<?> delete(@Param("id") Long id){
 		cnfTipoComprobanteService.delete(id);
